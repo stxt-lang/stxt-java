@@ -41,8 +41,7 @@ public class ParserAllDocsTest {
 		System.out.println(file.getAbsolutePath());
 		List<Node> docs = parser.parseFile(file);
 		for (Node node : docs) {
-			File jsonFile = new File("test/docs_json",
-					file.getName().substring(0, file.getName().length() - 5) + ".json");
+			File jsonFile = FileLoction.getFileBase("docs_json/" + file.getName().substring(0, file.getName().length() - 5) + ".json");
 			if (!jsonFile.exists()) {
 				System.out.println("Writting json..." + jsonFile.getAbsolutePath());
 				String json = node.toJsonPretty();

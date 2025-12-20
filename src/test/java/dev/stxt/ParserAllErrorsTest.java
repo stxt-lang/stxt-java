@@ -66,8 +66,7 @@ public class ParserAllErrorsTest {
 			errorInfo.put("code", e.getCode());
 			JsonNode json = JSON.toJsonTree(JSON.toJson(errorInfo));
 
-			File jsonFile = new File("test/error_json",
-					file.getName().substring(0, file.getName().length() - 5) + ".json");
+			File jsonFile = FileLoction.getFileBase("error_json/" + file.getName().substring(0, file.getName().length() - 5) + ".json");
 			if (!jsonFile.exists()) {
 				System.out.println("Writting json..." + jsonFile.getAbsolutePath());
 				System.out.println(json);

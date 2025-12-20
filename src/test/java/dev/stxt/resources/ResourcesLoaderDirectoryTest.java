@@ -25,7 +25,7 @@ public class ResourcesLoaderDirectoryTest {
 
 	@Test
 	void testNotFound() throws IOException, ResourcesException {
-		ResourcesLoaderDirectory finder = new ResourcesLoaderDirectory(new File("test"));
+		ResourcesLoaderDirectory finder = new ResourcesLoaderDirectory(FileLoction.getFileBase(""));
 
 		try {
 			finder.retrieve("@stxt.nonexistent", "com.example.nonexistent");
