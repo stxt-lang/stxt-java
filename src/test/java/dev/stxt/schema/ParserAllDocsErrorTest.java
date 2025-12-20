@@ -27,7 +27,7 @@ public class ParserAllDocsErrorTest {
 		System.out.println("Inici");
 
 		// Validator
-		ResourcesLoader resourcesLoader = new ResourcesLoaderDirectory("./test");
+		ResourcesLoader resourcesLoader = new ResourcesLoaderDirectory(FileLoction.getFileBase(""));
 		DocumentValidator validator = new DocumentValidator(resourcesLoader);
 
 		// Create parser

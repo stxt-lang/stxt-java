@@ -23,10 +23,10 @@ import dev.stxt.utils.JSON;
 public class SchemaReaderTestAll {
 	@Test
 	void testReadSchema() throws IOException, ParseException, ResourcesException {
-		ResourcesLoader resourcesLoader = new ResourcesLoaderDirectory("./test");
+		ResourcesLoader resourcesLoader = new ResourcesLoaderDirectory(FileLoction.getFileBase(""));
 
 		// Miramos todos
-		File f = new File("./test/@stxt.schema");
+		File f = FileLoction.getFileBase("@stxt.schema");
 		String[] namespaces = f.list();
 		for (String namespace : namespaces) {
 			checkPrint(namespace, resourcesLoader);

@@ -18,7 +18,7 @@ public class SchemaValidatorTest {
 	@Test
 	void testReadSchema() throws IOException, ParseException, ResourcesException {
 		// Path
-		ResourcesLoader resourcesLoader = new ResourcesLoaderDirectory("./test");
+		ResourcesLoader resourcesLoader = new ResourcesLoaderDirectory(FileLoction.getFileBase(""));
 
 		// Validator
 		DocumentValidator schemaValidator = new DocumentValidator(resourcesLoader);

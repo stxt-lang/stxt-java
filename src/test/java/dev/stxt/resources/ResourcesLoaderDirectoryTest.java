@@ -15,7 +15,7 @@ import dev.stxt.utils.FileLoction;
 public class ResourcesLoaderDirectoryTest {
 	@Test
 	void testExist() throws IOException, ResourcesException, NotFoundException {
-		ResourcesLoaderDirectory finder = new ResourcesLoaderDirectory(FileLoction.getFileBase("test"));
+		ResourcesLoaderDirectory finder = new ResourcesLoaderDirectory(FileLoction.getFileBase(""));
 
 		String result = finder.retrieve("@stxt.schema", "com.example.docs");
 		System.out.println("Result = " + result);
