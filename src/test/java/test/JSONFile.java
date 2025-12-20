@@ -11,8 +11,8 @@ import dev.stxt.utils.FileUtils;
 
 public class JSONFile {
 
-	public static void checkContentWithJsonFile(Object node, String string) throws IOException {
-		File jsonFile = FileTestLoction.getFile(string + ".json");
+	public static void checkContentWithJsonFile(Object node, String directory, String name) throws IOException {
+		File jsonFile = FileTestLoction.getFile(directory + "/" + name + ".json");
 		if (!jsonFile.exists()) {
 			System.out.println("Writting json..." + jsonFile.getAbsolutePath());
 			String json = JSON.toJsonPretty(node);

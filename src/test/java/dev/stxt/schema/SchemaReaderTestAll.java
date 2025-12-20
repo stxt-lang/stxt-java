@@ -44,7 +44,7 @@ public class SchemaReaderTestAll {
 			for (Node node : nodes) {
 				System.out.println(JSON.toJson(node));
 				Schema sch = SchemaParser.transformNodeToSchema(node);
-				JSONFile.checkContentWithJsonFile(sch, "schema_json/" + namespace);
+				JSONFile.checkContentWithJsonFile(sch, "schema_json", namespace);
 				
 				System.out.println("SCH => " + JSON.toJsonPretty(sch));
 			}

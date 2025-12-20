@@ -1,7 +1,5 @@
 package dev.stxt;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -15,11 +13,9 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import com.fasterxml.jackson.databind.JsonNode;
-
-import dev.stxt.utils.FileUtils;
 import test.FileTestLoction;
 import test.JSON;
+import test.JSONFile;
 
 public class ParserAllErrorsTest {
 	public static void main(String[] args) throws IOException, ParseException {
@@ -64,19 +60,8 @@ public class ParserAllErrorsTest {
 			Map<String, Object> errorInfo = new HashMap<>();
 			errorInfo.put("line", e.getLine());
 			errorInfo.put("code", e.getCode());
-			JsonNode json = JSON.toJsonTree(JSON.toJson(errorInfo));
 
-			File jsonFile = FileTestLoction.getFile("error_json/" + file.getName().substring(0, file.getName().length() - 5) + ".json");
-			if (!jsonFile.exists()) {
-				System.out.println("Writting json..." + jsonFile.getAbsolutePath());
-				System.out.println(json);
-				FileUtils.writeStringToFile(json.toPrettyString(), jsonFile);
-			} else {
-				System.out.println("Checking json...");
-				String jsonFileContent = FileUtils.readFileContent(jsonFile);
-				JsonNode treeFile = JSON.toJsonTree(jsonFileContent);
-				assertEquals(treeFile.toString(), json.toString());
-			}
+			JSONFile.checkContentWithJsonFile(errorInfo, "error_json", file.getName().substring(0, file.getName().length() - 5));
 		}
 	}
 

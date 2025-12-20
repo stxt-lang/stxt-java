@@ -37,7 +37,7 @@ public class ParserAllDocsTest {
 		System.out.println(file.getAbsolutePath());
 		List<Node> docs = parser.parseFile(file);
 		for (Node node : docs) {
-			JSONFile.checkContentWithJsonFile(node, "docs_json/" + file.getName().substring(0, file.getName().length() - 5));
+			JSONFile.checkContentWithJsonFile(node, "docs_json/", file.getName().substring(0, file.getName().length() - 5));
 		}
 	}
 
