@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-import dev.stxt.utils.FileLoction;
+import dev.stxt.utils.FileTestLoction;
 import dev.stxt.utils.FileUtils;
 import dev.stxt.utils.JSON;
 
@@ -25,7 +25,7 @@ public class ParserAllDocsTest {
 
 		// Create parser
 		Parser parser = new Parser();
-		File docsDir = FileLoction.getFileBase("docs");
+		File docsDir = FileTestLoction.getFile("docs");
 
 		List<File> stxtFiles = FileUtils.getStxtFiles(docsDir);
 
@@ -41,7 +41,7 @@ public class ParserAllDocsTest {
 		System.out.println(file.getAbsolutePath());
 		List<Node> docs = parser.parseFile(file);
 		for (Node node : docs) {
-			File jsonFile = FileLoction.getFileBase("docs_json/" + file.getName().substring(0, file.getName().length() - 5) + ".json");
+			File jsonFile = FileTestLoction.getFile("docs_json/" + file.getName().substring(0, file.getName().length() - 5) + ".json");
 			if (!jsonFile.exists()) {
 				System.out.println("Writting json..." + jsonFile.getAbsolutePath());
 				String json = node.toJsonPretty();

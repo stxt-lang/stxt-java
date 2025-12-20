@@ -14,7 +14,7 @@ import dev.stxt.Parser;
 import dev.stxt.resources.ResourcesException;
 import dev.stxt.resources.ResourcesLoader;
 import dev.stxt.resources.ResourcesLoaderDirectory;
-import dev.stxt.utils.FileLoction;
+import dev.stxt.utils.FileTestLoction;
 import dev.stxt.utils.FileUtils;
 
 public class ParserAllDocsErrorTest {
@@ -27,12 +27,12 @@ public class ParserAllDocsErrorTest {
 		System.out.println("Inici");
 
 		// Validator
-		ResourcesLoader resourcesLoader = new ResourcesLoaderDirectory(FileLoction.getFileBase(""));
+		ResourcesLoader resourcesLoader = new ResourcesLoaderDirectory(FileTestLoction.getFile(""));
 		DocumentValidator validator = new DocumentValidator(resourcesLoader);
 
 		// Create parser
 		Parser parser = new Parser();
-		File docsDir = FileLoction.getFileBase("error_schema");
+		File docsDir = FileTestLoction.getFile("error_schema");
 
 		List<File> stxtFiles = FileUtils.getStxtFiles(docsDir);
 

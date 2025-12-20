@@ -12,19 +12,19 @@ import dev.stxt.Parser;
 import dev.stxt.resources.ResourcesException;
 import dev.stxt.resources.ResourcesLoader;
 import dev.stxt.resources.ResourcesLoaderDirectory;
-import dev.stxt.utils.FileLoction;
+import dev.stxt.utils.FileTestLoction;
 
 public class SchemaValidatorTest {
 	@Test
 	void testReadSchema() throws IOException, ParseException, ResourcesException {
 		// Path
-		ResourcesLoader resourcesLoader = new ResourcesLoaderDirectory(FileLoction.getFileBase(""));
+		ResourcesLoader resourcesLoader = new ResourcesLoaderDirectory(FileTestLoction.getFile(""));
 
 		// Validator
 		DocumentValidator schemaValidator = new DocumentValidator(resourcesLoader);
 
 		// Parser file
-		File f = FileLoction.getFileBase("docs/email.stxt");
+		File f = FileTestLoction.getFile("docs/email.stxt");
 		Parser parser = new Parser();
 		List<Node> nodes = schemaValidator.validateNodes(parser.parseFile(f));
 

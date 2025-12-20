@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import dev.stxt.utils.FileLoction;
+import dev.stxt.utils.FileTestLoction;
 
 public class ParserTest {
 	public static void main(String[] args) throws IOException, ParseException {
@@ -20,7 +20,7 @@ public class ParserTest {
 		// Create parser
 		Parser parser = createBasicParser();
 
-		File f = FileLoction.getFileBase("docs/client.stxt");
+		File f = FileTestLoction.getFile("docs/client.stxt");
 		System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 		System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 		System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");

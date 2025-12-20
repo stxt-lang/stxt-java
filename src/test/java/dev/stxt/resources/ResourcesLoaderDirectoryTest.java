@@ -10,12 +10,12 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
-import dev.stxt.utils.FileLoction;
+import dev.stxt.utils.FileTestLoction;
 
 public class ResourcesLoaderDirectoryTest {
 	@Test
 	void testExist() throws IOException, ResourcesException, NotFoundException {
-		ResourcesLoaderDirectory finder = new ResourcesLoaderDirectory(FileLoction.getFileBase(""));
+		ResourcesLoaderDirectory finder = new ResourcesLoaderDirectory(FileTestLoction.getFile(""));
 
 		String result = finder.retrieve("@stxt.schema", "com.example.docs");
 		System.out.println("Result = " + result);
@@ -25,7 +25,7 @@ public class ResourcesLoaderDirectoryTest {
 
 	@Test
 	void testNotFound() throws IOException, ResourcesException {
-		ResourcesLoaderDirectory finder = new ResourcesLoaderDirectory(FileLoction.getFileBase(""));
+		ResourcesLoaderDirectory finder = new ResourcesLoaderDirectory(FileTestLoction.getFile(""));
 
 		try {
 			finder.retrieve("@stxt.nonexistent", "com.example.nonexistent");

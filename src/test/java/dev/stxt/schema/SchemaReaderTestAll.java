@@ -16,17 +16,17 @@ import dev.stxt.resources.NotFoundException;
 import dev.stxt.resources.ResourcesException;
 import dev.stxt.resources.ResourcesLoader;
 import dev.stxt.resources.ResourcesLoaderDirectory;
-import dev.stxt.utils.FileLoction;
+import dev.stxt.utils.FileTestLoction;
 import dev.stxt.utils.FileUtils;
 import dev.stxt.utils.JSON;
 
 public class SchemaReaderTestAll {
 	@Test
 	void testReadSchema() throws IOException, ParseException, ResourcesException {
-		ResourcesLoader resourcesLoader = new ResourcesLoaderDirectory(FileLoction.getFileBase(""));
+		ResourcesLoader resourcesLoader = new ResourcesLoaderDirectory(FileTestLoction.getFile(""));
 
 		// Miramos todos
-		File f = FileLoction.getFileBase("@stxt.schema");
+		File f = FileTestLoction.getFile("@stxt.schema");
 		String[] namespaces = f.list();
 		for (String namespace : namespaces) {
 			checkPrint(namespace, resourcesLoader);
@@ -48,7 +48,7 @@ public class SchemaReaderTestAll {
 				System.out.println(node.toJson());
 				Schema sch = SchemaParser.transformNodeToSchema(node);
 				
-				File json = FileLoction.getFileBase("schema_json/" + namespace + ".json");
+				File json = FileTestLoction.getFile("schema_json/" + namespace + ".json");
 				if (json.exists()) {
 					String jsonFileContent = FileUtils.readFileContent(json);
 					JsonNode treeFile = JSON.toJsonTree(jsonFileContent);

@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import dev.stxt.Node;
 import dev.stxt.ParseException;
 import dev.stxt.Parser;
-import dev.stxt.utils.FileLoction;
+import dev.stxt.utils.FileTestLoction;
 
 public class TestTopDownProcessor {
 
@@ -23,7 +23,7 @@ public class TestTopDownProcessor {
 	void loadNode() throws IOException, ParseException {
 		Parser parser = new Parser();
 
-		File f = FileLoction.getFileBase("docs/client.stxt");
+		File f = FileTestLoction.getFile("docs/client.stxt");
 		List<Node> docs = parser.parseFile(f);
 		node = docs.get(0);
 		System.out.println("*********************************");

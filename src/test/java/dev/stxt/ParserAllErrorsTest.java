@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-import dev.stxt.utils.FileLoction;
+import dev.stxt.utils.FileTestLoction;
 import dev.stxt.utils.FileUtils;
 import dev.stxt.utils.JSON;
 
@@ -32,7 +32,7 @@ public class ParserAllErrorsTest {
 
 		// Create parser
 		Parser parser = new Parser();
-		File docsDir = FileLoction.getFileBase("error");
+		File docsDir = FileTestLoction.getFile("error");
 
 		List<File> stxtFiles;
 		try (Stream<Path> stream = Files.walk(docsDir.toPath())) {
@@ -66,7 +66,7 @@ public class ParserAllErrorsTest {
 			errorInfo.put("code", e.getCode());
 			JsonNode json = JSON.toJsonTree(JSON.toJson(errorInfo));
 
-			File jsonFile = FileLoction.getFileBase("error_json/" + file.getName().substring(0, file.getName().length() - 5) + ".json");
+			File jsonFile = FileTestLoction.getFile("error_json/" + file.getName().substring(0, file.getName().length() - 5) + ".json");
 			if (!jsonFile.exists()) {
 				System.out.println("Writting json..." + jsonFile.getAbsolutePath());
 				System.out.println(json);

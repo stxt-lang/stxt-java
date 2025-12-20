@@ -11,16 +11,16 @@ import dev.stxt.ParseException;
 import dev.stxt.resources.ResourcesException;
 import dev.stxt.resources.ResourcesLoader;
 import dev.stxt.resources.ResourcesLoaderDirectory;
-import dev.stxt.utils.FileLoction;
+import dev.stxt.utils.FileTestLoction;
 
 public class SchemaLocatorAllTest {
 	@Test
 	void testReadSchema() throws IOException, ParseException, ResourcesException {
 		// Validator
-		ResourcesLoader resourcesLoader = new ResourcesLoaderDirectory(FileLoction.getFileBase(""));
+		ResourcesLoader resourcesLoader = new ResourcesLoaderDirectory(FileTestLoction.getFile(""));
 		SchemaProviderCache schemaLocator = new SchemaProviderCache(resourcesLoader);
 
-		File f = FileLoction.getFileBase("@stxt.schema");
+		File f = FileTestLoction.getFile("@stxt.schema");
 		String[] namespaces = f.list();
 		for (String namespace : namespaces) {
 			checkSchema(namespace, schemaLocator);
