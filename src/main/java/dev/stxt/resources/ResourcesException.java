@@ -1,9 +1,11 @@
 package dev.stxt.resources;
 
-public class ResourcesException extends Exception {
+import dev.stxt.ParseException;
+
+public class ResourcesException extends ParseException {
 	private static final long serialVersionUID = 1L;
 
 	public ResourcesException(String message) {
-		super(message);
+		super(0, "RESOURCES_EXCEPTION", message);
 	}
 }

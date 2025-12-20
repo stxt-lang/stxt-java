@@ -7,9 +7,10 @@ import java.util.Map;
 
 import dev.stxt.Node;
 import dev.stxt.ParseException;
+import dev.stxt.Validator;
 import dev.stxt.resources.NotFoundException;
 
-class SchemaValidator {
+class SchemaValidator implements Validator {
 	// ------------------
 	// Variables públicas
 	// ------------------
@@ -20,6 +21,18 @@ class SchemaValidator {
 		this.schemaProvider = schemaProvider;
 	}
 
+	@Override
+	public void validate(Node node) throws ParseException {
+		// Obtenemos namespace
+		String namespace = node.getNamespace();
+		Schema sch = schemaProvider.getSchema(namespace);
+		if (sch == null)
+			throw new ParseException(node.getLine(), "SCHEMA_NOT_FOUND", "Not found schema: " + sch);
+
+		// Validamos nodo y childs
+		validateAgainstSchema(node, sch);
+	}
+	
 	public Node validateNode(Node node) throws ParseException, IOException, NotFoundException {
 		// Obtenemos namespace
 		String namespace = node.getNamespace();
@@ -99,5 +112,6 @@ class SchemaValidator {
 			throw new ParseException(node.getLine(), "INVALID_NUMBER",
 					num + " nodes of '" + chNode.getQualifiedName() + " and max is " + max);
 	}
+
 
 }
