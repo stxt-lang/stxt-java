@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
@@ -13,6 +14,14 @@ import static dev.stxt.Constants.EMPTY_NAMESPACE;
 import static dev.stxt.utils.StringUtils.compactString;
 
 public class Parser {
+	private List<Validator> validators;
+	
+	public void registerValidator(Validator v)
+	{
+		if (validators == null) validators = new ArrayList<Validator>();
+		validators.add(v);
+	}
+	
 	public List<Node> parseFile(File srcFile) throws IOException, ParseException {
 		return parse(FileUtils.readFileContent(srcFile));
 	}
@@ -30,6 +39,13 @@ public class Parser {
 			processLine(line, lineNumber, state);
 		}
 
+		// Validators
+		Stack<Node> stack = state.getStack();
+		while (!stack.isEmpty()) {
+		    validateNode(stack.peek());
+		    stack.pop();
+		}
+		
 		return state.getDocuments();
 	}
 
@@ -62,11 +78,19 @@ public class Parser {
 
 		if (currentLevel == 0) {
 			state.addDocument(node);
-			stack.clear();
+			
+			// Clear stack and validate
+			while (!stack.isEmpty()) {
+			    validateNode(stack.peek());
+			    stack.pop();
+			}	
+			//stack.clear();			
+			
 			stack.push(node);
 		} else {
 			while (stack.size() > currentLevel) {
-				stack.pop();
+			    validateNode(stack.peek());
+			    stack.pop();				
 			}
 
 			Node parent = stack.peek();
@@ -75,6 +99,14 @@ public class Parser {
 		}
 	}
 
+	private void validateNode(Node node) throws ParseException {
+	    if (validators != null) {
+		    for (Validator v : validators) {
+		        v.validate(node);
+		    }
+	    }
+	}
+	
 	private Node createNode(LineIndent result, int lineNumber, int level, Node parent) throws ParseException {
 		String line = result.lineWithoutIndent;
 		String name = null;
