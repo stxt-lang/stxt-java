@@ -1,0 +1,31 @@
+Documento(com.dokumentando.documento): 123456-179
+
+    Título: Introducción a la Programación
+    Autor: Juan Pérez
+    Cuerpo>>
+        La programación es el proceso de crear software mediante la escritura de código.
+        Este documento proporciona una visión general de los conceptos básicos de programación.
+    Fecha Creación: 2024-06-08
+    Última modificación: 2024-06-08T14:30:00Z
+    Email Contacto: juan.perez@example.com
+    Sitio Web: https://www.programacionbasica.com
+    Código Postal: 12345
+    Es Público: true
+    Color Tema: #FF5733
+    Tipo Documento: artículo
+    Secciones:
+        Sección:
+            Título: Fundamentos de Programación
+            Contenido>>
+                La programación implica el uso de lenguajes de programación para crear soluciones a problemas.
+                Existen diversos paradigmas de programación, incluyendo programación estructurada, orientada a objetos, y funcional.
+        Sección:
+            Título: Lenguajes de Programación
+            Contenido>>
+                Los lenguajes de programación son herramientas que permiten a los programadores comunicarse con las computadoras.
+                Ejemplos de lenguajes populares incluyen Python, Java, C++, y JavaScript.
+        Sección:
+            Título: Buenas Prácticas
+            Contenido>>
+                Es importante seguir buenas prácticas de programación, como la escritura de código limpio y comentado.
+                Además, se recomienda el uso de control de versiones y pruebas de software para asegurar la calidad del código.

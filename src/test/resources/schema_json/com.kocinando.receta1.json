@@ -1,0 +1,63 @@
+{
+    "nodes" : {
+        "receta" : {
+            "name" : "receta",
+            "type" : "INLINE TEXT",
+            "children" : {
+                "com.kocinando.receta1:descripción" : {
+                    "name" : "descripción",
+                    "namespace" : "com.kocinando.receta1",
+                    "min" : 1,
+                    "max" : 1,
+                    "count" : "1",
+                    "qualified_name" : "com.kocinando.receta1:descripción"
+                },
+                "com.kocinando.receta1:ingredientes" : {
+                    "name" : "ingredientes",
+                    "namespace" : "com.kocinando.receta1",
+                    "min" : 1,
+                    "max" : 1,
+                    "count" : "1",
+                    "qualified_name" : "com.kocinando.receta1:ingredientes"
+                },
+                "com.kocinando.receta1:título" : {
+                    "name" : "título",
+                    "namespace" : "com.kocinando.receta1",
+                    "min" : 1,
+                    "max" : 1,
+                    "count" : "1",
+                    "qualified_name" : "com.kocinando.receta1:título"
+                },
+                "com.kocinando.receta1:preparación" : {
+                    "name" : "preparación",
+                    "namespace" : "com.kocinando.receta1",
+                    "min" : 1,
+                    "max" : 1,
+                    "count" : "1",
+                    "qualified_name" : "com.kocinando.receta1:preparación"
+                }
+            }
+        },
+        "título" : {
+            "name" : "título",
+            "type" : "INLINE TEXT",
+            "children" : { }
+        },
+        "descripción" : {
+            "name" : "descripción",
+            "type" : "TEXT",
+            "children" : { }
+        },
+        "ingredientes" : {
+            "name" : "ingredientes",
+            "type" : "TEXT",
+            "children" : { }
+        },
+        "preparación" : {
+            "name" : "preparación",
+            "type" : "TEXT",
+            "children" : { }
+        }
+    },
+    "namespace" : "com.kocinando.receta1"
+}

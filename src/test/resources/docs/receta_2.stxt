@@ -1,0 +1,51 @@
+# -----------------
+# Receta macarrones
+# -----------------
+
+Documento(com.dokumentando.documento):
+    Título: Receta de Pizza de Jamón
+    Autor: María López
+    Cuerpo>>
+        Esta receta te guiará a través de los pasos necesarios para preparar una deliciosa pizza de jamón en casa.
+        Sigue las instrucciones cuidadosamente para obtener los mejores resultados.
+    Fecha Creación: 2024-06-08
+    Última modificación: 2024-06-08T14:30:00Z
+    Email Contacto: maria.lopez@example.com
+    Sitio Web: https://www.recetasdeliciosas.com/pizza-jamon
+    Código Postal: 54321
+    Es Público: true
+    Color Tema: #FF6347
+    Tipo Documento: artículo
+    Secciones:
+        Sección:
+            Título: Ingredientes
+            Contenido >>
+                - 250g de harina de trigo
+                - 150ml de agua
+                - 10g de levadura fresca
+                - 1 cucharadita de sal
+                - 2 cucharadas de aceite de oliva
+                - 200g de salsa de tomate
+                - 200g de queso mozzarella
+                - 150g de jamón en lonchas
+                - Orégano al gusto
+        Sección:
+            Título: Instrucciones
+            Contenido >>
+                1. En un bol grande, mezcla la harina con la sal.
+                2. Disuelve la levadura en el agua tibia y añádela a la mezcla de harina.
+                3. Agrega el aceite de oliva y amasa hasta obtener una masa homogénea.
+                4. Cubre la masa con un paño y deja reposar durante 1 hora en un lugar cálido.
+                5. Precalienta el horno a 220°C.
+                6. Estira la masa en una superficie enharinada hasta obtener el tamaño deseado.
+                7. Coloca la masa en una bandeja para horno y unta la salsa de tomate por encima.
+                8. Espolvorea el queso mozzarella y distribuye las lonchas de jamón.
+                9. Hornea la pizza durante 15-20 minutos o hasta que los bordes estén dorados.
+                10. Retira la pizza del horno, espolvorea orégano al gusto y sirve caliente.
+        Sección:
+            Título: Información Nutricional
+            Contenido >>
+                Calorías por porción: 350 kcal
+                Proteínas: 18g
+                Grasas: 12g
+                Carbohidratos: 45g

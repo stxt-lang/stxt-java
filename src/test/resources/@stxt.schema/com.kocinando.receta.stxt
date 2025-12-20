@@ -1,0 +1,32 @@
+Schema (@stxt.schema): com.kocinando.receta
+	Node: Receta
+		Children >>
+			Nombre Receta (1)
+			Descripción (?)
+			Ingredientes (1)
+			Pasos (1)
+			Dificultad (?)
+			Calorías (?)
+			Comensales (?)
+			com.dokumentando.doc:Documento (*) 
+	Node: Nombre Receta
+	Node: Descripción (TEXT)
+	Node: Ingredientes
+		Children >>
+			Ingrediente (+)
+	Node: Ingrediente
+		Children >>
+			Cantidad (1)
+			Unidades (1)
+			Nombre (1)
+	Node: Cantidad (NUMBER)
+	Node: Unidades
+	Node: Nombre
+	Node: Pasos
+		Children >>
+			Paso (+)
+			Descripción
+	Node: Paso (NATURAL)
+	Node: Dificultad
+	Node: Calorías (NUMBER)
+	Node: Comensales (NUMBER)

@@ -1,0 +1,82 @@
+{
+    "name" : "email",
+    "namespace" : "com.example.docs",
+    "multiline" : false,
+    "inline_text" : "",
+    "multiline_text" : [ ],
+    "line" : 1,
+    "level" : 0,
+    "children" : [
+        {
+            "name" : "from",
+            "namespace" : "com.example.docs",
+            "multiline" : false,
+            "inline_text" : "John Smith",
+            "multiline_text" : [ ],
+            "line" : 2,
+            "level" : 1,
+            "children" : [ ],
+            "display_name" : "com.example.docs(from)",
+            "text" : "John Smith",
+            "qualified_name" : "com.example.docs:from"
+        },
+        {
+            "name" : "to",
+            "namespace" : "com.example.docs",
+            "multiline" : false,
+            "inline_text" : "Mery Adams",
+            "multiline_text" : [ ],
+            "line" : 3,
+            "level" : 1,
+            "children" : [ ],
+            "display_name" : "com.example.docs(to)",
+            "text" : "Mery Adams",
+            "qualified_name" : "com.example.docs:to"
+        },
+        {
+            "name" : "cc",
+            "namespace" : "com.example.docs",
+            "multiline" : false,
+            "inline_text" : "Keyla Brown",
+            "multiline_text" : [ ],
+            "line" : 4,
+            "level" : 1,
+            "children" : [ ],
+            "display_name" : "com.example.docs(cc)",
+            "text" : "Keyla Brown",
+            "qualified_name" : "com.example.docs:cc"
+        },
+        {
+            "name" : "title",
+            "namespace" : "com.example.docs",
+            "multiline" : false,
+            "inline_text" : "Project report",
+            "multiline_text" : [ ],
+            "line" : 5,
+            "level" : 1,
+            "children" : [ ],
+            "display_name" : "com.example.docs(title)",
+            "text" : "Project report",
+            "qualified_name" : "com.example.docs:title"
+        },
+        {
+            "name" : "body content",
+            "namespace" : "com.example.docs",
+            "multiline" : true,
+            "inline_text" : "",
+            "multiline_text" : [
+                "Hello Mery!!",
+                "The book is finished!!"
+            ],
+            "line" : 6,
+            "level" : 1,
+            "children" : [ ],
+            "display_name" : "com.example.docs(body content)",
+            "text" : "Hello Mery!!\nThe book is finished!!",
+            "qualified_name" : "com.example.docs:body content"
+        }
+    ],
+    "display_name" : "com.example.docs(email)",
+    "text" : "",
+    "qualified_name" : "com.example.docs:email"
+}

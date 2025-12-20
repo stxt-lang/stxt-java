@@ -1,0 +1,11 @@
+Schema (@stxt.schema): com.kocinando.receta1
+	Node: Receta
+		Children >>
+			Título (1)
+			Descripción (1)
+			Ingredientes (1)
+			Preparación (1)
+	Node: Título
+	Node: Descripción (TEXT)
+	Node: Ingredientes (TEXT)
+	Node: Preparación (TEXT)

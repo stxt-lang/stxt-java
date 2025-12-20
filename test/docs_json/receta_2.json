@@ -1,0 +1,320 @@
+{
+    "name" : "documento",
+    "namespace" : "com.dokumentando.documento",
+    "multiline" : false,
+    "inline_text" : "",
+    "multiline_text" : [ ],
+    "line" : 5,
+    "level" : 0,
+    "children" : [
+        {
+            "name" : "título",
+            "namespace" : "com.dokumentando.documento",
+            "multiline" : false,
+            "inline_text" : "Receta de Pizza de Jamón",
+            "multiline_text" : [ ],
+            "line" : 6,
+            "level" : 1,
+            "children" : [ ],
+            "display_name" : "com.dokumentando.documento(título)",
+            "text" : "Receta de Pizza de Jamón",
+            "qualified_name" : "com.dokumentando.documento:título"
+        },
+        {
+            "name" : "autor",
+            "namespace" : "com.dokumentando.documento",
+            "multiline" : false,
+            "inline_text" : "María López",
+            "multiline_text" : [ ],
+            "line" : 7,
+            "level" : 1,
+            "children" : [ ],
+            "display_name" : "com.dokumentando.documento(autor)",
+            "text" : "María López",
+            "qualified_name" : "com.dokumentando.documento:autor"
+        },
+        {
+            "name" : "cuerpo",
+            "namespace" : "com.dokumentando.documento",
+            "multiline" : true,
+            "inline_text" : "",
+            "multiline_text" : [
+                "Esta receta te guiará a través de los pasos necesarios para preparar una deliciosa pizza de jamón en casa.",
+                "Sigue las instrucciones cuidadosamente para obtener los mejores resultados."
+            ],
+            "line" : 8,
+            "level" : 1,
+            "children" : [ ],
+            "display_name" : "com.dokumentando.documento(cuerpo)",
+            "text" : "Esta receta te guiará a través de los pasos necesarios para preparar una deliciosa pizza de jamón en casa.\nSigue las instrucciones cuidadosamente para obtener los mejores resultados.",
+            "qualified_name" : "com.dokumentando.documento:cuerpo"
+        },
+        {
+            "name" : "fecha creación",
+            "namespace" : "com.dokumentando.documento",
+            "multiline" : false,
+            "inline_text" : "2024-06-08",
+            "multiline_text" : [ ],
+            "line" : 11,
+            "level" : 1,
+            "children" : [ ],
+            "display_name" : "com.dokumentando.documento(fecha creación)",
+            "text" : "2024-06-08",
+            "qualified_name" : "com.dokumentando.documento:fecha creación"
+        },
+        {
+            "name" : "última modificación",
+            "namespace" : "com.dokumentando.documento",
+            "multiline" : false,
+            "inline_text" : "2024-06-08T14:30:00Z",
+            "multiline_text" : [ ],
+            "line" : 12,
+            "level" : 1,
+            "children" : [ ],
+            "display_name" : "com.dokumentando.documento(última modificación)",
+            "text" : "2024-06-08T14:30:00Z",
+            "qualified_name" : "com.dokumentando.documento:última modificación"
+        },
+        {
+            "name" : "email contacto",
+            "namespace" : "com.dokumentando.documento",
+            "multiline" : false,
+            "inline_text" : "maria.lopez@example.com",
+            "multiline_text" : [ ],
+            "line" : 13,
+            "level" : 1,
+            "children" : [ ],
+            "display_name" : "com.dokumentando.documento(email contacto)",
+            "text" : "maria.lopez@example.com",
+            "qualified_name" : "com.dokumentando.documento:email contacto"
+        },
+        {
+            "name" : "sitio web",
+            "namespace" : "com.dokumentando.documento",
+            "multiline" : false,
+            "inline_text" : "https://www.recetasdeliciosas.com/pizza-jamon",
+            "multiline_text" : [ ],
+            "line" : 14,
+            "level" : 1,
+            "children" : [ ],
+            "display_name" : "com.dokumentando.documento(sitio web)",
+            "text" : "https://www.recetasdeliciosas.com/pizza-jamon",
+            "qualified_name" : "com.dokumentando.documento:sitio web"
+        },
+        {
+            "name" : "código postal",
+            "namespace" : "com.dokumentando.documento",
+            "multiline" : false,
+            "inline_text" : "54321",
+            "multiline_text" : [ ],
+            "line" : 15,
+            "level" : 1,
+            "children" : [ ],
+            "display_name" : "com.dokumentando.documento(código postal)",
+            "text" : "54321",
+            "qualified_name" : "com.dokumentando.documento:código postal"
+        },
+        {
+            "name" : "es público",
+            "namespace" : "com.dokumentando.documento",
+            "multiline" : false,
+            "inline_text" : "true",
+            "multiline_text" : [ ],
+            "line" : 16,
+            "level" : 1,
+            "children" : [ ],
+            "display_name" : "com.dokumentando.documento(es público)",
+            "text" : "true",
+            "qualified_name" : "com.dokumentando.documento:es público"
+        },
+        {
+            "name" : "color tema",
+            "namespace" : "com.dokumentando.documento",
+            "multiline" : false,
+            "inline_text" : "#FF6347",
+            "multiline_text" : [ ],
+            "line" : 17,
+            "level" : 1,
+            "children" : [ ],
+            "display_name" : "com.dokumentando.documento(color tema)",
+            "text" : "#FF6347",
+            "qualified_name" : "com.dokumentando.documento:color tema"
+        },
+        {
+            "name" : "tipo documento",
+            "namespace" : "com.dokumentando.documento",
+            "multiline" : false,
+            "inline_text" : "artículo",
+            "multiline_text" : [ ],
+            "line" : 18,
+            "level" : 1,
+            "children" : [ ],
+            "display_name" : "com.dokumentando.documento(tipo documento)",
+            "text" : "artículo",
+            "qualified_name" : "com.dokumentando.documento:tipo documento"
+        },
+        {
+            "name" : "secciones",
+            "namespace" : "com.dokumentando.documento",
+            "multiline" : false,
+            "inline_text" : "",
+            "multiline_text" : [ ],
+            "line" : 19,
+            "level" : 1,
+            "children" : [
+                {
+                    "name" : "sección",
+                    "namespace" : "com.dokumentando.documento",
+                    "multiline" : false,
+                    "inline_text" : "",
+                    "multiline_text" : [ ],
+                    "line" : 20,
+                    "level" : 2,
+                    "children" : [
+                        {
+                            "name" : "título",
+                            "namespace" : "com.dokumentando.documento",
+                            "multiline" : false,
+                            "inline_text" : "Ingredientes",
+                            "multiline_text" : [ ],
+                            "line" : 21,
+                            "level" : 3,
+                            "children" : [ ],
+                            "display_name" : "com.dokumentando.documento(título)",
+                            "text" : "Ingredientes",
+                            "qualified_name" : "com.dokumentando.documento:título"
+                        },
+                        {
+                            "name" : "contenido",
+                            "namespace" : "com.dokumentando.documento",
+                            "multiline" : true,
+                            "inline_text" : "",
+                            "multiline_text" : [
+                                "- 250g de harina de trigo",
+                                "- 150ml de agua",
+                                "- 10g de levadura fresca",
+                                "- 1 cucharadita de sal",
+                                "- 2 cucharadas de aceite de oliva",
+                                "- 200g de salsa de tomate",
+                                "- 200g de queso mozzarella",
+                                "- 150g de jamón en lonchas",
+                                "- Orégano al gusto"
+                            ],
+                            "line" : 22,
+                            "level" : 3,
+                            "children" : [ ],
+                            "display_name" : "com.dokumentando.documento(contenido)",
+                            "text" : "- 250g de harina de trigo\n- 150ml de agua\n- 10g de levadura fresca\n- 1 cucharadita de sal\n- 2 cucharadas de aceite de oliva\n- 200g de salsa de tomate\n- 200g de queso mozzarella\n- 150g de jamón en lonchas\n- Orégano al gusto",
+                            "qualified_name" : "com.dokumentando.documento:contenido"
+                        }
+                    ],
+                    "display_name" : "com.dokumentando.documento(sección)",
+                    "text" : "",
+                    "qualified_name" : "com.dokumentando.documento:sección"
+                },
+                {
+                    "name" : "sección",
+                    "namespace" : "com.dokumentando.documento",
+                    "multiline" : false,
+                    "inline_text" : "",
+                    "multiline_text" : [ ],
+                    "line" : 32,
+                    "level" : 2,
+                    "children" : [
+                        {
+                            "name" : "título",
+                            "namespace" : "com.dokumentando.documento",
+                            "multiline" : false,
+                            "inline_text" : "Instrucciones",
+                            "multiline_text" : [ ],
+                            "line" : 33,
+                            "level" : 3,
+                            "children" : [ ],
+                            "display_name" : "com.dokumentando.documento(título)",
+                            "text" : "Instrucciones",
+                            "qualified_name" : "com.dokumentando.documento:título"
+                        },
+                        {
+                            "name" : "contenido",
+                            "namespace" : "com.dokumentando.documento",
+                            "multiline" : true,
+                            "inline_text" : "",
+                            "multiline_text" : [
+                                "1. En un bol grande, mezcla la harina con la sal.",
+                                "2. Disuelve la levadura en el agua tibia y añádela a la mezcla de harina.",
+                                "3. Agrega el aceite de oliva y amasa hasta obtener una masa homogénea.",
+                                "4. Cubre la masa con un paño y deja reposar durante 1 hora en un lugar cálido.",
+                                "5. Precalienta el horno a 220°C.",
+                                "6. Estira la masa en una superficie enharinada hasta obtener el tamaño deseado.",
+                                "7. Coloca la masa en una bandeja para horno y unta la salsa de tomate por encima.",
+                                "8. Espolvorea el queso mozzarella y distribuye las lonchas de jamón.",
+                                "9. Hornea la pizza durante 15-20 minutos o hasta que los bordes estén dorados.",
+                                "10. Retira la pizza del horno, espolvorea orégano al gusto y sirve caliente."
+                            ],
+                            "line" : 34,
+                            "level" : 3,
+                            "children" : [ ],
+                            "display_name" : "com.dokumentando.documento(contenido)",
+                            "text" : "1. En un bol grande, mezcla la harina con la sal.\n2. Disuelve la levadura en el agua tibia y añádela a la mezcla de harina.\n3. Agrega el aceite de oliva y amasa hasta obtener una masa homogénea.\n4. Cubre la masa con un paño y deja reposar durante 1 hora en un lugar cálido.\n5. Precalienta el horno a 220°C.\n6. Estira la masa en una superficie enharinada hasta obtener el tamaño deseado.\n7. Coloca la masa en una bandeja para horno y unta la salsa de tomate por encima.\n8. Espolvorea el queso mozzarella y distribuye las lonchas de jamón.\n9. Hornea la pizza durante 15-20 minutos o hasta que los bordes estén dorados.\n10. Retira la pizza del horno, espolvorea orégano al gusto y sirve caliente.",
+                            "qualified_name" : "com.dokumentando.documento:contenido"
+                        }
+                    ],
+                    "display_name" : "com.dokumentando.documento(sección)",
+                    "text" : "",
+                    "qualified_name" : "com.dokumentando.documento:sección"
+                },
+                {
+                    "name" : "sección",
+                    "namespace" : "com.dokumentando.documento",
+                    "multiline" : false,
+                    "inline_text" : "",
+                    "multiline_text" : [ ],
+                    "line" : 45,
+                    "level" : 2,
+                    "children" : [
+                        {
+                            "name" : "título",
+                            "namespace" : "com.dokumentando.documento",
+                            "multiline" : false,
+                            "inline_text" : "Información Nutricional",
+                            "multiline_text" : [ ],
+                            "line" : 46,
+                            "level" : 3,
+                            "children" : [ ],
+                            "display_name" : "com.dokumentando.documento(título)",
+                            "text" : "Información Nutricional",
+                            "qualified_name" : "com.dokumentando.documento:título"
+                        },
+                        {
+                            "name" : "contenido",
+                            "namespace" : "com.dokumentando.documento",
+                            "multiline" : true,
+                            "inline_text" : "",
+                            "multiline_text" : [
+                                "Calorías por porción: 350 kcal",
+                                "Proteínas: 18g",
+                                "Grasas: 12g",
+                                "Carbohidratos: 45g"
+                            ],
+                            "line" : 47,
+                            "level" : 3,
+                            "children" : [ ],
+                            "display_name" : "com.dokumentando.documento(contenido)",
+                            "text" : "Calorías por porción: 350 kcal\nProteínas: 18g\nGrasas: 12g\nCarbohidratos: 45g",
+                            "qualified_name" : "com.dokumentando.documento:contenido"
+                        }
+                    ],
+                    "display_name" : "com.dokumentando.documento(sección)",
+                    "text" : "",
+                    "qualified_name" : "com.dokumentando.documento:sección"
+                }
+            ],
+            "display_name" : "com.dokumentando.documento(secciones)",
+            "text" : "",
+            "qualified_name" : "com.dokumentando.documento:secciones"
+        }
+    ],
+    "display_name" : "com.dokumentando.documento(documento)",
+    "text" : "",
+    "qualified_name" : "com.dokumentando.documento:documento"
+}

@@ -1,0 +1,97 @@
+{
+    "nodes" : {
+        "email" : {
+            "name" : "email",
+            "type" : "INLINE TEXT",
+            "children" : {
+                "com.example.docs:cc" : {
+                    "name" : "cc",
+                    "namespace" : "com.example.docs",
+                    "min" : null,
+                    "max" : null,
+                    "count" : "*",
+                    "qualified_name" : "com.example.docs:cc"
+                },
+                "com.example.docs:bcc" : {
+                    "name" : "bcc",
+                    "namespace" : "com.example.docs",
+                    "min" : null,
+                    "max" : null,
+                    "count" : "*",
+                    "qualified_name" : "com.example.docs:bcc"
+                },
+                "com.example.docs:to" : {
+                    "name" : "to",
+                    "namespace" : "com.example.docs",
+                    "min" : null,
+                    "max" : null,
+                    "count" : "*",
+                    "qualified_name" : "com.example.docs:to"
+                },
+                "com.example.docs:from" : {
+                    "name" : "from",
+                    "namespace" : "com.example.docs",
+                    "min" : null,
+                    "max" : null,
+                    "count" : null,
+                    "qualified_name" : "com.example.docs:from"
+                },
+                "com.example.docs:body content" : {
+                    "name" : "body content",
+                    "namespace" : "com.example.docs",
+                    "min" : 1,
+                    "max" : 1,
+                    "count" : "1",
+                    "qualified_name" : "com.example.docs:body content"
+                },
+                "com.example.docs:title" : {
+                    "name" : "title",
+                    "namespace" : "com.example.docs",
+                    "min" : null,
+                    "max" : 1,
+                    "count" : "?",
+                    "qualified_name" : "com.example.docs:title"
+                },
+                "com.google:metadata" : {
+                    "name" : "metadata",
+                    "namespace" : "com.google",
+                    "min" : null,
+                    "max" : 1,
+                    "count" : "?",
+                    "qualified_name" : "com.google:metadata"
+                }
+            }
+        },
+        "from" : {
+            "name" : "from",
+            "type" : "INLINE TEXT",
+            "children" : { }
+        },
+        "to" : {
+            "name" : "to",
+            "type" : "INLINE TEXT",
+            "children" : { }
+        },
+        "cc" : {
+            "name" : "cc",
+            "type" : "INLINE TEXT",
+            "children" : { }
+        },
+        "bcc" : {
+            "name" : "bcc",
+            "type" : "INLINE TEXT",
+            "children" : { }
+        },
+        "title" : {
+            "name" : "title",
+            "type" : "INLINE TEXT",
+            "children" : { }
+        },
+        "body content" : {
+            "name" : "body content",
+            "type" : "TEXT",
+            "children" : { }
+        }
+    },
+    "namespace" : "com.example.docs"
+}

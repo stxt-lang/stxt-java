@@ -1,0 +1,11 @@
+Schema (@stxt.schema): @stxt.schema
+    Node: Schema (INLINE TEXT)
+        Children>>
+            Description (?)
+            Node (+)
+    Node: Node (INLINE TEXT)
+        Children>>
+            Children (?)
+            Description (?)
+    Node: Children (MULTILINE TEXT)
+    Node: Description (TEXT)

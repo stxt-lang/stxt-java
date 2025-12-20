@@ -1,0 +1,32 @@
+# ----------------
+# Datos de cliente
+# ----------------
+
+Cliente:
+
+	# ----------------
+	# Datos personales
+	# ----------------
+	
+	Datos Personales:
+	
+		Nombre: Shila
+		Primer apellido: Kween
+		Edad: 28
+		Cliente vip: true
+		Foto:
+			R0lGODlhlgCNALMAAFtepau07X2I1tvg+pOe42dwwMPK9vz+/AAAAAAAAAAAAAAAAAAAAAAAAAAA
+			...
+			AjwuaomD+J5OCgNveUckajccWKU0EBdDlQKMIz5c2nbWF6UjoDYwOqZbdhItEChqqitG4IotYG5v
+			6gLpx6Aygad1aqd72qd++qeAGqiCOqiEWqiGeqiImqiKuqiM2qiO+qiQGqlyEAEAOw==
+	
+	# Nota: si alguien quiere entretenerse, la foto ha sido dibujada por mí. 
+	# Comprovaréis que soy bastante mejor informático que ilustrador :-D
+	
+	# ---------------
+	# Datos Bancarios
+	# ---------------
+	
+	Datos Bancarios:
+		Titular cuenta: Joan Costa Mombiela
+		Número cuenta: 0000-0000-00-000000000

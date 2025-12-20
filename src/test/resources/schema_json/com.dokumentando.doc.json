@@ -1,0 +1,77 @@
+{
+    "nodes" : {
+        "documento" : {
+            "name" : "documento",
+            "type" : "INLINE TEXT",
+            "children" : {
+                "com.dokumentando.doc:description" : {
+                    "name" : "description",
+                    "namespace" : "com.dokumentando.doc",
+                    "min" : 1,
+                    "max" : 1,
+                    "count" : "1",
+                    "qualified_name" : "com.dokumentando.doc:description"
+                },
+                "com.dokumentando.doc:secciones" : {
+                    "name" : "secciones",
+                    "namespace" : "com.dokumentando.doc",
+                    "min" : null,
+                    "max" : null,
+                    "count" : "*",
+                    "qualified_name" : "com.dokumentando.doc:secciones"
+                },
+                "com.dokumentando.doc:tipo documento" : {
+                    "name" : "tipo documento",
+                    "namespace" : "com.dokumentando.doc",
+                    "min" : 1,
+                    "max" : 1,
+                    "count" : "1",
+                    "qualified_name" : "com.dokumentando.doc:tipo documento"
+                },
+                "com.dokumentando.doc:título" : {
+                    "name" : "título",
+                    "namespace" : "com.dokumentando.doc",
+                    "min" : 1,
+                    "max" : 1,
+                    "count" : "1",
+                    "qualified_name" : "com.dokumentando.doc:título"
+                }
+            }
+        },
+        "secciones" : {
+            "name" : "secciones",
+            "type" : "INLINE TEXT",
+            "children" : {
+                "com.dokumentando.doc:sección" : {
+                    "name" : "sección",
+                    "namespace" : "com.dokumentando.doc",
+                    "min" : 1,
+                    "max" : null,
+                    "count" : "+",
+                    "qualified_name" : "com.dokumentando.doc:sección"
+                }
+            }
+        },
+        "título" : {
+            "name" : "título",
+            "type" : "INLINE TEXT",
+            "children" : { }
+        },
+        "sección" : {
+            "name" : "sección",
+            "type" : "TEXT",
+            "children" : { }
+        },
+        "description" : {
+            "name" : "description",
+            "type" : "TEXT",
+            "children" : { }
+        },
+        "tipo documento" : {
+            "name" : "tipo documento",
+            "type" : "INLINE TEXT",
+            "children" : { }
+        }
+    },
+    "namespace" : "com.dokumentando.doc"
+}

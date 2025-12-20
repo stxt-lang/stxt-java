@@ -1,0 +1,16 @@
+Schema (@stxt.schema): com.example.docs
+	Node: Email
+		Children >>
+			From
+			To (*)
+			Cc (*)
+			Bcc (*)
+			Title (?)
+			Body    Content (1)
+			com.google:Metadata (?)
+	Node: From
+	Node: To
+	Node: Cc
+	Node: Bcc
+	Node: Title
+	Node: Body   Content (TEXT)

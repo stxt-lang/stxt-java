@@ -1,0 +1,19 @@
+{
+    "nodes" : {
+        "recetario" : {
+            "name" : "recetario",
+            "type" : "INLINE TEXT",
+            "children" : {
+                "com.kocinando.receta:receta" : {
+                    "name" : "receta",
+                    "namespace" : "com.kocinando.receta",
+                    "min" : 1,
+                    "max" : null,
+                    "count" : "+",
+                    "qualified_name" : "com.kocinando.receta:receta"
+                }
+            }
+        }
+    },
+    "namespace" : "com.kocinando.recetario"
+}

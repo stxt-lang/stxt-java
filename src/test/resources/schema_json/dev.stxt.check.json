@@ -1,0 +1,115 @@
+{
+    "nodes" : {
+        "type list" : {
+            "name" : "type list",
+            "type" : "INLINE TEXT",
+            "children" : {
+                "dev.stxt.check:number" : {
+                    "name" : "number",
+                    "namespace" : "dev.stxt.check",
+                    "min" : 1,
+                    "max" : null,
+                    "count" : "+",
+                    "qualified_name" : "dev.stxt.check:number"
+                },
+                "dev.stxt.check:text" : {
+                    "name" : "text",
+                    "namespace" : "dev.stxt.check",
+                    "min" : 1,
+                    "max" : null,
+                    "count" : "+",
+                    "qualified_name" : "dev.stxt.check:text"
+                },
+                "dev.stxt.check:base64" : {
+                    "name" : "base64",
+                    "namespace" : "dev.stxt.check",
+                    "min" : 1,
+                    "max" : null,
+                    "count" : "+",
+                    "qualified_name" : "dev.stxt.check:base64"
+                },
+                "dev.stxt.check:natural" : {
+                    "name" : "natural",
+                    "namespace" : "dev.stxt.check",
+                    "min" : 1,
+                    "max" : null,
+                    "count" : "+",
+                    "qualified_name" : "dev.stxt.check:natural"
+                },
+                "dev.stxt.check:integer" : {
+                    "name" : "integer",
+                    "namespace" : "dev.stxt.check",
+                    "min" : 1,
+                    "max" : null,
+                    "count" : "+",
+                    "qualified_name" : "dev.stxt.check:integer"
+                },
+                "dev.stxt.check:boolean" : {
+                    "name" : "boolean",
+                    "namespace" : "dev.stxt.check",
+                    "min" : 1,
+                    "max" : null,
+                    "count" : "+",
+                    "qualified_name" : "dev.stxt.check:boolean"
+                },
+                "dev.stxt.check:url" : {
+                    "name" : "url",
+                    "namespace" : "dev.stxt.check",
+                    "min" : 1,
+                    "max" : null,
+                    "count" : "+",
+                    "qualified_name" : "dev.stxt.check:url"
+                },
+                "dev.stxt.check:hexadecimal" : {
+                    "name" : "hexadecimal",
+                    "namespace" : "dev.stxt.check",
+                    "min" : 1,
+                    "max" : null,
+                    "count" : "+",
+                    "qualified_name" : "dev.stxt.check:hexadecimal"
+                }
+            }
+        },
+        "text" : {
+            "name" : "text",
+            "type" : "TEXT",
+            "children" : { }
+        },
+        "natural" : {
+            "name" : "natural",
+            "type" : "NATURAL",
+            "children" : { }
+        },
+        "integer" : {
+            "name" : "integer",
+            "type" : "INTEGER",
+            "children" : { }
+        },
+        "number" : {
+            "name" : "number",
+            "type" : "NUMBER",
+            "children" : { }
+        },
+        "hexadecimal" : {
+            "name" : "hexadecimal",
+            "type" : "HEXADECIMAL",
+            "children" : { }
+        },
+        "base64" : {
+            "name" : "base64",
+            "type" : "BASE64",
+            "children" : { }
+        },
+        "boolean" : {
+            "name" : "boolean",
+            "type" : "BOOLEAN",
+            "children" : { }
+        },
+        "url" : {
+            "name" : "url",
+            "type" : "URL",
+            "children" : { }
+        }
+    },
+    "namespace" : "dev.stxt.check"
+}

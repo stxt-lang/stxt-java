@@ -1,0 +1,143 @@
+{
+    "nodes" : {
+        "cliente" : {
+            "name" : "cliente",
+            "type" : "INLINE TEXT",
+            "children" : {
+                "com.gym.docs:datos personales" : {
+                    "name" : "datos personales",
+                    "namespace" : "com.gym.docs",
+                    "min" : 1,
+                    "max" : 1,
+                    "count" : "1",
+                    "qualified_name" : "com.gym.docs:datos personales"
+                },
+                "com.gym.docs:datos bancarios" : {
+                    "name" : "datos bancarios",
+                    "namespace" : "com.gym.docs",
+                    "min" : 1,
+                    "max" : 1,
+                    "count" : "1",
+                    "qualified_name" : "com.gym.docs:datos bancarios"
+                }
+            }
+        },
+        "datos personales" : {
+            "name" : "datos personales",
+            "type" : "INLINE TEXT",
+            "children" : {
+                "com.gym.docs:nombre" : {
+                    "name" : "nombre",
+                    "namespace" : "com.gym.docs",
+                    "min" : 1,
+                    "max" : 1,
+                    "count" : "1",
+                    "qualified_name" : "com.gym.docs:nombre"
+                },
+                "com.gym.docs:primer apellido" : {
+                    "name" : "primer apellido",
+                    "namespace" : "com.gym.docs",
+                    "min" : 1,
+                    "max" : 1,
+                    "count" : "1",
+                    "qualified_name" : "com.gym.docs:primer apellido"
+                },
+                "com.gym.docs:segundo apellido" : {
+                    "name" : "segundo apellido",
+                    "namespace" : "com.gym.docs",
+                    "min" : null,
+                    "max" : 1,
+                    "count" : "?",
+                    "qualified_name" : "com.gym.docs:segundo apellido"
+                },
+                "com.gym.docs:cliente vip" : {
+                    "name" : "cliente vip",
+                    "namespace" : "com.gym.docs",
+                    "min" : null,
+                    "max" : 1,
+                    "count" : "?",
+                    "qualified_name" : "com.gym.docs:cliente vip"
+                },
+                "com.gym.docs:edad" : {
+                    "name" : "edad",
+                    "namespace" : "com.gym.docs",
+                    "min" : null,
+                    "max" : 1,
+                    "count" : "?",
+                    "qualified_name" : "com.gym.docs:edad"
+                },
+                "com.gym.docs:foto" : {
+                    "name" : "foto",
+                    "namespace" : "com.gym.docs",
+                    "min" : null,
+                    "max" : null,
+                    "count" : "*",
+                    "qualified_name" : "com.gym.docs:foto"
+                }
+            }
+        },
+        "datos bancarios" : {
+            "name" : "datos bancarios",
+            "type" : "INLINE TEXT",
+            "children" : {
+                "com.gym.docs:titular cuenta" : {
+                    "name" : "titular cuenta",
+                    "namespace" : "com.gym.docs",
+                    "min" : null,
+                    "max" : 1,
+                    "count" : "?",
+                    "qualified_name" : "com.gym.docs:titular cuenta"
+                },
+                "com.gym.docs:número cuenta" : {
+                    "name" : "número cuenta",
+                    "namespace" : "com.gym.docs",
+                    "min" : 1,
+                    "max" : 1,
+                    "count" : "1",
+                    "qualified_name" : "com.gym.docs:número cuenta"
+                }
+            }
+        },
+        "nombre" : {
+            "name" : "nombre",
+            "type" : "INLINE TEXT",
+            "children" : { }
+        },
+        "primer apellido" : {
+            "name" : "primer apellido",
+            "type" : "INLINE TEXT",
+            "children" : { }
+        },
+        "segundo apellido" : {
+            "name" : "segundo apellido",
+            "type" : "INLINE TEXT",
+            "children" : { }
+        },
+        "edad" : {
+            "name" : "edad",
+            "type" : "NUMBER",
+            "children" : { }
+        },
+        "cliente vip" : {
+            "name" : "cliente vip",
+            "type" : "BOOLEAN",
+            "children" : { }
+        },
+        "foto" : {
+            "name" : "foto",
+            "type" : "BASE64",
+            "children" : { }
+        },
+        "titular cuenta" : {
+            "name" : "titular cuenta",
+            "type" : "INLINE TEXT",
+            "children" : { }
+        },
+        "número cuenta" : {
+            "name" : "número cuenta",
+            "type" : "INLINE TEXT",
+            "children" : { }
+        }
+    },
+    "namespace" : "com.gym.docs"
+}

@@ -1,0 +1,14 @@
+Schema (@stxt.schema): com.dokumentando.doc
+	Node: Documento
+		Children >>
+			Título (1)
+			Secciones (*)
+			Description (1)
+			Tipo Documento (1)
+	Node: Secciones
+		Children >>
+			Sección (+)
+	Node: Título
+	Node: Sección (TEXT)
+	Node: Description (TEXT)
+	Node: Tipo Documento

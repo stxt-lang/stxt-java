@@ -1,0 +1,28 @@
+package dev.stxt.schema.type;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+
+import dev.stxt.Node;
+import dev.stxt.ParseException;
+import dev.stxt.schema.TypeValidator;
+
+public final class UrlValidator implements TypeValidator {
+	public static final UrlValidator INSTANCE = new UrlValidator();
+
+	private UrlValidator() {
+	}
+
+	@Override
+	public void validate(Node n) throws ParseException {
+		String url = n.getInlineText();
+		try {
+			URI uri = new URI(url);
+			boolean ok = uri.getScheme() != null && uri.getHost() != null;
+			if (!ok)
+				throw new IllegalArgumentException();
+		} catch (URISyntaxException | IllegalArgumentException e) {
+			throw new ParseException(n.getLine(), "INVALID_VALUE", "Invalid URL: " + url);
+		}
+	}
+}

@@ -1,0 +1,33 @@
+package dev.stxt.resources;
+
+import java.io.File;
+import java.io.IOException;
+
+import dev.stxt.utils.FileUtils;
+
+public class ResourcesLoaderDirectory implements ResourcesLoader {
+	private final File dir;
+
+	public ResourcesLoaderDirectory(String dir) throws ResourcesException {
+		this(new File(dir));
+	}
+
+	public ResourcesLoaderDirectory(File dirResources) throws ResourcesException {
+		this.dir = dirResources;
+		if (!dir.exists() || !dir.isDirectory())
+			throw new ResourcesException("Directory not valid: " + dir.getAbsolutePath());
+	}
+
+	@Override
+	public String retrieve(String namespace, String resource) throws NotFoundException, IOException {
+		// Obtenemos fichero
+		File file = new File(dir, namespace + '/' + resource + ".stxt");
+
+		// Validamos exista
+		if (!file.exists() || !file.isFile())
+			throw new NotFoundException(namespace, resource);
+
+		// Retornamos valor
+		return FileUtils.readFileContent(file);
+	}
+}

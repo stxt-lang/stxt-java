@@ -1,0 +1,39 @@
+Schema (@stxt.schema): com.dokumentando.documento
+	Node: Sección
+		Children >>
+			Título (1)
+			Contenido (1)
+	Node: Documento
+		Children >>
+			Título (1)
+			Cuerpo (1)
+			Autor (1)
+			Fecha Creación (1)
+			Última modificación (1)
+			Email Contacto (1)
+			Sitio Web (1)
+			Código postal
+			Es Público (1)
+			Color Tema (?)
+			Secciones (1)
+			Tipo Documento (1)
+	Node: Título
+	Node: Contenido (TEXT)
+	Node: Cuerpo (TEXT)
+	Node: Autor
+	Node: Fecha creación (DATE)
+	Node: Última modificación (TIMESTAMP)
+	Node: Email contacto (EMAIL)
+	Node: Sitio Web (URL)
+	Node: Código postal (NUMBER)
+	Node: Es público (BOOLEAN)
+	Node: Color Tema (HEXADECIMAL)
+	Node: Secciones
+		Children >>
+			Sección (+)
+	Node: Sección
+		Children >>
+			Título (1)
+			Contenido (1)
+	Node: Tipo documento
+	
