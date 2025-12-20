@@ -7,6 +7,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import test.FileTestLoction;
+import test.JSON;
 
 public class ParserTest {
 	public static void main(String[] args) throws IOException, ParseException {
@@ -27,7 +28,7 @@ public class ParserTest {
 		System.out.println(f.getAbsolutePath());
 		List<Node> docs = parser.parseFile(f);
 		Node n = docs.get(0);
-		System.out.println(n.toJson()); // System.out.println(n.toJsonPretty());
+		System.out.println(JSON.toJson(n)); // System.out.println(n.toJsonPretty());
 
 		System.out.println("End");
 	}

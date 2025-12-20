@@ -12,6 +12,7 @@ import dev.stxt.resources.ResourcesException;
 import dev.stxt.resources.ResourcesLoader;
 import dev.stxt.resources.ResourcesLoaderDirectory;
 import test.FileTestLoction;
+import test.JSON;
 
 public class SchemaParserTest {
 	@Test
@@ -24,7 +25,7 @@ public class SchemaParserTest {
 		Parser parser = new Parser();
 		List<Node> nodes = parser.parse(schema);
 		for (Node node : nodes) {
-			System.out.println(node.toJson());
+			System.out.println(JSON.toJson(node));
 			Schema sch = SchemaParser.transformNodeToSchema(node);
 			checkSchema(sch);
 		}
@@ -32,7 +33,7 @@ public class SchemaParserTest {
 
 	private void checkSchema(Schema sch) {
 		// TODO Auto-generated method stub
-		System.out.println("SCH => " + sch.toJsonPretty());
+		System.out.println("SCH => " + JSON.toJsonPretty(sch));
 	}
 
 }

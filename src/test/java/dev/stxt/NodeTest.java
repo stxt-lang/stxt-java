@@ -7,14 +7,14 @@ import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-import dev.stxt.utils.JSON;
+import test.JSON;
 
 class NodeTest {
 	@Test
 	void toJson_minimalNode_hasEmptyArraysAndNoOptionalFields() {
 		Node node = new Node(1, 0, "Title", null, false, "");
 
-		JsonNode json = JSON.toJsonTree(node.toJson());
+		JsonNode json = JSON.toJsonTree(node);
 		System.out.println("JSON: " + json.toString());
 
 		// Campos básicos
@@ -45,7 +45,7 @@ class NodeTest {
 		Node child = new Node(2, 1, "Title", null, false, "Hello");
 		parent.getChildren().add(child);
 
-		JsonNode json = JSON.toJsonTree(parent.toJson());
+		JsonNode json = JSON.toJsonTree(parent);
 		System.out.println("JSON: " + json.toString());
 
 		// Campos básicos

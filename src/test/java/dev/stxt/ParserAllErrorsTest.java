@@ -1,6 +1,6 @@
 package dev.stxt;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,8 +18,8 @@ import org.junit.jupiter.api.Test;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import dev.stxt.utils.FileUtils;
-import dev.stxt.utils.JSON;
 import test.FileTestLoction;
+import test.JSON;
 
 public class ParserAllErrorsTest {
 	public static void main(String[] args) throws IOException, ParseException {
@@ -55,7 +55,7 @@ public class ParserAllErrorsTest {
 		try {
 			List<Node> nodes = parser.parseFile(file);
 			for (Node n : nodes)
-				System.out.println(n.toJsonPretty());
+				System.out.println(JSON.toJsonPretty(n));
 			Assertions.fail("Expected ParseException for " + file);
 		} catch (ParseException e) {
 			System.out.println("OK Error at line: " + e.getLine());

@@ -14,6 +14,7 @@ import dev.stxt.Node;
 import dev.stxt.ParseException;
 import dev.stxt.Parser;
 import test.FileTestLoction;
+import test.JSON;
 
 public class TopDownValidatorTest {
 
@@ -27,7 +28,7 @@ public class TopDownValidatorTest {
 		List<Node> docs = parser.parseFile(f);
 		node = docs.get(0);
 		System.out.println("*********************************");
-		System.out.println("NODE: " + node.toJson());
+		System.out.println("NODE: " + JSON.toJson(node));
 	}
 
 	@Test

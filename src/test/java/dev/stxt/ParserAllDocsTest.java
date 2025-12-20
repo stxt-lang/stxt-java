@@ -11,8 +11,8 @@ import org.junit.jupiter.api.Test;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import dev.stxt.utils.FileUtils;
-import dev.stxt.utils.JSON;
 import test.FileTestLoction;
+import test.JSON;
 
 public class ParserAllDocsTest {
 	public static void main(String[] args) throws IOException, ParseException {
@@ -44,14 +44,14 @@ public class ParserAllDocsTest {
 			File jsonFile = FileTestLoction.getFile("docs_json/" + file.getName().substring(0, file.getName().length() - 5) + ".json");
 			if (!jsonFile.exists()) {
 				System.out.println("Writting json..." + jsonFile.getAbsolutePath());
-				String json = node.toJsonPretty();
+				String json = JSON.toJsonPretty(node);
 				System.out.println(json);
 				FileUtils.writeStringToFile(json, jsonFile);
 			} else {
 				System.out.println("Checking json...");
 				String jsonFileContent = FileUtils.readFileContent(jsonFile);
 				JsonNode treeFile = JSON.toJsonTree(jsonFileContent);
-				assertEquals(treeFile.toString(), node.toJson());
+				assertEquals(treeFile.toString(), JSON.toJson(node));
 			}
 		}
 	}

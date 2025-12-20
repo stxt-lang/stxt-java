@@ -1,4 +1,4 @@
-package dev.stxt.utils;
+package test;
 
 import java.io.IOException;
 
@@ -51,6 +51,11 @@ public final class JSON {
 		}
 	}
 
+	public static JsonNode toJsonTree(Object obj) {
+		return toJsonTree(toJson(obj));
+	}
+	
+	
 	public static JsonNode toJsonTree(String json) {
 		try {
 			return MAPPER.readTree(json);

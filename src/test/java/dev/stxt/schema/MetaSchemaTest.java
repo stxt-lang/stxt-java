@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import dev.stxt.ParseException;
 import dev.stxt.resources.NotFoundException;
+import test.JSON;
 
 public class MetaSchemaTest {
 	@Test
@@ -15,7 +16,7 @@ public class MetaSchemaTest {
 		SchemaProviderMeta resolver = new SchemaProviderMeta();
 		Schema meta = resolver.getSchema("@stxt.schema");
 		assertNotNull(meta, "Debería resolver un schema");
-		System.out.println("meta = \n" + meta.toJsonPretty());
+		System.out.println("meta = \n" + JSON.toJsonPretty(meta));
 	}
 
 }

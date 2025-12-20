@@ -12,6 +12,7 @@ import dev.stxt.resources.ResourcesException;
 import dev.stxt.resources.ResourcesLoader;
 import dev.stxt.resources.ResourcesLoaderDirectory;
 import test.FileTestLoction;
+import test.JSON;
 
 public class SchemaLocatorAllTest {
 	@Test
@@ -31,7 +32,7 @@ public class SchemaLocatorAllTest {
 			throws IOException, ParseException, ResourcesException {
 		Schema sch = schemaLocator.getSchema("com.example.docs");
 		assertNotNull(sch, "Debería resolver un schema");
-		System.out.println("SCH => " + sch.toJsonPretty());
+		System.out.println("SCH => " + JSON.toJsonPretty(sch));
 	}
 
 }

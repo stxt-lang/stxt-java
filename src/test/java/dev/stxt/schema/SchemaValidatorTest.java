@@ -13,6 +13,7 @@ import dev.stxt.resources.ResourcesException;
 import dev.stxt.resources.ResourcesLoader;
 import dev.stxt.resources.ResourcesLoaderDirectory;
 import test.FileTestLoction;
+import test.JSON;
 
 public class SchemaValidatorTest {
 	@Test
@@ -29,7 +30,7 @@ public class SchemaValidatorTest {
 		List<Node> nodes = schemaValidator.validateNodes(parser.parseFile(f));
 
 		for (Node n : nodes) {
-			System.out.println(n.toJsonPretty());
+			System.out.println(JSON.toJsonPretty(n));
 		}
 	}
 

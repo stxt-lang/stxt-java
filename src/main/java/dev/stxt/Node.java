@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import dev.stxt.utils.JSON;
-
 public class Node {
 	private final String name;
 	private final String namespace;
@@ -67,14 +65,6 @@ public class Node {
 
 	public int getLevel() {
 		return level;
-	}
-
-	public String toJson() {
-		return JSON.toJson(this);
-	}
-
-	public String toJsonPretty() {
-		return JSON.toJsonPretty(this);
 	}
 
 	public boolean isMultiline() {

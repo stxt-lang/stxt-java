@@ -1,11 +1,12 @@
 package dev.stxt.schema;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -17,8 +18,8 @@ import dev.stxt.resources.ResourcesException;
 import dev.stxt.resources.ResourcesLoader;
 import dev.stxt.resources.ResourcesLoaderDirectory;
 import dev.stxt.utils.FileUtils;
-import dev.stxt.utils.JSON;
 import test.FileTestLoction;
+import test.JSON;
 
 public class SchemaReaderTestAll {
 	@Test
@@ -45,20 +46,20 @@ public class SchemaReaderTestAll {
 			Parser parser = new Parser();
 			List<Node> nodes = parser.parse(schema);
 			for (Node node : nodes) {
-				System.out.println(node.toJson());
+				System.out.println(JSON.toJson(node));
 				Schema sch = SchemaParser.transformNodeToSchema(node);
 				
 				File json = FileTestLoction.getFile("schema_json/" + namespace + ".json");
 				if (json.exists()) {
 					String jsonFileContent = FileUtils.readFileContent(json);
 					JsonNode treeFile = JSON.toJsonTree(jsonFileContent);
-					assertEquals(treeFile.toString(), sch.toJson());					
+					assertEquals(treeFile.toString(), JSON.toJson(sch));					
 				}
 				else {
-					FileUtils.writeStringToFile(sch.toJsonPretty(), json);
+					FileUtils.writeStringToFile(JSON.toJsonPretty(sch), json);
 				}				
 				
-				System.out.println("SCH => " + sch.toJsonPretty());
+				System.out.println("SCH => " + JSON.toJsonPretty(sch));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
