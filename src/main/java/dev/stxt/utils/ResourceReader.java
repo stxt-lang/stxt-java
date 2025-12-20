@@ -16,4 +16,9 @@ public class ResourceReader {
 			return new String(is.readAllBytes(), StandardCharsets.UTF_8);
 		}
 	}
+	
+	public static void main(String[] args) throws IOException {
+		String metaSchemaText = ResourceReader.readResource("dev/stxt/schema/@stxt.schema.stxt");
+		System.out.println(metaSchemaText);
+	}
 }

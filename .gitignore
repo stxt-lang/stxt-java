@@ -17,9 +17,6 @@ dependency-reduced-pom.xml
 *.swp
 
 # Eclipse
-.project
-.classpath
-.settings/
 .metadata/
 bin/
 
