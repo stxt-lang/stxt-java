@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import dev.stxt.Node;
 import dev.stxt.ParseException;
 import dev.stxt.Parser;
 import dev.stxt.resources.ResourcesException;
@@ -24,12 +23,8 @@ public class ParserAllDocsTest {
 	public void mainTest() throws IOException, ParseException, ResourcesException {
 		System.out.println("Inici");
 
-		// Validator
-		ResourcesLoader resourcesLoader = new ResourcesLoaderDirectory(FileTestLoction.getFile(""));
-		DocumentValidator validator = new DocumentValidator(resourcesLoader);
-
 		// Create parser
-		Parser parser = new Parser();
+		Parser parser = getParser();
 		File docsDir = FileTestLoction.getFile("docs");
 
 		List<File> stxtFiles = FileUtils.getStxtFiles(docsDir);
@@ -38,12 +33,7 @@ public class ParserAllDocsTest {
 			try {
 				System.out.println("***************************************************");
 				System.out.println("FILE: " + file.getAbsolutePath());
-				List<Node> docs = parser.parseFile(file);
-
-				for (Node n : docs) {
-					if (!n.getNamespace().isEmpty())
-						validator.validateNode(n);
-				}
+				parser.parseFile(file);
 			} catch (Exception e) {
 				e.printStackTrace();
 				System.out.println("ERROR: " + file.getName() + " => " + e.getMessage());
@@ -53,5 +43,17 @@ public class ParserAllDocsTest {
 
 		System.out.println("End");
 	}
+	private Parser getParser() throws ResourcesException
+	{
+		Parser result = new Parser();
+		// Path
+		ResourcesLoader resourcesLoader = new ResourcesLoaderDirectory(FileTestLoction.getFile(""));
+		SchemaValidator schemaValidator = new SchemaValidator(new SchemaProviderCache(resourcesLoader));
+
+		result.registerValidator(schemaValidator);
+		
+		return result;
+	}
+	
 
 }
