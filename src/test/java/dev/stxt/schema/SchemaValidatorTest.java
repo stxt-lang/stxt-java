@@ -27,7 +27,8 @@ public class SchemaValidatorTest {
 		// Parser file
 		File f = FileTestLoction.getFile("docs/email.stxt");
 		Parser parser = new Parser();
-		List<Node> nodes = schemaValidator.validateNodes(parser.parseFile(f));
+		List<Node> nodes = parser.parseFile(f);
+		schemaValidator.validateNodes(nodes);
 
 		for (Node n : nodes) {
 			System.out.println(JSON.toJsonPretty(n));

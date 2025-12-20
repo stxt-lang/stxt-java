@@ -15,11 +15,11 @@ public final class DocumentValidator {
 		validator = new SchemaValidator(new SchemaProviderCache(resourcesLoader));
 	}
 
-	public Node validateNode(Node node) throws ParseException, IOException, NotFoundException {
-		return validator.validateNode(node);
+	public void validateNode(Node node) throws ParseException, IOException, NotFoundException {
+		validator.validateNode(node);
 	}
 
-	public List<Node> validateNodes(List<Node> nodes) throws ParseException, IOException, NotFoundException {
-		return validator.validateNodes(nodes);
+	public void validateNodes(List<Node> nodes) throws ParseException, IOException, NotFoundException {
+		validator.validateNodes(nodes);
 	}
 }
