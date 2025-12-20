@@ -31,15 +31,14 @@ final class SchemaProviderCache implements SchemaProvider {
 		// Cargamos schema
 		String textSchema = resourcesLoader.retrieve(Schema.SCHEMA_NAMESPACE, namespace);
 		Parser parser = new Parser();
+		parser.registerValidator(schemaValidator);
 		List<Node> nodes = parser.parse(textSchema);
 
 		if (nodes.size() != 1)
 			throw new ParseException(0, "INVALID_SCHEMA", "There are " + nodes.size() + ", and expected is 1");
 
-		Node root = nodes.get(0);
-		schemaValidator.validateNode(root);
-
 		// Convertimos a schema
+		Node root = nodes.get(0);
 		Schema sch = SchemaParser.transformNodeToSchema(root);
 
 		// Comprobar namespace esperado
