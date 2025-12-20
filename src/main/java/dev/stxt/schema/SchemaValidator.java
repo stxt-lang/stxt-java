@@ -1,14 +1,11 @@
 package dev.stxt.schema;
 
-import dev.stxt.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import dev.stxt.Node;
 import dev.stxt.ParseException;
 import dev.stxt.Validator;
-import dev.stxt.resources.NotFoundException;
 
 class SchemaValidator implements Validator {
 	// ------------------
@@ -33,41 +30,11 @@ class SchemaValidator implements Validator {
 		validateAgainstSchema(node, sch);
 	}
 	
-	public Node validateNode(Node node) throws ParseException, IOException, NotFoundException {
-		// Obtenemos namespace
-		String namespace = node.getNamespace();
-		Schema sch = schemaProvider.getSchema(namespace);
-		if (sch == null)
-			throw new ParseException(node.getLine(), "SCHEMA_NOT_FOUND", "Not found schema: " + sch);
-
-		// Validamos nodo y childs
-		validateAgainstSchema(node, sch);
-		validateNodes(node.getChildren());
-
-		return node;
-	}
-
-	public List<Node> validateNodes(List<Node> nodes) throws ParseException, IOException, NotFoundException {
-		if (nodes == null)
-			return null;
-
-		for (Node n : nodes)
-			validateNode(n);
-
-		return nodes;
-	}
-
 	public void validateAgainstSchema(Node node, Schema sch) throws ParseException {
-		// Obtenemos namespace
-		String namespace = node.getNamespace();
-		if (!namespace.equals(sch.namespace))
-			throw new IllegalArgumentException(
-					"Node namespace " + namespace + " not match with schema namespace: " + sch.namespace);
-
 		// Obtenemos node
 		SchemaNode schemaNode = sch.nodes.get(node.getName());
 		if (schemaNode == null) {
-			String error = "NOT EXIST NODE " + node.getName() + " for namespace " + namespace;
+			String error = "NOT EXIST NODE " + node.getName() + " for namespace " + sch.namespace;
 			throw new ParseException(node.getLine(), "NODE_NOT_EXIST_IN_SCHEMA", error);
 		}
 
