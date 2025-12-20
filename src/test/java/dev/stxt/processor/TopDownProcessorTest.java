@@ -1,6 +1,6 @@
 package dev.stxt.processor;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import dev.stxt.Node;
 import dev.stxt.ParseException;
 import dev.stxt.Parser;
-import dev.stxt.processor.TopDownProcessor;
 import test.FileTestLoction;
 import test.JSON;
 
