@@ -15,7 +15,7 @@ import dev.stxt.ParseException;
 import dev.stxt.Parser;
 import test.FileTestLoction;
 
-public class TestTopDownProcessor {
+public class TopDownValidatorTest {
 
 	private Node node;
 
