@@ -23,3 +23,6 @@ Hacer ResourceLoaderMultiple y ResourceLoaderDirectorys (que ignore los no exist
 dev.stxt.resources.os
 Revisar este directorio y normalizar con dev.stxt.resources
 
+Valorar: Validator vs Processor
+	Validator: void validate(Node)
+	Processor: Node process(Node)
