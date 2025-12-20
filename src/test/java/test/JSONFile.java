@@ -22,7 +22,7 @@ public class JSONFile {
 			System.out.println("Checking json...");
 			String jsonFileContent = FileUtils.readFileContent(jsonFile);
 			JsonNode treeFile = JSON.toJsonTree(jsonFileContent);
-			assertEquals(treeFile.toString(), JSON.toJson(node));
+			assertEquals(JSON.toJsonPretty(treeFile), JSON.toJsonPretty(node));
 		}
 	}
 }
