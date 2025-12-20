@@ -10,7 +10,7 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
-import dev.stxt.utils.FileTestLoction;
+import test.FileTestLoction;
 
 public class ResourcesLoaderDirectoryTest {
 	@Test

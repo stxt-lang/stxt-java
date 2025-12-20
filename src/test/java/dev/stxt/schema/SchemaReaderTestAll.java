@@ -16,9 +16,9 @@ import dev.stxt.resources.NotFoundException;
 import dev.stxt.resources.ResourcesException;
 import dev.stxt.resources.ResourcesLoader;
 import dev.stxt.resources.ResourcesLoaderDirectory;
-import dev.stxt.utils.FileTestLoction;
 import dev.stxt.utils.FileUtils;
 import dev.stxt.utils.JSON;
+import test.FileTestLoction;
 
 public class SchemaReaderTestAll {
 	@Test

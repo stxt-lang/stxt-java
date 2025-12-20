@@ -8,6 +8,8 @@ import java.util.Base64;
 
 import org.junit.jupiter.api.Test;
 
+import test.FileTestLoction;
+
 public class Base64ReadTest {
 	@Test
 	public void mainTest() throws IOException {

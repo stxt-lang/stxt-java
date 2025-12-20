@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import dev.stxt.utils.FileTestLoction;
+import test.FileTestLoction;
 
 public class ParserTest {
 	public static void main(String[] args) throws IOException, ParseException {

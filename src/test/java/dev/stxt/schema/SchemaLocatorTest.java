@@ -10,7 +10,7 @@ import dev.stxt.ParseException;
 import dev.stxt.resources.ResourcesException;
 import dev.stxt.resources.ResourcesLoader;
 import dev.stxt.resources.ResourcesLoaderDirectory;
-import dev.stxt.utils.FileTestLoction;
+import test.FileTestLoction;
 
 public class SchemaLocatorTest {
 	@Test

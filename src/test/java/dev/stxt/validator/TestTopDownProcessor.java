@@ -13,8 +13,8 @@ import org.junit.jupiter.api.Test;
 import dev.stxt.Node;
 import dev.stxt.ParseException;
 import dev.stxt.Parser;
-import dev.stxt.utils.FileTestLoction;
 import dev.stxt.validator.TopDownProcessor;
+import test.FileTestLoction;
 
 public class TestTopDownProcessor {
 

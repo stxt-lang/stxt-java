@@ -17,9 +17,9 @@ import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-import dev.stxt.utils.FileTestLoction;
 import dev.stxt.utils.FileUtils;
 import dev.stxt.utils.JSON;
+import test.FileTestLoction;
 
 public class ParserAllErrorsTest {
 	public static void main(String[] args) throws IOException, ParseException {

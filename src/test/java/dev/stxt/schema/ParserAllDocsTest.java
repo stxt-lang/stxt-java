@@ -12,8 +12,8 @@ import dev.stxt.Parser;
 import dev.stxt.resources.ResourcesException;
 import dev.stxt.resources.ResourcesLoader;
 import dev.stxt.resources.ResourcesLoaderDirectory;
-import dev.stxt.utils.FileTestLoction;
 import dev.stxt.utils.FileUtils;
+import test.FileTestLoction;
 
 public class ParserAllDocsTest {
 	public static void main(String[] args) throws IOException, ParseException, ResourcesException {
