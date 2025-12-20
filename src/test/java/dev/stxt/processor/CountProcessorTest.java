@@ -1,4 +1,4 @@
-package dev.stxt.validator;
+package dev.stxt.processor;
 
 import dev.stxt.Node;
 import dev.stxt.Processor;

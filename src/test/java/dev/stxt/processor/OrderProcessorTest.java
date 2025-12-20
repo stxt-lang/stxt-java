@@ -1,4 +1,4 @@
-package dev.stxt.validator;
+package dev.stxt.processor;
 
 import java.util.ArrayList;
 import java.util.List;

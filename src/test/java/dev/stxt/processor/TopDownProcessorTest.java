@@ -1,4 +1,4 @@
-package dev.stxt.validator;
+package dev.stxt.processor;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -13,10 +13,11 @@ import org.junit.jupiter.api.Test;
 import dev.stxt.Node;
 import dev.stxt.ParseException;
 import dev.stxt.Parser;
+import dev.stxt.processor.TopDownProcessor;
 import test.FileTestLoction;
 import test.JSON;
 
-public class TopDownValidatorTest {
+public class TopDownProcessorTest {
 
 	private Node node;
 
@@ -34,7 +35,7 @@ public class TopDownValidatorTest {
 	@Test
 	void testNumber() {
 		CountProcessorTest count = new CountProcessorTest();
-		TopDownValidator main = new TopDownValidator(Collections.singletonList(count));
+		TopDownProcessor main = new TopDownProcessor(Collections.singletonList(count));
 		main.process(node);
 
 		System.out.println("Nodes = " + count.total);
@@ -44,7 +45,7 @@ public class TopDownValidatorTest {
 	@Test
 	void testOrder() {
 		OrderProcessorTest order = new OrderProcessorTest();
-		TopDownValidator main = new TopDownValidator(Collections.singletonList(order));
+		TopDownProcessor main = new TopDownProcessor(Collections.singletonList(order));
 		main.process(node);
 		
 		List<String> elements = order.elements;
