@@ -33,7 +33,7 @@ public class TestTopDownProcessor {
 	@Test
 	void testNumber() {
 		CountProcessorTest count = new CountProcessorTest();
-		TopDownProcessor main = new TopDownProcessor(Collections.singletonList(count));
+		TopDownValidator main = new TopDownValidator(Collections.singletonList(count));
 		main.process(node);
 
 		System.out.println("Nodes = " + count.total);
@@ -43,7 +43,7 @@ public class TestTopDownProcessor {
 	@Test
 	void testOrder() {
 		OrderProcessorTest order = new OrderProcessorTest();
-		TopDownProcessor main = new TopDownProcessor(Collections.singletonList(order));
+		TopDownValidator main = new TopDownValidator(Collections.singletonList(order));
 		main.process(node);
 		
 		List<String> elements = order.elements;

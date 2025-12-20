@@ -5,10 +5,10 @@ import java.util.List;
 import dev.stxt.Node;
 import dev.stxt.Processor;
 
-public class TopDownProcessor implements Processor {
+public class TopDownValidator implements Processor {
 	private final List<Processor> processors;
 
-	public TopDownProcessor(List<Processor> processors) {
+	public TopDownValidator(List<Processor> processors) {
 		this.processors = processors;
 	}
 
