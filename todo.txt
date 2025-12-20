@@ -1,11 +1,20 @@
 dev.stxt
 * Poner getParent() en los childs
 * Poner level en child
-* Validator (interface). NOOO processor
-* ValidatorService (recorre los nodos) NOOO processor
-* Valorar si se hace un Visitor NOOOO processor
+* Validator (interface). NOOO! processor
+* ValidatorService (recorre los nodos) NOOO! processor
+* Valorar si se hace un Visitor NOOOO! processor
 * toJson y toJsonPretty en otro sitio
 * toString correcto con niveles y estructura estándar
+
+dev.stxt.schema
+* Processor para leer schema de nodo
+* Processor para validar schema
+* SchemaValidatorCount
+* SchemaValidatorType
+* Hacer exception para schema, que no sea el Parser, por ejemplo SchemaException, InvalidNodeSchema,... algo.
+* toJson y toJsonPretty en otro sitio: SchemaExporter (JsonSchemaExporter,...)
+* quitar INSTANCE de type, hacer método mejor y que el nombre esté en el propio TypeValidator
 
 dev.stxt.resources
 Hacer ResourceLoaderMultiple y ResourceLoaderDirectorys (que ignore los no existentes)
@@ -13,9 +22,3 @@ Hacer ResourceLoaderMultiple y ResourceLoaderDirectorys (que ignore los no exist
 dev.stxt.resources.os
 Revisar este directorio y normalizar con dev.stxt.resources
 
-dev.stxt.schema
-* SchemaValidatorCount
-* SchemaValidatorType
-* Hacer exception para schema, que no sea el Parser, por ejemplo SchemaException, InvalidNodeSchema,... algo.
-* toJson y toJsonPretty en otro sitio: SchemaExporter (JsonSchemaExporter,...)
-* quitar INSTANCE de type, hacer método mejor y que el nombre esté en el propio TypeValidator
