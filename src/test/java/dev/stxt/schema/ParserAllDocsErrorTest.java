@@ -4,7 +4,9 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
@@ -16,6 +18,7 @@ import dev.stxt.resources.ResourcesLoader;
 import dev.stxt.resources.ResourcesLoaderDirectory;
 import dev.stxt.utils.FileUtils;
 import test.FileTestLoction;
+import test.JSONFile;
 
 public class ParserAllDocsErrorTest {
 	public static void main(String[] args) throws IOException, ParseException, ResourcesException {
@@ -45,8 +48,12 @@ public class ParserAllDocsErrorTest {
 				validator.validateNodes(docs);
 				fail("Debería haber saltado excepción!!");
 			} catch (ParseException e) {
-				System.out.println("OK Exception: " + e.getMessage());
-				System.out.println("Code: " + e.getCode() + ", line: " + e.getLine());
+				// Build JSON node with line and code from the exception
+				Map<String, Object> errorInfo = new HashMap<>();
+				errorInfo.put("line", e.getLine());
+				errorInfo.put("code", e.getCode());
+
+				JSONFile.checkContentWithJsonFile(errorInfo, "error_schema_json", file.getName().substring(0, file.getName().length() - 5));
 			}
 		}
 
