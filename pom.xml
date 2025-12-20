@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>dev.stxt</groupId>
-    <artifactId>dev.stxt.lang</artifactId>
+    <artifactId>dev.stxt</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
