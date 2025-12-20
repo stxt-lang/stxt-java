@@ -10,6 +10,7 @@ dev.stxt
 dev.stxt.schema
 * Processor para leer schema de nodo
 * Processor para validar schema
+* En DocumentValidator permitir custom processor para otras cosas
 * SchemaValidatorCount
 * SchemaValidatorType
 * Hacer exception para schema, que no sea el Parser, por ejemplo SchemaException, InvalidNodeSchema,... algo.
