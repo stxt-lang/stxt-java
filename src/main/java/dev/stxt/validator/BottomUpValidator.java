@@ -1,13 +1,14 @@
-package dev.stxt.processor;
+package dev.stxt.validator;
 
 import java.util.List;
 
 import dev.stxt.Node;
+import dev.stxt.Processor;
 
-public class BottomUpProcessor implements Processor {
+public class BottomUpValidator implements Processor {
 	private final List<Processor> processors;
 
-	public BottomUpProcessor(List<Processor> processors) {
+	public BottomUpValidator(List<Processor> processors) {
 		this.processors = processors;
 	}
 

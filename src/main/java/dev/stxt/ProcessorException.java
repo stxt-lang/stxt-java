@@ -1,4 +1,4 @@
-package dev.stxt.processor;
+package dev.stxt;
 
 public class ProcessorException extends RuntimeException {
 	private static final long serialVersionUID = 1L;

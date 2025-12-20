@@ -1,4 +1,4 @@
-package dev.stxt.processor;
+package dev.stxt.validator;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -14,6 +14,7 @@ import dev.stxt.Node;
 import dev.stxt.ParseException;
 import dev.stxt.Parser;
 import dev.stxt.utils.FileTestLoction;
+import dev.stxt.validator.TopDownProcessor;
 
 public class TestTopDownProcessor {
 

@@ -1,6 +1,4 @@
-package dev.stxt.processor;
-
-import dev.stxt.Node;
+package dev.stxt;
 
 public interface Processor {
 	public void process(Node n);

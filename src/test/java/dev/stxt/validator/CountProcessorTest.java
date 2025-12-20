@@ -1,6 +1,7 @@
-package dev.stxt.processor;
+package dev.stxt.validator;
 
 import dev.stxt.Node;
+import dev.stxt.Processor;
 
 class CountProcessorTest implements Processor {
 	public int total = 0;

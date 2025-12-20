@@ -1,8 +1,9 @@
-package dev.stxt.processor;
+package dev.stxt.validator;
 
 import java.util.List;
 
 import dev.stxt.Node;
+import dev.stxt.Processor;
 
 public class TopDownProcessor implements Processor {
 	private final List<Processor> processors;
