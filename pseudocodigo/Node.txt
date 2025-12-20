@@ -1,0 +1,52 @@
+STRUCT Node:
+    name: STRING
+    namespace: STRING?          // opcional
+    type: STRING?               // opcional (TEXT, MARKDOWN, BASE64, ...)
+    value: STRING?              // valor en la misma línea que el nombre
+    text: LIST<STRING>          // siempre lista, vacía o con líneas
+    children: LIST<Node>        // siempre lista, vacía o con nodos
+    line: INTEGER               // número de línea en el fichero origen (1-based)
+    level: INTEGER              // nivel de indentación (0, 1, 2, ...)
+
+FUNCTION createNode(line, level, name, value) -> Node:
+    node = new Node
+    node.line = line
+    node.level = level
+    node.name = name
+    node.value = value          // puede ser null si el nodo no tiene valor en línea
+    node.namespace = null
+    node.type = null
+    node.text = lista vacía no null
+    node.children = lista vacía no null
+    RETURN node
+
+FUNCTION nodeToJson(node: Node) -> JSON_OBJECT:
+    obj = nuevo JSON_OBJECT
+
+    obj["name"] = node.name
+
+    IF node.namespace != null:
+        obj["namespace"] = node.namespace
+
+    IF node.type != null:
+        obj["type"] = node.type
+
+    IF node.value != null:
+        obj["value"] = node.value
+
+    obj["line"] = node.line
+    obj["level"] = node.level
+
+    // Text siempre presente como array JSON (vacío o lleno)
+    jsonText = nueva JSON_ARRAY
+    PARA cada linea EN node.text:
+        jsonText.append(linea)
+    obj["text"] = jsonText
+
+    // Children siempre presente como array JSON (vacío o lleno)
+    jsonChildren = nueva JSON_ARRAY
+    PARA cada child EN node.children:
+        jsonChildren.append(nodeToJson(child))
+    obj["children"] = jsonChildren
+
+    RETURN obj
