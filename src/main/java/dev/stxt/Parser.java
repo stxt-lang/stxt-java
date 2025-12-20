@@ -2,7 +2,6 @@ package dev.stxt;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,20 +22,28 @@ public class Parser {
 	}
 	
 	public List<Node> parseFile(File srcFile) throws IOException, ParseException {
-		return parse(FileUtils.readFileContent(srcFile));
+		try {	
+			return parse(FileUtils.readFileContent(srcFile));
+		}
+		catch (java.io.IOException e) {
+			throw new IOException(e);
+		}
 	}
 
-	public List<Node> parse(String content) throws ParseException, IOException {
+	public List<Node> parse(String content) throws ParseException {
 		content = FileUtils.removeUTF8BOM(content);
 
 		ParseState state = new ParseState();
 		int lineNumber = 0;
 
-		BufferedReader in = new BufferedReader(new StringReader(content));
-		String line;
-		while ((line = in.readLine()) != null) {
-			lineNumber++;
-			processLine(line, lineNumber, state);
+		try (BufferedReader in = new BufferedReader(new StringReader(content));) {
+			String line;
+			while ((line = in.readLine()) != null) {
+				lineNumber++;
+				processLine(line, lineNumber, state);
+			}
+		} catch (java.io.IOException e) {
+			throw new IOException(e);
 		}
 
 		// Validators

@@ -1,7 +1,7 @@
 package dev.stxt.resources;
 
 import java.io.File;
-import java.io.IOException;
+import dev.stxt.IOException;
 
 import dev.stxt.utils.FileUtils;
 
@@ -28,6 +28,12 @@ public class ResourcesLoaderDirectory implements ResourcesLoader {
 			throw new NotFoundException(namespace, resource);
 
 		// Retornamos valor
-		return FileUtils.readFileContent(file);
+		try {
+			return FileUtils.readFileContent(file);
+		}
+		catch (java.io.IOException e) {
+			throw new IOException(e);
+		}
+		
 	}
 }

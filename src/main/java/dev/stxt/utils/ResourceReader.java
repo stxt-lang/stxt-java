@@ -1,6 +1,5 @@
 package dev.stxt.utils;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
@@ -8,7 +7,7 @@ public class ResourceReader {
 	private ResourceReader() {
 	}
 
-	public static String readResource(String resourcePath) throws IOException {
+	public static String readResource(String resourcePath) throws java.io.IOException {
 		try (InputStream is = ResourceReader.class.getClassLoader().getResourceAsStream(resourcePath)) {
 			if (is == null)
 				throw new IllegalArgumentException("Recurso no encontrado en el classpath: " + resourcePath);
@@ -17,7 +16,7 @@ public class ResourceReader {
 		}
 	}
 	
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws java.io.IOException {
 		String metaSchemaText = ResourceReader.readResource("dev/stxt/schema/@stxt.schema.stxt");
 		System.out.println(metaSchemaText);
 	}

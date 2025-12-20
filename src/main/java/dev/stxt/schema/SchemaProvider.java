@@ -1,6 +1,6 @@
 package dev.stxt.schema;
 
-import java.io.IOException;
+import dev.stxt.IOException;
 
 import dev.stxt.ParseException;
 import dev.stxt.resources.NotFoundException;

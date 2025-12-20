@@ -6,10 +6,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
-import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
+import dev.stxt.IOException;
 import test.FileTestLoction;
 
 public class ResourcesLoaderDirectoryTest {

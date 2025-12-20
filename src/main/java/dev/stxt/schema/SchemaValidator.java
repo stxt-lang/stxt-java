@@ -1,6 +1,6 @@
 package dev.stxt.schema;
 
-import java.io.IOException;
+import dev.stxt.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
