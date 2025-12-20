@@ -28,7 +28,7 @@ public class ParserAllErrorsTest {
 
 		// Create parser
 		Parser parser = new Parser();
-		File docsDir = FileTestLoction.getFile("error");
+		File docsDir = FileTestLoction.getFile("error_docs");
 
 		List<File> stxtFiles;
 		try (Stream<Path> stream = Files.walk(docsDir.toPath())) {
@@ -61,7 +61,7 @@ public class ParserAllErrorsTest {
 			errorInfo.put("line", e.getLine());
 			errorInfo.put("code", e.getCode());
 
-			JSONFile.checkContentWithJsonFile(errorInfo, "error_json", file.getName().substring(0, file.getName().length() - 5));
+			JSONFile.checkContentWithJsonFile(errorInfo, "error_docs_json", file.getName().substring(0, file.getName().length() - 5));
 		}
 	}
 
