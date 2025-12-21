@@ -2,30 +2,11 @@ Fichero: dev/stxt/ParseException.java
 ```
 package dev.stxt;
 
-public class ParseException extends Exception {
+public class ParseException extends LineAwareException {
 	private static final long serialVersionUID = 1L;
-	private final int line;
-	private final String code;
-
-	public ParseException(int line, String code, String message) {
-		super(message);
-		this.line = line;
-		this.code = code;
-	}
-
-	public int getLine() {
-		return line;
-	}
-
-	public String getCode() {
-		return code;
-	}
-
-	@Override
-	public String toString() {
-		return "ParseException{" + "line=" + line + ", code='" + code + '\'' + ", message='" + getMessage() + '\''
-				+ '}';
-	}
+    public ParseException(int line, String code, String message) {
+        super(line, code, message);
+    }
 }
 
 ```
@@ -194,22 +175,6 @@ class ParseState {
 
 ```
 
-Fichero: dev/stxt/IOException.java
-```
-package dev.stxt;
-
-public class IOException extends ParseException {
-
-	private static final long serialVersionUID = 1L;
-
-	public IOException(java.io.IOException io) {
-		super(0, "IO_EXCEPTION", io.getMessage());
-	}
-
-}
-
-```
-
 Fichero: dev/stxt/schema/type/NumberValidator.java
 ```
 package dev.stxt.schema.type;
@@ -285,7 +250,7 @@ abstract class RegexValueValidator implements TypeValidator {
 	}
 
 	@Override
-	public void validate(Node n) throws ParseException {
+	public void validate(Node n) {
 		String value = n.getText();
 		Matcher m = pattern.matcher(value);
 		if (!m.matches()) {
@@ -331,7 +296,7 @@ public final class UrlValidator implements TypeValidator {
 	}
 
 	@Override
-	public void validate(Node n) throws ParseException {
+	public void validate(Node n) {
 		String url = n.getInlineText();
 		try {
 			URI uri = new URI(url);
@@ -378,7 +343,7 @@ public final class EmptyValidator implements TypeValidator {
 	}
 
 	@Override
-	public void validate(Node n) throws ParseException {
+	public void validate(Node n) {
 		if (!n.getInlineText().isEmpty() || n.getMultilineText().size() > 0) {
 			throw new ParseException(n.getLine(), "INVALID_VALUE", "Node '" + n.getName() + "' has to be empty");
 		}
@@ -405,7 +370,7 @@ public final class Base64Validator implements TypeValidator {
 	}
 
 	@Override
-	public void validate(Node n) throws ParseException {
+	public void validate(Node n) {
 		try {
 			Base64.getDecoder().decode(StringUtils.cleanupString(n.getText()));
 		} catch (Exception e) {
@@ -431,7 +396,7 @@ public final class InlineTextValidator implements TypeValidator {
 	}
 
 	@Override
-	public void validate(Node n) throws ParseException {
+	public void validate(Node n) {
 		if (n.getMultilineText() != null && n.getMultilineText().size() > 0) {
 			throw new ParseException(n.getLine(), "NOT_ALLOWED_MULTILINE_TEXT",
 					"Not allowed multiline text in node " + n.getQualifiedName());
@@ -456,7 +421,7 @@ public final class MultilineTextValidator implements TypeValidator {
 	}
 
 	@Override
-	public void validate(Node n) throws ParseException {
+	public void validate(Node n) {
 		if (n.getInlineText() != null && !n.getInlineText().isEmpty()) {
 			throw new ParseException(n.getLine(), "NOT_ALLOWED_INLINE_TEXT",
 					"Not allowed inline text in node " + n.getQualifiedName());
@@ -481,7 +446,7 @@ public final class TextValidator implements TypeValidator {
 	}
 
 	@Override
-	public void validate(Node n) throws ParseException {
+	public void validate(Node n) {
 		if (n.getChildren() != null && n.getChildren().size() > 0) {
 			throw new ParseException(n.getLine(), "NOT_ALLOWED_CHILDREN_TEXT",
 					"Not allowed children nodes in node " + n.getQualifiedName());
@@ -551,14 +516,10 @@ Fichero: dev/stxt/schema/SchemaValidatorService.java
 ```
 package dev.stxt.schema;
 
-import dev.stxt.IOException;
-
 import java.util.Collections;
 import java.util.List;
 
 import dev.stxt.Node;
-import dev.stxt.ParseException;
-import dev.stxt.resources.NotFoundException;
 import dev.stxt.resources.ResourcesLoader;
 import dev.stxt.validator.TopDownValidator;
 
@@ -569,11 +530,11 @@ public final class SchemaValidatorService {
 		validator = new TopDownValidator(Collections.singletonList(new SchemaValidator(new SchemaProviderCache(resourcesLoader))));
 	}
 
-	public void validateNode(Node node) throws ParseException, IOException, NotFoundException {
+	public void validateNode(Node node) {
 		validator.validate(node);
 	}
 
-	public void validateNodes(List<Node> nodes) throws ParseException, IOException, NotFoundException {
+	public void validateNodes(List<Node> nodes) {
 		for (Node n: nodes)
 			validator.validate(n);
 	}
@@ -604,7 +565,7 @@ class SchemaValidator implements Validator {
 	}
 
 	@Override
-	public void validate(Node node) throws ParseException {
+	public void validate(Node node) {
 		// Obtenemos namespace
 		String namespace = node.getNamespace();
 		Schema sch = schemaProvider.getSchema(namespace);
@@ -615,7 +576,7 @@ class SchemaValidator implements Validator {
 		validateAgainstSchema(node, sch);
 	}
 	
-	public void validateAgainstSchema(Node node, Schema sch) throws ParseException {
+	public void validateAgainstSchema(Node node, Schema sch) {
 		// Obtenemos node
 		SchemaNode schemaNode = sch.nodes.get(node.getName());
 		if (schemaNode == null) {
@@ -628,7 +589,7 @@ class SchemaValidator implements Validator {
 		validateCount(schemaNode, node);
 	}
 
-	private static void validateValue(SchemaNode nsNode, Node n) throws ParseException {
+	private static void validateValue(SchemaNode nsNode, Node n) {
 		String nodeType = nsNode.type;
 
 		TypeValidator validator = TypeRegistry.get(nodeType);
@@ -638,7 +599,7 @@ class SchemaValidator implements Validator {
 		validator.validate(n);
 	}
 
-	private static void validateCount(SchemaNode nsNode, Node node) throws ParseException {
+	private static void validateCount(SchemaNode nsNode, Node node) {
 		Map<String, Integer> count = new HashMap<>();
 
 		for (Node child : node.getChildren()) {
@@ -652,7 +613,7 @@ class SchemaValidator implements Validator {
 		}
 	}
 
-	private static void validateCount(SchemaChild chNode, int num, Node node) throws ParseException {
+	private static void validateCount(SchemaChild chNode, int num, Node node) {
 		Integer min = chNode.min;
 		Integer max = chNode.max;
 
@@ -689,7 +650,6 @@ Fichero: dev/stxt/schema/SchemaProviderCache.java
 ```
 package dev.stxt.schema;
 
-import dev.stxt.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -697,7 +657,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import dev.stxt.Node;
 import dev.stxt.ParseException;
 import dev.stxt.Parser;
-import dev.stxt.resources.NotFoundException;
 import dev.stxt.resources.ResourcesLoader;
 
 final class SchemaProviderCache implements SchemaProvider {
@@ -710,7 +669,7 @@ final class SchemaProviderCache implements SchemaProvider {
 		this.schemaValidator = new SchemaValidator(new SchemaProviderMeta());
 	}
 
-	public Schema getSchema(String namespace) throws IOException, ParseException, NotFoundException {
+	public Schema getSchema(String namespace) {
 		// Retorno de cache
 		namespace = namespace.toLowerCase();
 		Schema cached = cache.get(namespace);
@@ -747,13 +706,11 @@ Fichero: dev/stxt/schema/SchemaProviderMeta.java
 ```
 package dev.stxt.schema;
 
-import dev.stxt.IOException;
 import java.util.List;
 
 import dev.stxt.Node;
-import dev.stxt.ParseException;
 import dev.stxt.Parser;
-import dev.stxt.resources.NotFoundException;
+import dev.stxt.resources.ResourceNotFoundException;
 import dev.stxt.utils.ResourceReader;
 
 final class SchemaProviderMeta implements SchemaProvider {
@@ -772,13 +729,29 @@ final class SchemaProviderMeta implements SchemaProvider {
 		meta = metaSchema;
 	}
 
-	public Schema getSchema(String namespace) throws IOException, ParseException, NotFoundException {
+	public Schema getSchema(String namespace) {
 		if (!namespace.equals(Schema.SCHEMA_NAMESPACE))
-			throw new NotFoundException(namespace, namespace);
+			throw new ResourceNotFoundException(namespace, namespace);
 
 		// Retorno de cache
 		return meta;
 	}
+}
+
+```
+
+Fichero: dev/stxt/schema/SchemaException.java
+```
+package dev.stxt.schema;
+
+import dev.stxt.STXTException;
+
+public class SchemaException extends STXTException {
+    private static final long serialVersionUID = 1L;
+
+	public SchemaException(String code, String message) {
+        super(code, message);
+    }
 }
 
 ```
@@ -788,10 +761,9 @@ Fichero: dev/stxt/schema/TypeValidator.java
 package dev.stxt.schema;
 
 import dev.stxt.Node;
-import dev.stxt.ParseException;
 
 public interface TypeValidator {
-	void validate(Node node) throws ParseException;
+	void validate(Node node);
 }
 
 ```
@@ -850,7 +822,7 @@ class SchemaParser {
 	private static final Pattern P = Pattern
 			.compile("^\\s*(?<name>[^()]+?)\\s*(?:\\(\\s*(?<type>[^()]+?)\\s*\\))?\\s*$");
 
-	public static Schema transformNodeToSchema(Node node) throws ParseException {
+	public static Schema transformNodeToSchema(Node node) {
 		Schema schema = new Schema();
 
 		// Node name
@@ -1072,13 +1044,8 @@ Fichero: dev/stxt/schema/SchemaProvider.java
 ```
 package dev.stxt.schema;
 
-import dev.stxt.IOException;
-
-import dev.stxt.ParseException;
-import dev.stxt.resources.NotFoundException;
-
 public interface SchemaProvider {
-	public Schema getSchema(String namespace) throws IOException, ParseException, NotFoundException;
+	public Schema getSchema(String namespace);
 }
 
 ```
@@ -1098,6 +1065,25 @@ class Constants {
 	public static final char SEP_NODE = ':';
 	public static final Charset ENCODING = StandardCharsets.UTF_8;
 	public static final String EMPTY_NAMESPACE = "";
+}
+
+```
+
+Fichero: dev/stxt/LineAwareException.java
+```
+package dev.stxt;
+
+public abstract class LineAwareException extends STXTException {
+	
+	private static final long serialVersionUID = 1L;
+	private final int line;
+    
+    protected LineAwareException(int line, String code, String message) {
+        super(code, message);
+        this.line = line;
+    }
+    
+    public int getLine() { return line; }
 }
 
 ```
@@ -1125,7 +1111,7 @@ class LineIndent {
 	// parseLine
 	// -------------------------------------------------
 
-	public static LineIndent parseLine(String line, int numLine, ParseState parseState) throws ParseException {
+	public static LineIndent parseLine(String line, int numLine, ParseState parseState) {
 		int stackSize = parseState.getStack().size();
 		boolean lastNodeMultiline = stackSize > 0 && parseState.getStack().peek().isMultiline();
 
@@ -1254,9 +1240,36 @@ public interface Validator {
 
 ```
 
+Fichero: dev/stxt/STXTException.java
+```
+package dev.stxt;
+
+public class STXTException extends RuntimeException {
+	
+	private static final long serialVersionUID = 1L;
+	private final String code;
+    
+    public STXTException(String code, String message) {
+        super(message);
+        this.code = code;
+    }
+    
+    public STXTException(String code, String message, Throwable cause) {
+        super(message, cause);
+        this.code = code;
+    }
+    
+    public String getCode() { return code; }
+}
+
+```
+
 Fichero: dev/stxt/Parser.java
 ```
 package dev.stxt;
+
+import static dev.stxt.Constants.EMPTY_NAMESPACE;
+import static dev.stxt.utils.StringUtils.compactString;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -1267,9 +1280,6 @@ import java.util.Stack;
 
 import dev.stxt.utils.FileUtils;
 
-import static dev.stxt.Constants.EMPTY_NAMESPACE;
-import static dev.stxt.utils.StringUtils.compactString;
-
 public class Parser {
 	private List<Validator> validators;
 	
@@ -1279,12 +1289,12 @@ public class Parser {
 		validators.add(v);
 	}
 	
-	public List<Node> parseFile(File srcFile) throws IOException, ParseException {
+	public List<Node> parseFile(File srcFile) throws STXTIOException, ParseException {
 		try {	
 			return parse(FileUtils.readFileContent(srcFile));
 		}
 		catch (java.io.IOException e) {
-			throw new IOException(e);
+			throw new STXTIOException(e);
 		}
 	}
 
@@ -1301,7 +1311,7 @@ public class Parser {
 				processLine(line, lineNumber, state);
 			}
 		} catch (java.io.IOException e) {
-			throw new IOException(e);
+			throw new STXTIOException(e);
 		}
 
 		// Validators
@@ -1314,7 +1324,7 @@ public class Parser {
 		return state.getDocuments();
 	}
 
-	private void processLine(String line, int lineNumber, ParseState state) throws ParseException, IOException {
+	private void processLine(String line, int lineNumber, ParseState state) throws ParseException, STXTIOException {
 		// Parseamos la línea actual
 		LineIndent lineIndent = LineIndent.parseLine(line, lineNumber, state);
 		if (lineIndent == null)
@@ -1448,32 +1458,17 @@ public class Parser {
 }
 ```
 
-Fichero: dev/stxt/ValidatorException.java
+Fichero: dev/stxt/STXTIOException.java
 ```
 package dev.stxt;
 
-public class ValidatorException extends RuntimeException {
+public class STXTIOException extends STXTException {
+
 	private static final long serialVersionUID = 1L;
 
-	public ValidatorException() {
-		super();
-	}
-
-	public ValidatorException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-		super(message, cause, enableSuppression, writableStackTrace);
-	}
-
-	public ValidatorException(String message, Throwable cause) {
-		super(message, cause);
-	}
-
-	public ValidatorException(String message) {
-		super(message);
-	}
-
-	public ValidatorException(Throwable cause) {
-		super(cause);
-	}
+    public STXTIOException(java.io.IOException cause) {
+        super("IO_ERROR", "I/O error: " + cause.getMessage(), cause);
+    }
 }
 
 ```
@@ -1662,43 +1657,58 @@ public class StringUtils {
 
 ```
 
+Fichero: dev/stxt/ValidationException.java
+```
+package dev.stxt;
+
+public class ValidationException extends ParseException {
+	private static final long serialVersionUID = 1L;
+	public ValidationException(int line, String code, String message) {
+        super(line, code, message);
+    }
+}
+
+```
+
 Fichero: dev/stxt/resources/ResourcesLoaderDirectory.java
 ```
 package dev.stxt.resources;
 
 import java.io.File;
-import dev.stxt.IOException;
 
+import dev.stxt.STXTException;
+import dev.stxt.STXTIOException;
 import dev.stxt.utils.FileUtils;
 
 public class ResourcesLoaderDirectory implements ResourcesLoader {
 	private final File dir;
 
-	public ResourcesLoaderDirectory(String dir) throws ResourcesException {
+	public ResourcesLoaderDirectory(String dir) {
 		this(new File(dir));
 	}
 
-	public ResourcesLoaderDirectory(File dirResources) throws ResourcesException {
+	public ResourcesLoaderDirectory(File dirResources) {
 		this.dir = dirResources;
 		if (!dir.exists() || !dir.isDirectory())
-			throw new ResourcesException("Directory not valid: " + dir.getAbsolutePath());
+			throw new STXTException("RESOURCE_DIRECTORY_NOT_VALID",
+					"Directory not valid: " + dir.getAbsolutePath());
 	}
 
 	@Override
-	public String retrieve(String namespace, String resource) throws NotFoundException, IOException {
+	public String retrieve(String namespace, String resource) {
 		// Obtenemos fichero
 		File file = new File(dir, namespace + '/' + resource + ".stxt");
 
 		// Validamos exista
 		if (!file.exists() || !file.isFile())
-			throw new NotFoundException(namespace, resource);
+			throw new ResourceNotFoundException(namespace, resource);
 
 		// Retornamos valor
 		try {
 			return FileUtils.readFileContent(file);
 		}
 		catch (java.io.IOException e) {
-			throw new IOException(e);
+			throw new STXTIOException(e);
 		}
 		
 	}
@@ -1706,18 +1716,30 @@ public class ResourcesLoaderDirectory implements ResourcesLoader {
 
 ```
 
-Fichero: dev/stxt/resources/NotFoundException.java
+Fichero: dev/stxt/resources/ResourcesLoader.java
 ```
 package dev.stxt.resources;
 
-public class NotFoundException extends ResourcesException {
+public interface ResourcesLoader {
+	public String retrieve(String namespace, String resource);
+}
+
+```
+
+Fichero: dev/stxt/resources/ResourceNotFoundException.java
+```
+package dev.stxt.resources;
+
+import dev.stxt.STXTException;
+
+public class ResourceNotFoundException extends STXTException {
 	private static final long serialVersionUID = 1L;
 
 	private final String namespace;
 	private final String resource;
 
-	public NotFoundException(String namespace, String resource) {
-		super("Not found '" + resource + "' in namespace: " + namespace);
+	public ResourceNotFoundException(String namespace, String resource) {
+		super("RESOURCE_NOT_FOUND", "Not found '" + resource + "' in namespace: " + namespace);
 		this.namespace = namespace;
 		this.resource = resource;
 	}
@@ -1733,34 +1755,6 @@ public class NotFoundException extends ResourcesException {
 
 ```
 
-Fichero: dev/stxt/resources/ResourcesException.java
-```
-package dev.stxt.resources;
-
-import dev.stxt.ParseException;
-
-public class ResourcesException extends ParseException {
-	private static final long serialVersionUID = 1L;
-
-	public ResourcesException(String message) {
-		super(0, "RESOURCES_EXCEPTION", message);
-	}
-}
-
-```
-
-Fichero: dev/stxt/resources/ResourcesLoader.java
-```
-package dev.stxt.resources;
-
-import dev.stxt.IOException;
-
-public interface ResourcesLoader {
-	public String retrieve(String namespace, String resource) throws NotFoundException, IOException;
-}
-
-```
-
 Fichero: dev/stxt/validator/BottomUpValidator.java
 ```
 package dev.stxt.validator;
@@ -1768,7 +1762,6 @@ package dev.stxt.validator;
 import java.util.List;
 
 import dev.stxt.Node;
-import dev.stxt.ParseException;
 import dev.stxt.Validator;
 
 public class BottomUpValidator implements Validator {
@@ -1779,7 +1772,7 @@ public class BottomUpValidator implements Validator {
 	}
 
 	@Override
-	public void validate(Node node) throws ParseException {
+	public void validate(Node node) {
 		for (Node n : node.getChildren()) {
 			validate(n);
 		}
@@ -1798,7 +1791,6 @@ package dev.stxt.validator;
 import java.util.List;
 
 import dev.stxt.Node;
-import dev.stxt.ParseException;
 import dev.stxt.Validator;
 
 public class TopDownValidator implements Validator {
@@ -1809,7 +1801,7 @@ public class TopDownValidator implements Validator {
 	}
 
 	@Override
-	public void validate(Node node) throws ParseException {
+	public void validate(Node node) {
 		for (Validator  validator: validators) {
 			validator.validate(node);
 		}
