@@ -1,0 +1,1823 @@
+Fichero: dev/stxt/ParseException.java
+```
+package dev.stxt;
+
+public class ParseException extends Exception {
+	private static final long serialVersionUID = 1L;
+	private final int line;
+	private final String code;
+
+	public ParseException(int line, String code, String message) {
+		super(message);
+		this.line = line;
+		this.code = code;
+	}
+
+	public int getLine() {
+		return line;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	@Override
+	public String toString() {
+		return "ParseException{" + "line=" + line + ", code='" + code + '\'' + ", message='" + getMessage() + '\''
+				+ '}';
+	}
+}
+
+```
+
+Fichero: dev/stxt/Node.java
+```
+package dev.stxt;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+public class Node {
+	private final String name;
+	private final String namespace;
+	private final boolean multiline;
+
+	private final String inlineText;
+	private final List<String> multilineText = new ArrayList<>();
+	private final int line;
+	private final int level;
+	private final List<Node> children = new ArrayList<>();
+
+	public Node(int line, int level, String name, String namespace, boolean multiline, String value) {
+		this.level = level;
+		this.line = line;
+		this.name = name.toLowerCase(Locale.ENGLISH);
+		this.namespace = namespace;
+		this.inlineText = value;
+		this.multiline = multiline;
+
+		if (!this.inlineText.isEmpty() && this.isMultiline())
+			throw new IllegalArgumentException("Not empty value with multiline");
+	}
+
+	public void addTextLine(String line) {
+		this.multilineText.add(line);
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public String getQualifiedName() {
+		return namespace + ':' + name;
+	}
+
+	public String getDisplayName() {
+		return namespace + '(' + name + ')';
+	}
+
+	public String getNamespace() {
+		return namespace;
+	}
+
+	public List<Node> getChildren() {
+		return children;
+	}
+
+	public String getInlineText() {
+		return inlineText;
+	}
+
+	public List<String> getMultilineText() {
+		return multilineText;
+	}
+
+	public int getLine() {
+		return line;
+	}
+
+	public int getLevel() {
+		return level;
+	}
+
+	public boolean isMultiline() {
+		return multiline;
+	}
+
+	public String getText() {
+		if (isMultiline())
+			return String.join("\n", multilineText);
+		else
+			return inlineText;
+	}
+
+	public Node getChild(String cname) {
+		List<Node> result = getChilds(cname);
+		if (result.size() > 1)
+			throw new IllegalArgumentException("More than 1 child. Use getChilds");
+		if (result.size() == 0)
+			return null;
+		return result.get(0);
+	}
+
+	// Fast access methods to children
+	public List<Node> getChilds(String cname) {
+		List<Node> result = new ArrayList<Node>();
+
+		for (Node child : children) {
+			if (child.getName().equalsIgnoreCase(cname))
+				result.add(child);
+		}
+
+		return result;
+	}
+}
+```
+
+Fichero: dev/stxt/Processor.java
+```
+package dev.stxt;
+
+public interface Processor {
+	public void process(Node n);
+}
+
+```
+
+Fichero: dev/stxt/ParseState.java
+```
+package dev.stxt;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
+
+class ParseState {
+	// Pila de nodos abiertos según la indentación actual.
+	private final Stack<Node> stack = new Stack<>();
+
+	// Lista de documentos raíz resultantes del parseo.
+	private final List<Node> documents = new ArrayList<>();
+
+	public ParseState() {
+	}
+
+	public Stack<Node> getStack() {
+		return stack;
+	}
+
+	public boolean stackIsEmpty() {
+		return stack.isEmpty();
+	}
+
+	public Node stackPeek() {
+		return stack.peek();
+	}
+
+	public void stackPush(Node node) {
+		stack.push(node);
+	}
+
+	public Node stackPop() {
+		return stack.pop();
+	}
+
+	public List<Node> getDocuments() {
+		return documents;
+	}
+
+	public void addDocument(Node doc) {
+		documents.add(doc);
+	}
+}
+
+```
+
+Fichero: dev/stxt/IOException.java
+```
+package dev.stxt;
+
+public class IOException extends ParseException {
+
+	private static final long serialVersionUID = 1L;
+
+	public IOException(java.io.IOException io) {
+		super(0, "IO_EXCEPTION", io.getMessage());
+	}
+
+}
+
+```
+
+Fichero: dev/stxt/schema/type/NumberValidator.java
+```
+package dev.stxt.schema.type;
+
+import java.util.regex.Pattern;
+
+public final class NumberValidator extends RegexValueValidator {
+	private static final Pattern P_NUMBER = Pattern.compile("^(\\-|\\+)?\\d+(\\.\\d+(e(\\-|\\+)?\\d+)?)?$");
+	public static final NumberValidator INSTANCE = new NumberValidator();
+
+	private NumberValidator() {
+		super(P_NUMBER, "Invalid number");
+	}
+}
+
+```
+
+Fichero: dev/stxt/schema/type/IntegerValidator.java
+```
+package dev.stxt.schema.type;
+
+import java.util.regex.Pattern;
+
+public final class IntegerValidator extends RegexValueValidator {
+	private static final Pattern P_INTEGER = Pattern.compile("^(\\-|\\+)?\\d+$");
+	public static final IntegerValidator INSTANCE = new IntegerValidator();
+
+	private IntegerValidator() {
+		super(P_INTEGER, "Invalid integer");
+	}
+}
+
+```
+
+Fichero: dev/stxt/schema/type/BooleanValidator.java
+```
+package dev.stxt.schema.type;
+
+import java.util.regex.Pattern;
+
+public final class BooleanValidator extends RegexValueValidator {
+	private static final Pattern P_BOOLEAN = Pattern.compile("^(true|false)$");
+	public static final BooleanValidator INSTANCE = new BooleanValidator();
+
+	private BooleanValidator() {
+		super(P_BOOLEAN, "Invalid boolean");
+	}
+}
+
+```
+
+Fichero: dev/stxt/schema/type/RegexValueValidator.java
+```
+package dev.stxt.schema.type;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import dev.stxt.Node;
+import dev.stxt.ParseException;
+import dev.stxt.schema.TypeValidator;
+
+/**
+ * Base validator for simple regex-based value checks.
+ */
+abstract class RegexValueValidator implements TypeValidator {
+	private final Pattern pattern;
+	private final String error;
+
+	protected RegexValueValidator(Pattern pattern, String error) {
+		this.pattern = pattern;
+		this.error = error;
+	}
+
+	@Override
+	public void validate(Node n) throws ParseException {
+		String value = n.getText();
+		Matcher m = pattern.matcher(value);
+		if (!m.matches()) {
+			throw new ParseException(n.getLine(), "INVALID_VALUE", n.getName() + ": " + error + " (" + value + ")");
+		}
+	}
+}
+
+```
+
+Fichero: dev/stxt/schema/type/DateValidator.java
+```
+package dev.stxt.schema.type;
+
+import java.util.regex.Pattern;
+
+public final class DateValidator extends RegexValueValidator {
+	private static final Pattern P_DATE = Pattern.compile("^\\d{4}-\\d{2}-\\d{2}$");
+	public static final DateValidator INSTANCE = new DateValidator();
+
+	private DateValidator() {
+		super(P_DATE, "Invalid date");
+	}
+}
+
+```
+
+Fichero: dev/stxt/schema/type/UrlValidator.java
+```
+package dev.stxt.schema.type;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+
+import dev.stxt.Node;
+import dev.stxt.ParseException;
+import dev.stxt.schema.TypeValidator;
+
+public final class UrlValidator implements TypeValidator {
+	public static final UrlValidator INSTANCE = new UrlValidator();
+
+	private UrlValidator() {
+	}
+
+	@Override
+	public void validate(Node n) throws ParseException {
+		String url = n.getInlineText();
+		try {
+			URI uri = new URI(url);
+			boolean ok = uri.getScheme() != null && uri.getHost() != null;
+			if (!ok)
+				throw new IllegalArgumentException();
+		} catch (URISyntaxException | IllegalArgumentException e) {
+			throw new ParseException(n.getLine(), "INVALID_VALUE", "Invalid URL: " + url);
+		}
+	}
+}
+
+```
+
+Fichero: dev/stxt/schema/type/HexadecimalValidator.java
+```
+package dev.stxt.schema.type;
+
+import java.util.regex.Pattern;
+
+public final class HexadecimalValidator extends RegexValueValidator {
+	private static final Pattern P_HEXADECIMAL = Pattern.compile("^\\#?([A-Fa-f0-9]|\\s)+$");
+	public static final HexadecimalValidator INSTANCE = new HexadecimalValidator();
+
+	private HexadecimalValidator() {
+		super(P_HEXADECIMAL, "Invalid hexadecimal");
+	}
+}
+
+```
+
+Fichero: dev/stxt/schema/type/EmptyValidator.java
+```
+package dev.stxt.schema.type;
+
+import dev.stxt.Node;
+import dev.stxt.ParseException;
+import dev.stxt.schema.TypeValidator;
+
+public final class EmptyValidator implements TypeValidator {
+	public static final EmptyValidator INSTANCE = new EmptyValidator();
+
+	private EmptyValidator() {
+	}
+
+	@Override
+	public void validate(Node n) throws ParseException {
+		if (!n.getInlineText().isEmpty() || n.getMultilineText().size() > 0) {
+			throw new ParseException(n.getLine(), "INVALID_VALUE", "Node '" + n.getName() + "' has to be empty");
+		}
+	}
+}
+
+```
+
+Fichero: dev/stxt/schema/type/Base64Validator.java
+```
+package dev.stxt.schema.type;
+
+import java.util.Base64;
+
+import dev.stxt.Node;
+import dev.stxt.ParseException;
+import dev.stxt.schema.TypeValidator;
+import dev.stxt.utils.StringUtils;
+
+public final class Base64Validator implements TypeValidator {
+	public static final Base64Validator INSTANCE = new Base64Validator();
+
+	private Base64Validator() {
+	}
+
+	@Override
+	public void validate(Node n) throws ParseException {
+		try {
+			Base64.getDecoder().decode(StringUtils.cleanupString(n.getText()));
+		} catch (Exception e) {
+			throw new ParseException(n.getLine(), "INVALID_VALUE", "Node '" + n.getName() + "' Invalid Base64");
+		}
+	}
+}
+
+```
+
+Fichero: dev/stxt/schema/type/InlineTextValidator.java
+```
+package dev.stxt.schema.type;
+
+import dev.stxt.Node;
+import dev.stxt.ParseException;
+import dev.stxt.schema.TypeValidator;
+
+public final class InlineTextValidator implements TypeValidator {
+	public static final InlineTextValidator INSTANCE = new InlineTextValidator();
+
+	private InlineTextValidator() {
+	}
+
+	@Override
+	public void validate(Node n) throws ParseException {
+		if (n.getMultilineText() != null && n.getMultilineText().size() > 0) {
+			throw new ParseException(n.getLine(), "NOT_ALLOWED_MULTILINE_TEXT",
+					"Not allowed multiline text in node " + n.getQualifiedName());
+		}
+	}
+}
+
+```
+
+Fichero: dev/stxt/schema/type/MultilineTextValidator.java
+```
+package dev.stxt.schema.type;
+
+import dev.stxt.Node;
+import dev.stxt.ParseException;
+import dev.stxt.schema.TypeValidator;
+
+public final class MultilineTextValidator implements TypeValidator {
+	public static final MultilineTextValidator INSTANCE = new MultilineTextValidator();
+
+	private MultilineTextValidator() {
+	}
+
+	@Override
+	public void validate(Node n) throws ParseException {
+		if (n.getInlineText() != null && !n.getInlineText().isEmpty()) {
+			throw new ParseException(n.getLine(), "NOT_ALLOWED_INLINE_TEXT",
+					"Not allowed inline text in node " + n.getQualifiedName());
+		}
+	}
+}
+
+```
+
+Fichero: dev/stxt/schema/type/TextValidator.java
+```
+package dev.stxt.schema.type;
+
+import dev.stxt.Node;
+import dev.stxt.ParseException;
+import dev.stxt.schema.TypeValidator;
+
+public final class TextValidator implements TypeValidator {
+	public static final TextValidator INSTANCE = new TextValidator();
+
+	private TextValidator() {
+	}
+
+	@Override
+	public void validate(Node n) throws ParseException {
+		if (n.getChildren() != null && n.getChildren().size() > 0) {
+			throw new ParseException(n.getLine(), "NOT_ALLOWED_CHILDREN_TEXT",
+					"Not allowed children nodes in node " + n.getQualifiedName());
+		}
+	}
+}
+
+```
+
+Fichero: dev/stxt/schema/type/EmailValidator.java
+```
+package dev.stxt.schema.type;
+
+import java.util.regex.Pattern;
+
+public final class EmailValidator extends RegexValueValidator {
+	private static final String EMAIL_PATTERN = "^(?=.{1,256})(?=.{1,64}@.{1,255}$)(?=.{1,64}@.{1,63}\\..{1,63}$)[A-Za-z0-9!#$%&'*+/=?^_`{|}~.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
+	private static final Pattern P_EMAIL = Pattern.compile(EMAIL_PATTERN);
+
+	public static final EmailValidator INSTANCE = new EmailValidator();
+
+	private EmailValidator() {
+		super(P_EMAIL, "Invalid email");
+	}
+}
+
+```
+
+Fichero: dev/stxt/schema/type/NaturalValidator.java
+```
+package dev.stxt.schema.type;
+
+import java.util.regex.Pattern;
+
+public final class NaturalValidator extends RegexValueValidator {
+	private static final Pattern P_NATURAL = Pattern.compile("^\\d+$");
+	public static final NaturalValidator INSTANCE = new NaturalValidator();
+
+	private NaturalValidator() {
+		super(P_NATURAL, "Invalid natural");
+	}
+}
+
+```
+
+Fichero: dev/stxt/schema/type/TimestampValidator.java
+```
+package dev.stxt.schema.type;
+
+import java.util.regex.Pattern;
+
+public final class TimestampValidator extends RegexValueValidator {
+	private static final String ISO_8601_PATTERN = "^\\d{4}-\\d{2}-\\d{2}" + "T" + "\\d{2}:\\d{2}(:\\d{2}(\\.\\d{3})?)?"
+			+ "(Z|[+-]\\d{2}:\\d{2})?$";
+	private static final Pattern P_TIMESTAMP = Pattern.compile(ISO_8601_PATTERN);
+
+	public static final TimestampValidator INSTANCE = new TimestampValidator();
+
+	private TimestampValidator() {
+		super(P_TIMESTAMP, "Invalid timestamp");
+	}
+}
+
+```
+
+Fichero: dev/stxt/schema/SchemaValidatorService.java
+```
+package dev.stxt.schema;
+
+import dev.stxt.IOException;
+
+import java.util.Collections;
+import java.util.List;
+
+import dev.stxt.Node;
+import dev.stxt.ParseException;
+import dev.stxt.resources.NotFoundException;
+import dev.stxt.resources.ResourcesLoader;
+import dev.stxt.validator.TopDownValidator;
+
+public final class SchemaValidatorService {
+	private final TopDownValidator validator;
+
+	public SchemaValidatorService(ResourcesLoader resourcesLoader) {
+		validator = new TopDownValidator(Collections.singletonList(new SchemaValidator(new SchemaProviderCache(resourcesLoader))));
+	}
+
+	public void validateNode(Node node) throws ParseException, IOException, NotFoundException {
+		validator.validate(node);
+	}
+
+	public void validateNodes(List<Node> nodes) throws ParseException, IOException, NotFoundException {
+		for (Node n: nodes)
+			validator.validate(n);
+	}
+}
+
+```
+
+Fichero: dev/stxt/schema/SchemaValidator.java
+```
+package dev.stxt.schema;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import dev.stxt.Node;
+import dev.stxt.ParseException;
+import dev.stxt.Validator;
+
+class SchemaValidator implements Validator {
+	// ------------------
+	// Variables públicas
+	// ------------------
+
+	private final SchemaProvider schemaProvider;
+
+	public SchemaValidator(SchemaProvider schemaProvider) {
+		this.schemaProvider = schemaProvider;
+	}
+
+	@Override
+	public void validate(Node node) throws ParseException {
+		// Obtenemos namespace
+		String namespace = node.getNamespace();
+		Schema sch = schemaProvider.getSchema(namespace);
+		if (sch == null)
+			throw new ParseException(node.getLine(), "SCHEMA_NOT_FOUND", "Not found schema: " + sch);
+
+		// Validamos nodo y childs
+		validateAgainstSchema(node, sch);
+	}
+	
+	public void validateAgainstSchema(Node node, Schema sch) throws ParseException {
+		// Obtenemos node
+		SchemaNode schemaNode = sch.nodes.get(node.getName());
+		if (schemaNode == null) {
+			String error = "NOT EXIST NODE " + node.getName() + " for namespace " + sch.namespace;
+			throw new ParseException(node.getLine(), "NODE_NOT_EXIST_IN_SCHEMA", error);
+		}
+
+		// Validamos nodo
+		validateValue(schemaNode, node);
+		validateCount(schemaNode, node);
+	}
+
+	private static void validateValue(SchemaNode nsNode, Node n) throws ParseException {
+		String nodeType = nsNode.type;
+
+		TypeValidator validator = TypeRegistry.get(nodeType);
+		if (validator == null)
+			throw new ParseException(n.getLine(), "TYPE_NOT_SUPPORTED", "Node type not supported: " + nodeType);
+
+		validator.validate(n);
+	}
+
+	private static void validateCount(SchemaNode nsNode, Node node) throws ParseException {
+		Map<String, Integer> count = new HashMap<>();
+
+		for (Node child : node.getChildren()) {
+			// Count childs
+			String childName = child.getQualifiedName();
+			count.put(childName, count.getOrDefault(childName, 0) + 1);
+		}
+
+		for (SchemaChild chNode : nsNode.children.values()) {
+			validateCount(chNode, count.getOrDefault(chNode.getQualifiedName(), 0), node);
+		}
+	}
+
+	private static void validateCount(SchemaChild chNode, int num, Node node) throws ParseException {
+		Integer min = chNode.min;
+		Integer max = chNode.max;
+
+		if (min != null && num < min)
+			throw new ParseException(node.getLine(), "INVALID_NUMBER",
+					num + " nodes of '" + chNode.getQualifiedName() + " and min is " + min);
+
+		if (max != null && num > max)
+			throw new ParseException(node.getLine(), "INVALID_NUMBER",
+					num + " nodes of '" + chNode.getQualifiedName() + " and max is " + max);
+	}
+
+
+}
+
+```
+
+Fichero: dev/stxt/schema/SchemaNode.java
+```
+package dev.stxt.schema;
+
+import java.util.HashMap;
+import java.util.Map;
+
+class SchemaNode {
+	public String name;
+	public String type;
+	public Map<String, SchemaChild> children = new HashMap<>();
+}
+
+```
+
+Fichero: dev/stxt/schema/SchemaProviderCache.java
+```
+package dev.stxt.schema;
+
+import dev.stxt.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import dev.stxt.Node;
+import dev.stxt.ParseException;
+import dev.stxt.Parser;
+import dev.stxt.resources.NotFoundException;
+import dev.stxt.resources.ResourcesLoader;
+
+final class SchemaProviderCache implements SchemaProvider {
+	private final ResourcesLoader resourcesLoader;
+	private final Map<String, Schema> cache = new ConcurrentHashMap<>();
+	private final SchemaValidator schemaValidator;
+
+	public SchemaProviderCache(ResourcesLoader pathResolver) {
+		this.resourcesLoader = pathResolver;
+		this.schemaValidator = new SchemaValidator(new SchemaProviderMeta());
+	}
+
+	public Schema getSchema(String namespace) throws IOException, ParseException, NotFoundException {
+		// Retorno de cache
+		namespace = namespace.toLowerCase();
+		Schema cached = cache.get(namespace);
+		if (cached != null)
+			return cached;
+
+		// Cargamos schema
+		String textSchema = resourcesLoader.retrieve(Schema.SCHEMA_NAMESPACE, namespace);
+		Parser parser = new Parser();
+		parser.registerValidator(schemaValidator);
+		List<Node> nodes = parser.parse(textSchema);
+
+		if (nodes.size() != 1)
+			throw new ParseException(0, "INVALID_SCHEMA", "There are " + nodes.size() + ", and expected is 1");
+
+		// Convertimos a schema
+		Node root = nodes.get(0);
+		Schema sch = SchemaParser.transformNodeToSchema(root);
+
+		// Comprobar namespace esperado
+		if (!sch.namespace.equalsIgnoreCase(namespace))
+			throw new ParseException(0, "INVALID_SCHEMA",
+					"Schema namespace is " + sch.namespace + ", and expected is " + namespace);
+
+		// Insertamos en cache
+		cache.put(namespace, sch);
+		return sch;
+	}
+}
+
+```
+
+Fichero: dev/stxt/schema/SchemaProviderMeta.java
+```
+package dev.stxt.schema;
+
+import dev.stxt.IOException;
+import java.util.List;
+
+import dev.stxt.Node;
+import dev.stxt.ParseException;
+import dev.stxt.Parser;
+import dev.stxt.resources.NotFoundException;
+import dev.stxt.utils.ResourceReader;
+
+final class SchemaProviderMeta implements SchemaProvider {
+	private final Schema meta;
+
+	public SchemaProviderMeta() {
+		Schema metaSchema = null;
+		try {
+			String metaSchemaText = ResourceReader.readResource("dev/stxt/schema/@stxt.schema.stxt");
+			Parser parser = new Parser();
+			List<Node> nodes = parser.parse(metaSchemaText);
+			metaSchema = SchemaParser.transformNodeToSchema(nodes.get(0));
+		} catch (Exception e) {
+			throw new RuntimeException();
+		}
+		meta = metaSchema;
+	}
+
+	public Schema getSchema(String namespace) throws IOException, ParseException, NotFoundException {
+		if (!namespace.equals(Schema.SCHEMA_NAMESPACE))
+			throw new NotFoundException(namespace, namespace);
+
+		// Retorno de cache
+		return meta;
+	}
+}
+
+```
+
+Fichero: dev/stxt/schema/TypeValidator.java
+```
+package dev.stxt.schema;
+
+import dev.stxt.Node;
+import dev.stxt.ParseException;
+
+public interface TypeValidator {
+	void validate(Node node) throws ParseException;
+}
+
+```
+
+Fichero: dev/stxt/schema/Schema.java
+```
+package dev.stxt.schema;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+class Schema {
+	public static final String SCHEMA_NAMESPACE = "@stxt.schema";
+
+	public Map<String, SchemaNode> nodes = new LinkedHashMap<String, SchemaNode>();
+	public String namespace;
+}
+
+```
+
+Fichero: dev/stxt/schema/SchemaChild.java
+```
+package dev.stxt.schema;
+
+class SchemaChild {
+	public String name;
+	public String namespace;
+	public Integer min = null;
+	public Integer max = null;
+	public String count = null;
+
+	public String getQualifiedName() {
+		return namespace + ':' + name;
+	}
+}
+
+```
+
+Fichero: dev/stxt/schema/SchemaParser.java
+```
+package dev.stxt.schema;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import dev.stxt.Node;
+import dev.stxt.ParseException;
+import dev.stxt.utils.StringUtils;
+
+class SchemaParser {
+	private static final Pattern CHILD_LINE_PATTERN = Pattern
+			.compile("^\\s*(?:(?<ns>[^:()]+):)?(?<name>[^()]+?)\\s*(?:\\(\\s*(?<count>[^()\\s][^)]*?)\\s*\\))?\\s*$");
+	private static final Pattern P = Pattern
+			.compile("^\\s*(?<name>[^()]+?)\\s*(?:\\(\\s*(?<type>[^()]+?)\\s*\\))?\\s*$");
+
+	public static Schema transformNodeToSchema(Node node) throws ParseException {
+		Schema schema = new Schema();
+
+		// Node name
+		String nodeName = node.getName();
+		String namespaceSchema = node.getNamespace();
+
+		// Obtenemos name y namespace
+		if (!nodeName.equals("schema") || !namespaceSchema.equals(Schema.SCHEMA_NAMESPACE)) {
+			throw new ParseException(0, "NOT_STXT_SCHEMA",
+					"Se espera schema(" + Schema.SCHEMA_NAMESPACE + ") y es " + nodeName + "(" + namespaceSchema + ")");
+		}
+		String namespace = node.getInlineText();
+		schema.namespace = namespace;
+
+		// Obtenemos los nodos
+		List<Node> nodes = node.getChilds("node");
+
+		Set<String> allNames = new HashSet<String>(); // Para validar que
+														// existan los childs
+		for (Node n : nodes) {
+			SchemaNode schNode = createFrom(n, schema.namespace);
+			schema.nodes.put(schNode.name, schNode);
+
+			allNames.add(schNode.name);
+		}
+
+		// Validamos que todos los nombres estén definidos
+		for (SchemaNode schNode : schema.nodes.values()) {
+			for (SchemaChild schChild : schNode.children.values()) {
+				if (schChild.namespace.equals(namespace)) // Sólo validamos del mismo namespace
+				{
+					if (!allNames.contains(schChild.name))
+						throw new ParseException(0, "CHILD_NOT_DEFINED",
+								"Child " + schChild.name + " not defined in " + namespace);
+				}
+			}
+		}
+
+		return schema;
+	}
+
+	private static SchemaNode createFrom(Node n, String namespace) throws ParseException {
+		SchemaNode result = new SchemaNode();
+
+		String name = n.getInlineText();
+
+		Matcher m = P.matcher(name);
+		String type = "INLINE TEXT";
+
+		if (m.matches()) {
+			name = m.group("name").trim();
+			type = m.group("type") != null ? m.group("type").trim() : type;
+		} else {
+			throw new ParseException(n.getLine(), "NODE_NAME_INVALID", "Line not valid: " + n.getInlineText());
+		}
+
+		result.name = StringUtils.compactString(name.toLowerCase());
+		result.type = type;
+
+		Node children = n.getChild("children");
+		if (children != null) {
+			for (String line : children.getMultilineText()) {
+				if (line.isEmpty())
+					continue;
+
+				SchemaChild schemaChild = parseFromLine(line, namespace);
+				updateCount(schemaChild);
+				String qname = schemaChild.getQualifiedName();
+				if (result.children.containsKey(qname))
+					throw new ParseException(children.getLine(), "DUPLICATED_CHILD", qname);
+
+				result.children.put(qname, schemaChild);
+			}
+		}
+
+		return result;
+	}
+
+	private static SchemaChild parseFromLine(String line, String namespace) {
+		if (line == null) {
+			throw new IllegalArgumentException("line cannot be null");
+		}
+
+		String trimmed = line.trim();
+		if (trimmed.isEmpty()) {
+			throw new IllegalArgumentException("line cannot be empty");
+		}
+
+		Matcher m = CHILD_LINE_PATTERN.matcher(trimmed);
+		if (!m.matches()) {
+			throw new IllegalArgumentException("Line format not valid: " + line);
+		}
+
+		SchemaChild child = new SchemaChild();
+
+		String name = m.group("name");
+		if (name == null || name.trim().isEmpty()) {
+			throw new IllegalArgumentException("Name cannot be empty: " + line);
+		}
+		child.name = StringUtils.compactString(name.trim().toLowerCase());
+
+		String ns = m.group("ns");
+		if (ns != null && !ns.trim().isEmpty())
+			child.namespace = ns.trim();
+		else
+			child.namespace = namespace;
+
+		String count = m.group("count");
+		child.count = count;
+		return child;
+	}
+
+	private static void updateCount(SchemaChild child) {
+		String count = child.count;
+
+		if (count == null || count.isEmpty() || count.equals("*")) {
+			// No min, no max para empty y "*"
+		} else if (count.equals("?")) {
+			child.max = 1;
+		} else if (count.equals("+")) {
+			child.min = 1;
+		} else if (count.endsWith("+")) {
+			int expectedNum = Integer.parseInt(count.substring(0, count.length() - 1));
+			child.min = expectedNum;
+		} else if (count.endsWith("-")) {
+			int expectedNum = Integer.parseInt(count.substring(0, count.length() - 1));
+			child.max = expectedNum;
+		} else {
+			int expectedNum = Integer.parseInt(count);
+			child.min = expectedNum;
+			child.max = expectedNum;
+		}
+	}
+}
+```
+
+Fichero: dev/stxt/schema/TypeRegistry.java
+```
+package dev.stxt.schema;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import dev.stxt.schema.type.Base64Validator;
+import dev.stxt.schema.type.BooleanValidator;
+import dev.stxt.schema.type.DateValidator;
+import dev.stxt.schema.type.EmailValidator;
+import dev.stxt.schema.type.EmptyValidator;
+import dev.stxt.schema.type.HexadecimalValidator;
+import dev.stxt.schema.type.InlineTextValidator;
+import dev.stxt.schema.type.IntegerValidator;
+import dev.stxt.schema.type.MultilineTextValidator;
+import dev.stxt.schema.type.NaturalValidator;
+import dev.stxt.schema.type.NumberValidator;
+import dev.stxt.schema.type.TextValidator;
+import dev.stxt.schema.type.TimestampValidator;
+import dev.stxt.schema.type.UrlValidator;
+
+class TypeRegistry {
+	private static final String TEXT = "TEXT";
+	private static final String INLINE_TEXT = "INLINE TEXT";
+	private static final String MULTILINE_TEXT = "MULTILINE TEXT";
+	private static final String NUMBER = "NUMBER";
+	private static final String BOOLEAN = "BOOLEAN";
+	private static final String DATE = "DATE";
+	private static final String TIMESTAMP = "TIMESTAMP";
+	private static final String EMAIL = "EMAIL";
+	private static final String URL = "URL";
+	private static final String HEXADECIMAL = "HEXADECIMAL";
+	private static final String BASE64 = "BASE64";
+	private static final String EMPTY = "EMPTY";
+	private static final String INTEGER = "INTEGER";
+	private static final String NATURAL = "NATURAL";
+
+	private static final Map<String, TypeValidator> REGISTRY = new HashMap<>();
+
+	static {
+		REGISTRY.put(BOOLEAN, BooleanValidator.INSTANCE);
+		REGISTRY.put(URL, UrlValidator.INSTANCE);
+		REGISTRY.put(INTEGER, IntegerValidator.INSTANCE);
+		REGISTRY.put(NATURAL, NaturalValidator.INSTANCE);
+		REGISTRY.put(NUMBER, NumberValidator.INSTANCE);
+		REGISTRY.put(DATE, DateValidator.INSTANCE);
+		REGISTRY.put(TIMESTAMP, TimestampValidator.INSTANCE);
+		REGISTRY.put(EMAIL, EmailValidator.INSTANCE);
+		REGISTRY.put(HEXADECIMAL, HexadecimalValidator.INSTANCE);
+		REGISTRY.put(BASE64, Base64Validator.INSTANCE);
+		REGISTRY.put(EMPTY, EmptyValidator.INSTANCE);
+		REGISTRY.put(TEXT, TextValidator.INSTANCE);
+		REGISTRY.put(INLINE_TEXT, InlineTextValidator.INSTANCE);
+		REGISTRY.put(MULTILINE_TEXT, MultilineTextValidator.INSTANCE);
+	}
+
+	public static TypeValidator get(String nodeType) {
+		return REGISTRY.get(nodeType);
+	}
+
+}
+
+```
+
+Fichero: dev/stxt/schema/@stxt.schema.stxt
+```
+Schema (@stxt.schema): @stxt.schema
+    Node: Schema (INLINE TEXT)
+        Children>>
+            Description (?)
+            Node (+)
+    Node: Node (INLINE TEXT)
+        Children>>
+            Children (?)
+            Description (?)
+    Node: Children (MULTILINE TEXT)
+    Node: Description (TEXT)
+
+```
+
+Fichero: dev/stxt/schema/SchemaProvider.java
+```
+package dev.stxt.schema;
+
+import dev.stxt.IOException;
+
+import dev.stxt.ParseException;
+import dev.stxt.resources.NotFoundException;
+
+public interface SchemaProvider {
+	public Schema getSchema(String namespace) throws IOException, ParseException, NotFoundException;
+}
+
+```
+
+Fichero: dev/stxt/Constants.java
+```
+package dev.stxt;
+
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+
+class Constants {
+	public static final char COMMENT_CHAR = '#';
+	public static final int TAB_SPACES = 4;
+	public static final char TAB = '\t';
+	public static final char SPACE = ' ';
+	public static final char SEP_NODE = ':';
+	public static final Charset ENCODING = StandardCharsets.UTF_8;
+	public static final String EMPTY_NAMESPACE = "";
+}
+
+```
+
+Fichero: dev/stxt/LineIndent.java
+```
+package dev.stxt;
+
+import static dev.stxt.Constants.SPACE;
+import static dev.stxt.Constants.TAB;
+import static dev.stxt.Constants.TAB_SPACES;
+import static dev.stxt.utils.StringUtils.rightTrim;
+
+class LineIndent {
+	// Indentation mode constants
+	public final int indentLevel;
+	public final String lineWithoutIndent;
+
+	private LineIndent(int level, String line) {
+		this.indentLevel = level;
+		this.lineWithoutIndent = line;
+	}
+
+	// -------------------------------------------------
+	// parseLine
+	// -------------------------------------------------
+
+	public static LineIndent parseLine(String line, int numLine, ParseState parseState) throws ParseException {
+		int stackSize = parseState.getStack().size();
+		boolean lastNodeMultiline = stackSize > 0 && parseState.getStack().peek().isMultiline();
+
+		// Empty line
+		if (line.trim().isEmpty()) {
+			if (lastNodeMultiline)
+				return new LineIndent(stackSize, "");
+			else
+				return null;
+		}
+
+		// Recorremos
+		int level = 0;
+		int spaces = 0;
+		int pointer = 0;
+
+		while (pointer < line.length()) {
+			char c = line.charAt(pointer);
+
+			if (c == SPACE) {
+				spaces++;
+				if (spaces == TAB_SPACES) {
+					level++;
+					spaces = 0;
+				}
+			} else if (c == TAB) {
+				level++;
+				spaces = 0;
+			} else {
+				// Primer carácter no espacio/tab → fin de indentación
+				break;
+			}
+
+			pointer++;
+
+			// Dentro de multilínea: no consumir más niveles de los del nodo
+			if (lastNodeMultiline && level >= stackSize) {
+				return new LineIndent(level, rightTrim(line.substring(pointer)));
+			}
+		}
+
+		// Comment
+		if (isCommentLine(line))
+			return null;
+
+		// Strange identation
+		if (spaces > 0)
+			throw new ParseException(numLine, "INVALID_NUMBER_SPACES", "There are " + spaces + " spaces before node");
+
+		// 4) Caso general: devolver la línea sin la indentación consumida
+		return new LineIndent(level, line.substring(pointer).trim());
+	}
+
+	private static boolean isCommentLine(String line) {
+		return line.trim().startsWith("#");
+	}
+}
+
+```
+
+Fichero: dev/stxt/processor/BottomUpProcessor.java
+```
+package dev.stxt.processor;
+
+import java.util.List;
+
+import dev.stxt.Node;
+import dev.stxt.Processor;
+
+public class BottomUpProcessor implements Processor {
+	private final List<Processor> processors;
+
+	public BottomUpProcessor(List<Processor> processors) {
+		this.processors = processors;
+	}
+
+	@Override
+	public void process(Node n) {
+		for (Node node : n.getChildren()) {
+			process(node);
+		}
+		for (Processor p : processors) {
+			p.process(n);
+		}
+	}
+}
+
+```
+
+Fichero: dev/stxt/processor/TopDownProcessor.java
+```
+package dev.stxt.processor;
+
+import java.util.List;
+
+import dev.stxt.Node;
+import dev.stxt.Processor;
+
+public class TopDownProcessor implements Processor {
+	private final List<Processor> processors;
+
+	public TopDownProcessor(List<Processor> processors) {
+		this.processors = processors;
+	}
+
+	@Override
+	public void process(Node n) {
+		for (Processor p : processors) {
+			p.process(n);
+		}
+		for (Node node : n.getChildren()) {
+			process(node);
+		}
+	}
+}
+
+```
+
+Fichero: dev/stxt/Validator.java
+```
+package dev.stxt;
+
+public interface Validator {
+	public void validate(Node n) throws ParseException;
+}
+
+```
+
+Fichero: dev/stxt/Parser.java
+```
+package dev.stxt;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
+
+import dev.stxt.utils.FileUtils;
+
+import static dev.stxt.Constants.EMPTY_NAMESPACE;
+import static dev.stxt.utils.StringUtils.compactString;
+
+public class Parser {
+	private List<Validator> validators;
+	
+	public void registerValidator(Validator v)
+	{
+		if (validators == null) validators = new ArrayList<Validator>();
+		validators.add(v);
+	}
+	
+	public List<Node> parseFile(File srcFile) throws IOException, ParseException {
+		try {	
+			return parse(FileUtils.readFileContent(srcFile));
+		}
+		catch (java.io.IOException e) {
+			throw new IOException(e);
+		}
+	}
+
+	public List<Node> parse(String content) throws ParseException {
+		content = FileUtils.removeUTF8BOM(content);
+
+		ParseState state = new ParseState();
+		int lineNumber = 0;
+
+		try (BufferedReader in = new BufferedReader(new StringReader(content));) {
+			String line;
+			while ((line = in.readLine()) != null) {
+				lineNumber++;
+				processLine(line, lineNumber, state);
+			}
+		} catch (java.io.IOException e) {
+			throw new IOException(e);
+		}
+
+		// Validators
+		Stack<Node> stack = state.getStack();
+		while (!stack.isEmpty()) {
+		    validateNode(stack.peek());
+		    stack.pop();
+		}
+		
+		return state.getDocuments();
+	}
+
+	private void processLine(String line, int lineNumber, ParseState state) throws ParseException, IOException {
+		// Parseamos la línea actual
+		LineIndent lineIndent = LineIndent.parseLine(line, lineNumber, state);
+		if (lineIndent == null)
+			return;
+
+		int currentLevel = lineIndent.indentLevel;
+
+		// Obtenemos valores del estado actual
+		Stack<Node> stack = state.getStack();
+		Node lastNode = !stack.isEmpty() ? stack.peek() : null;
+		boolean lastNodeMultiline = lastNode != null && lastNode.isMultiline();
+
+		// Multilinea añadir si procede
+		if (lastNodeMultiline && currentLevel >= stack.size()) {
+			lastNode.addTextLine(lineIndent.lineWithoutIndent);
+			return;
+		}
+
+		// Validamos nivel inválido por encima
+		if (currentLevel > stack.size())
+			throw new ParseException(lineNumber, "INDENTATION_LEVEL_NOT_VALID",
+					"Level of indent incorrect: " + currentLevel);
+
+		// Creamos nodo
+		Node node = createNode(lineIndent, lineNumber, currentLevel, lastNode);
+
+		if (currentLevel == 0) {
+			state.addDocument(node);
+			
+			// Clear stack and validate
+			while (!stack.isEmpty()) {
+			    validateNode(stack.peek());
+			    stack.pop();
+			}	
+			//stack.clear();			
+			
+			stack.push(node);
+		} else {
+			while (stack.size() > currentLevel) {
+			    validateNode(stack.peek());
+			    stack.pop();				
+			}
+
+			Node parent = stack.peek();
+			parent.getChildren().add(node);
+			stack.push(node);
+		}
+	}
+
+	private void validateNode(Node node) throws ParseException {
+	    if (validators != null) {
+		    for (Validator v : validators) {
+		        v.validate(node);
+		    }
+	    }
+	}
+	
+	private Node createNode(LineIndent result, int lineNumber, int level, Node parent) throws ParseException {
+		String line = result.lineWithoutIndent;
+		String name = null;
+		String value = null;
+		boolean multiline = false;
+
+		int nodeIndex = line.indexOf(':');
+		int textIndex = line.indexOf(">>");
+
+		if ((nodeIndex != -1 && textIndex != -1) || (nodeIndex == -1 && textIndex == -1))
+			throw new ParseException(lineNumber, "INVALID_LINE", "Line not valid: " + line);
+
+		// Inline value
+		if (nodeIndex != -1) {
+			name = compactString(line.substring(0, nodeIndex));
+			value = line.substring(nodeIndex + 1).trim();
+		}
+
+		// Multiline Text
+		if (textIndex != -1) {
+			name = compactString(line.substring(0, textIndex));
+			value = line.substring(textIndex + 2).trim();
+			if (!value.isEmpty())
+				throw new ParseException(lineNumber, "INLINE_VALUE_NOT_VALID", "Line not valid: " + line);
+			multiline = true;
+		}
+
+		// Obtenemos namespace si hay
+		String namespace = parent != null ? parent.getNamespace() : EMPTY_NAMESPACE;
+
+		int namespaceIndx = name.indexOf("(");
+		int namespaceEnd = name.lastIndexOf(')');
+
+		if (namespaceIndx != -1) {
+			if (namespaceEnd <= namespaceIndx + 1)
+				throw new ParseException(lineNumber, "INVALID_NAMESPACE_DEF", "Line not valid: " + line);
+
+			namespace = name.substring(namespaceIndx + 1, namespaceEnd).trim();
+			if (namespace.isEmpty())
+				throw new ParseException(lineNumber, "INVALID_NAMESPACE_DEF", "Line not valid: " + line);
+
+			name = compactString(name.substring(0, namespaceIndx));
+		}
+
+		// Validamos nombre
+		if (name.isEmpty())
+			throw new ParseException(lineNumber, "INVALID_LINE", "Line not valid: " + line);
+
+		// check namespace
+		validateNamespaceFormat(namespace, lineNumber);
+
+		// Creamos node
+		Node node = new Node(lineNumber, level, name, namespace, multiline, value);
+		return node;
+	}
+
+	/**
+	 * Valida el namespace lógico.
+	 *
+	 * Reglas: - Solo minúsculas, dígitos y punto. - Puede empezar opcionalmente por
+	 * '@'. - Debe ser una o varias etiquetas estilo dominio separadas por '.':
+	 * etiqueta := [a-z0-9]+ ejemplos válidos: "xxx", "xxx.ddd", "zzz.ttt.ooo",
+	 * "@xxx", "@xxx.ddd".
+	 */
+	private void validateNamespaceFormat(String namespace, int lineNumber) throws ParseException {
+		// Permitimos namespace vacío (se usa EMPTY_NAMESPACE heredado, etc.)
+		if (namespace == null || namespace.isEmpty())
+			return;
+
+		// Patrón: opcional '@', luego una o más etiquetas [a-z0-9]+ separadas por '.'
+		if (!namespace.matches("^@?[a-z0-9]+(\\.[a-z0-9]+)*$"))
+			throw new ParseException(lineNumber, "INVALID_NAMESPACE", "Namespace not valid: " + namespace);
+	}
+}
+```
+
+Fichero: dev/stxt/ValidatorException.java
+```
+package dev.stxt;
+
+public class ValidatorException extends RuntimeException {
+	private static final long serialVersionUID = 1L;
+
+	public ValidatorException() {
+		super();
+	}
+
+	public ValidatorException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+		super(message, cause, enableSuppression, writableStackTrace);
+	}
+
+	public ValidatorException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
+	public ValidatorException(String message) {
+		super(message);
+	}
+
+	public ValidatorException(Throwable cause) {
+		super(cause);
+	}
+}
+
+```
+
+Fichero: dev/stxt/ProcessorException.java
+```
+package dev.stxt;
+
+public class ProcessorException extends RuntimeException {
+	private static final long serialVersionUID = 1L;
+
+	public ProcessorException() {
+		super();
+	}
+
+	public ProcessorException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+		super(message, cause, enableSuppression, writableStackTrace);
+	}
+
+	public ProcessorException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
+	public ProcessorException(String message) {
+		super(message);
+	}
+
+	public ProcessorException(Throwable cause) {
+		super(cause);
+	}
+}
+
+```
+
+Fichero: dev/stxt/utils/ResourceReader.java
+```
+package dev.stxt.utils;
+
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+
+public class ResourceReader {
+	private ResourceReader() {
+	}
+
+	public static String readResource(String resourcePath) throws java.io.IOException {
+		try (InputStream is = ResourceReader.class.getClassLoader().getResourceAsStream(resourcePath)) {
+			if (is == null)
+				throw new IllegalArgumentException("Recurso no encontrado en el classpath: " + resourcePath);
+
+			return new String(is.readAllBytes(), StandardCharsets.UTF_8);
+		}
+	}
+	
+	public static void main(String[] args) throws java.io.IOException {
+		String metaSchemaText = ResourceReader.readResource("dev/stxt/schema/@stxt.schema.stxt");
+		System.out.println(metaSchemaText);
+	}
+}
+
+```
+
+Fichero: dev/stxt/utils/FileUtils.java
+```
+package dev.stxt.utils;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
+import java.util.List;
+
+public class FileUtils {
+	private FileUtils() {
+		// No initialization
+	}
+
+	private static final String UTF8_BOM = "\uFEFF";
+
+	public static String removeUTF8BOM(String s) {
+		if (s.startsWith(UTF8_BOM))
+			s = s.substring(1);
+		return s;
+	}
+
+	public static byte[] readFile(File file) throws IOException {
+		try (RandomAccessFile f = new RandomAccessFile(file, "r")) {
+			// Get and check length
+			long longlength = f.length();
+			int length = (int) longlength;
+			if (length != longlength)
+				throw new IOException("File size >= 2 GB");
+
+			// Read file and return data
+			byte[] data = new byte[length];
+			f.readFully(data);
+			return data;
+		}
+	}
+
+	public static String readFileContent(File file) throws IOException {
+		return new String(readFile(file), StandardCharsets.UTF_8);
+	}
+
+	public static List<File> getStxtFiles(File directory) {
+		List<File> stxtFiles = new ArrayList<>();
+		Path startPath = Paths.get(directory.getAbsolutePath());
+
+		try {
+			Files.walkFileTree(startPath, new SimpleFileVisitor<Path>() {
+				@Override
+				public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
+					if (file.toString().endsWith(".stxt")) {
+						stxtFiles.add(file.toFile());
+					}
+					return FileVisitResult.CONTINUE;
+				}
+
+				@Override
+				public FileVisitResult visitFileFailed(Path file, IOException exc) {
+					System.err.println("Error access file: " + file.toString());
+					return FileVisitResult.CONTINUE;
+				}
+			});
+		} catch (IOException e) {
+			System.err.println("Error search: " + e.getMessage());
+		}
+
+		return stxtFiles;
+	}
+
+	public static void writeStringToFile(String content, File file) throws IOException {
+		// Ensure parent directories exist
+		File parent = file.getParentFile();
+		if (parent != null && !parent.exists()) {
+			if (!parent.mkdirs() && !parent.exists()) {
+				throw new IOException("Unable to create directories for file: " + file.getAbsolutePath());
+			}
+		}
+
+		// Write content as UTF-8
+		Files.write(file.toPath(), content.getBytes(StandardCharsets.UTF_8));
+	}
+}
+```
+
+Fichero: dev/stxt/utils/StringUtils.java
+```
+package dev.stxt.utils;
+
+public class StringUtils {
+	private StringUtils() {
+	}
+
+	// Trim derecha
+	public static String rightTrim(String s) {
+		if (s == null)
+			return null;
+		int i = s.length() - 1;
+		while (i >= 0 && Character.isWhitespace(s.charAt(i))) {
+			i--;
+		}
+		return s.substring(0, i + 1);
+	}
+
+	// Trim a ambos lados y compacta espacios/tabs internos a uno
+	public static String compactString(String s) {
+		if (s == null)
+			return null;
+		// \s+ coincide con uno o más espacios en blanco (incluye tab, etc.)
+		return s.trim().replaceAll("\\s+", " ");
+	}
+
+	public static String cleanupString(String input) {
+		return input.replaceAll("[\\r\\n\\t]+|\\s+", "");
+	}
+
+}
+
+```
+
+Fichero: dev/stxt/resources/ResourcesLoaderDirectory.java
+```
+package dev.stxt.resources;
+
+import java.io.File;
+import dev.stxt.IOException;
+
+import dev.stxt.utils.FileUtils;
+
+public class ResourcesLoaderDirectory implements ResourcesLoader {
+	private final File dir;
+
+	public ResourcesLoaderDirectory(String dir) throws ResourcesException {
+		this(new File(dir));
+	}
+
+	public ResourcesLoaderDirectory(File dirResources) throws ResourcesException {
+		this.dir = dirResources;
+		if (!dir.exists() || !dir.isDirectory())
+			throw new ResourcesException("Directory not valid: " + dir.getAbsolutePath());
+	}
+
+	@Override
+	public String retrieve(String namespace, String resource) throws NotFoundException, IOException {
+		// Obtenemos fichero
+		File file = new File(dir, namespace + '/' + resource + ".stxt");
+
+		// Validamos exista
+		if (!file.exists() || !file.isFile())
+			throw new NotFoundException(namespace, resource);
+
+		// Retornamos valor
+		try {
+			return FileUtils.readFileContent(file);
+		}
+		catch (java.io.IOException e) {
+			throw new IOException(e);
+		}
+		
+	}
+}
+
+```
+
+Fichero: dev/stxt/resources/NotFoundException.java
+```
+package dev.stxt.resources;
+
+public class NotFoundException extends ResourcesException {
+	private static final long serialVersionUID = 1L;
+
+	private final String namespace;
+	private final String resource;
+
+	public NotFoundException(String namespace, String resource) {
+		super("Not found '" + resource + "' in namespace: " + namespace);
+		this.namespace = namespace;
+		this.resource = resource;
+	}
+
+	public String getNamespace() {
+		return namespace;
+	}
+
+	public String getResource() {
+		return resource;
+	}
+}
+
+```
+
+Fichero: dev/stxt/resources/ResourcesException.java
+```
+package dev.stxt.resources;
+
+import dev.stxt.ParseException;
+
+public class ResourcesException extends ParseException {
+	private static final long serialVersionUID = 1L;
+
+	public ResourcesException(String message) {
+		super(0, "RESOURCES_EXCEPTION", message);
+	}
+}
+
+```
+
+Fichero: dev/stxt/resources/ResourcesLoader.java
+```
+package dev.stxt.resources;
+
+import dev.stxt.IOException;
+
+public interface ResourcesLoader {
+	public String retrieve(String namespace, String resource) throws NotFoundException, IOException;
+}
+
+```
+
+Fichero: dev/stxt/validator/BottomUpValidator.java
+```
+package dev.stxt.validator;
+
+import java.util.List;
+
+import dev.stxt.Node;
+import dev.stxt.ParseException;
+import dev.stxt.Validator;
+
+public class BottomUpValidator implements Validator {
+	private final List<Validator> validators;
+
+	public BottomUpValidator(List<Validator> processors) {
+		this.validators = processors;
+	}
+
+	@Override
+	public void validate(Node node) throws ParseException {
+		for (Node n : node.getChildren()) {
+			validate(n);
+		}
+		for (Validator  validator: validators) {
+			validator.validate(node);
+		}
+	}
+}
+
+```
+
+Fichero: dev/stxt/validator/TopDownValidator.java
+```
+package dev.stxt.validator;
+
+import java.util.List;
+
+import dev.stxt.Node;
+import dev.stxt.ParseException;
+import dev.stxt.Validator;
+
+public class TopDownValidator implements Validator {
+	private final List<Validator> validators;
+
+	public TopDownValidator(List<Validator> processors) {
+		this.validators = processors;
+	}
+
+	@Override
+	public void validate(Node node) throws ParseException {
+		for (Validator  validator: validators) {
+			validator.validate(node);
+		}
+		for (Node n : node.getChildren()) {
+			validate(n);
+		}
+	}
+}
+
+```
+
