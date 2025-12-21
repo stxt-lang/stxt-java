@@ -265,6 +265,8 @@ public class Parser {
 	        }
 	    }
 
+	    // Cerramos listas
+	    current.freeze();
 	    return current;
 	}
 }

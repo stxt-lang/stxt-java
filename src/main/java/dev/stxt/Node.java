@@ -1,6 +1,7 @@
 package dev.stxt;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -10,10 +11,10 @@ public class Node {
 	private final boolean multiline;
 
 	private final String inlineText;
-	private final List<String> multilineText = new ArrayList<>();
+	private List<String> multilineText = new ArrayList<>();
 	private final int line;
 	private final int level;
-	private final List<Node> children = new ArrayList<>();
+	private List<Node> children = new ArrayList<>();
 
 	public Node(int line, int level, String name, String namespace, boolean multiline, String value) {
 		this.level = level;
@@ -78,6 +79,12 @@ public class Node {
 			return inlineText;
 	}
 
+	void freeze()
+	{
+		this.children = Collections.unmodifiableList(this.children);
+		this.multilineText = Collections.unmodifiableList(this.multilineText);
+	}
+	
 	public Node getChild(String cname) {
 		List<Node> result = getChildren(cname);
 		if (result.size() > 1)
