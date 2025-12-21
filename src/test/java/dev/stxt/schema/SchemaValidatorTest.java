@@ -1,15 +1,12 @@
 package dev.stxt.schema;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
 import dev.stxt.Node;
-import dev.stxt.ParseException;
 import dev.stxt.Parser;
-import dev.stxt.resources.ResourcesException;
 import dev.stxt.resources.ResourcesLoader;
 import dev.stxt.resources.ResourcesLoaderDirectory;
 import test.FileTestLoction;
@@ -17,7 +14,7 @@ import test.JSON;
 
 public class SchemaValidatorTest {
 	@Test
-	void testReadSchema() throws IOException, ParseException, ResourcesException {
+	void testReadSchema() {
 		// Parser file
 		File f = FileTestLoction.getFile("docs/email.stxt");
 		Parser parser = getParser();
@@ -28,7 +25,7 @@ public class SchemaValidatorTest {
 		}
 	}
 
-	private Parser getParser() throws ResourcesException
+	private Parser getParser()
 	{
 		Parser result = new Parser();
 		// Path

@@ -21,12 +21,12 @@ public class Parser {
 		validators.add(v);
 	}
 	
-	public List<Node> parseFile(File srcFile) throws IOException, ParseException {
+	public List<Node> parseFile(File srcFile) throws STXTIOException, ParseException {
 		try {	
 			return parse(FileUtils.readFileContent(srcFile));
 		}
 		catch (java.io.IOException e) {
-			throw new IOException(e);
+			throw new STXTIOException(e);
 		}
 	}
 
@@ -43,7 +43,7 @@ public class Parser {
 				processLine(line, lineNumber, state);
 			}
 		} catch (java.io.IOException e) {
-			throw new IOException(e);
+			throw new STXTIOException(e);
 		}
 
 		// Validators
@@ -56,7 +56,7 @@ public class Parser {
 		return state.getDocuments();
 	}
 
-	private void processLine(String line, int lineNumber, ParseState state) throws ParseException, IOException {
+	private void processLine(String line, int lineNumber, ParseState state) throws ParseException, STXTIOException {
 		// Parseamos la línea actual
 		LineIndent lineIndent = LineIndent.parseLine(line, lineNumber, state);
 		if (lineIndent == null)

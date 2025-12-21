@@ -1,26 +1,23 @@
 package dev.stxt.schema;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import dev.stxt.ParseException;
 import dev.stxt.Parser;
-import dev.stxt.resources.ResourcesException;
 import dev.stxt.resources.ResourcesLoader;
 import dev.stxt.resources.ResourcesLoaderDirectory;
 import dev.stxt.utils.FileUtils;
 import test.FileTestLoction;
 
 public class ParserAllDocsTest {
-	public static void main(String[] args) throws IOException, ParseException, ResourcesException {
+	public static void main(String[] args){
 		new ParserAllDocsTest().mainTest();
 	}
 
 	@Test
-	public void mainTest() throws IOException, ParseException, ResourcesException {
+	public void mainTest(){
 		System.out.println("Inici");
 
 		// Create parser
@@ -43,7 +40,7 @@ public class ParserAllDocsTest {
 
 		System.out.println("End");
 	}
-	private Parser getParser() throws ResourcesException
+	private Parser getParser()
 	{
 		Parser result = new Parser();
 		// Path

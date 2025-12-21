@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 
 import dev.stxt.ParseException;
 import dev.stxt.Parser;
-import dev.stxt.resources.ResourcesException;
 import dev.stxt.resources.ResourcesLoader;
 import dev.stxt.resources.ResourcesLoaderDirectory;
 import dev.stxt.utils.FileUtils;
@@ -20,12 +19,12 @@ import test.FileTestLoction;
 import test.JSONFile;
 
 public class ParserAllDocsErrorTest {
-	public static void main(String[] args) throws IOException, ParseException, ResourcesException {
+	public static void main(String[] args) throws IOException {
 		new ParserAllDocsErrorTest().mainTest();
 	}
 
 	@Test
-	public void mainTest() throws IOException, ParseException, ResourcesException {
+	public void mainTest() throws IOException {
 		System.out.println("Inici");
 
 		// Create parser
@@ -53,7 +52,7 @@ public class ParserAllDocsErrorTest {
 
 		System.out.println("End");
 	}
-	private Parser getParser() throws ResourcesException
+	private Parser getParser()
 	{
 		Parser result = new Parser();
 		// Path

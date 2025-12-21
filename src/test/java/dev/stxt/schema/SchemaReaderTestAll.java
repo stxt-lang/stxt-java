@@ -1,16 +1,12 @@
 package dev.stxt.schema;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
 import dev.stxt.Node;
-import dev.stxt.ParseException;
 import dev.stxt.Parser;
-import dev.stxt.resources.NotFoundException;
-import dev.stxt.resources.ResourcesException;
 import dev.stxt.resources.ResourcesLoader;
 import dev.stxt.resources.ResourcesLoaderDirectory;
 import test.FileTestLoction;
@@ -19,7 +15,7 @@ import test.JSONFile;
 
 public class SchemaReaderTestAll {
 	@Test
-	void testReadSchema() throws IOException, ParseException, ResourcesException {
+	void testReadSchema() throws Exception {
 		ResourcesLoader resourcesLoader = new ResourcesLoaderDirectory(FileTestLoction.getFile(""));
 
 		// Miramos todos
@@ -30,8 +26,7 @@ public class SchemaReaderTestAll {
 		}
 	}
 
-	private void checkPrint(String namespace, ResourcesLoader resolver)
-			throws ParseException, IOException, NotFoundException {
+	private void checkPrint(String namespace, ResourcesLoader resolver) throws Exception {
 		namespace = namespace.substring(0, namespace.length() - 5);
 
 		System.out.println("*****************************************");

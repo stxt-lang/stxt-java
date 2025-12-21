@@ -9,12 +9,12 @@ import java.io.File;
 
 import org.junit.jupiter.api.Test;
 
-import dev.stxt.IOException;
+import dev.stxt.STXTException;
 import test.FileTestLoction;
 
 public class ResourcesLoaderDirectoryTest {
 	@Test
-	void testExist() throws IOException, ResourcesException, NotFoundException {
+	void testExist() {
 		ResourcesLoaderDirectory finder = new ResourcesLoaderDirectory(FileTestLoction.getFile(""));
 
 		String result = finder.retrieve("@stxt.schema", "com.example.docs");
@@ -24,14 +24,14 @@ public class ResourcesLoaderDirectoryTest {
 	}
 
 	@Test
-	void testNotFound() throws IOException, ResourcesException {
+	void testNotFound() {
 		ResourcesLoaderDirectory finder = new ResourcesLoaderDirectory(FileTestLoction.getFile(""));
 
 		try {
 			finder.retrieve("@stxt.nonexistent", "com.example.nonexistent");
 			System.out.println("ERROR! Not exception");
 			fail("Se esperaba una excepción");
-		} catch (NotFoundException nfr) {
+		} catch (ResourceNotFoundException nfr) {
 			System.out.println("OK exception");
 			assertEquals(nfr.getNamespace(), "@stxt.nonexistent");
 			assertEquals(nfr.getResource(), "com.example.nonexistent");
@@ -44,7 +44,7 @@ public class ResourcesLoaderDirectoryTest {
 			new ResourcesLoaderDirectory(new File("testnotexistent/stxt"));
 			System.out.println("ERROR! Not exception");
 			fail("Se esperaba una excepción");
-		} catch (ResourcesException nfr) {
+		} catch (STXTException nfr) {
 			System.out.println("OK exception");
 		}
 	}

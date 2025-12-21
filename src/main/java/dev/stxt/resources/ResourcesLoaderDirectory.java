@@ -2,7 +2,8 @@ package dev.stxt.resources;
 
 import java.io.File;
 
-import dev.stxt.IOException;
+import dev.stxt.STXTException;
+import dev.stxt.STXTIOException;
 import dev.stxt.utils.FileUtils;
 
 public class ResourcesLoaderDirectory implements ResourcesLoader {
@@ -15,7 +16,8 @@ public class ResourcesLoaderDirectory implements ResourcesLoader {
 	public ResourcesLoaderDirectory(File dirResources) {
 		this.dir = dirResources;
 		if (!dir.exists() || !dir.isDirectory())
-			throw new ResourcesException("Directory not valid: " + dir.getAbsolutePath());
+			throw new STXTException("RESOURCE_DIRECTORY_NOT_VALID",
+					"Directory not valid: " + dir.getAbsolutePath());
 	}
 
 	@Override
@@ -25,14 +27,14 @@ public class ResourcesLoaderDirectory implements ResourcesLoader {
 
 		// Validamos exista
 		if (!file.exists() || !file.isFile())
-			throw new NotFoundException(namespace, resource);
+			throw new ResourceNotFoundException(namespace, resource);
 
 		// Retornamos valor
 		try {
 			return FileUtils.readFileContent(file);
 		}
 		catch (java.io.IOException e) {
-			throw new IOException(e);
+			throw new STXTIOException(e);
 		}
 		
 	}

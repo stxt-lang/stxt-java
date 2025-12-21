@@ -4,7 +4,7 @@ import java.util.List;
 
 import dev.stxt.Node;
 import dev.stxt.Parser;
-import dev.stxt.resources.NotFoundException;
+import dev.stxt.resources.ResourceNotFoundException;
 import dev.stxt.utils.ResourceReader;
 
 final class SchemaProviderMeta implements SchemaProvider {
@@ -25,7 +25,7 @@ final class SchemaProviderMeta implements SchemaProvider {
 
 	public Schema getSchema(String namespace) {
 		if (!namespace.equals(Schema.SCHEMA_NAMESPACE))
-			throw new NotFoundException(namespace, namespace);
+			throw new ResourceNotFoundException(namespace, namespace);
 
 		// Retorno de cache
 		return meta;

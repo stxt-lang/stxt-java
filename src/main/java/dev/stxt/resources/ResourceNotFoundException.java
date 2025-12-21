@@ -1,13 +1,15 @@
 package dev.stxt.resources;
 
-public class NotFoundException extends ResourcesException {
+import dev.stxt.STXTException;
+
+public class ResourceNotFoundException extends STXTException {
 	private static final long serialVersionUID = 1L;
 
 	private final String namespace;
 	private final String resource;
 
-	public NotFoundException(String namespace, String resource) {
-		super("Not found '" + resource + "' in namespace: " + namespace);
+	public ResourceNotFoundException(String namespace, String resource) {
+		super("RESOURCE_NOT_FOUND", "Not found '" + resource + "' in namespace: " + namespace);
 		this.namespace = namespace;
 		this.resource = resource;
 	}

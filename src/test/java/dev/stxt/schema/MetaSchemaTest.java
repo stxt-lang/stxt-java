@@ -7,12 +7,12 @@ import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
 import dev.stxt.ParseException;
-import dev.stxt.resources.NotFoundException;
+import dev.stxt.resources.ResourceNotFoundException;
 import test.JSON;
 
 public class MetaSchemaTest {
 	@Test
-	void testReadSchema() throws IOException, ParseException, NotFoundException {
+	void testReadSchema() throws IOException, ParseException, ResourceNotFoundException {
 		SchemaProviderMeta resolver = new SchemaProviderMeta();
 		Schema meta = resolver.getSchema("@stxt.schema");
 		assertNotNull(meta, "Debería resolver un schema");
