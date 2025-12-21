@@ -1,6 +1,6 @@
 package dev.stxt;
 
-public class ParseException extends Exception {
+public class ParseException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 	private final int line;
 	private final String code;
