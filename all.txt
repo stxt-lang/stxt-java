@@ -95,7 +95,7 @@ public class Node {
 			return inlineText;
 	}
 
-	void freeze()
+	public void freeze()
 	{
 		if (isFrozen) return;
 		for (Node n: children) n.freeze();
