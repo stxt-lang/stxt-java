@@ -1265,29 +1265,29 @@ public class Parser {
 	private List<Observer> observers;
 
 	public void register(Processor p) {
-	    if (p instanceof Validator v) {
+	    if (p instanceof Validator) {
 	        if (validators == null) {
 	            validators = new ArrayList<Validator>();
 	        }
-	        validators.add(v);
+	        validators.add((Validator) p);
 	    }
-	    if (p instanceof Transformer t) {
+	    if (p instanceof Transformer) {
 	        if (transformers == null) {
 	            transformers = new ArrayList<Transformer>();
 	        }
-	        transformers.add(t);
+	        transformers.add((Transformer) p);
 	    }
-	    if (p instanceof Filter f) {
+	    if (p instanceof Filter) {
 	        if (filters == null) {
 	            filters = new ArrayList<Filter>();
 	        }
-	        filters.add(f);
+	        filters.add((Filter) p);
 	    }
-	    if (p instanceof Observer o) {
+	    if (p instanceof Observer) {
 	        if (observers == null) {
 	            observers = new ArrayList<Observer>();
 	        }
-	        observers.add(o);
+	        observers.add((Observer) p);
 	    }
 	}
 
