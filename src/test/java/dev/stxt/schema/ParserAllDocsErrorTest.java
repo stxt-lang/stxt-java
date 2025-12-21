@@ -52,6 +52,7 @@ public class ParserAllDocsErrorTest {
 				Map<String, Object> errorInfo = new HashMap<>();
 				errorInfo.put("line", e.getLine());
 				errorInfo.put("code", e.getCode());
+				System.out.println("Error: " + e.getMessage());
 
 				JSONFile.checkContentWithJsonFile(errorInfo, "error_schema_json", file.getName().substring(0, file.getName().length() - 5));
 			}
