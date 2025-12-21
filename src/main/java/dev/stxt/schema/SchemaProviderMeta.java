@@ -25,11 +25,12 @@ final class SchemaProviderMeta implements SchemaProvider {
 		} catch (ParseException e) {
 		    throw new STXTException("INVALID_META_SCHEMA", 
 		        "Meta-schema is invalid", e);
-		}		meta = metaSchema;
+		}		
+		meta = metaSchema;
 	}
 
 	public Schema getSchema(String namespace) {
-		if (!namespace.equals(Schema.SCHEMA_NAMESPACE))
+		if (!namespace.equals(Schema.SCHEMA_NAMESPACE) || meta == null)
 			throw new ResourceNotFoundException(namespace, namespace);
 
 		// Retorno de cache

@@ -33,7 +33,7 @@ final class SchemaProviderCache implements SchemaProvider {
 		List<Node> nodes = parser.parse(textSchema);
 
 		if (nodes.size() != 1)
-			throw new ParseException(0, "INVALID_SCHEMA", "There are " + nodes.size() + ", and expected is 1");
+			throw new SchemaException("INVALID_SCHEMA", "There are " + nodes.size() + ", and expected is 1");
 
 		// Convertimos a schema
 		Node root = nodes.get(0);
