@@ -2,10 +2,9 @@ package dev.stxt.schema;
 
 import java.util.List;
 
+import dev.stxt.IOException;
 import dev.stxt.Node;
-import dev.stxt.ParseException;
 import dev.stxt.Parser;
-import dev.stxt.STXTException;
 import dev.stxt.resources.ResourceNotFoundException;
 import dev.stxt.utils.ResourceReader;
 
@@ -20,11 +19,7 @@ final class SchemaProviderMeta implements SchemaProvider {
 			List<Node> nodes = parser.parse(metaSchemaText);
 			metaSchema = SchemaParser.transformNodeToSchema(nodes.get(0));
 		} catch (java.io.IOException e) {
-		    throw new STXTException("META_SCHEMA_NOT_FOUND", 
-		        "Could not load meta-schema from resources", e);
-		} catch (ParseException e) {
-		    throw new STXTException("INVALID_META_SCHEMA", 
-		        "Meta-schema is invalid", e);
+		    throw new IOException(e);
 		}		
 		meta = metaSchema;
 	}
