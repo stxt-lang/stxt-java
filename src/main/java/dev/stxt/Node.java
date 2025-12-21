@@ -81,7 +81,7 @@ public class Node {
 	public Node getChild(String cname) {
 		List<Node> result = getChildren(cname);
 		if (result.size() > 1)
-			throw new IllegalArgumentException("More than 1 child. Use getChilds");
+			throw new IllegalArgumentException("More than 1 child. Use getChildren");
 		if (result.size() == 0)
 			return null;
 		return result.get(0);
