@@ -87,7 +87,8 @@ public class Parser {
 		closeToLevel(state, 0);
 		
 		// Congelar documentos
-		freezeAll(state.getDocuments());
+		for (Node n: state.getDocuments())
+			n.freeze();
 
 		// Retorno documentos
 		return state.getDocuments();
@@ -270,21 +271,5 @@ public class Parser {
 	    }
 
 	    return current;
-	}
-	
-	private void freezeAll(List<Node> docs) {
-	    for (Node n : docs) {
-	        freezeRecursive(n);
-	    }
-	}
-
-	private void freezeRecursive(Node n) {
-	    // primero congela hijos
-	    for (Node ch : n.getChildren()) {
-	        freezeRecursive(ch);
-	    }
-	    // luego el propio nodo (shallow)
-	    n.freeze();
-	}
-	
+	}	
 }

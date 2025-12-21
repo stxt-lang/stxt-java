@@ -15,6 +15,7 @@ public class Node {
 	private final int line;
 	private final int level;
 	private List<Node> children = new ArrayList<>();
+	private boolean isFrozen = false;
 
 	public Node(int line, int level, String name, String namespace, boolean multiline, String value) {
 		this.level = level;
@@ -81,8 +82,12 @@ public class Node {
 
 	void freeze()
 	{
+		if (isFrozen) return;
+		for (Node n: children) n.freeze();
 		this.children = Collections.unmodifiableList(this.children);
-		this.multilineText = Collections.unmodifiableList(this.multilineText);
+		this.multilineText = Collections.unmodifiableList(this.multilineText);		
+		
+		isFrozen = true;
 	}
 	
 	public Node getChild(String cname) {
