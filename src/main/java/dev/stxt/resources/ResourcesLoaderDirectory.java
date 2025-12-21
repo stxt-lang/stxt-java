@@ -1,8 +1,8 @@
 package dev.stxt.resources;
 
 import java.io.File;
-import dev.stxt.IOException;
 
+import dev.stxt.IOException;
 import dev.stxt.utils.FileUtils;
 
 public class ResourcesLoaderDirectory implements ResourcesLoader {

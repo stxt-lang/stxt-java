@@ -1,5 +1,8 @@
 package dev.stxt;
 
+import static dev.stxt.Constants.EMPTY_NAMESPACE;
+import static dev.stxt.utils.StringUtils.compactString;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.StringReader;
@@ -8,9 +11,6 @@ import java.util.List;
 import java.util.Stack;
 
 import dev.stxt.utils.FileUtils;
-
-import static dev.stxt.Constants.EMPTY_NAMESPACE;
-import static dev.stxt.utils.StringUtils.compactString;
 
 public class Parser {
 	private List<Validator> validators;

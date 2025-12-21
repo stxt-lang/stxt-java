@@ -1,10 +1,8 @@
 package dev.stxt.schema;
 
-import dev.stxt.IOException;
 import java.util.List;
 
 import dev.stxt.Node;
-import dev.stxt.ParseException;
 import dev.stxt.Parser;
 import dev.stxt.resources.NotFoundException;
 import dev.stxt.utils.ResourceReader;
