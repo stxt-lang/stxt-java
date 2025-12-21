@@ -30,6 +30,7 @@ public class Node {
 	private final int line;
 	private final int level;
 	private List<Node> children = new ArrayList<>();
+	private boolean isFrozen = false;
 
 	public Node(int line, int level, String name, String namespace, boolean multiline, String value) {
 		this.level = level;
@@ -96,8 +97,12 @@ public class Node {
 
 	void freeze()
 	{
+		if (isFrozen) return;
+		for (Node n: children) n.freeze();
 		this.children = Collections.unmodifiableList(this.children);
-		this.multilineText = Collections.unmodifiableList(this.multilineText);
+		this.multilineText = Collections.unmodifiableList(this.multilineText);		
+		
+		isFrozen = true;
 	}
 	
 	public Node getChild(String cname) {
@@ -1317,7 +1322,8 @@ public class Parser {
 		closeToLevel(state, 0);
 		
 		// Congelar documentos
-		freezeAll(state.getDocuments());
+		for (Node n: state.getDocuments())
+			n.freeze();
 
 		// Retorno documentos
 		return state.getDocuments();
@@ -1500,23 +1506,7 @@ public class Parser {
 	    }
 
 	    return current;
-	}
-	
-	private void freezeAll(List<Node> docs) {
-	    for (Node n : docs) {
-	        freezeRecursive(n);
-	    }
-	}
-
-	private void freezeRecursive(Node n) {
-	    // primero congela hijos
-	    for (Node ch : n.getChildren()) {
-	        freezeRecursive(ch);
-	    }
-	    // luego el propio nodo (shallow)
-	    n.freeze();
-	}
-	
+	}	
 }
 
 ```
