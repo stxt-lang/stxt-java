@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Stack;
 
 import dev.stxt.processors.Filter;
+import dev.stxt.processors.Observer;
 import dev.stxt.processors.Processor;
 import dev.stxt.processors.Transformer;
 import dev.stxt.processors.Validator;
@@ -230,6 +231,15 @@ public class Parser {
 			}
 		}
 
+	    // Observers (solo inspección)
+	    if (processors != null) {
+	        for (Processor p : processors) {
+	            if (p instanceof Observer o) {
+	                o.process(current);
+	            }
+	        }
+	    }
+	    
 		// Validators
 		if (processors != null) {
 			for (Processor p : processors) {
