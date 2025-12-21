@@ -13,9 +13,14 @@ class SchemaValidator implements Validator {
 	// ------------------
 
 	private final SchemaProvider schemaProvider;
+	private boolean recursive = false;
 
 	public SchemaValidator(SchemaProvider schemaProvider) {
 		this.schemaProvider = schemaProvider;
+	}
+	public SchemaValidator(SchemaProvider schemaProvider, boolean recursive) {
+		this.schemaProvider = schemaProvider;
+		this.recursive = recursive;
 	}
 
 	@Override
@@ -26,8 +31,13 @@ class SchemaValidator implements Validator {
 		if (sch == null)
 			throw new ValidationException(node.getLine(), "SCHEMA_NOT_FOUND", "Not found schema: " + namespace);
 
-		// Validamos nodo y childs
+		// Validamos nodo
 		validateAgainstSchema(node, sch);
+		
+		// Validamos children
+		if (recursive)
+			for (Node n: node.getChildren())
+				validate(n);
 	}
 	
 	public void validateAgainstSchema(Node node, Schema sch) {

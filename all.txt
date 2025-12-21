@@ -589,9 +589,14 @@ class SchemaValidator implements Validator {
 	// ------------------
 
 	private final SchemaProvider schemaProvider;
+	private boolean recursive = false;
 
 	public SchemaValidator(SchemaProvider schemaProvider) {
 		this.schemaProvider = schemaProvider;
+	}
+	public SchemaValidator(SchemaProvider schemaProvider, boolean recursive) {
+		this.schemaProvider = schemaProvider;
+		this.recursive = recursive;
 	}
 
 	@Override
@@ -602,8 +607,13 @@ class SchemaValidator implements Validator {
 		if (sch == null)
 			throw new ValidationException(node.getLine(), "SCHEMA_NOT_FOUND", "Not found schema: " + namespace);
 
-		// Validamos nodo y childs
+		// Validamos nodo
 		validateAgainstSchema(node, sch);
+		
+		// Validamos children
+		if (recursive)
+			for (Node n: node.getChildren())
+				validate(n);
 	}
 	
 	public void validateAgainstSchema(Node node, Schema sch) {
@@ -1053,22 +1063,6 @@ class TypeRegistry {
 
 ```
 
-Fichero: dev/stxt/schema/@stxt.schema.stxt
-```
-Schema (@stxt.schema): @stxt.schema
-    Node: Schema (INLINE TEXT)
-        Children>>
-            Description (?)
-            Node (+)
-    Node: Node (INLINE TEXT)
-        Children>>
-            Children (?)
-            Description (?)
-    Node: Children (MULTILINE TEXT)
-    Node: Description (TEXT)
-
-```
-
 Fichero: dev/stxt/schema/SchemaProvider.java
 ```
 package dev.stxt.schema;
@@ -1321,7 +1315,11 @@ public class Parser {
 
 		// Cerrar todos los nodos pendientes al EOF
 		closeToLevel(state, 0);
+		
+		// Congelar documentos
+		freezeAll(state.getDocuments());
 
+		// Retorno documentos
 		return state.getDocuments();
 	}
 
@@ -1501,10 +1499,24 @@ public class Parser {
 	        }
 	    }
 
-	    // Cerramos listas
-	    current.freeze();
 	    return current;
 	}
+	
+	private void freezeAll(List<Node> docs) {
+	    for (Node n : docs) {
+	        freezeRecursive(n);
+	    }
+	}
+
+	private void freezeRecursive(Node n) {
+	    // primero congela hijos
+	    for (Node ch : n.getChildren()) {
+	        freezeRecursive(ch);
+	    }
+	    // luego el propio nodo (shallow)
+	    n.freeze();
+	}
+	
 }
 
 ```

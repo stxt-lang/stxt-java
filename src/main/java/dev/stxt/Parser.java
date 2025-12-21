@@ -85,7 +85,11 @@ public class Parser {
 
 		// Cerrar todos los nodos pendientes al EOF
 		closeToLevel(state, 0);
+		
+		// Congelar documentos
+		freezeAll(state.getDocuments());
 
+		// Retorno documentos
 		return state.getDocuments();
 	}
 
@@ -265,8 +269,22 @@ public class Parser {
 	        }
 	    }
 
-	    // Cerramos listas
-	    current.freeze();
 	    return current;
 	}
+	
+	private void freezeAll(List<Node> docs) {
+	    for (Node n : docs) {
+	        freezeRecursive(n);
+	    }
+	}
+
+	private void freezeRecursive(Node n) {
+	    // primero congela hijos
+	    for (Node ch : n.getChildren()) {
+	        freezeRecursive(ch);
+	    }
+	    // luego el propio nodo (shallow)
+	    n.freeze();
+	}
+	
 }
