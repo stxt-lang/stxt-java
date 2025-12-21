@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import dev.stxt.Node;
-import dev.stxt.ParseException;
+import dev.stxt.ValidationException;
 import dev.stxt.Validator;
 
 class SchemaValidator implements Validator {
@@ -24,7 +24,7 @@ class SchemaValidator implements Validator {
 		String namespace = node.getNamespace();
 		Schema sch = schemaProvider.getSchema(namespace);
 		if (sch == null)
-			throw new ParseException(node.getLine(), "SCHEMA_NOT_FOUND", "Not found schema: " + sch);
+			throw new ValidationException(node.getLine(), "SCHEMA_NOT_FOUND", "Not found schema: " + sch);
 
 		// Validamos nodo y childs
 		validateAgainstSchema(node, sch);
@@ -35,7 +35,7 @@ class SchemaValidator implements Validator {
 		SchemaNode schemaNode = sch.nodes.get(node.getName());
 		if (schemaNode == null) {
 			String error = "NOT EXIST NODE " + node.getName() + " for namespace " + sch.namespace;
-			throw new ParseException(node.getLine(), "NODE_NOT_EXIST_IN_SCHEMA", error);
+			throw new ValidationException(node.getLine(), "NODE_NOT_EXIST_IN_SCHEMA", error);
 		}
 
 		// Validamos nodo
@@ -48,7 +48,7 @@ class SchemaValidator implements Validator {
 
 		TypeValidator validator = TypeRegistry.get(nodeType);
 		if (validator == null)
-			throw new ParseException(n.getLine(), "TYPE_NOT_SUPPORTED", "Node type not supported: " + nodeType);
+			throw new ValidationException(n.getLine(), "TYPE_NOT_SUPPORTED", "Node type not supported: " + nodeType);
 
 		validator.validate(n);
 	}
@@ -72,11 +72,11 @@ class SchemaValidator implements Validator {
 		Integer max = chNode.max;
 
 		if (min != null && num < min)
-			throw new ParseException(node.getLine(), "INVALID_NUMBER",
+			throw new ValidationException(node.getLine(), "INVALID_NUMBER",
 					num + " nodes of '" + chNode.getQualifiedName() + " and min is " + min);
 
 		if (max != null && num > max)
-			throw new ParseException(node.getLine(), "INVALID_NUMBER",
+			throw new ValidationException(node.getLine(), "INVALID_NUMBER",
 					num + " nodes of '" + chNode.getQualifiedName() + " and max is " + max);
 	}
 

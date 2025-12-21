@@ -21,7 +21,7 @@ public class Parser {
 		validators.add(v);
 	}
 	
-	public List<Node> parseFile(File srcFile) throws STXTIOException, ParseException {
+	public List<Node> parseFile(File srcFile) {
 		try {	
 			return parse(FileUtils.readFileContent(srcFile));
 		}
@@ -30,7 +30,7 @@ public class Parser {
 		}
 	}
 
-	public List<Node> parse(String content) throws ParseException {
+	public List<Node> parse(String content) {
 		content = FileUtils.removeUTF8BOM(content);
 
 		ParseState state = new ParseState();
@@ -56,7 +56,7 @@ public class Parser {
 		return state.getDocuments();
 	}
 
-	private void processLine(String line, int lineNumber, ParseState state) throws ParseException, STXTIOException {
+	private void processLine(String line, int lineNumber, ParseState state) {
 		// Parseamos la línea actual
 		LineIndent lineIndent = LineIndent.parseLine(line, lineNumber, state);
 		if (lineIndent == null)
@@ -106,7 +106,7 @@ public class Parser {
 		}
 	}
 
-	private void validateNode(Node node) throws ParseException {
+	private void validateNode(Node node) {
 	    if (validators != null) {
 		    for (Validator v : validators) {
 		        v.validate(node);
@@ -114,7 +114,7 @@ public class Parser {
 	    }
 	}
 	
-	private Node createNode(LineIndent result, int lineNumber, int level, Node parent) throws ParseException {
+	private Node createNode(LineIndent result, int lineNumber, int level, Node parent) {
 		String line = result.lineWithoutIndent;
 		String name = null;
 		String value = null;
@@ -178,7 +178,7 @@ public class Parser {
 	 * etiqueta := [a-z0-9]+ ejemplos válidos: "xxx", "xxx.ddd", "zzz.ttt.ooo",
 	 * "@xxx", "@xxx.ddd".
 	 */
-	private void validateNamespaceFormat(String namespace, int lineNumber) throws ParseException {
+	private void validateNamespaceFormat(String namespace, int lineNumber) {
 		// Permitimos namespace vacío (se usa EMPTY_NAMESPACE heredado, etc.)
 		if (namespace == null || namespace.isEmpty())
 			return;

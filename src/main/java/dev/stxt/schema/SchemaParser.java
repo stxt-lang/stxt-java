@@ -58,7 +58,7 @@ class SchemaParser {
 		return schema;
 	}
 
-	private static SchemaNode createFrom(Node n, String namespace) throws ParseException {
+	private static SchemaNode createFrom(Node n, String namespace) {
 		SchemaNode result = new SchemaNode();
 
 		String name = n.getInlineText();
