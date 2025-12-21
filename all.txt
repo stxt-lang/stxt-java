@@ -116,16 +116,6 @@ public class Node {
 }
 ```
 
-Fichero: dev/stxt/Processor.java
-```
-package dev.stxt;
-
-public interface Processor {
-	public void process(Node n);
-}
-
-```
-
 Fichero: dev/stxt/ParseState.java
 ```
 package dev.stxt;
@@ -527,36 +517,6 @@ public final class TimestampValidator extends RegexValueValidator {
 
 ```
 
-Fichero: dev/stxt/schema/SchemaValidatorService.java
-```
-package dev.stxt.schema;
-
-import java.util.Collections;
-import java.util.List;
-
-import dev.stxt.Node;
-import dev.stxt.resources.ResourcesLoader;
-import dev.stxt.validator.TopDownValidator;
-
-public final class SchemaValidatorService {
-	private final TopDownValidator validator;
-
-	public SchemaValidatorService(ResourcesLoader resourcesLoader) {
-		validator = new TopDownValidator(Collections.singletonList(new SchemaValidator(new SchemaProviderCache(resourcesLoader))));
-	}
-
-	public void validateNode(Node node) {
-		validator.validate(node);
-	}
-
-	public void validateNodes(List<Node> nodes) {
-		for (Node n: nodes)
-			validator.validate(n);
-	}
-}
-
-```
-
 Fichero: dev/stxt/schema/SchemaValidator.java
 ```
 package dev.stxt.schema;
@@ -565,8 +525,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import dev.stxt.Node;
-import dev.stxt.ValidationException;
-import dev.stxt.Validator;
+import dev.stxt.processors.ValidationException;
+import dev.stxt.processors.Validator;
 
 class SchemaValidator implements Validator {
 	// ------------------
@@ -670,7 +630,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import dev.stxt.Node;
-import dev.stxt.ParseException;
 import dev.stxt.Parser;
 import dev.stxt.resources.ResourcesLoader;
 
@@ -694,7 +653,7 @@ final class SchemaProviderCache implements SchemaProvider {
 		// Cargamos schema
 		String textSchema = resourcesLoader.retrieve(Schema.SCHEMA_NAMESPACE, namespace);
 		Parser parser = new Parser();
-		parser.registerValidator(schemaValidator);
+		parser.register(schemaValidator);
 		List<Node> nodes = parser.parse(textSchema);
 
 		if (nodes.size() != 1)
@@ -722,10 +681,9 @@ package dev.stxt.schema;
 
 import java.util.List;
 
+import dev.stxt.IOException;
 import dev.stxt.Node;
-import dev.stxt.ParseException;
 import dev.stxt.Parser;
-import dev.stxt.STXTException;
 import dev.stxt.resources.ResourceNotFoundException;
 import dev.stxt.utils.ResourceReader;
 
@@ -740,11 +698,7 @@ final class SchemaProviderMeta implements SchemaProvider {
 			List<Node> nodes = parser.parse(metaSchemaText);
 			metaSchema = SchemaParser.transformNodeToSchema(nodes.get(0));
 		} catch (java.io.IOException e) {
-		    throw new STXTException("META_SCHEMA_NOT_FOUND", 
-		        "Could not load meta-schema from resources", e);
-		} catch (ParseException e) {
-		    throw new STXTException("INVALID_META_SCHEMA", 
-		        "Meta-schema is invalid", e);
+		    throw new IOException(e);
 		}		
 		meta = metaSchema;
 	}
@@ -833,7 +787,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import dev.stxt.Node;
-import dev.stxt.ValidationException;
+import dev.stxt.processors.ValidationException;
 import dev.stxt.utils.StringUtils;
 
 class SchemaParser {
@@ -1192,74 +1146,6 @@ class LineIndent {
 
 ```
 
-Fichero: dev/stxt/processor/BottomUpProcessor.java
-```
-package dev.stxt.processor;
-
-import java.util.List;
-
-import dev.stxt.Node;
-import dev.stxt.Processor;
-
-public class BottomUpProcessor implements Processor {
-	private final List<Processor> processors;
-
-	public BottomUpProcessor(List<Processor> processors) {
-		this.processors = processors;
-	}
-
-	@Override
-	public void process(Node n) {
-		for (Node node : n.getChildren()) {
-			process(node);
-		}
-		for (Processor p : processors) {
-			p.process(n);
-		}
-	}
-}
-
-```
-
-Fichero: dev/stxt/processor/TopDownProcessor.java
-```
-package dev.stxt.processor;
-
-import java.util.List;
-
-import dev.stxt.Node;
-import dev.stxt.Processor;
-
-public class TopDownProcessor implements Processor {
-	private final List<Processor> processors;
-
-	public TopDownProcessor(List<Processor> processors) {
-		this.processors = processors;
-	}
-
-	@Override
-	public void process(Node n) {
-		for (Processor p : processors) {
-			p.process(n);
-		}
-		for (Node node : n.getChildren()) {
-			process(node);
-		}
-	}
-}
-
-```
-
-Fichero: dev/stxt/Validator.java
-```
-package dev.stxt;
-
-public interface Validator {
-	public void validate(Node n);
-}
-
-```
-
 Fichero: dev/stxt/STXTException.java
 ```
 package dev.stxt;
@@ -1305,15 +1191,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+import dev.stxt.processors.Processor;
+import dev.stxt.processors.Validator;
 import dev.stxt.utils.FileUtils;
 
 public class Parser {
-	private List<Validator> validators;
+	private List<Processor> processors;
 	
-	public void registerValidator(Validator v)
+	public void register(Processor p)
 	{
-		if (validators == null) validators = new ArrayList<Validator>();
-		validators.add(v);
+		if (processors == null) processors = new ArrayList<>();
+		processors.add(p);
 	}
 	
 	public List<Node> parseFile(File srcFile) {
@@ -1402,9 +1290,9 @@ public class Parser {
 	}
 
 	private void validateNode(Node node) {
-	    if (validators != null) {
-		    for (Validator v : validators) {
-		        v.validate(node);
+	    if (processors != null) {
+		    for (Processor p: processors) {
+		    	if (p instanceof Validator v) v.validate(node);
 		    }
 	    }
 	}
@@ -1485,17 +1373,63 @@ public class Parser {
 }
 ```
 
-Fichero: dev/stxt/ProcessorException.java
+Fichero: dev/stxt/processors/Processor.java
 ```
-package dev.stxt;
+package dev.stxt.processors;
 
-public class ProcessorException extends STXTException {
-    private static final long serialVersionUID = 1L;
-	public ProcessorException(String message) {
-        super("PROCESSOR_ERROR", message);
-    }
-    public ProcessorException(String message, Throwable cause) {
-        super("PROCESSOR_ERROR", message, cause);
+public interface Processor {
+}
+
+```
+
+Fichero: dev/stxt/processors/Transformer.java
+```
+package dev.stxt.processors;
+
+import dev.stxt.Node;
+
+public interface Transformer extends Processor {
+    /**
+     * Transforma un nodo.
+     * @return El nodo transformado, o null para eliminarlo
+     */
+    Node transform(Node node);
+}
+```
+
+Fichero: dev/stxt/processors/Filter.java
+```
+package dev.stxt.processors;
+
+import dev.stxt.Node;
+
+public interface Filter extends Processor {
+    boolean accept(Node node);
+}
+```
+
+Fichero: dev/stxt/processors/Validator.java
+```
+package dev.stxt.processors;
+
+import dev.stxt.Node;
+
+public interface Validator extends Processor {
+	public void validate(Node n);
+}
+
+```
+
+Fichero: dev/stxt/processors/ValidationException.java
+```
+package dev.stxt.processors;
+
+import dev.stxt.ParseException;
+
+public class ValidationException extends ParseException {
+	private static final long serialVersionUID = 1L;
+	public ValidationException(int line, String code, String message) {
+        super(line, code, message);
     }
 }
 
@@ -1655,19 +1589,6 @@ public class StringUtils {
 
 ```
 
-Fichero: dev/stxt/ValidationException.java
-```
-package dev.stxt;
-
-public class ValidationException extends ParseException {
-	private static final long serialVersionUID = 1L;
-	public ValidationException(int line, String code, String message) {
-        super(line, code, message);
-    }
-}
-
-```
-
 Fichero: dev/stxt/resources/ResourcesLoaderDirectory.java
 ```
 package dev.stxt.resources;
@@ -1748,64 +1669,6 @@ public class ResourceNotFoundException extends STXTException {
 
 	public String getResource() {
 		return resource;
-	}
-}
-
-```
-
-Fichero: dev/stxt/validator/BottomUpValidator.java
-```
-package dev.stxt.validator;
-
-import java.util.List;
-
-import dev.stxt.Node;
-import dev.stxt.Validator;
-
-public class BottomUpValidator implements Validator {
-	private final List<Validator> validators;
-
-	public BottomUpValidator(List<Validator> processors) {
-		this.validators = processors;
-	}
-
-	@Override
-	public void validate(Node node) {
-		for (Node n : node.getChildren()) {
-			validate(n);
-		}
-		for (Validator  validator: validators) {
-			validator.validate(node);
-		}
-	}
-}
-
-```
-
-Fichero: dev/stxt/validator/TopDownValidator.java
-```
-package dev.stxt.validator;
-
-import java.util.List;
-
-import dev.stxt.Node;
-import dev.stxt.Validator;
-
-public class TopDownValidator implements Validator {
-	private final List<Validator> validators;
-
-	public TopDownValidator(List<Validator> processors) {
-		this.validators = processors;
-	}
-
-	@Override
-	public void validate(Node node) {
-		for (Validator  validator: validators) {
-			validator.validate(node);
-		}
-		for (Node n : node.getChildren()) {
-			validate(n);
-		}
 	}
 }
 
