@@ -24,7 +24,7 @@ class SchemaValidator implements Validator {
 		String namespace = node.getNamespace();
 		Schema sch = schemaProvider.getSchema(namespace);
 		if (sch == null)
-			throw new ValidationException(node.getLine(), "SCHEMA_NOT_FOUND", "Not found schema: " + sch);
+			throw new ValidationException(node.getLine(), "SCHEMA_NOT_FOUND", "Not found schema: " + namespace);
 
 		// Validamos nodo y childs
 		validateAgainstSchema(node, sch);

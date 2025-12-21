@@ -7,7 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import dev.stxt.Node;
-import dev.stxt.ParseException;
+import dev.stxt.ValidationException;
 import dev.stxt.utils.StringUtils;
 
 class SchemaParser {
@@ -25,7 +25,7 @@ class SchemaParser {
 
 		// Obtenemos name y namespace
 		if (!nodeName.equals("schema") || !namespaceSchema.equals(Schema.SCHEMA_NAMESPACE)) {
-			throw new ParseException(0, "NOT_STXT_SCHEMA",
+			throw new SchemaException("NOT_STXT_SCHEMA",
 					"Se espera schema(" + Schema.SCHEMA_NAMESPACE + ") y es " + nodeName + "(" + namespaceSchema + ")");
 		}
 		String namespace = node.getInlineText();
@@ -49,7 +49,7 @@ class SchemaParser {
 				if (schChild.namespace.equals(namespace)) // Sólo validamos del mismo namespace
 				{
 					if (!allNames.contains(schChild.name))
-						throw new ParseException(0, "CHILD_NOT_DEFINED",
+						throw new ValidationException(0, "CHILD_NOT_DEFINED",
 								"Child " + schChild.name + " not defined in " + namespace);
 				}
 			}
@@ -70,7 +70,7 @@ class SchemaParser {
 			name = m.group("name").trim();
 			type = m.group("type") != null ? m.group("type").trim() : type;
 		} else {
-			throw new ParseException(n.getLine(), "NODE_NAME_INVALID", "Line not valid: " + n.getInlineText());
+			throw new ValidationException(n.getLine(), "NODE_NAME_INVALID", "Line not valid: " + n.getInlineText());
 		}
 
 		result.name = StringUtils.compactString(name.toLowerCase());
@@ -86,7 +86,7 @@ class SchemaParser {
 				updateCount(schemaChild);
 				String qname = schemaChild.getQualifiedName();
 				if (result.children.containsKey(qname))
-					throw new ParseException(children.getLine(), "DUPLICATED_CHILD", qname);
+					throw new ValidationException(children.getLine(), "DUPLICATED_CHILD", qname);
 
 				result.children.put(qname, schemaChild);
 			}
