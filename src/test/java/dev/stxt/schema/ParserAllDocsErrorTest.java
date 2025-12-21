@@ -29,12 +29,8 @@ public class ParserAllDocsErrorTest {
 	public void mainTest() throws IOException, ParseException, ResourcesException {
 		System.out.println("Inici");
 
-		// Validator
-		ResourcesLoader resourcesLoader = new ResourcesLoaderDirectory(FileTestLoction.getFile(""));
-		SchemaValidatorService validator = new SchemaValidatorService(resourcesLoader);
-
 		// Create parser
-		Parser parser = new Parser();
+		Parser parser = getParser();
 		File docsDir = FileTestLoction.getFile("error_schema");
 
 		List<File> stxtFiles = FileUtils.getStxtFiles(docsDir);
@@ -43,9 +39,7 @@ public class ParserAllDocsErrorTest {
 			try {
 				System.out.println("***************************************************");
 				System.out.println("FILE: " + file.getAbsolutePath());
-				List<Node> docs = parser.parseFile(file);
-
-				validator.validateNodes(docs);
+				parser.parseFile(file);
 				fail("Debería haber saltado excepción!!");
 			} catch (ParseException e) {
 				// Build JSON node with line and code from the exception
@@ -60,5 +54,15 @@ public class ParserAllDocsErrorTest {
 
 		System.out.println("End");
 	}
+	private Parser getParser() throws ResourcesException
+	{
+		Parser result = new Parser();
+		// Path
+		ResourcesLoader resourcesLoader = new ResourcesLoaderDirectory(FileTestLoction.getFile(""));
+		SchemaValidator schemaValidator = new SchemaValidator(new SchemaProviderCache(resourcesLoader));
 
+		result.registerValidator(schemaValidator);
+		
+		return result;
+	}
 }

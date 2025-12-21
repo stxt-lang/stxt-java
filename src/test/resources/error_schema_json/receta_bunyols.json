@@ -1,4 +1,4 @@
 {
-    "code" : "INVALID_NUMBER",
-    "line" : 1
+    "code" : "NODE_NOT_EXIST_IN_SCHEMA",
+    "line" : 5
 }
