@@ -23,12 +23,36 @@ public class Parser {
 	 *  Configuración de procesadores
 	 */
 	
-	private List<Processor> processors;
+	private List<Validator> validators;
+	private List<Transformer> transformers;
+	private List<Filter> filters;
+	private List<Observer> observers;
 
 	public void register(Processor p) {
-		if (processors == null)
-			processors = new ArrayList<>();
-		processors.add(p);
+	    if (p instanceof Validator v) {
+	        if (validators == null) {
+	            validators = new ArrayList<Validator>();
+	        }
+	        validators.add(v);
+	    }
+	    if (p instanceof Transformer t) {
+	        if (transformers == null) {
+	            transformers = new ArrayList<Transformer>();
+	        }
+	        transformers.add(t);
+	    }
+	    if (p instanceof Filter f) {
+	        if (filters == null) {
+	            filters = new ArrayList<Filter>();
+	        }
+	        filters.add(f);
+	    }
+	    if (p instanceof Observer o) {
+	        if (observers == null) {
+	            observers = new ArrayList<Observer>();
+	        }
+	        observers.add(o);
+	    }
 	}
 
 	/** 
@@ -206,49 +230,41 @@ public class Parser {
 	 * 3) Validators (solo si el nodo sigue vivo)
 	 */
 	private Node finishNode(Node node) {
-		Node current = node;
+	    Node current = node;
 
-		// Transformers
-		if (processors != null) {
-			for (Processor p : processors) {
-				if (p instanceof Transformer t) {
-					current = t.transform(current);
-					if (current == null) {
-						return null; // eliminado
-					}
-				}
-			}
-		}
-
-		// Filters (AND lógico: todos deben aceptar)
-		if (processors != null) {
-			for (Processor p : processors) {
-				if (p instanceof Filter f) {
-					if (!f.accept(current)) {
-						return null; // filtrado
-					}
-				}
-			}
-		}
-
-	    // Observers (solo inspección)
-	    if (processors != null) {
-	        for (Processor p : processors) {
-	            if (p instanceof Observer o) {
-	                o.process(current);
+	    // 1) Transformers
+	    if (transformers != null) {
+	        for (Transformer t : transformers) {
+	            current = t.transform(current);
+	            if (current == null) {
+	                return null; // eliminado
 	            }
 	        }
 	    }
-	    
-		// Validators
-		if (processors != null) {
-			for (Processor p : processors) {
-				if (p instanceof Validator v) {
-					v.validate(current);
-				}
-			}
-		}
 
-		return current;
-	}	
+	    // 2) Filters
+	    if (filters != null) {
+	        for (Filter f : filters) {
+	            if (!f.accept(current)) {
+	                return null; // filtrado
+	            }
+	        }
+	    }
+
+	    // 3) Observers (solo inspección)
+	    if (observers != null) {
+	        for (Observer o : observers) {
+	            o.process(current);
+	        }
+	    }
+
+	    // 4) Validators
+	    if (validators != null) {
+	        for (Validator v : validators) {
+	            v.validate(current);
+	        }
+	    }
+
+	    return current;
+	}
 }
