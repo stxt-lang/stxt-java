@@ -1,6 +1,5 @@
 dev.stxt
 * Poner getParent() en los childs
-* Poner level en child
 * toString correcto con niveles y estructura estándar
 
 dev.stxt.schema
