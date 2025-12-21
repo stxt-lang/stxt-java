@@ -94,7 +94,7 @@ public class Node {
 	}
 
 	public Node getChild(String cname) {
-		List<Node> result = getChilds(cname);
+		List<Node> result = getChildren(cname);
 		if (result.size() > 1)
 			throw new IllegalArgumentException("More than 1 child. Use getChilds");
 		if (result.size() == 0)
@@ -103,7 +103,7 @@ public class Node {
 	}
 
 	// Fast access methods to children
-	public List<Node> getChilds(String cname) {
+	public List<Node> getChildren(String cname) {
 		List<Node> result = new ArrayList<Node>();
 
 		for (Node child : children) {
@@ -812,7 +812,7 @@ class SchemaParser {
 		schema.namespace = namespace;
 
 		// Obtenemos los nodos
-		List<Node> nodes = node.getChilds("node");
+		List<Node> nodes = node.getChildren("node");
 
 		Set<String> allNames = new HashSet<String>(); // Para validar que
 														// existan los childs
@@ -1191,24 +1191,34 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+import dev.stxt.processors.Filter;
 import dev.stxt.processors.Processor;
+import dev.stxt.processors.Transformer;
 import dev.stxt.processors.Validator;
 import dev.stxt.utils.FileUtils;
 
 public class Parser {
-	private List<Processor> processors;
 	
-	public void register(Processor p)
-	{
-		if (processors == null) processors = new ArrayList<>();
+	/** 
+	 *  Configuración de procesadores
+	 */
+	
+	private List<Processor> processors;
+
+	public void register(Processor p) {
+		if (processors == null)
+			processors = new ArrayList<>();
 		processors.add(p);
 	}
+
+	/** 
+	 *  Parseo principal del texto
+	 */
 	
 	public List<Node> parseFile(File srcFile) {
-		try {	
+		try {
 			return parse(FileUtils.readFileContent(srcFile));
-		}
-		catch (java.io.IOException e) {
+		} catch (java.io.IOException e) {
 			throw new IOException(e);
 		}
 	}
@@ -1219,7 +1229,7 @@ public class Parser {
 		ParseState state = new ParseState();
 		int lineNumber = 0;
 
-		try (BufferedReader in = new BufferedReader(new StringReader(content));) {
+		try (BufferedReader in = new BufferedReader(new StringReader(content))) {
 			String line;
 			while ((line = in.readLine()) != null) {
 				lineNumber++;
@@ -1229,74 +1239,73 @@ public class Parser {
 			throw new IOException(e);
 		}
 
-		// Validators
-		Stack<Node> stack = state.getStack();
-		while (!stack.isEmpty()) {
-		    validateNode(stack.peek());
-		    stack.pop();
-		}
-		
+		// Cerrar todos los nodos pendientes al EOF
+		closeToLevel(state, 0);
+
 		return state.getDocuments();
 	}
 
 	private void processLine(String line, int lineNumber, ParseState state) {
-		// Parseamos la línea actual
 		LineIndent lineIndent = LineIndent.parseLine(line, lineNumber, state);
 		if (lineIndent == null)
 			return;
 
 		int currentLevel = lineIndent.indentLevel;
 
-		// Obtenemos valores del estado actual
 		Stack<Node> stack = state.getStack();
 		Node lastNode = !stack.isEmpty() ? stack.peek() : null;
 		boolean lastNodeMultiline = lastNode != null && lastNode.isMultiline();
 
-		// Multilinea añadir si procede
+		// 1) Si estamos dentro de un nodo multilínea, y el nivel indica que sigue siendo texto,
+		// añadimos línea de texto y no creamos nodo.
 		if (lastNodeMultiline && currentLevel >= stack.size()) {
 			lastNode.addTextLine(lineIndent.lineWithoutIndent);
 			return;
 		}
 
-		// Validamos nivel inválido por encima
-		if (currentLevel > stack.size())
+		// 2) No se permite saltar niveles de indentación por encima de la profundidad actual
+		if (currentLevel > stack.size()) {
 			throw new ParseException(lineNumber, "INDENTATION_LEVEL_NOT_VALID",
 					"Level of indent incorrect: " + currentLevel);
+		}
 
-		// Creamos nodo
-		Node node = createNode(lineIndent, lineNumber, currentLevel, lastNode);
+		// 3) Cerramos nodos hasta el nivel actual (esto "finaliza" y adjunta al padre/documentos)
+		closeToLevel(state, currentLevel);
 
-		if (currentLevel == 0) {
-			state.addDocument(node);
-			
-			// Clear stack and validate
-			while (!stack.isEmpty()) {
-			    validateNode(stack.peek());
-			    stack.pop();
-			}	
-			//stack.clear();			
-			
-			stack.push(node);
-		} else {
-			while (stack.size() > currentLevel) {
-			    validateNode(stack.peek());
-			    stack.pop();				
+		// 4) Creamos el nuevo nodo y lo dejamos "abierto" en la pila (NO lo adjuntamos aún)
+		Node parent = stack.isEmpty() ? null : stack.peek();
+		Node node = createNode(lineIndent, lineNumber, currentLevel, parent);
+
+		stack.push(node);
+	}
+
+	/**
+	 * Cierra nodos hasta que stack.size() == targetLevel.
+	 * Cada nodo cerrado pasa por: transform -> filter -> validate -> attach.
+	 */
+	private void closeToLevel(ParseState state, int targetLevel) {
+		Stack<Node> stack = state.getStack();
+
+		while (stack.size() > targetLevel) {
+			Node completed = stack.pop();
+
+			Node processed = finishNode(completed);
+
+			if (processed == null) {
+				// Eliminado por transformer (null) o por filter
+				continue;
 			}
 
-			Node parent = stack.peek();
-			parent.getChildren().add(node);
-			stack.push(node);
+			if (stack.isEmpty()) {
+				// Es un documento raíz
+				state.addDocument(processed);
+			} else {
+				// Se adjunta al padre que sigue en la pila
+				stack.peek().getChildren().add(processed);
+			}
 		}
 	}
 
-	private void validateNode(Node node) {
-	    if (processors != null) {
-		    for (Processor p: processors) {
-		    	if (p instanceof Validator v) v.validate(node);
-		    }
-	    }
-	}
-	
 	private Node createNode(LineIndent result, int lineNumber, int level, Node parent) {
 		String line = result.lineWithoutIndent;
 		String name = null;
@@ -1306,8 +1315,9 @@ public class Parser {
 		int nodeIndex = line.indexOf(':');
 		int textIndex = line.indexOf(">>");
 
-		if ((nodeIndex != -1 && textIndex != -1) || (nodeIndex == -1 && textIndex == -1))
+		if ((nodeIndex != -1 && textIndex != -1) || (nodeIndex == -1 && textIndex == -1)) {
 			throw new ParseException(lineNumber, "INVALID_LINE", "Line not valid: " + line);
+		}
 
 		// Inline value
 		if (nodeIndex != -1) {
@@ -1324,7 +1334,7 @@ public class Parser {
 			multiline = true;
 		}
 
-		// Obtenemos namespace si hay
+		// Namespace por defecto: heredado del padre
 		String namespace = parent != null ? parent.getNamespace() : EMPTY_NAMESPACE;
 
 		int namespaceIndx = name.indexOf("(");
@@ -1348,29 +1358,72 @@ public class Parser {
 		// check namespace
 		validateNamespaceFormat(namespace, lineNumber);
 
-		// Creamos node
-		Node node = new Node(lineNumber, level, name, namespace, multiline, value);
-		return node;
+		return new Node(lineNumber, level, name, namespace, multiline, value);
 	}
 
 	/**
 	 * Valida el namespace lógico.
 	 *
-	 * Reglas: - Solo minúsculas, dígitos y punto. - Puede empezar opcionalmente por
-	 * '@'. - Debe ser una o varias etiquetas estilo dominio separadas por '.':
-	 * etiqueta := [a-z0-9]+ ejemplos válidos: "xxx", "xxx.ddd", "zzz.ttt.ooo",
-	 * "@xxx", "@xxx.ddd".
+	 * Reglas:
+	 * - Solo minúsculas, dígitos y punto.
+	 * - Puede empezar opcionalmente por '@'.
+	 * - Debe ser una o varias etiquetas estilo dominio separadas por '.':
+	 *   etiqueta := [a-z0-9]+
+	 * ejemplos válidos: "xxx", "xxx.ddd", "zzz.ttt.ooo", "@xxx", "@xxx.ddd".
 	 */
 	private void validateNamespaceFormat(String namespace, int lineNumber) {
-		// Permitimos namespace vacío (se usa EMPTY_NAMESPACE heredado, etc.)
 		if (namespace == null || namespace.isEmpty())
 			return;
 
-		// Patrón: opcional '@', luego una o más etiquetas [a-z0-9]+ separadas por '.'
 		if (!namespace.matches("^@?[a-z0-9]+(\\.[a-z0-9]+)*$"))
 			throw new ParseException(lineNumber, "INVALID_NAMESPACE", "Namespace not valid: " + namespace);
 	}
+	
+	/**
+	 * Aplica el pipeline a un nodo ya completo (con hijos añadidos):
+	 * 1) Transformers en cadena (pueden devolver un nodo nuevo o null para eliminar)
+	 * 2) Filters (si alguno no acepta -> null)
+	 * 3) Validators (solo si el nodo sigue vivo)
+	 */
+	private Node finishNode(Node node) {
+		Node current = node;
+
+		// Transformers
+		if (processors != null) {
+			for (Processor p : processors) {
+				if (p instanceof Transformer t) {
+					current = t.transform(current);
+					if (current == null) {
+						return null; // eliminado
+					}
+				}
+			}
+		}
+
+		// Filters (AND lógico: todos deben aceptar)
+		if (processors != null) {
+			for (Processor p : processors) {
+				if (p instanceof Filter f) {
+					if (!f.accept(current)) {
+						return null; // filtrado
+					}
+				}
+			}
+		}
+
+		// Validators
+		if (processors != null) {
+			for (Processor p : processors) {
+				if (p instanceof Validator v) {
+					v.validate(current);
+				}
+			}
+		}
+
+		return current;
+	}	
 }
+
 ```
 
 Fichero: dev/stxt/processors/Processor.java
