@@ -10,15 +10,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+import dev.stxt.processors.Processor;
+import dev.stxt.processors.Validator;
 import dev.stxt.utils.FileUtils;
 
 public class Parser {
-	private List<Validator> validators;
+	private List<Processor> processors;
 	
-	public void registerValidator(Validator v)
+	public void register(Processor p)
 	{
-		if (validators == null) validators = new ArrayList<Validator>();
-		validators.add(v);
+		if (processors == null) processors = new ArrayList<>();
+		processors.add(p);
 	}
 	
 	public List<Node> parseFile(File srcFile) {
@@ -107,9 +109,9 @@ public class Parser {
 	}
 
 	private void validateNode(Node node) {
-	    if (validators != null) {
-		    for (Validator v : validators) {
-		        v.validate(node);
+	    if (processors != null) {
+		    for (Processor p: processors) {
+		    	if (p instanceof Validator v) v.validate(node);
 		    }
 	    }
 	}

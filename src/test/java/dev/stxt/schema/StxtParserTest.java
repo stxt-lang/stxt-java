@@ -22,7 +22,7 @@ public class StxtParserTest {
 		ResourcesLoader resourcesLoader = new ResourcesLoaderDirectory(FileTestLoction.getFile(""));
 		SchemaProviderCache schemaLocator = new SchemaProviderCache(resourcesLoader);
 		SchemaValidator schemaValidator = new SchemaValidator(schemaLocator);
-		parser.registerValidator(schemaValidator);
+		parser.register(schemaValidator);
 		
 		File f = FileTestLoction.getFile("docs/client.stxt");
 		System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");

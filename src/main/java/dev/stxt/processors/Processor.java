@@ -1,4 +1,4 @@
-package dev.stxt;
+package dev.stxt.processors;
 
 public interface Processor {
 }

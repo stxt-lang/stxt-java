@@ -59,7 +59,7 @@ public class ParserAllDocsErrorTest {
 		ResourcesLoader resourcesLoader = new ResourcesLoaderDirectory(FileTestLoction.getFile(""));
 		SchemaValidator schemaValidator = new SchemaValidator(new SchemaProviderCache(resourcesLoader));
 
-		result.registerValidator(schemaValidator);
+		result.register(schemaValidator);
 		
 		return result;
 	}

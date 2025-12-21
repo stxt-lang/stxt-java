@@ -7,7 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import dev.stxt.Node;
-import dev.stxt.ValidationException;
+import dev.stxt.processors.ValidationException;
 import dev.stxt.utils.StringUtils;
 
 class SchemaParser {

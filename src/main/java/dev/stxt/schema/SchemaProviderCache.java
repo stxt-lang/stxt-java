@@ -28,7 +28,7 @@ final class SchemaProviderCache implements SchemaProvider {
 		// Cargamos schema
 		String textSchema = resourcesLoader.retrieve(Schema.SCHEMA_NAMESPACE, namespace);
 		Parser parser = new Parser();
-		parser.registerValidator(schemaValidator);
+		parser.register(schemaValidator);
 		List<Node> nodes = parser.parse(textSchema);
 
 		if (nodes.size() != 1)

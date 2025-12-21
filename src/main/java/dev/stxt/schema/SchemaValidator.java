@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import dev.stxt.Node;
-import dev.stxt.ValidationException;
-import dev.stxt.Validator;
+import dev.stxt.processors.ValidationException;
+import dev.stxt.processors.Validator;
 
 class SchemaValidator implements Validator {
 	// ------------------
