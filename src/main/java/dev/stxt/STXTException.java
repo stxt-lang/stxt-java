@@ -19,6 +19,8 @@ public class STXTException extends RuntimeException {
     
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "[" + getCode() + "] " + getMessage();
-    }    
+        String className = getClass().getSimpleName();
+        String message = getLocalizedMessage();
+        return (className + "[" + code + "]" + (message != null ? ": " + message : ""));
+    }
 }
