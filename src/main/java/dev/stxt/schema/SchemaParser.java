@@ -32,7 +32,7 @@ class SchemaParser {
 		schema.namespace = namespace;
 
 		// Obtenemos los nodos
-		List<Node> nodes = node.getChilds("node");
+		List<Node> nodes = node.getChildren("node");
 
 		Set<String> allNames = new HashSet<String>(); // Para validar que
 														// existan los childs

@@ -79,7 +79,7 @@ public class Node {
 	}
 
 	public Node getChild(String cname) {
-		List<Node> result = getChilds(cname);
+		List<Node> result = getChildren(cname);
 		if (result.size() > 1)
 			throw new IllegalArgumentException("More than 1 child. Use getChilds");
 		if (result.size() == 0)
@@ -88,7 +88,7 @@ public class Node {
 	}
 
 	// Fast access methods to children
-	public List<Node> getChilds(String cname) {
+	public List<Node> getChildren(String cname) {
 		List<Node> result = new ArrayList<Node>();
 
 		for (Node child : children) {
