@@ -3,7 +3,7 @@ package dev.stxt.resources;
 import java.io.File;
 
 import dev.stxt.STXTException;
-import dev.stxt.STXTIOException;
+import dev.stxt.IOException;
 import dev.stxt.utils.FileUtils;
 
 public class ResourcesLoaderDirectory implements ResourcesLoader {
@@ -34,7 +34,7 @@ public class ResourcesLoaderDirectory implements ResourcesLoader {
 			return FileUtils.readFileContent(file);
 		}
 		catch (java.io.IOException e) {
-			throw new STXTIOException(e);
+			throw new IOException(e);
 		}
 		
 	}

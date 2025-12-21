@@ -175,6 +175,21 @@ class ParseState {
 
 ```
 
+Fichero: dev/stxt/IOException.java
+```
+package dev.stxt;
+
+public class IOException extends STXTException {
+
+	private static final long serialVersionUID = 1L;
+
+    public IOException(java.io.IOException cause) {
+        super("IO_ERROR", "I/O error: " + cause.getMessage(), cause);
+    }
+}
+
+```
+
 Fichero: dev/stxt/schema/type/NumberValidator.java
 ```
 package dev.stxt.schema.type;
@@ -1298,7 +1313,7 @@ public class Parser {
 			return parse(FileUtils.readFileContent(srcFile));
 		}
 		catch (java.io.IOException e) {
-			throw new STXTIOException(e);
+			throw new IOException(e);
 		}
 	}
 
@@ -1315,7 +1330,7 @@ public class Parser {
 				processLine(line, lineNumber, state);
 			}
 		} catch (java.io.IOException e) {
-			throw new STXTIOException(e);
+			throw new IOException(e);
 		}
 
 		// Validators
@@ -1460,21 +1475,6 @@ public class Parser {
 			throw new ParseException(lineNumber, "INVALID_NAMESPACE", "Namespace not valid: " + namespace);
 	}
 }
-```
-
-Fichero: dev/stxt/STXTIOException.java
-```
-package dev.stxt;
-
-public class STXTIOException extends STXTException {
-
-	private static final long serialVersionUID = 1L;
-
-    public STXTIOException(java.io.IOException cause) {
-        super("IO_ERROR", "I/O error: " + cause.getMessage(), cause);
-    }
-}
-
 ```
 
 Fichero: dev/stxt/ProcessorException.java
@@ -1667,7 +1667,7 @@ package dev.stxt.resources;
 import java.io.File;
 
 import dev.stxt.STXTException;
-import dev.stxt.STXTIOException;
+import dev.stxt.IOException;
 import dev.stxt.utils.FileUtils;
 
 public class ResourcesLoaderDirectory implements ResourcesLoader {
@@ -1698,7 +1698,7 @@ public class ResourcesLoaderDirectory implements ResourcesLoader {
 			return FileUtils.readFileContent(file);
 		}
 		catch (java.io.IOException e) {
-			throw new STXTIOException(e);
+			throw new IOException(e);
 		}
 		
 	}

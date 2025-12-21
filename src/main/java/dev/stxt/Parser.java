@@ -26,7 +26,7 @@ public class Parser {
 			return parse(FileUtils.readFileContent(srcFile));
 		}
 		catch (java.io.IOException e) {
-			throw new STXTIOException(e);
+			throw new IOException(e);
 		}
 	}
 
@@ -43,7 +43,7 @@ public class Parser {
 				processLine(line, lineNumber, state);
 			}
 		} catch (java.io.IOException e) {
-			throw new STXTIOException(e);
+			throw new IOException(e);
 		}
 
 		// Validators

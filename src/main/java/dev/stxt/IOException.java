@@ -1,10 +1,10 @@
 package dev.stxt;
 
-public class STXTIOException extends STXTException {
+public class IOException extends STXTException {
 
 	private static final long serialVersionUID = 1L;
 
-    public STXTIOException(java.io.IOException cause) {
+    public IOException(java.io.IOException cause) {
         super("IO_ERROR", "I/O error: " + cause.getMessage(), cause);
     }
 }
