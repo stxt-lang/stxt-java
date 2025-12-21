@@ -12,20 +12,18 @@ import dev.stxt.resources.ResourcesLoader;
 import dev.stxt.validator.TopDownValidator;
 
 public final class SchemaValidatorService {
-	private final SchemaValidator validator;
+	private final TopDownValidator validator;
 
 	public SchemaValidatorService(ResourcesLoader resourcesLoader) {
-		validator = new SchemaValidator(new SchemaProviderCache(resourcesLoader));
+		validator = new TopDownValidator(Collections.singletonList(new SchemaValidator(new SchemaProviderCache(resourcesLoader))));
 	}
 
 	public void validateNode(Node node) throws ParseException, IOException, NotFoundException {
-		TopDownValidator tdp = new TopDownValidator(Collections.singletonList(validator));
-		tdp.validate(node);
+		validator.validate(node);
 	}
 
 	public void validateNodes(List<Node> nodes) throws ParseException, IOException, NotFoundException {
-		TopDownValidator tdp = new TopDownValidator(Collections.singletonList(validator));
 		for (Node n: nodes)
-			tdp.validate(n);
+			validator.validate(n);
 	}
 }
