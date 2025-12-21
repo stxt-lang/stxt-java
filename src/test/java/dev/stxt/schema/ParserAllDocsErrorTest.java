@@ -10,7 +10,6 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
-import dev.stxt.Node;
 import dev.stxt.ParseException;
 import dev.stxt.Parser;
 import dev.stxt.resources.ResourcesException;
