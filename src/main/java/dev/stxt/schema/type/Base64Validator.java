@@ -14,7 +14,7 @@ public final class Base64Validator implements TypeValidator {
 	}
 
 	@Override
-	public void validate(Node n) throws ParseException {
+	public void validate(Node n) {
 		try {
 			Base64.getDecoder().decode(StringUtils.cleanupString(n.getText()));
 		} catch (Exception e) {

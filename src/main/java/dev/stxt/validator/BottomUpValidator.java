@@ -3,7 +3,6 @@ package dev.stxt.validator;
 import java.util.List;
 
 import dev.stxt.Node;
-import dev.stxt.ParseException;
 import dev.stxt.Validator;
 
 public class BottomUpValidator implements Validator {
@@ -14,7 +13,7 @@ public class BottomUpValidator implements Validator {
 	}
 
 	@Override
-	public void validate(Node node) throws ParseException {
+	public void validate(Node node) {
 		for (Node n : node.getChildren()) {
 			validate(n);
 		}

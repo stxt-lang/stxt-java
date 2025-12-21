@@ -14,7 +14,7 @@ public final class UrlValidator implements TypeValidator {
 	}
 
 	@Override
-	public void validate(Node n) throws ParseException {
+	public void validate(Node n) {
 		String url = n.getInlineText();
 		try {
 			URI uri = new URI(url);

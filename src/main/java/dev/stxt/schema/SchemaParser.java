@@ -16,7 +16,7 @@ class SchemaParser {
 	private static final Pattern P = Pattern
 			.compile("^\\s*(?<name>[^()]+?)\\s*(?:\\(\\s*(?<type>[^()]+?)\\s*\\))?\\s*$");
 
-	public static Schema transformNodeToSchema(Node node) throws ParseException {
+	public static Schema transformNodeToSchema(Node node) {
 		Schema schema = new Schema();
 
 		// Node name

@@ -25,7 +25,7 @@ final class SchemaProviderMeta implements SchemaProvider {
 		meta = metaSchema;
 	}
 
-	public Schema getSchema(String namespace) throws IOException, ParseException, NotFoundException {
+	public Schema getSchema(String namespace) {
 		if (!namespace.equals(Schema.SCHEMA_NAMESPACE))
 			throw new NotFoundException(namespace, namespace);
 

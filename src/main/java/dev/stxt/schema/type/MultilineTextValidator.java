@@ -11,7 +11,7 @@ public final class MultilineTextValidator implements TypeValidator {
 	}
 
 	@Override
-	public void validate(Node n) throws ParseException {
+	public void validate(Node n) {
 		if (n.getInlineText() != null && !n.getInlineText().isEmpty()) {
 			throw new ParseException(n.getLine(), "NOT_ALLOWED_INLINE_TEXT",
 					"Not allowed inline text in node " + n.getQualifiedName());

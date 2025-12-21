@@ -1,6 +1,5 @@
 package dev.stxt.schema;
 
-import dev.stxt.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -8,7 +7,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import dev.stxt.Node;
 import dev.stxt.ParseException;
 import dev.stxt.Parser;
-import dev.stxt.resources.NotFoundException;
 import dev.stxt.resources.ResourcesLoader;
 
 final class SchemaProviderCache implements SchemaProvider {
@@ -21,7 +19,7 @@ final class SchemaProviderCache implements SchemaProvider {
 		this.schemaValidator = new SchemaValidator(new SchemaProviderMeta());
 	}
 
-	public Schema getSchema(String namespace) throws IOException, ParseException, NotFoundException {
+	public Schema getSchema(String namespace) {
 		// Retorno de cache
 		namespace = namespace.toLowerCase();
 		Schema cached = cache.get(namespace);

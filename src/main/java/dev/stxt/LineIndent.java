@@ -19,7 +19,7 @@ class LineIndent {
 	// parseLine
 	// -------------------------------------------------
 
-	public static LineIndent parseLine(String line, int numLine, ParseState parseState) throws ParseException {
+	public static LineIndent parseLine(String line, int numLine, ParseState parseState) {
 		int stackSize = parseState.getStack().size();
 		boolean lastNodeMultiline = stackSize > 0 && parseState.getStack().peek().isMultiline();
 

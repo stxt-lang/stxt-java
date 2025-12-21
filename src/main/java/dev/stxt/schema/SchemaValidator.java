@@ -19,7 +19,7 @@ class SchemaValidator implements Validator {
 	}
 
 	@Override
-	public void validate(Node node) throws ParseException {
+	public void validate(Node node) {
 		// Obtenemos namespace
 		String namespace = node.getNamespace();
 		Schema sch = schemaProvider.getSchema(namespace);
@@ -30,7 +30,7 @@ class SchemaValidator implements Validator {
 		validateAgainstSchema(node, sch);
 	}
 	
-	public void validateAgainstSchema(Node node, Schema sch) throws ParseException {
+	public void validateAgainstSchema(Node node, Schema sch) {
 		// Obtenemos node
 		SchemaNode schemaNode = sch.nodes.get(node.getName());
 		if (schemaNode == null) {
@@ -43,7 +43,7 @@ class SchemaValidator implements Validator {
 		validateCount(schemaNode, node);
 	}
 
-	private static void validateValue(SchemaNode nsNode, Node n) throws ParseException {
+	private static void validateValue(SchemaNode nsNode, Node n) {
 		String nodeType = nsNode.type;
 
 		TypeValidator validator = TypeRegistry.get(nodeType);
@@ -53,7 +53,7 @@ class SchemaValidator implements Validator {
 		validator.validate(n);
 	}
 
-	private static void validateCount(SchemaNode nsNode, Node node) throws ParseException {
+	private static void validateCount(SchemaNode nsNode, Node node) {
 		Map<String, Integer> count = new HashMap<>();
 
 		for (Node child : node.getChildren()) {
@@ -67,7 +67,7 @@ class SchemaValidator implements Validator {
 		}
 	}
 
-	private static void validateCount(SchemaChild chNode, int num, Node node) throws ParseException {
+	private static void validateCount(SchemaChild chNode, int num, Node node) {
 		Integer min = chNode.min;
 		Integer max = chNode.max;
 

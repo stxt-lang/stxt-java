@@ -11,7 +11,7 @@ public final class EmptyValidator implements TypeValidator {
 	}
 
 	@Override
-	public void validate(Node n) throws ParseException {
+	public void validate(Node n) {
 		if (!n.getInlineText().isEmpty() || n.getMultilineText().size() > 0) {
 			throw new ParseException(n.getLine(), "INVALID_VALUE", "Node '" + n.getName() + "' has to be empty");
 		}

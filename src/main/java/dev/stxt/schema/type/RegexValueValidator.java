@@ -20,7 +20,7 @@ abstract class RegexValueValidator implements TypeValidator {
 	}
 
 	@Override
-	public void validate(Node n) throws ParseException {
+	public void validate(Node n) {
 		String value = n.getText();
 		Matcher m = pattern.matcher(value);
 		if (!m.matches()) {

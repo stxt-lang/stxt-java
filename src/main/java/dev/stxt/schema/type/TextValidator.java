@@ -11,7 +11,7 @@ public final class TextValidator implements TypeValidator {
 	}
 
 	@Override
-	public void validate(Node n) throws ParseException {
+	public void validate(Node n) {
 		if (n.getChildren() != null && n.getChildren().size() > 0) {
 			throw new ParseException(n.getLine(), "NOT_ALLOWED_CHILDREN_TEXT",
 					"Not allowed children nodes in node " + n.getQualifiedName());
