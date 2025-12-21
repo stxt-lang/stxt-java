@@ -31,7 +31,7 @@ public class ParserAllDocsErrorTest {
 
 		// Validator
 		ResourcesLoader resourcesLoader = new ResourcesLoaderDirectory(FileTestLoction.getFile(""));
-		DocumentValidator validator = new DocumentValidator(resourcesLoader);
+		SchemaValidatorService validator = new SchemaValidatorService(resourcesLoader);
 
 		// Create parser
 		Parser parser = new Parser();

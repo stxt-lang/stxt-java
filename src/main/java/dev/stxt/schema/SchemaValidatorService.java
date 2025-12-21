@@ -11,10 +11,10 @@ import dev.stxt.resources.NotFoundException;
 import dev.stxt.resources.ResourcesLoader;
 import dev.stxt.validator.TopDownValidator;
 
-public final class DocumentValidator {
+public final class SchemaValidatorService {
 	private final SchemaValidator validator;
 
-	public DocumentValidator(ResourcesLoader resourcesLoader) {
+	public SchemaValidatorService(ResourcesLoader resourcesLoader) {
 		validator = new SchemaValidator(new SchemaProviderCache(resourcesLoader));
 	}
 
