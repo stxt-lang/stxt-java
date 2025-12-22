@@ -35,7 +35,7 @@ public class Node {
 	public Node(int line, int level, String name, String namespace, boolean multiline, String inlineText) {
 		this.level = level;
 		this.line = line;
-		this.name = name.toLowerCase(Locale.ENGLISH);
+		this.name = name.toLowerCase(Locale.ROOT);
 		this.namespace = namespace;
 		this.inlineText = (inlineText == null ? "" : inlineText);
 		this.multiline = multiline;
@@ -57,7 +57,7 @@ public class Node {
 	}
 
 	public String getDisplayName() {
-		return namespace + '(' + name + ')';
+	    return (namespace == null || namespace.isEmpty()) ? name : name + "(" + namespace + ")";
 	}
 
 	public String getNamespace() {
@@ -295,7 +295,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import dev.stxt.Node;
-import dev.stxt.ParseException;
+import dev.stxt.processors.ValidationException;
 import dev.stxt.schema.TypeValidator;
 
 public final class UrlValidator implements TypeValidator {
@@ -313,7 +313,7 @@ public final class UrlValidator implements TypeValidator {
 			if (!ok)
 				throw new IllegalArgumentException();
 		} catch (URISyntaxException | IllegalArgumentException e) {
-			throw new ParseException(n.getLine(), "INVALID_VALUE", "Invalid URL: " + url);
+			throw new ValidationException(n.getLine(), "INVALID_VALUE", "Invalid URL: " + url);
 		}
 	}
 }
@@ -325,7 +325,7 @@ Fichero: dev/stxt/schema/type/HexadecimalValidator.java
 package dev.stxt.schema.type;
 
 import dev.stxt.Node;
-import dev.stxt.ParseException;
+import dev.stxt.processors.ValidationException;
 import dev.stxt.schema.TypeValidator;
 import dev.stxt.utils.StringUtils;
 
@@ -367,8 +367,8 @@ public final class HexadecimalValidator implements TypeValidator {
 		}
 	}
 
-	private static ParseException invalid(Node n, String msg) {
-		return new ParseException(
+	private static ValidationException invalid(Node n, String msg) {
+		return new ValidationException(
 				n.getLine(),
 				"INVALID_VALUE",
 				n.getName() + ": " + msg
@@ -383,7 +383,7 @@ Fichero: dev/stxt/schema/type/EmptyValidator.java
 package dev.stxt.schema.type;
 
 import dev.stxt.Node;
-import dev.stxt.ParseException;
+import dev.stxt.processors.ValidationException;
 import dev.stxt.schema.TypeValidator;
 
 public final class EmptyValidator implements TypeValidator {
@@ -395,7 +395,7 @@ public final class EmptyValidator implements TypeValidator {
 	@Override
 	public void validate(Node n) {
 		if (!n.getInlineText().isEmpty() || n.getMultilineText().size() > 0) {
-			throw new ParseException(n.getLine(), "INVALID_VALUE", "Node '" + n.getName() + "' has to be empty");
+			throw new ValidationException(n.getLine(), "INVALID_VALUE", "Node '" + n.getName() + "' has to be empty");
 		}
 	}
 }
@@ -409,7 +409,7 @@ package dev.stxt.schema.type;
 import java.util.Base64;
 
 import dev.stxt.Node;
-import dev.stxt.ParseException;
+import dev.stxt.processors.ValidationException;
 import dev.stxt.schema.TypeValidator;
 import dev.stxt.utils.StringUtils;
 
@@ -424,7 +424,7 @@ public final class Base64Validator implements TypeValidator {
 		try {
 			Base64.getDecoder().decode(StringUtils.cleanupString(n.getText()));
 		} catch (Exception e) {
-			throw new ParseException(n.getLine(), "INVALID_VALUE", "Node '" + n.getName() + "' Invalid Base64");
+			throw new ValidationException(n.getLine(), "INVALID_VALUE", "Node '" + n.getName() + "' Invalid Base64");
 		}
 	}
 }
@@ -436,7 +436,7 @@ Fichero: dev/stxt/schema/type/InlineTextValidator.java
 package dev.stxt.schema.type;
 
 import dev.stxt.Node;
-import dev.stxt.ParseException;
+import dev.stxt.processors.ValidationException;
 import dev.stxt.schema.TypeValidator;
 
 public final class InlineTextValidator implements TypeValidator {
@@ -448,7 +448,7 @@ public final class InlineTextValidator implements TypeValidator {
 	@Override
 	public void validate(Node n) {
 		if (n.getMultilineText() != null && n.getMultilineText().size() > 0) {
-			throw new ParseException(n.getLine(), "NOT_ALLOWED_MULTILINE_TEXT",
+			throw new ValidationException(n.getLine(), "NOT_ALLOWED_MULTILINE_TEXT",
 					"Not allowed multiline text in node " + n.getQualifiedName());
 		}
 	}
@@ -461,7 +461,7 @@ Fichero: dev/stxt/schema/type/MultilineTextValidator.java
 package dev.stxt.schema.type;
 
 import dev.stxt.Node;
-import dev.stxt.ParseException;
+import dev.stxt.processors.ValidationException;
 import dev.stxt.schema.TypeValidator;
 
 public final class MultilineTextValidator implements TypeValidator {
@@ -473,7 +473,7 @@ public final class MultilineTextValidator implements TypeValidator {
 	@Override
 	public void validate(Node n) {
 		if (n.getInlineText() != null && !n.getInlineText().isEmpty()) {
-			throw new ParseException(n.getLine(), "NOT_ALLOWED_INLINE_TEXT",
+			throw new ValidationException(n.getLine(), "NOT_ALLOWED_INLINE_TEXT",
 					"Not allowed inline text in node " + n.getQualifiedName());
 		}
 	}
@@ -486,7 +486,7 @@ Fichero: dev/stxt/schema/type/TextValidator.java
 package dev.stxt.schema.type;
 
 import dev.stxt.Node;
-import dev.stxt.ParseException;
+import dev.stxt.processors.ValidationException;
 import dev.stxt.schema.TypeValidator;
 
 public final class TextValidator implements TypeValidator {
@@ -498,7 +498,7 @@ public final class TextValidator implements TypeValidator {
 	@Override
 	public void validate(Node n) {
 		if (n.getChildren() != null && n.getChildren().size() > 0) {
-			throw new ParseException(n.getLine(), "NOT_ALLOWED_CHILDREN_TEXT",
+			throw new ValidationException(n.getLine(), "NOT_ALLOWED_CHILDREN_TEXT",
 					"Not allowed children nodes in node " + n.getQualifiedName());
 		}
 	}
@@ -681,6 +681,7 @@ Fichero: dev/stxt/schema/SchemaProviderCache.java
 package dev.stxt.schema;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -700,7 +701,7 @@ final class SchemaProviderCache implements SchemaProvider {
 
 	public Schema getSchema(String namespace) {
 		// Retorno de cache
-		namespace = namespace.toLowerCase();
+		namespace = namespace.toLowerCase(Locale.ROOT);
 		Schema cached = cache.get(namespace);
 		if (cached != null)
 			return cached;
@@ -759,11 +760,13 @@ final class SchemaProviderMeta implements SchemaProvider {
 	}
 
 	public Schema getSchema(String namespace) {
-		if (!namespace.equals(Schema.SCHEMA_NAMESPACE) || meta == null)
-			throw new ResourceNotFoundException(namespace, namespace);
+	    if (!Schema.SCHEMA_NAMESPACE.equals(namespace))
+	        throw new ResourceNotFoundException(Schema.SCHEMA_NAMESPACE, namespace);
 
-		// Retorno de cache
-		return meta;
+	    if (meta == null)
+	        throw new SchemaException("META_SCHEMA_NOT_AVAILABLE", "Meta schema not available");
+
+	    return meta;
 	}
 }
 
@@ -825,7 +828,7 @@ class SchemaChild {
 	public String count = null;
 
 	public String getQualifiedName() {
-		return namespace + ':' + name;
+	    return namespace == null || namespace.isEmpty() ? name : namespace + ":" + name;
 	}
 }
 
@@ -1412,6 +1415,9 @@ public class Parser {
 		int namespaceEnd = name.lastIndexOf(')');
 
 		if (namespaceIndx != -1) {
+		    if (namespaceEnd != name.length() - 1)
+		        throw new ParseException(lineNumber, "INVALID_NAMESPACE_DEF", "Line not valid: " + line);
+
 			if (namespaceEnd <= namespaceIndx + 1)
 				throw new ParseException(lineNumber, "INVALID_NAMESPACE_DEF", "Line not valid: " + line);
 
@@ -1427,7 +1433,7 @@ public class Parser {
 			throw new ParseException(lineNumber, "INVALID_LINE", "Line not valid: " + line);
 
 		// check namespace
-		namespace = namespace.toLowerCase(Locale.ENGLISH);
+		namespace = namespace.toLowerCase(Locale.ROOT);
 		validateNamespaceFormat(namespace, lineNumber);
 
 		return new Node(lineNumber, level, name, namespace, multiline, value);
