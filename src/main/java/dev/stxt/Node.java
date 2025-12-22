@@ -20,7 +20,7 @@ public class Node {
 	public Node(int line, int level, String name, String namespace, boolean multiline, String inlineText) {
 		this.level = level;
 		this.line = line;
-		this.name = name.toLowerCase(Locale.ENGLISH);
+		this.name = name.toLowerCase(Locale.ROOT);
 		this.namespace = namespace;
 		this.inlineText = (inlineText == null ? "" : inlineText);
 		this.multiline = multiline;

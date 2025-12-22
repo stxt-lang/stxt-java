@@ -207,7 +207,7 @@ public class Parser {
 			throw new ParseException(lineNumber, "INVALID_LINE", "Line not valid: " + line);
 
 		// check namespace
-		namespace = namespace.toLowerCase(Locale.ENGLISH);
+		namespace = namespace.toLowerCase(Locale.ROOT);
 		validateNamespaceFormat(namespace, lineNumber);
 
 		return new Node(lineNumber, level, name, namespace, multiline, value);

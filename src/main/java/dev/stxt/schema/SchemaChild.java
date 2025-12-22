@@ -8,6 +8,6 @@ class SchemaChild {
 	public String count = null;
 
 	public String getQualifiedName() {
-		return namespace + ':' + name;
+	    return namespace == null || namespace.isEmpty() ? name : namespace + ":" + name;
 	}
 }
