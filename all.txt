@@ -497,7 +497,7 @@ public final class TextValidator implements TypeValidator {
 
 	@Override
 	public void validate(Node n) {
-		if (n.getChildren() != null && n.getChildren().size() > 0) {
+		if (n.getChildren().size() > 0) {
 			throw new ValidationException(n.getLine(), "NOT_ALLOWED_CHILDREN_TEXT",
 					"Not allowed children nodes in node " + n.getQualifiedName());
 		}
@@ -701,7 +701,9 @@ final class SchemaProviderCache implements SchemaProvider {
 
 	public Schema getSchema(String namespace) {
 		// Retorno de cache
-		if (namespace == null || namespace.isEmpty()) throw new SchemaException("NULL_NAMESPACE_NOT_ALLOWED", namespace);
+		if (namespace == null || namespace.isEmpty())
+		    throw new SchemaException("NAMESPACE_REQUIRED", "Namespace is required to load schema");
+		
 		namespace = namespace.toLowerCase(Locale.ROOT);
 		Schema cached = cache.get(namespace);
 		if (cached != null)
@@ -738,7 +740,6 @@ package dev.stxt.schema;
 
 import java.util.List;
 
-import dev.stxt.STXTIOException;
 import dev.stxt.Node;
 import dev.stxt.Parser;
 import dev.stxt.resources.ResourceNotFoundException;
@@ -749,14 +750,10 @@ final class SchemaProviderMeta implements SchemaProvider {
 
 	public SchemaProviderMeta() {
 		Schema metaSchema = null;
-		try {
-			String metaSchemaText = ResourceReader.readResource("dev/stxt/schema/@stxt.schema.stxt");
-			Parser parser = new Parser();
-			List<Node> nodes = parser.parse(metaSchemaText);
-			metaSchema = SchemaParser.transformNodeToSchema(nodes.get(0));
-		} catch (java.io.IOException e) {
-		    throw new STXTIOException(e);
-		}		
+		String metaSchemaText = ResourceReader.readResource("dev/stxt/schema/@stxt.schema.stxt");
+		Parser parser = new Parser();
+		List<Node> nodes = parser.parse(metaSchemaText);
+		metaSchema = SchemaParser.transformNodeToSchema(nodes.get(0));
 		meta = metaSchema;
 	}
 
@@ -1611,12 +1608,15 @@ public class ResourceReader {
 	private ResourceReader() {
 	}
 
-	public static String readResource(String resourcePath) throws java.io.IOException {
+	public static String readResource(String resourcePath) {
 		try (InputStream is = ResourceReader.class.getClassLoader().getResourceAsStream(resourcePath)) {
 			if (is == null)
 				throw new STXTIOException(new IOException("Resource not found in classpath: " + resourcePath));
 			
 			return new String(is.readAllBytes(), StandardCharsets.UTF_8);
+		}
+		catch (IOException e) {
+			throw new STXTIOException(e);
 		}
 	}
 	
@@ -1747,7 +1747,7 @@ public class StringUtils {
 	}
 
 	public static String cleanupString(String input) {
-		return input.replaceAll("[\\r\\n\\t]+|\\s+", "");
+		return input.replaceAll("\\s+", "");
 	}
 
 }

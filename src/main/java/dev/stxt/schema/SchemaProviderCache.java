@@ -21,7 +21,9 @@ final class SchemaProviderCache implements SchemaProvider {
 
 	public Schema getSchema(String namespace) {
 		// Retorno de cache
-		if (namespace == null || namespace.isEmpty()) throw new SchemaException("NULL_NAMESPACE_NOT_ALLOWED", namespace);
+		if (namespace == null || namespace.isEmpty())
+		    throw new SchemaException("NAMESPACE_REQUIRED", "Namespace is required to load schema");
+		
 		namespace = namespace.toLowerCase(Locale.ROOT);
 		Schema cached = cache.get(namespace);
 		if (cached != null)

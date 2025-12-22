@@ -12,7 +12,7 @@ public final class TextValidator implements TypeValidator {
 
 	@Override
 	public void validate(Node n) {
-		if (n.getChildren() != null && n.getChildren().size() > 0) {
+		if (n.getChildren().size() > 0) {
 			throw new ValidationException(n.getLine(), "NOT_ALLOWED_CHILDREN_TEXT",
 					"Not allowed children nodes in node " + n.getQualifiedName());
 		}

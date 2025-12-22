@@ -24,7 +24,7 @@ public class StringUtils {
 	}
 
 	public static String cleanupString(String input) {
-		return input.replaceAll("[\\r\\n\\t]+|\\s+", "");
+		return input.replaceAll("\\s+", "");
 	}
 
 }

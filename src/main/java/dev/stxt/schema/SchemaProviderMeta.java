@@ -2,7 +2,6 @@ package dev.stxt.schema;
 
 import java.util.List;
 
-import dev.stxt.STXTIOException;
 import dev.stxt.Node;
 import dev.stxt.Parser;
 import dev.stxt.resources.ResourceNotFoundException;
@@ -13,14 +12,10 @@ final class SchemaProviderMeta implements SchemaProvider {
 
 	public SchemaProviderMeta() {
 		Schema metaSchema = null;
-		try {
-			String metaSchemaText = ResourceReader.readResource("dev/stxt/schema/@stxt.schema.stxt");
-			Parser parser = new Parser();
-			List<Node> nodes = parser.parse(metaSchemaText);
-			metaSchema = SchemaParser.transformNodeToSchema(nodes.get(0));
-		} catch (java.io.IOException e) {
-		    throw new STXTIOException(e);
-		}		
+		String metaSchemaText = ResourceReader.readResource("dev/stxt/schema/@stxt.schema.stxt");
+		Parser parser = new Parser();
+		List<Node> nodes = parser.parse(metaSchemaText);
+		metaSchema = SchemaParser.transformNodeToSchema(nodes.get(0));
 		meta = metaSchema;
 	}
 
