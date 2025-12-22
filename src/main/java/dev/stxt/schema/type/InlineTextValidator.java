@@ -1,7 +1,7 @@
 package dev.stxt.schema.type;
 
 import dev.stxt.Node;
-import dev.stxt.ParseException;
+import dev.stxt.processors.ValidationException;
 import dev.stxt.schema.TypeValidator;
 
 public final class InlineTextValidator implements TypeValidator {
@@ -13,7 +13,7 @@ public final class InlineTextValidator implements TypeValidator {
 	@Override
 	public void validate(Node n) {
 		if (n.getMultilineText() != null && n.getMultilineText().size() > 0) {
-			throw new ParseException(n.getLine(), "NOT_ALLOWED_MULTILINE_TEXT",
+			throw new ValidationException(n.getLine(), "NOT_ALLOWED_MULTILINE_TEXT",
 					"Not allowed multiline text in node " + n.getQualifiedName());
 		}
 	}

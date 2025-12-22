@@ -1,7 +1,7 @@
 package dev.stxt.schema.type;
 
 import dev.stxt.Node;
-import dev.stxt.ParseException;
+import dev.stxt.processors.ValidationException;
 import dev.stxt.schema.TypeValidator;
 import dev.stxt.utils.StringUtils;
 
@@ -43,8 +43,8 @@ public final class HexadecimalValidator implements TypeValidator {
 		}
 	}
 
-	private static ParseException invalid(Node n, String msg) {
-		return new ParseException(
+	private static ValidationException invalid(Node n, String msg) {
+		return new ValidationException(
 				n.getLine(),
 				"INVALID_VALUE",
 				n.getName() + ": " + msg
