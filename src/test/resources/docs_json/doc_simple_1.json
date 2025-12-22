@@ -16,7 +16,7 @@
             "line" : 2,
             "level" : 1,
             "children" : [ ],
-            "display_name" : "com.dokumentando.doc(título)",
+            "display_name" : "título(com.dokumentando.doc)",
             "text" : "Primer documento simple",
             "qualified_name" : "com.dokumentando.doc:título"
         },
@@ -33,7 +33,7 @@
             "line" : 3,
             "level" : 1,
             "children" : [ ],
-            "display_name" : "com.dokumentando.doc(description)",
+            "display_name" : "description(com.dokumentando.doc)",
             "text" : "Este es el\nprimer documento\nsimple. Tiene varias líneas",
             "qualified_name" : "com.dokumentando.doc:description"
         },
@@ -46,12 +46,12 @@
             "line" : 7,
             "level" : 1,
             "children" : [ ],
-            "display_name" : "com.dokumentando.doc(tipo documento)",
+            "display_name" : "tipo documento(com.dokumentando.doc)",
             "text" : "informe",
             "qualified_name" : "com.dokumentando.doc:tipo documento"
         }
     ],
-    "display_name" : "com.dokumentando.doc(documento)",
+    "display_name" : "documento(com.dokumentando.doc)",
     "text" : "",
     "qualified_name" : "com.dokumentando.doc:documento"
 }

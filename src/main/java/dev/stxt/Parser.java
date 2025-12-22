@@ -192,6 +192,9 @@ public class Parser {
 		int namespaceEnd = name.lastIndexOf(')');
 
 		if (namespaceIndx != -1) {
+		    if (namespaceEnd != name.length() - 1)
+		        throw new ParseException(lineNumber, "INVALID_NAMESPACE_DEF", "Line not valid: " + line);
+
 			if (namespaceEnd <= namespaceIndx + 1)
 				throw new ParseException(lineNumber, "INVALID_NAMESPACE_DEF", "Line not valid: " + line);
 

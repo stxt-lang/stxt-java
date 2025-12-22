@@ -25,7 +25,7 @@
                     "line" : 8,
                     "level" : 2,
                     "children" : [ ],
-                    "display_name" : "com.kocinando.receta(nombre receta)",
+                    "display_name" : "nombre receta(com.kocinando.receta)",
                     "text" : "Una receta",
                     "qualified_name" : "com.kocinando.receta:nombre receta"
                 },
@@ -38,7 +38,7 @@
                     "line" : 9,
                     "level" : 2,
                     "children" : [ ],
-                    "display_name" : "com.kocinando.receta(descripción)",
+                    "display_name" : "descripción(com.kocinando.receta)",
                     "text" : "Esta es una receta de ejemplo",
                     "qualified_name" : "com.kocinando.receta:descripción"
                 },
@@ -69,7 +69,7 @@
                                     "line" : 12,
                                     "level" : 4,
                                     "children" : [ ],
-                                    "display_name" : "com.kocinando.receta(cantidad)",
+                                    "display_name" : "cantidad(com.kocinando.receta)",
                                     "text" : "10",
                                     "qualified_name" : "com.kocinando.receta:cantidad"
                                 },
@@ -82,7 +82,7 @@
                                     "line" : 13,
                                     "level" : 4,
                                     "children" : [ ],
-                                    "display_name" : "com.kocinando.receta(unidades)",
+                                    "display_name" : "unidades(com.kocinando.receta)",
                                     "text" : "g",
                                     "qualified_name" : "com.kocinando.receta:unidades"
                                 },
@@ -95,12 +95,12 @@
                                     "line" : 14,
                                     "level" : 4,
                                     "children" : [ ],
-                                    "display_name" : "com.kocinando.receta(nombre)",
+                                    "display_name" : "nombre(com.kocinando.receta)",
                                     "text" : "tomate",
                                     "qualified_name" : "com.kocinando.receta:nombre"
                                 }
                             ],
-                            "display_name" : "com.kocinando.receta(ingrediente)",
+                            "display_name" : "ingrediente(com.kocinando.receta)",
                             "text" : "",
                             "qualified_name" : "com.kocinando.receta:ingrediente"
                         },
@@ -122,7 +122,7 @@
                                     "line" : 16,
                                     "level" : 4,
                                     "children" : [ ],
-                                    "display_name" : "com.kocinando.receta(cantidad)",
+                                    "display_name" : "cantidad(com.kocinando.receta)",
                                     "text" : "1",
                                     "qualified_name" : "com.kocinando.receta:cantidad"
                                 },
@@ -135,7 +135,7 @@
                                     "line" : 17,
                                     "level" : 4,
                                     "children" : [ ],
-                                    "display_name" : "com.kocinando.receta(unidades)",
+                                    "display_name" : "unidades(com.kocinando.receta)",
                                     "text" : "u",
                                     "qualified_name" : "com.kocinando.receta:unidades"
                                 },
@@ -148,12 +148,12 @@
                                     "line" : 18,
                                     "level" : 4,
                                     "children" : [ ],
-                                    "display_name" : "com.kocinando.receta(nombre)",
+                                    "display_name" : "nombre(com.kocinando.receta)",
                                     "text" : "pera",
                                     "qualified_name" : "com.kocinando.receta:nombre"
                                 }
                             ],
-                            "display_name" : "com.kocinando.receta(ingrediente)",
+                            "display_name" : "ingrediente(com.kocinando.receta)",
                             "text" : "",
                             "qualified_name" : "com.kocinando.receta:ingrediente"
                         },
@@ -175,7 +175,7 @@
                                     "line" : 20,
                                     "level" : 4,
                                     "children" : [ ],
-                                    "display_name" : "com.kocinando.receta(cantidad)",
+                                    "display_name" : "cantidad(com.kocinando.receta)",
                                     "text" : "200",
                                     "qualified_name" : "com.kocinando.receta:cantidad"
                                 },
@@ -188,7 +188,7 @@
                                     "line" : 21,
                                     "level" : 4,
                                     "children" : [ ],
-                                    "display_name" : "com.kocinando.receta(unidades)",
+                                    "display_name" : "unidades(com.kocinando.receta)",
                                     "text" : "dl",
                                     "qualified_name" : "com.kocinando.receta:unidades"
                                 },
@@ -201,17 +201,17 @@
                                     "line" : 22,
                                     "level" : 4,
                                     "children" : [ ],
-                                    "display_name" : "com.kocinando.receta(nombre)",
+                                    "display_name" : "nombre(com.kocinando.receta)",
                                     "text" : "leche",
                                     "qualified_name" : "com.kocinando.receta:nombre"
                                 }
                             ],
-                            "display_name" : "com.kocinando.receta(ingrediente)",
+                            "display_name" : "ingrediente(com.kocinando.receta)",
                             "text" : "",
                             "qualified_name" : "com.kocinando.receta:ingrediente"
                         }
                     ],
-                    "display_name" : "com.kocinando.receta(ingredientes)",
+                    "display_name" : "ingredientes(com.kocinando.receta)",
                     "text" : "",
                     "qualified_name" : "com.kocinando.receta:ingredientes"
                 },
@@ -233,7 +233,7 @@
                             "line" : 25,
                             "level" : 3,
                             "children" : [ ],
-                            "display_name" : "com.kocinando.receta(paso)",
+                            "display_name" : "paso(com.kocinando.receta)",
                             "text" : "1",
                             "qualified_name" : "com.kocinando.receta:paso"
                         },
@@ -246,7 +246,7 @@
                             "line" : 26,
                             "level" : 3,
                             "children" : [ ],
-                            "display_name" : "com.kocinando.receta(paso)",
+                            "display_name" : "paso(com.kocinando.receta)",
                             "text" : "2",
                             "qualified_name" : "com.kocinando.receta:paso"
                         },
@@ -259,7 +259,7 @@
                             "line" : 27,
                             "level" : 3,
                             "children" : [ ],
-                            "display_name" : "com.kocinando.receta(paso)",
+                            "display_name" : "paso(com.kocinando.receta)",
                             "text" : "3",
                             "qualified_name" : "com.kocinando.receta:paso"
                         },
@@ -272,7 +272,7 @@
                             "line" : 28,
                             "level" : 3,
                             "children" : [ ],
-                            "display_name" : "com.kocinando.receta(paso)",
+                            "display_name" : "paso(com.kocinando.receta)",
                             "text" : "4",
                             "qualified_name" : "com.kocinando.receta:paso"
                         },
@@ -296,17 +296,17 @@
                             "line" : 29,
                             "level" : 3,
                             "children" : [ ],
-                            "display_name" : "com.kocinando.receta(descripción)",
+                            "display_name" : "descripción(com.kocinando.receta)",
                             "text" : "Hay que vigilar este Paso, ya que\nno se puede garantizar su buen funcionamiento.\nEn caso de error consultar realizar una llamada\nal servicio único.\n\nEsta es otra linea\n# Hola\nMundo\n\n",
                             "qualified_name" : "com.kocinando.receta:descripción"
                         }
                     ],
-                    "display_name" : "com.kocinando.receta(pasos)",
+                    "display_name" : "pasos(com.kocinando.receta)",
                     "text" : "",
                     "qualified_name" : "com.kocinando.receta:pasos"
                 }
             ],
-            "display_name" : "com.kocinando.receta(receta)",
+            "display_name" : "receta(com.kocinando.receta)",
             "text" : "",
             "qualified_name" : "com.kocinando.receta:receta"
         },
@@ -328,7 +328,7 @@
                     "line" : 42,
                     "level" : 2,
                     "children" : [ ],
-                    "display_name" : "com.kocinando.receta(nombre receta)",
+                    "display_name" : "nombre receta(com.kocinando.receta)",
                     "text" : "Una receta",
                     "qualified_name" : "com.kocinando.receta:nombre receta"
                 },
@@ -341,7 +341,7 @@
                     "line" : 43,
                     "level" : 2,
                     "children" : [ ],
-                    "display_name" : "com.kocinando.receta(descripción)",
+                    "display_name" : "descripción(com.kocinando.receta)",
                     "text" : "Esta es una receta de ejemplo",
                     "qualified_name" : "com.kocinando.receta:descripción"
                 },
@@ -372,7 +372,7 @@
                                     "line" : 46,
                                     "level" : 4,
                                     "children" : [ ],
-                                    "display_name" : "com.kocinando.receta(cantidad)",
+                                    "display_name" : "cantidad(com.kocinando.receta)",
                                     "text" : "10",
                                     "qualified_name" : "com.kocinando.receta:cantidad"
                                 },
@@ -385,7 +385,7 @@
                                     "line" : 47,
                                     "level" : 4,
                                     "children" : [ ],
-                                    "display_name" : "com.kocinando.receta(unidades)",
+                                    "display_name" : "unidades(com.kocinando.receta)",
                                     "text" : "g",
                                     "qualified_name" : "com.kocinando.receta:unidades"
                                 },
@@ -398,12 +398,12 @@
                                     "line" : 48,
                                     "level" : 4,
                                     "children" : [ ],
-                                    "display_name" : "com.kocinando.receta(nombre)",
+                                    "display_name" : "nombre(com.kocinando.receta)",
                                     "text" : "tomate",
                                     "qualified_name" : "com.kocinando.receta:nombre"
                                 }
                             ],
-                            "display_name" : "com.kocinando.receta(ingrediente)",
+                            "display_name" : "ingrediente(com.kocinando.receta)",
                             "text" : "",
                             "qualified_name" : "com.kocinando.receta:ingrediente"
                         },
@@ -425,7 +425,7 @@
                                     "line" : 50,
                                     "level" : 4,
                                     "children" : [ ],
-                                    "display_name" : "com.kocinando.receta(cantidad)",
+                                    "display_name" : "cantidad(com.kocinando.receta)",
                                     "text" : "1",
                                     "qualified_name" : "com.kocinando.receta:cantidad"
                                 },
@@ -438,7 +438,7 @@
                                     "line" : 51,
                                     "level" : 4,
                                     "children" : [ ],
-                                    "display_name" : "com.kocinando.receta(unidades)",
+                                    "display_name" : "unidades(com.kocinando.receta)",
                                     "text" : "u",
                                     "qualified_name" : "com.kocinando.receta:unidades"
                                 },
@@ -451,12 +451,12 @@
                                     "line" : 52,
                                     "level" : 4,
                                     "children" : [ ],
-                                    "display_name" : "com.kocinando.receta(nombre)",
+                                    "display_name" : "nombre(com.kocinando.receta)",
                                     "text" : "pera",
                                     "qualified_name" : "com.kocinando.receta:nombre"
                                 }
                             ],
-                            "display_name" : "com.kocinando.receta(ingrediente)",
+                            "display_name" : "ingrediente(com.kocinando.receta)",
                             "text" : "",
                             "qualified_name" : "com.kocinando.receta:ingrediente"
                         },
@@ -478,7 +478,7 @@
                                     "line" : 54,
                                     "level" : 4,
                                     "children" : [ ],
-                                    "display_name" : "com.kocinando.receta(cantidad)",
+                                    "display_name" : "cantidad(com.kocinando.receta)",
                                     "text" : "200",
                                     "qualified_name" : "com.kocinando.receta:cantidad"
                                 },
@@ -491,7 +491,7 @@
                                     "line" : 55,
                                     "level" : 4,
                                     "children" : [ ],
-                                    "display_name" : "com.kocinando.receta(unidades)",
+                                    "display_name" : "unidades(com.kocinando.receta)",
                                     "text" : "dl",
                                     "qualified_name" : "com.kocinando.receta:unidades"
                                 },
@@ -504,17 +504,17 @@
                                     "line" : 56,
                                     "level" : 4,
                                     "children" : [ ],
-                                    "display_name" : "com.kocinando.receta(nombre)",
+                                    "display_name" : "nombre(com.kocinando.receta)",
                                     "text" : "leche",
                                     "qualified_name" : "com.kocinando.receta:nombre"
                                 }
                             ],
-                            "display_name" : "com.kocinando.receta(ingrediente)",
+                            "display_name" : "ingrediente(com.kocinando.receta)",
                             "text" : "",
                             "qualified_name" : "com.kocinando.receta:ingrediente"
                         }
                     ],
-                    "display_name" : "com.kocinando.receta(ingredientes)",
+                    "display_name" : "ingredientes(com.kocinando.receta)",
                     "text" : "",
                     "qualified_name" : "com.kocinando.receta:ingredientes"
                 },
@@ -536,7 +536,7 @@
                             "line" : 58,
                             "level" : 3,
                             "children" : [ ],
-                            "display_name" : "com.kocinando.receta(paso)",
+                            "display_name" : "paso(com.kocinando.receta)",
                             "text" : "5",
                             "qualified_name" : "com.kocinando.receta:paso"
                         },
@@ -549,7 +549,7 @@
                             "line" : 59,
                             "level" : 3,
                             "children" : [ ],
-                            "display_name" : "com.kocinando.receta(paso)",
+                            "display_name" : "paso(com.kocinando.receta)",
                             "text" : "6",
                             "qualified_name" : "com.kocinando.receta:paso"
                         },
@@ -562,7 +562,7 @@
                             "line" : 60,
                             "level" : 3,
                             "children" : [ ],
-                            "display_name" : "com.kocinando.receta(paso)",
+                            "display_name" : "paso(com.kocinando.receta)",
                             "text" : "7",
                             "qualified_name" : "com.kocinando.receta:paso"
                         },
@@ -575,7 +575,7 @@
                             "line" : 61,
                             "level" : 3,
                             "children" : [ ],
-                            "display_name" : "com.kocinando.receta(paso)",
+                            "display_name" : "paso(com.kocinando.receta)",
                             "text" : "8",
                             "qualified_name" : "com.kocinando.receta:paso"
                         },
@@ -593,7 +593,7 @@
                             "line" : 62,
                             "level" : 3,
                             "children" : [ ],
-                            "display_name" : "com.kocinando.receta(descripción)",
+                            "display_name" : "descripción(com.kocinando.receta)",
                             "text" : "Hay que vigilar este Paso, ya que\nno se puede garantizar su buen funcionamiento.\nEn caso de error consultar realizar una llamada\nal servicio único",
                             "qualified_name" : "com.kocinando.receta:descripción"
                         },
@@ -606,22 +606,22 @@
                             "line" : 67,
                             "level" : 3,
                             "children" : [ ],
-                            "display_name" : "com.kocinando.receta(paso)",
+                            "display_name" : "paso(com.kocinando.receta)",
                             "text" : "9",
                             "qualified_name" : "com.kocinando.receta:paso"
                         }
                     ],
-                    "display_name" : "com.kocinando.receta(pasos)",
+                    "display_name" : "pasos(com.kocinando.receta)",
                     "text" : "",
                     "qualified_name" : "com.kocinando.receta:pasos"
                 }
             ],
-            "display_name" : "com.kocinando.receta(receta)",
+            "display_name" : "receta(com.kocinando.receta)",
             "text" : "",
             "qualified_name" : "com.kocinando.receta:receta"
         }
     ],
-    "display_name" : "com.kocinando.recetario(recetario)",
+    "display_name" : "recetario(com.kocinando.recetario)",
     "text" : "",
     "qualified_name" : "com.kocinando.recetario:recetario"
 }

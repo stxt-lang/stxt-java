@@ -42,7 +42,7 @@ public class Node {
 	}
 
 	public String getDisplayName() {
-		return namespace + '(' + name + ')';
+	    return (namespace == null || namespace.isEmpty()) ? name : name + "(" + namespace + ")";
 	}
 
 	public String getNamespace() {

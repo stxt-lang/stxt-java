@@ -25,10 +25,12 @@ final class SchemaProviderMeta implements SchemaProvider {
 	}
 
 	public Schema getSchema(String namespace) {
-		if (!namespace.equals(Schema.SCHEMA_NAMESPACE) || meta == null)
-			throw new ResourceNotFoundException(namespace, namespace);
+	    if (!Schema.SCHEMA_NAMESPACE.equals(namespace))
+	        throw new ResourceNotFoundException(Schema.SCHEMA_NAMESPACE, namespace);
 
-		// Retorno de cache
-		return meta;
+	    if (meta == null)
+	        throw new SchemaException("META_SCHEMA_NOT_AVAILABLE", "Meta schema not available");
+
+	    return meta;
 	}
 }
