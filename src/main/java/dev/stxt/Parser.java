@@ -9,6 +9,7 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
+import java.util.regex.Pattern;
 
 import dev.stxt.processors.Filter;
 import dev.stxt.processors.Observer;
@@ -220,11 +221,12 @@ public class Parser {
 	 *   etiqueta := [a-z0-9]+
 	 * ejemplos válidos: "xxx", "xxx.ddd", "zzz.ttt.ooo", "@xxx", "@xxx.ddd".
 	 */
+	private static final Pattern NAMESPACE_FORMAT = Pattern.compile("^@?[a-z0-9]+(\\.[a-z0-9]+)*$");
 	private void validateNamespaceFormat(String namespace, int lineNumber) {
 		if (namespace == null || namespace.isEmpty())
 			return;
 
-		if (!namespace.matches("^@?[a-z0-9]+(\\.[a-z0-9]+)*$"))
+		if (!NAMESPACE_FORMAT.matcher(namespace).matches())
 			throw new ParseException(lineNumber, "INVALID_NAMESPACE", "Namespace not valid: " + namespace);
 	}
 	

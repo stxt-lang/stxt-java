@@ -32,12 +32,12 @@ public class Node {
 	private List<Node> children = new ArrayList<>();
 	private boolean isFrozen = false;
 
-	public Node(int line, int level, String name, String namespace, boolean multiline, String value) {
+	public Node(int line, int level, String name, String namespace, boolean multiline, String inlineText) {
 		this.level = level;
 		this.line = line;
 		this.name = name.toLowerCase(Locale.ENGLISH);
 		this.namespace = namespace;
-		this.inlineText = value;
+		this.inlineText = (inlineText == null ? "" : inlineText);
 		this.multiline = multiline;
 
 		if (!this.inlineText.isEmpty() && this.isMultiline())
@@ -53,7 +53,7 @@ public class Node {
 	}
 
 	public String getQualifiedName() {
-		return namespace + ':' + name;
+		return namespace == null || namespace.isEmpty() ? name : namespace + ":" + name;
 	}
 
 	public String getDisplayName() {
@@ -177,21 +177,6 @@ class ParseState {
 
 ```
 
-Fichero: dev/stxt/IOException.java
-```
-package dev.stxt;
-
-public class IOException extends STXTException {
-
-	private static final long serialVersionUID = 1L;
-
-    public IOException(java.io.IOException cause) {
-        super("IO_ERROR", "I/O error: " + cause.getMessage(), cause);
-    }
-}
-
-```
-
 Fichero: dev/stxt/schema/type/NumberValidator.java
 ```
 package dev.stxt.schema.type;
@@ -258,7 +243,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import dev.stxt.Node;
-import dev.stxt.ParseException;
+import dev.stxt.processors.ValidationException;
 import dev.stxt.schema.TypeValidator;
 
 /**
@@ -278,7 +263,7 @@ abstract class RegexValueValidator implements TypeValidator {
 		String value = n.getText();
 		Matcher m = pattern.matcher(value);
 		if (!m.matches()) {
-			throw new ParseException(n.getLine(), "INVALID_VALUE", n.getName() + ": " + error + " (" + value + ")");
+			throw new ValidationException(n.getLine(), "INVALID_VALUE", n.getName() + ": " + error + " (" + value + ")");
 		}
 	}
 }
@@ -751,7 +736,7 @@ package dev.stxt.schema;
 
 import java.util.List;
 
-import dev.stxt.IOException;
+import dev.stxt.STXTIOException;
 import dev.stxt.Node;
 import dev.stxt.Parser;
 import dev.stxt.resources.ResourceNotFoundException;
@@ -768,7 +753,7 @@ final class SchemaProviderMeta implements SchemaProvider {
 			List<Node> nodes = parser.parse(metaSchemaText);
 			metaSchema = SchemaParser.transformNodeToSchema(nodes.get(0));
 		} catch (java.io.IOException e) {
-		    throw new IOException(e);
+		    throw new STXTIOException(e);
 		}		
 		meta = metaSchema;
 	}
@@ -1244,6 +1229,7 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
+import java.util.regex.Pattern;
 
 import dev.stxt.processors.Filter;
 import dev.stxt.processors.Observer;
@@ -1298,7 +1284,7 @@ public class Parser {
 		try {
 			return parse(FileUtils.readFileContent(srcFile));
 		} catch (java.io.IOException e) {
-			throw new IOException(e);
+			throw new STXTIOException(e);
 		}
 	}
 
@@ -1315,7 +1301,7 @@ public class Parser {
 				processLine(line, lineNumber, state);
 			}
 		} catch (java.io.IOException e) {
-			throw new IOException(e);
+			throw new STXTIOException(e);
 		}
 
 		// Cerrar todos los nodos pendientes al EOF
@@ -1455,11 +1441,12 @@ public class Parser {
 	 *   etiqueta := [a-z0-9]+
 	 * ejemplos válidos: "xxx", "xxx.ddd", "zzz.ttt.ooo", "@xxx", "@xxx.ddd".
 	 */
+	private static final Pattern NAMESPACE_FORMAT = Pattern.compile("^@?[a-z0-9]+(\\.[a-z0-9]+)*$");
 	private void validateNamespaceFormat(String namespace, int lineNumber) {
 		if (namespace == null || namespace.isEmpty())
 			return;
 
-		if (!namespace.matches("^@?[a-z0-9]+(\\.[a-z0-9]+)*$"))
+		if (!NAMESPACE_FORMAT.matcher(namespace).matches())
 			throw new ParseException(lineNumber, "INVALID_NAMESPACE", "Namespace not valid: " + namespace);
 	}
 	
@@ -1507,6 +1494,21 @@ public class Parser {
 
 	    return current;
 	}	
+}
+
+```
+
+Fichero: dev/stxt/STXTIOException.java
+```
+package dev.stxt;
+
+public class STXTIOException extends STXTException {
+
+	private static final long serialVersionUID = 1L;
+
+    public STXTIOException(java.io.IOException cause) {
+        super("IO_ERROR", "I/O error: " + cause.getMessage(), cause);
+    }
 }
 
 ```
@@ -1746,7 +1748,7 @@ package dev.stxt.resources;
 import java.io.File;
 
 import dev.stxt.STXTException;
-import dev.stxt.IOException;
+import dev.stxt.STXTIOException;
 import dev.stxt.utils.FileUtils;
 
 public class ResourcesLoaderDirectory implements ResourcesLoader {
@@ -1777,7 +1779,7 @@ public class ResourcesLoaderDirectory implements ResourcesLoader {
 			return FileUtils.readFileContent(file);
 		}
 		catch (java.io.IOException e) {
-			throw new IOException(e);
+			throw new STXTIOException(e);
 		}
 		
 	}

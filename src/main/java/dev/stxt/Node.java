@@ -17,12 +17,12 @@ public class Node {
 	private List<Node> children = new ArrayList<>();
 	private boolean isFrozen = false;
 
-	public Node(int line, int level, String name, String namespace, boolean multiline, String value) {
+	public Node(int line, int level, String name, String namespace, boolean multiline, String inlineText) {
 		this.level = level;
 		this.line = line;
 		this.name = name.toLowerCase(Locale.ENGLISH);
 		this.namespace = namespace;
-		this.inlineText = value;
+		this.inlineText = (inlineText == null ? "" : inlineText);
 		this.multiline = multiline;
 
 		if (!this.inlineText.isEmpty() && this.isMultiline())
