@@ -4,7 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import dev.stxt.Node;
-import dev.stxt.ParseException;
+import dev.stxt.processors.ValidationException;
 import dev.stxt.schema.TypeValidator;
 
 /**
@@ -24,7 +24,7 @@ abstract class RegexValueValidator implements TypeValidator {
 		String value = n.getText();
 		Matcher m = pattern.matcher(value);
 		if (!m.matches()) {
-			throw new ParseException(n.getLine(), "INVALID_VALUE", n.getName() + ": " + error + " (" + value + ")");
+			throw new ValidationException(n.getLine(), "INVALID_VALUE", n.getName() + ": " + error + " (" + value + ")");
 		}
 	}
 }

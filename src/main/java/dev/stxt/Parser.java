@@ -63,7 +63,7 @@ public class Parser {
 		try {
 			return parse(FileUtils.readFileContent(srcFile));
 		} catch (java.io.IOException e) {
-			throw new IOException(e);
+			throw new STXTIOException(e);
 		}
 	}
 
@@ -80,7 +80,7 @@ public class Parser {
 				processLine(line, lineNumber, state);
 			}
 		} catch (java.io.IOException e) {
-			throw new IOException(e);
+			throw new STXTIOException(e);
 		}
 
 		// Cerrar todos los nodos pendientes al EOF

@@ -2,7 +2,7 @@ package dev.stxt.schema;
 
 import java.util.List;
 
-import dev.stxt.IOException;
+import dev.stxt.STXTIOException;
 import dev.stxt.Node;
 import dev.stxt.Parser;
 import dev.stxt.resources.ResourceNotFoundException;
@@ -19,7 +19,7 @@ final class SchemaProviderMeta implements SchemaProvider {
 			List<Node> nodes = parser.parse(metaSchemaText);
 			metaSchema = SchemaParser.transformNodeToSchema(nodes.get(0));
 		} catch (java.io.IOException e) {
-		    throw new IOException(e);
+		    throw new STXTIOException(e);
 		}		
 		meta = metaSchema;
 	}

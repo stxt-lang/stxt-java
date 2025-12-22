@@ -38,7 +38,7 @@ public class Node {
 	}
 
 	public String getQualifiedName() {
-		return namespace + ':' + name;
+		return namespace == null || namespace.isEmpty() ? name : namespace + ":" + name;
 	}
 
 	public String getDisplayName() {
