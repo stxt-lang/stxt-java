@@ -2,6 +2,7 @@ package dev.stxt.schema;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -73,7 +74,7 @@ class SchemaParser {
 			throw new ValidationException(n.getLine(), "NODE_NAME_INVALID", "Line not valid: " + n.getInlineText());
 		}
 
-		result.name = StringUtils.compactString(name.toLowerCase());
+		result.name = StringUtils.compactString(name.toLowerCase(Locale.ROOT));
 		result.type = type;
 
 		Node children = n.getChild("children");
@@ -116,7 +117,7 @@ class SchemaParser {
 		if (name == null || name.trim().isEmpty()) {
 			throw new IllegalArgumentException("Name cannot be empty: " + line);
 		}
-		child.name = StringUtils.compactString(name.trim().toLowerCase());
+		child.name = StringUtils.compactString(name.trim().toLowerCase(Locale.ROOT));
 
 		String ns = m.group("ns");
 		if (ns != null && !ns.trim().isEmpty())

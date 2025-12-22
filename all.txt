@@ -447,7 +447,7 @@ public final class InlineTextValidator implements TypeValidator {
 
 	@Override
 	public void validate(Node n) {
-		if (n.getMultilineText() != null && n.getMultilineText().size() > 0) {
+		if (n.getMultilineText().size() > 0) {
 			throw new ValidationException(n.getLine(), "NOT_ALLOWED_MULTILINE_TEXT",
 					"Not allowed multiline text in node " + n.getQualifiedName());
 		}
@@ -472,7 +472,7 @@ public final class MultilineTextValidator implements TypeValidator {
 
 	@Override
 	public void validate(Node n) {
-		if (n.getInlineText() != null && !n.getInlineText().isEmpty()) {
+		if (!n.getInlineText().isEmpty()) {
 			throw new ValidationException(n.getLine(), "NOT_ALLOWED_INLINE_TEXT",
 					"Not allowed inline text in node " + n.getQualifiedName());
 		}
@@ -701,6 +701,7 @@ final class SchemaProviderCache implements SchemaProvider {
 
 	public Schema getSchema(String namespace) {
 		// Retorno de cache
+		if (namespace == null) namespace = "";
 		namespace = namespace.toLowerCase(Locale.ROOT);
 		Schema cached = cache.get(namespace);
 		if (cached != null)
@@ -840,6 +841,7 @@ package dev.stxt.schema;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -911,7 +913,7 @@ class SchemaParser {
 			throw new ValidationException(n.getLine(), "NODE_NAME_INVALID", "Line not valid: " + n.getInlineText());
 		}
 
-		result.name = StringUtils.compactString(name.toLowerCase());
+		result.name = StringUtils.compactString(name.toLowerCase(Locale.ROOT));
 		result.type = type;
 
 		Node children = n.getChild("children");
@@ -954,7 +956,7 @@ class SchemaParser {
 		if (name == null || name.trim().isEmpty()) {
 			throw new IllegalArgumentException("Name cannot be empty: " + line);
 		}
-		child.name = StringUtils.compactString(name.trim().toLowerCase());
+		child.name = StringUtils.compactString(name.trim().toLowerCase(Locale.ROOT));
 
 		String ns = m.group("ns");
 		if (ns != null && !ns.trim().isEmpty())
@@ -1609,8 +1611,8 @@ public class ResourceReader {
 	public static String readResource(String resourcePath) throws java.io.IOException {
 		try (InputStream is = ResourceReader.class.getClassLoader().getResourceAsStream(resourcePath)) {
 			if (is == null)
-				throw new IllegalArgumentException("Recurso no encontrado en el classpath: " + resourcePath);
-
+			    throw new dev.stxt.STXTException("RESOURCE_NOT_FOUND", "Resource not found in classpath: " + resourcePath);
+			
 			return new String(is.readAllBytes(), StandardCharsets.UTF_8);
 		}
 	}

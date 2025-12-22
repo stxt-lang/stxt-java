@@ -12,7 +12,7 @@ public final class MultilineTextValidator implements TypeValidator {
 
 	@Override
 	public void validate(Node n) {
-		if (n.getInlineText() != null && !n.getInlineText().isEmpty()) {
+		if (!n.getInlineText().isEmpty()) {
 			throw new ValidationException(n.getLine(), "NOT_ALLOWED_INLINE_TEXT",
 					"Not allowed inline text in node " + n.getQualifiedName());
 		}
