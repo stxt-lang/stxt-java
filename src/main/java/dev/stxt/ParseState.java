@@ -1,12 +1,12 @@
 package dev.stxt;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
 class ParseState {
 	// Pila de nodos abiertos según la indentación actual.
-	private final Stack<Node> stack = new Stack<>();
+	private final ArrayDeque<Node> stack = new ArrayDeque<Node>();
 
 	// Lista de documentos raíz resultantes del parseo.
 	private final List<Node> documents = new ArrayList<>();
@@ -14,7 +14,7 @@ class ParseState {
 	public ParseState() {
 	}
 
-	public Stack<Node> getStack() {
+	public ArrayDeque<Node> getStack() {
 		return stack;
 	}
 

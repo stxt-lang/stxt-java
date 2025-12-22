@@ -132,13 +132,13 @@ Fichero: dev/stxt/ParseState.java
 ```
 package dev.stxt;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
 class ParseState {
 	// Pila de nodos abiertos según la indentación actual.
-	private final Stack<Node> stack = new Stack<>();
+	private final ArrayDeque<Node> stack = new ArrayDeque<Node>();
 
 	// Lista de documentos raíz resultantes del parseo.
 	private final List<Node> documents = new ArrayList<>();
@@ -146,7 +146,7 @@ class ParseState {
 	public ParseState() {
 	}
 
-	public Stack<Node> getStack() {
+	public ArrayDeque<Node> getStack() {
 		return stack;
 	}
 
@@ -701,7 +701,7 @@ final class SchemaProviderCache implements SchemaProvider {
 
 	public Schema getSchema(String namespace) {
 		// Retorno de cache
-		if (namespace == null) namespace = "";
+		if (namespace == null || namespace.isEmpty()) throw new SchemaException("NULL_NAMESPACE_NOT_ALLOWED", namespace);
 		namespace = namespace.toLowerCase(Locale.ROOT);
 		Schema cached = cache.get(namespace);
 		if (cached != null)
@@ -1231,10 +1231,10 @@ import static dev.stxt.utils.StringUtils.compactString;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.StringReader;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Stack;
 import java.util.regex.Pattern;
 
 import dev.stxt.processors.Filter;
@@ -1328,7 +1328,7 @@ public class Parser {
 
 		int currentLevel = lineIndent.indentLevel;
 
-		Stack<Node> stack = state.getStack();
+		ArrayDeque<Node> stack = state.getStack();
 		Node lastNode = !stack.isEmpty() ? stack.peek() : null;
 		boolean lastNodeMultiline = lastNode != null && lastNode.isMultiline();
 
@@ -1360,7 +1360,7 @@ public class Parser {
 	 * Cada nodo cerrado pasa por: transform -> filter -> validate -> attach.
 	 */
 	private void closeToLevel(ParseState state, int targetLevel) {
-		Stack<Node> stack = state.getStack();
+		ArrayDeque<Node> stack = state.getStack();
 
 		while (stack.size() > targetLevel) {
 			Node completed = stack.pop();
@@ -1601,8 +1601,11 @@ Fichero: dev/stxt/utils/ResourceReader.java
 ```
 package dev.stxt.utils;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+
+import dev.stxt.STXTIOException;
 
 public class ResourceReader {
 	private ResourceReader() {
@@ -1611,7 +1614,7 @@ public class ResourceReader {
 	public static String readResource(String resourcePath) throws java.io.IOException {
 		try (InputStream is = ResourceReader.class.getClassLoader().getResourceAsStream(resourcePath)) {
 			if (is == null)
-			    throw new dev.stxt.STXTException("RESOURCE_NOT_FOUND", "Resource not found in classpath: " + resourcePath);
+				throw new STXTIOException(new IOException("Resource not found in classpath: " + resourcePath));
 			
 			return new String(is.readAllBytes(), StandardCharsets.UTF_8);
 		}

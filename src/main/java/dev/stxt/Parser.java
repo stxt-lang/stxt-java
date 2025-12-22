@@ -6,10 +6,10 @@ import static dev.stxt.utils.StringUtils.compactString;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.StringReader;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Stack;
 import java.util.regex.Pattern;
 
 import dev.stxt.processors.Filter;
@@ -103,7 +103,7 @@ public class Parser {
 
 		int currentLevel = lineIndent.indentLevel;
 
-		Stack<Node> stack = state.getStack();
+		ArrayDeque<Node> stack = state.getStack();
 		Node lastNode = !stack.isEmpty() ? stack.peek() : null;
 		boolean lastNodeMultiline = lastNode != null && lastNode.isMultiline();
 
@@ -135,7 +135,7 @@ public class Parser {
 	 * Cada nodo cerrado pasa por: transform -> filter -> validate -> attach.
 	 */
 	private void closeToLevel(ParseState state, int targetLevel) {
-		Stack<Node> stack = state.getStack();
+		ArrayDeque<Node> stack = state.getStack();
 
 		while (stack.size() > targetLevel) {
 			Node completed = stack.pop();
