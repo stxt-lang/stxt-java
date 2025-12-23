@@ -79,11 +79,13 @@ class SchemaParser {
 
 		Node children = n.getChild("children");
 		if (children != null) {
+			int realLine = children.getLine();
 			for (String line : children.getMultilineText()) {
+				realLine++;
 				if (line.isEmpty())
 					continue;
 
-				SchemaChild schemaChild = parseFromLine(line, namespace, n.getLine());
+				SchemaChild schemaChild = parseFromLine(line, namespace, realLine);
 				updateCount(schemaChild);
 				String qname = schemaChild.getQualifiedName();
 				if (result.children.containsKey(qname))
