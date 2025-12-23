@@ -121,7 +121,7 @@ class SchemaParser {
 
 		String ns = m.group("ns");
 		if (ns != null && !ns.trim().isEmpty())
-			child.namespace = ns.trim();
+			child.namespace = ns.trim().toLowerCase(Locale.ROOT);
 		else
 			child.namespace = namespace;
 

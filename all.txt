@@ -116,10 +116,11 @@ public class Node {
 
 	// Fast access methods to children
 	public List<Node> getChildren(String cname) {
+		String key = cname.toLowerCase(Locale.ROOT);
 		List<Node> result = new ArrayList<Node>();
 
 		for (Node child : children) {
-			if (child.getName().equalsIgnoreCase(cname))
+			if (child.getName().equals(key))
 				result.add(child);
 		}
 
@@ -957,7 +958,7 @@ class SchemaParser {
 
 		String ns = m.group("ns");
 		if (ns != null && !ns.trim().isEmpty())
-			child.namespace = ns.trim();
+			child.namespace = ns.trim().toLowerCase(Locale.ROOT);
 		else
 			child.namespace = namespace;
 

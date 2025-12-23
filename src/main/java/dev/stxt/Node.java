@@ -101,10 +101,11 @@ public class Node {
 
 	// Fast access methods to children
 	public List<Node> getChildren(String cname) {
+		String key = cname.toLowerCase(Locale.ROOT);
 		List<Node> result = new ArrayList<Node>();
 
 		for (Node child : children) {
-			if (child.getName().equalsIgnoreCase(cname))
+			if (child.getName().equals(key))
 				result.add(child);
 		}
 
