@@ -765,6 +765,8 @@ final class SchemaProviderMeta implements SchemaProvider {
 		Schema metaSchema = null;
 		Parser parser = new Parser();
 		List<Node> nodes = parser.parse(META_TEXT);
+		if (nodes.size() != 1)
+		    throw new SchemaException("META_SCHEMA_INVALID", "Meta schema must produce exactly 1 document, got " + nodes.size());
 		metaSchema = SchemaParser.transformNodeToSchema(nodes.get(0));
 		meta = metaSchema;
 	}
@@ -877,7 +879,7 @@ class SchemaParser {
 			throw new SchemaException("NOT_STXT_SCHEMA",
 					"Se espera schema(" + Schema.SCHEMA_NAMESPACE + ") y es " + nodeName + "(" + namespaceSchema + ")");
 		}
-		String namespace = node.getInlineText();
+		String namespace = node.getInlineText().trim().toLowerCase(Locale.ROOT);
 		schema.namespace = namespace;
 
 		// Obtenemos los nodos
@@ -937,7 +939,7 @@ class SchemaParser {
 				updateCount(schemaChild);
 				String qname = schemaChild.getQualifiedName();
 				if (result.children.containsKey(qname))
-					throw new ValidationException(children.getLine(), "DUPLICATED_CHILD", qname);
+					throw new ValidationException(realLine, "DUPLICATED_CHILD", qname);
 
 				result.children.put(qname, schemaChild);
 			}

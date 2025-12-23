@@ -26,6 +26,8 @@ final class SchemaProviderMeta implements SchemaProvider {
 		Schema metaSchema = null;
 		Parser parser = new Parser();
 		List<Node> nodes = parser.parse(META_TEXT);
+		if (nodes.size() != 1)
+		    throw new SchemaException("META_SCHEMA_INVALID", "Meta schema must produce exactly 1 document, got " + nodes.size());
 		metaSchema = SchemaParser.transformNodeToSchema(nodes.get(0));
 		meta = metaSchema;
 	}

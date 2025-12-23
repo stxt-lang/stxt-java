@@ -29,7 +29,7 @@ class SchemaParser {
 			throw new SchemaException("NOT_STXT_SCHEMA",
 					"Se espera schema(" + Schema.SCHEMA_NAMESPACE + ") y es " + nodeName + "(" + namespaceSchema + ")");
 		}
-		String namespace = node.getInlineText();
+		String namespace = node.getInlineText().trim().toLowerCase(Locale.ROOT);
 		schema.namespace = namespace;
 
 		// Obtenemos los nodos
@@ -89,7 +89,7 @@ class SchemaParser {
 				updateCount(schemaChild);
 				String qname = schemaChild.getQualifiedName();
 				if (result.children.containsKey(qname))
-					throw new ValidationException(children.getLine(), "DUPLICATED_CHILD", qname);
+					throw new ValidationException(realLine, "DUPLICATED_CHILD", qname);
 
 				result.children.put(qname, schemaChild);
 			}
