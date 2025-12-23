@@ -83,7 +83,7 @@ class SchemaParser {
 				if (line.isEmpty())
 					continue;
 
-				SchemaChild schemaChild = parseFromLine(line, namespace);
+				SchemaChild schemaChild = parseFromLine(line, namespace, n.getLine());
 				updateCount(schemaChild);
 				String qname = schemaChild.getQualifiedName();
 				if (result.children.containsKey(qname))
@@ -96,26 +96,26 @@ class SchemaParser {
 		return result;
 	}
 
-	private static SchemaChild parseFromLine(String line, String namespace) {
+	private static SchemaChild parseFromLine(String line, String namespace, int lineNum) {
 		if (line == null) {
-			throw new IllegalArgumentException("line cannot be null");
+			throw new ValidationException(lineNum, "SCHEMA_CHILD_NULL", "line child cannot be null");
 		}
 
 		String trimmed = line.trim();
 		if (trimmed.isEmpty()) {
-			throw new IllegalArgumentException("line cannot be empty");
+			throw new ValidationException(lineNum, "SCHEMA_CHILD_EMPTY", "line cannot be empty");
 		}
 
 		Matcher m = CHILD_LINE_PATTERN.matcher(trimmed);
 		if (!m.matches()) {
-			throw new IllegalArgumentException("Line format not valid: " + line);
+			throw new ValidationException(lineNum, "SCHEMA_CHILD_NOT_VALID", "line format not valid: " + line);
 		}
 
 		SchemaChild child = new SchemaChild();
 
 		String name = m.group("name");
 		if (name == null || name.trim().isEmpty()) {
-			throw new IllegalArgumentException("Name cannot be empty: " + line);
+			throw new ValidationException(lineNum, "SCHEMA_CHILD_NAME_EMPTY", "Name cannot be empty: " + line);
 		}
 		child.name = StringUtils.compactString(name.trim().toLowerCase(Locale.ROOT));
 
