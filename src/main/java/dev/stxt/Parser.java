@@ -195,26 +195,9 @@ public class Parser {
 		if (!m.matches())
 	        throw new ParseException(lineNumber, "INVALID_NAMESPACE_DEF", "Line not valid: " + line);
 		
-//		name = m.group(1);
-//		namespace = m.group(2) != null ? m.group(2): namespace;
-		
-		int namespaceIndx = name.indexOf("(");
-		int namespaceEnd = name.lastIndexOf(')');
-
-		if (namespaceIndx != -1) {
-		    if (namespaceEnd != name.length() - 1)
-		        throw new ParseException(lineNumber, "INVALID_NAMESPACE_DEF", "Line not valid: " + line);
-
-			if (namespaceEnd <= namespaceIndx + 1)
-				throw new ParseException(lineNumber, "INVALID_NAMESPACE_DEF", "Line not valid: " + line);
-
-			namespace = name.substring(namespaceIndx + 1, namespaceEnd).trim();
-			if (namespace.isEmpty())
-				throw new ParseException(lineNumber, "INVALID_NAMESPACE_DEF", "Line not valid: " + line);
-
-			name = normalizeName(name.substring(0, namespaceIndx));
-		}
-		
+		name = m.group(1);
+		if (m.group(2)!=null)
+			namespace = m.group(2);
 		
 		// Validamos nombre
 		if (name.isEmpty())
