@@ -10,6 +10,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import dev.stxt.processors.Filter;
@@ -18,7 +19,6 @@ import dev.stxt.processors.Processor;
 import dev.stxt.processors.Transformer;
 import dev.stxt.processors.Validator;
 import dev.stxt.utils.FileUtils;
-import dev.stxt.utils.StringUtils;
 
 public class Parser {
 	
@@ -158,6 +158,7 @@ public class Parser {
 		}
 	}
 
+	private static final Pattern P = Pattern.compile("^\\s*([A-Za-z0-9]+(?:\\s+[A-Za-z0-9]+)*)(?:\\s*\\(\\s*(@?[A-Za-z0-9]+(?:\\.[A-Za-z0-9]+)*)\\s*\\))?\\s*$");		
 	private Node createNode(LineIndent result, int lineNumber, int level, Node parent) {
 		String line = result.lineWithoutIndent;
 		String name = null;
@@ -190,7 +191,12 @@ public class Parser {
 		String namespace = parent != null ? parent.getNamespace() : EMPTY_NAMESPACE;
 
 		name = normalizeName(name);
+		Matcher m = P.matcher(name);
+		if (!m.matches())
+	        throw new ParseException(lineNumber, "INVALID_NAMESPACE_DEF", "Line not valid: " + line);
 		
+//		name = m.group(1);
+//		namespace = m.group(2) != null ? m.group(2): namespace;
 		
 		int namespaceIndx = name.indexOf("(");
 		int namespaceEnd = name.lastIndexOf(')');
