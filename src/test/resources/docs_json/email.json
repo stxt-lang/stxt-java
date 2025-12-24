@@ -1,5 +1,6 @@
 {
     "name" : "email",
+    "normalized_name" : "email",
     "namespace" : "com.example.docs",
     "multiline" : false,
     "inline_text" : "",
@@ -9,6 +10,7 @@
     "children" : [
         {
             "name" : "from",
+            "normalized_name" : "from",
             "namespace" : "com.example.docs",
             "multiline" : false,
             "inline_text" : "John Smith",
@@ -22,6 +24,7 @@
         },
         {
             "name" : "to",
+            "normalized_name" : "to",
             "namespace" : "com.example.docs",
             "multiline" : false,
             "inline_text" : "Mery Adams",
@@ -35,6 +38,7 @@
         },
         {
             "name" : "cc",
+            "normalized_name" : "cc",
             "namespace" : "com.example.docs",
             "multiline" : false,
             "inline_text" : "Keyla Brown",
@@ -48,6 +52,7 @@
         },
         {
             "name" : "title",
+            "normalized_name" : "title",
             "namespace" : "com.example.docs",
             "multiline" : false,
             "inline_text" : "Project report",
@@ -61,6 +66,7 @@
         },
         {
             "name" : "body content",
+            "normalized_name" : "body-content",
             "namespace" : "com.example.docs",
             "multiline" : true,
             "inline_text" : "",

@@ -1,5 +1,6 @@
 {
     "name" : "receta",
+    "normalized_name" : "receta",
     "namespace" : "com.kocinando.receta1",
     "multiline" : false,
     "inline_text" : "",
@@ -9,6 +10,7 @@
     "children" : [
         {
             "name" : "titulo",
+            "normalized_name" : "titulo",
             "namespace" : "com.kocinando.receta1",
             "multiline" : false,
             "inline_text" : "Buñuelos de Girona",
@@ -22,6 +24,7 @@
         },
         {
             "name" : "descripcion",
+            "normalized_name" : "descripcion",
             "namespace" : "com.kocinando.receta1",
             "multiline" : true,
             "inline_text" : "",
@@ -41,6 +44,7 @@
         },
         {
             "name" : "ingredientes",
+            "normalized_name" : "ingredientes",
             "namespace" : "com.kocinando.receta1",
             "multiline" : true,
             "inline_text" : "",
@@ -67,6 +71,7 @@
         },
         {
             "name" : "preparacion",
+            "normalized_name" : "preparacion",
             "namespace" : "com.kocinando.receta1",
             "multiline" : true,
             "inline_text" : "",

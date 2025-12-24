@@ -1,5 +1,6 @@
 {
     "name" : "receta",
+    "normalized_name" : "receta",
     "namespace" : "com.kocinando.receta",
     "multiline" : false,
     "inline_text" : "",
@@ -9,6 +10,7 @@
     "children" : [
         {
             "name" : "nombre receta",
+            "normalized_name" : "nombre-receta",
             "namespace" : "com.kocinando.receta",
             "multiline" : false,
             "inline_text" : "Hola!",
@@ -22,6 +24,7 @@
         },
         {
             "name" : "ingredientes",
+            "normalized_name" : "ingredientes",
             "namespace" : "com.kocinando.receta",
             "multiline" : false,
             "inline_text" : "",
@@ -31,6 +34,7 @@
             "children" : [
                 {
                     "name" : "ingrediente",
+                    "normalized_name" : "ingrediente",
                     "namespace" : "com.kocinando.receta",
                     "multiline" : false,
                     "inline_text" : "",
@@ -40,6 +44,7 @@
                     "children" : [
                         {
                             "name" : "cantidad",
+                            "normalized_name" : "cantidad",
                             "namespace" : "com.kocinando.receta",
                             "multiline" : false,
                             "inline_text" : "10",
@@ -53,6 +58,7 @@
                         },
                         {
                             "name" : "unidades",
+                            "normalized_name" : "unidades",
                             "namespace" : "com.kocinando.receta",
                             "multiline" : false,
                             "inline_text" : "g",
@@ -66,6 +72,7 @@
                         },
                         {
                             "name" : "nombre",
+                            "normalized_name" : "nombre",
                             "namespace" : "com.kocinando.receta",
                             "multiline" : false,
                             "inline_text" : "tomate",
@@ -84,6 +91,7 @@
                 },
                 {
                     "name" : "ingrediente",
+                    "normalized_name" : "ingrediente",
                     "namespace" : "com.kocinando.receta",
                     "multiline" : false,
                     "inline_text" : "",
@@ -93,6 +101,7 @@
                     "children" : [
                         {
                             "name" : "cantidad",
+                            "normalized_name" : "cantidad",
                             "namespace" : "com.kocinando.receta",
                             "multiline" : false,
                             "inline_text" : "1",
@@ -106,6 +115,7 @@
                         },
                         {
                             "name" : "unidades",
+                            "normalized_name" : "unidades",
                             "namespace" : "com.kocinando.receta",
                             "multiline" : false,
                             "inline_text" : "u",
@@ -119,6 +129,7 @@
                         },
                         {
                             "name" : "nombre",
+                            "normalized_name" : "nombre",
                             "namespace" : "com.kocinando.receta",
                             "multiline" : false,
                             "inline_text" : "pera",
@@ -137,6 +148,7 @@
                 },
                 {
                     "name" : "ingrediente",
+                    "normalized_name" : "ingrediente",
                     "namespace" : "com.kocinando.receta",
                     "multiline" : false,
                     "inline_text" : "",
@@ -146,6 +158,7 @@
                     "children" : [
                         {
                             "name" : "cantidad",
+                            "normalized_name" : "cantidad",
                             "namespace" : "com.kocinando.receta",
                             "multiline" : false,
                             "inline_text" : "200",
@@ -159,6 +172,7 @@
                         },
                         {
                             "name" : "unidades",
+                            "normalized_name" : "unidades",
                             "namespace" : "com.kocinando.receta",
                             "multiline" : false,
                             "inline_text" : "dl",
@@ -172,6 +186,7 @@
                         },
                         {
                             "name" : "nombre",
+                            "normalized_name" : "nombre",
                             "namespace" : "com.kocinando.receta",
                             "multiline" : false,
                             "inline_text" : "leche",
@@ -195,6 +210,7 @@
         },
         {
             "name" : "pasos",
+            "normalized_name" : "pasos",
             "namespace" : "com.kocinando.receta",
             "multiline" : false,
             "inline_text" : "",
@@ -204,6 +220,7 @@
             "children" : [
                 {
                     "name" : "paso",
+                    "normalized_name" : "paso",
                     "namespace" : "com.kocinando.receta",
                     "multiline" : false,
                     "inline_text" : "1",
@@ -217,6 +234,7 @@
                 },
                 {
                     "name" : "paso",
+                    "normalized_name" : "paso",
                     "namespace" : "com.kocinando.receta",
                     "multiline" : false,
                     "inline_text" : "2",
@@ -230,6 +248,7 @@
                 },
                 {
                     "name" : "paso",
+                    "normalized_name" : "paso",
                     "namespace" : "com.kocinando.receta",
                     "multiline" : false,
                     "inline_text" : "3",
@@ -243,6 +262,7 @@
                 },
                 {
                     "name" : "paso",
+                    "normalized_name" : "paso",
                     "namespace" : "com.kocinando.receta",
                     "multiline" : false,
                     "inline_text" : "4",
@@ -256,6 +276,7 @@
                 },
                 {
                     "name" : "descripcion",
+                    "normalized_name" : "descripcion",
                     "namespace" : "com.kocinando.receta",
                     "multiline" : true,
                     "inline_text" : "",

@@ -1,5 +1,6 @@
 {
     "name" : "type list",
+    "normalized_name" : "type-list",
     "namespace" : "dev.stxt.check",
     "multiline" : false,
     "inline_text" : "",
@@ -9,6 +10,7 @@
     "children" : [
         {
             "name" : "text",
+            "normalized_name" : "text",
             "namespace" : "dev.stxt.check",
             "multiline" : false,
             "inline_text" : "Esto es un texto normal",
@@ -22,6 +24,7 @@
         },
         {
             "name" : "text",
+            "normalized_name" : "text",
             "namespace" : "dev.stxt.check",
             "multiline" : true,
             "inline_text" : "",
@@ -50,6 +53,7 @@
         },
         {
             "name" : "natural",
+            "normalized_name" : "natural",
             "namespace" : "dev.stxt.check",
             "multiline" : false,
             "inline_text" : "134242342",
@@ -63,6 +67,7 @@
         },
         {
             "name" : "integer",
+            "normalized_name" : "integer",
             "namespace" : "dev.stxt.check",
             "multiline" : false,
             "inline_text" : "442424242234234",
@@ -76,6 +81,7 @@
         },
         {
             "name" : "integer",
+            "normalized_name" : "integer",
             "namespace" : "dev.stxt.check",
             "multiline" : false,
             "inline_text" : "+43242423424242",
@@ -89,6 +95,7 @@
         },
         {
             "name" : "integer",
+            "normalized_name" : "integer",
             "namespace" : "dev.stxt.check",
             "multiline" : false,
             "inline_text" : "-5432424242",
@@ -102,6 +109,7 @@
         },
         {
             "name" : "number",
+            "normalized_name" : "number",
             "namespace" : "dev.stxt.check",
             "multiline" : false,
             "inline_text" : "+52352.53252",
@@ -115,6 +123,7 @@
         },
         {
             "name" : "number",
+            "normalized_name" : "number",
             "namespace" : "dev.stxt.check",
             "multiline" : false,
             "inline_text" : "-523523.52325",
@@ -128,6 +137,7 @@
         },
         {
             "name" : "number",
+            "normalized_name" : "number",
             "namespace" : "dev.stxt.check",
             "multiline" : false,
             "inline_text" : "+52345.532e-10",
@@ -141,6 +151,7 @@
         },
         {
             "name" : "number",
+            "normalized_name" : "number",
             "namespace" : "dev.stxt.check",
             "multiline" : false,
             "inline_text" : "-523423.5432e10",
@@ -154,6 +165,7 @@
         },
         {
             "name" : "hexadecimal",
+            "normalized_name" : "hexadecimal",
             "namespace" : "dev.stxt.check",
             "multiline" : true,
             "inline_text" : "",
@@ -172,6 +184,7 @@
         },
         {
             "name" : "base64",
+            "normalized_name" : "base64",
             "namespace" : "dev.stxt.check",
             "multiline" : true,
             "inline_text" : "",
@@ -190,6 +203,7 @@
         },
         {
             "name" : "boolean",
+            "normalized_name" : "boolean",
             "namespace" : "dev.stxt.check",
             "multiline" : false,
             "inline_text" : "true",
@@ -203,6 +217,7 @@
         },
         {
             "name" : "boolean",
+            "normalized_name" : "boolean",
             "namespace" : "dev.stxt.check",
             "multiline" : false,
             "inline_text" : "false",
@@ -216,6 +231,7 @@
         },
         {
             "name" : "boolean",
+            "normalized_name" : "boolean",
             "namespace" : "dev.stxt.check",
             "multiline" : false,
             "inline_text" : "false",
@@ -229,6 +245,7 @@
         },
         {
             "name" : "url",
+            "normalized_name" : "url",
             "namespace" : "dev.stxt.check",
             "multiline" : false,
             "inline_text" : "http://www.google.com",

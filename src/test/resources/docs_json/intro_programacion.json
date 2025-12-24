@@ -1,5 +1,6 @@
 {
     "name" : "documento",
+    "normalized_name" : "documento",
     "namespace" : "com.dokumentando.documento",
     "multiline" : false,
     "inline_text" : "123456-179",
@@ -9,6 +10,7 @@
     "children" : [
         {
             "name" : "titulo",
+            "normalized_name" : "titulo",
             "namespace" : "com.dokumentando.documento",
             "multiline" : false,
             "inline_text" : "Introducción a la Programación",
@@ -22,6 +24,7 @@
         },
         {
             "name" : "autor",
+            "normalized_name" : "autor",
             "namespace" : "com.dokumentando.documento",
             "multiline" : false,
             "inline_text" : "Juan Pérez",
@@ -35,6 +38,7 @@
         },
         {
             "name" : "cuerpo",
+            "normalized_name" : "cuerpo",
             "namespace" : "com.dokumentando.documento",
             "multiline" : true,
             "inline_text" : "",
@@ -51,6 +55,7 @@
         },
         {
             "name" : "fecha creacion",
+            "normalized_name" : "fecha-creacion",
             "namespace" : "com.dokumentando.documento",
             "multiline" : false,
             "inline_text" : "2024-06-08",
@@ -64,6 +69,7 @@
         },
         {
             "name" : "ultima modificacion",
+            "normalized_name" : "ultima-modificacion",
             "namespace" : "com.dokumentando.documento",
             "multiline" : false,
             "inline_text" : "2024-06-08T14:30:00Z",
@@ -77,6 +83,7 @@
         },
         {
             "name" : "email contacto",
+            "normalized_name" : "email-contacto",
             "namespace" : "com.dokumentando.documento",
             "multiline" : false,
             "inline_text" : "juan.perez@example.com",
@@ -90,6 +97,7 @@
         },
         {
             "name" : "sitio web",
+            "normalized_name" : "sitio-web",
             "namespace" : "com.dokumentando.documento",
             "multiline" : false,
             "inline_text" : "https://www.programacionbasica.com",
@@ -103,6 +111,7 @@
         },
         {
             "name" : "codigo postal",
+            "normalized_name" : "codigo-postal",
             "namespace" : "com.dokumentando.documento",
             "multiline" : false,
             "inline_text" : "12345",
@@ -116,6 +125,7 @@
         },
         {
             "name" : "es publico",
+            "normalized_name" : "es-publico",
             "namespace" : "com.dokumentando.documento",
             "multiline" : false,
             "inline_text" : "true",
@@ -129,6 +139,7 @@
         },
         {
             "name" : "color tema",
+            "normalized_name" : "color-tema",
             "namespace" : "com.dokumentando.documento",
             "multiline" : false,
             "inline_text" : "#FF5733",
@@ -142,6 +153,7 @@
         },
         {
             "name" : "tipo documento",
+            "normalized_name" : "tipo-documento",
             "namespace" : "com.dokumentando.documento",
             "multiline" : false,
             "inline_text" : "artículo",
@@ -155,6 +167,7 @@
         },
         {
             "name" : "secciones",
+            "normalized_name" : "secciones",
             "namespace" : "com.dokumentando.documento",
             "multiline" : false,
             "inline_text" : "",
@@ -164,6 +177,7 @@
             "children" : [
                 {
                     "name" : "seccion",
+                    "normalized_name" : "seccion",
                     "namespace" : "com.dokumentando.documento",
                     "multiline" : false,
                     "inline_text" : "",
@@ -173,6 +187,7 @@
                     "children" : [
                         {
                             "name" : "titulo",
+                            "normalized_name" : "titulo",
                             "namespace" : "com.dokumentando.documento",
                             "multiline" : false,
                             "inline_text" : "Fundamentos de Programación",
@@ -186,6 +201,7 @@
                         },
                         {
                             "name" : "contenido",
+                            "normalized_name" : "contenido",
                             "namespace" : "com.dokumentando.documento",
                             "multiline" : true,
                             "inline_text" : "",
@@ -207,6 +223,7 @@
                 },
                 {
                     "name" : "seccion",
+                    "normalized_name" : "seccion",
                     "namespace" : "com.dokumentando.documento",
                     "multiline" : false,
                     "inline_text" : "",
@@ -216,6 +233,7 @@
                     "children" : [
                         {
                             "name" : "titulo",
+                            "normalized_name" : "titulo",
                             "namespace" : "com.dokumentando.documento",
                             "multiline" : false,
                             "inline_text" : "Lenguajes de Programación",
@@ -229,6 +247,7 @@
                         },
                         {
                             "name" : "contenido",
+                            "normalized_name" : "contenido",
                             "namespace" : "com.dokumentando.documento",
                             "multiline" : true,
                             "inline_text" : "",
@@ -250,6 +269,7 @@
                 },
                 {
                     "name" : "seccion",
+                    "normalized_name" : "seccion",
                     "namespace" : "com.dokumentando.documento",
                     "multiline" : false,
                     "inline_text" : "",
@@ -259,6 +279,7 @@
                     "children" : [
                         {
                             "name" : "titulo",
+                            "normalized_name" : "titulo",
                             "namespace" : "com.dokumentando.documento",
                             "multiline" : false,
                             "inline_text" : "Buenas Prácticas",
@@ -272,6 +293,7 @@
                         },
                         {
                             "name" : "contenido",
+                            "normalized_name" : "contenido",
                             "namespace" : "com.dokumentando.documento",
                             "multiline" : true,
                             "inline_text" : "",

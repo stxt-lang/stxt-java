@@ -1,5 +1,6 @@
 {
     "name" : "documento",
+    "normalized_name" : "documento",
     "namespace" : "com.dokumentando.documento",
     "multiline" : false,
     "inline_text" : "",
@@ -9,6 +10,7 @@
     "children" : [
         {
             "name" : "titulo",
+            "normalized_name" : "titulo",
             "namespace" : "com.dokumentando.documento",
             "multiline" : false,
             "inline_text" : "Receta de Pizza de Jamón",
@@ -22,6 +24,7 @@
         },
         {
             "name" : "autor",
+            "normalized_name" : "autor",
             "namespace" : "com.dokumentando.documento",
             "multiline" : false,
             "inline_text" : "María López",
@@ -35,6 +38,7 @@
         },
         {
             "name" : "cuerpo",
+            "normalized_name" : "cuerpo",
             "namespace" : "com.dokumentando.documento",
             "multiline" : true,
             "inline_text" : "",
@@ -51,6 +55,7 @@
         },
         {
             "name" : "fecha creacion",
+            "normalized_name" : "fecha-creacion",
             "namespace" : "com.dokumentando.documento",
             "multiline" : false,
             "inline_text" : "2024-06-08",
@@ -64,6 +69,7 @@
         },
         {
             "name" : "ultima modificacion",
+            "normalized_name" : "ultima-modificacion",
             "namespace" : "com.dokumentando.documento",
             "multiline" : false,
             "inline_text" : "2024-06-08T14:30:00Z",
@@ -77,6 +83,7 @@
         },
         {
             "name" : "email contacto",
+            "normalized_name" : "email-contacto",
             "namespace" : "com.dokumentando.documento",
             "multiline" : false,
             "inline_text" : "maria.lopez@example.com",
@@ -90,6 +97,7 @@
         },
         {
             "name" : "sitio web",
+            "normalized_name" : "sitio-web",
             "namespace" : "com.dokumentando.documento",
             "multiline" : false,
             "inline_text" : "https://www.recetasdeliciosas.com/pizza-jamon",
@@ -103,6 +111,7 @@
         },
         {
             "name" : "codigo postal",
+            "normalized_name" : "codigo-postal",
             "namespace" : "com.dokumentando.documento",
             "multiline" : false,
             "inline_text" : "54321",
@@ -116,6 +125,7 @@
         },
         {
             "name" : "es publico",
+            "normalized_name" : "es-publico",
             "namespace" : "com.dokumentando.documento",
             "multiline" : false,
             "inline_text" : "true",
@@ -129,6 +139,7 @@
         },
         {
             "name" : "color tema",
+            "normalized_name" : "color-tema",
             "namespace" : "com.dokumentando.documento",
             "multiline" : false,
             "inline_text" : "#FF6347",
@@ -142,6 +153,7 @@
         },
         {
             "name" : "tipo documento",
+            "normalized_name" : "tipo-documento",
             "namespace" : "com.dokumentando.documento",
             "multiline" : false,
             "inline_text" : "artículo",
@@ -155,6 +167,7 @@
         },
         {
             "name" : "secciones",
+            "normalized_name" : "secciones",
             "namespace" : "com.dokumentando.documento",
             "multiline" : false,
             "inline_text" : "",
@@ -164,6 +177,7 @@
             "children" : [
                 {
                     "name" : "seccion",
+                    "normalized_name" : "seccion",
                     "namespace" : "com.dokumentando.documento",
                     "multiline" : false,
                     "inline_text" : "",
@@ -173,6 +187,7 @@
                     "children" : [
                         {
                             "name" : "titulo",
+                            "normalized_name" : "titulo",
                             "namespace" : "com.dokumentando.documento",
                             "multiline" : false,
                             "inline_text" : "Ingredientes",
@@ -186,6 +201,7 @@
                         },
                         {
                             "name" : "contenido",
+                            "normalized_name" : "contenido",
                             "namespace" : "com.dokumentando.documento",
                             "multiline" : true,
                             "inline_text" : "",
@@ -214,6 +230,7 @@
                 },
                 {
                     "name" : "seccion",
+                    "normalized_name" : "seccion",
                     "namespace" : "com.dokumentando.documento",
                     "multiline" : false,
                     "inline_text" : "",
@@ -223,6 +240,7 @@
                     "children" : [
                         {
                             "name" : "titulo",
+                            "normalized_name" : "titulo",
                             "namespace" : "com.dokumentando.documento",
                             "multiline" : false,
                             "inline_text" : "Instrucciones",
@@ -236,6 +254,7 @@
                         },
                         {
                             "name" : "contenido",
+                            "normalized_name" : "contenido",
                             "namespace" : "com.dokumentando.documento",
                             "multiline" : true,
                             "inline_text" : "",
@@ -265,6 +284,7 @@
                 },
                 {
                     "name" : "seccion",
+                    "normalized_name" : "seccion",
                     "namespace" : "com.dokumentando.documento",
                     "multiline" : false,
                     "inline_text" : "",
@@ -274,6 +294,7 @@
                     "children" : [
                         {
                             "name" : "titulo",
+                            "normalized_name" : "titulo",
                             "namespace" : "com.dokumentando.documento",
                             "multiline" : false,
                             "inline_text" : "Información Nutricional",
@@ -287,6 +308,7 @@
                         },
                         {
                             "name" : "contenido",
+                            "normalized_name" : "contenido",
                             "namespace" : "com.dokumentando.documento",
                             "multiline" : true,
                             "inline_text" : "",

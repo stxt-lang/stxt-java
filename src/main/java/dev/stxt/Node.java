@@ -8,6 +8,7 @@ import dev.stxt.utils.StringUtils;
 
 public class Node {
 	private final String name;
+	private final String normalizedName;
 	private final String namespace;
 	private final boolean multiline;
 
@@ -22,6 +23,7 @@ public class Node {
 		this.level = level;
 		this.line = line;
 		this.name = StringUtils.normalizeName(name);
+		this.normalizedName = StringUtils.normalizeNodeName(name);
 		this.namespace = namespace;
 		this.inlineText = (inlineText == null ? "" : inlineText);
 		this.multiline = multiline;
@@ -36,6 +38,10 @@ public class Node {
 
 	public String getName() {
 		return name;
+	}
+
+	public String getNormalizedName() {
+		return normalizedName;
 	}
 
 	public String getQualifiedName() {

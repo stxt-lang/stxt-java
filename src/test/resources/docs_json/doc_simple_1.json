@@ -1,5 +1,6 @@
 {
     "name" : "documento",
+    "normalized_name" : "documento",
     "namespace" : "com.dokumentando.doc",
     "multiline" : false,
     "inline_text" : "",
@@ -9,6 +10,7 @@
     "children" : [
         {
             "name" : "titulo",
+            "normalized_name" : "titulo",
             "namespace" : "com.dokumentando.doc",
             "multiline" : false,
             "inline_text" : "Primer documento simple",
@@ -22,6 +24,7 @@
         },
         {
             "name" : "description",
+            "normalized_name" : "description",
             "namespace" : "com.dokumentando.doc",
             "multiline" : true,
             "inline_text" : "",
@@ -39,6 +42,7 @@
         },
         {
             "name" : "tipo documento",
+            "normalized_name" : "tipo-documento",
             "namespace" : "com.dokumentando.doc",
             "multiline" : false,
             "inline_text" : "informe",
