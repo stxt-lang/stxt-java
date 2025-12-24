@@ -16,7 +16,7 @@ public final class Base64Validator implements TypeValidator {
 	@Override
 	public void validate(Node n) {
 		try {
-			Base64.getDecoder().decode(StringUtils.cleanupString(n.getText()));
+			Base64.getDecoder().decode(StringUtils.cleanSpaces(n.getText()));
 		} catch (Exception e) {
 			throw new ValidationException(n.getLine(), "INVALID_VALUE", "Node '" + n.getName() + "' Invalid Base64");
 		}

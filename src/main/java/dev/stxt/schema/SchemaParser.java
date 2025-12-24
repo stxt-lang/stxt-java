@@ -74,7 +74,7 @@ class SchemaParser {
 			throw new ValidationException(n.getLine(), "NODE_NAME_INVALID", "Line not valid: " + n.getInlineText());
 		}
 
-		result.name = StringUtils.compactString(name.toLowerCase(Locale.ROOT));
+		result.name = StringUtils.compactSpaces(name.toLowerCase(Locale.ROOT));
 		result.type = type;
 
 		Node children = n.getChild("children");
@@ -119,7 +119,7 @@ class SchemaParser {
 		if (name == null || name.trim().isEmpty()) {
 			throw new ValidationException(lineNum, "SCHEMA_CHILD_NAME_EMPTY", "Name cannot be empty: " + line);
 		}
-		child.name = StringUtils.compactString(name.trim().toLowerCase(Locale.ROOT));
+		child.name = StringUtils.compactSpaces(name.trim().toLowerCase(Locale.ROOT));
 
 		String ns = m.group("ns");
 		if (ns != null && !ns.trim().isEmpty())

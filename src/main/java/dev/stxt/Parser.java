@@ -1,7 +1,7 @@
 package dev.stxt;
 
 import static dev.stxt.Constants.EMPTY_NAMESPACE;
-import static dev.stxt.utils.StringUtils.compactString;
+import static dev.stxt.utils.StringUtils.compactSpaces;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -172,13 +172,13 @@ public class Parser {
 
 		// Inline value
 		if (nodeIndex != -1) {
-			name = compactString(line.substring(0, nodeIndex));
+			name = compactSpaces(line.substring(0, nodeIndex));
 			value = line.substring(nodeIndex + 1).trim();
 		}
 
 		// Multiline Text
 		if (textIndex != -1) {
-			name = compactString(line.substring(0, textIndex));
+			name = compactSpaces(line.substring(0, textIndex));
 			value = line.substring(textIndex + 2).trim();
 			if (!value.isEmpty())
 				throw new ParseException(lineNumber, "INLINE_VALUE_NOT_VALID", "Line not valid: " + line);
@@ -202,7 +202,7 @@ public class Parser {
 			if (namespace.isEmpty())
 				throw new ParseException(lineNumber, "INVALID_NAMESPACE_DEF", "Line not valid: " + line);
 
-			name = compactString(name.substring(0, namespaceIndx));
+			name = compactSpaces(name.substring(0, namespaceIndx));
 		}
 
 		// Validamos nombre

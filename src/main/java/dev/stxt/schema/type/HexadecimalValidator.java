@@ -14,7 +14,7 @@ public final class HexadecimalValidator implements TypeValidator {
 	@Override
 	public void validate(Node n) {
 		// Elimina espacios, tabs y saltos de línea
-		String value = StringUtils.cleanupString(n.getText());
+		String value = StringUtils.cleanSpaces(n.getText());
 
 		if (value.isEmpty()) {
 			throw invalid(n, "Invalid hexadecimal (empty)");

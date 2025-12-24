@@ -15,7 +15,7 @@ public class Base64ReadTest {
 	public void mainTest() throws IOException {
 		String text = FileUtils.readFileContent(FileTestLoction.getFile("foto.base64.txt"));
 		System.out.println(text.substring(0, 200) + "...");
-		byte[] fotoBytes = Base64.getDecoder().decode(StringUtils.cleanupString(text));
+		byte[] fotoBytes = Base64.getDecoder().decode(StringUtils.cleanSpaces(text));
 		System.out.println(fotoBytes.length);
 
 		byte[] fotoBytesReal = FileUtils.readFile(FileTestLoction.getFile("foto.gif"));
