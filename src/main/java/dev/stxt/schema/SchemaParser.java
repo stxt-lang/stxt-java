@@ -14,7 +14,7 @@ import dev.stxt.utils.StringUtils;
 class SchemaParser {
 	private static final Pattern CHILD_LINE_PATTERN = Pattern
 			.compile("^\\s*(?:(?<ns>[^:()]+):)?(?<name>[^()]+?)\\s*(?:\\(\\s*(?<count>[^()\\s][^)]*?)\\s*\\))?\\s*$");
-	private static final Pattern P = Pattern
+	private static final Pattern NAME_TYPE_PATTERN = Pattern
 			.compile("^\\s*(?<name>[^()]+?)\\s*(?:\\(\\s*(?<type>[^()]+?)\\s*\\))?\\s*$");
 
 	public static Schema transformNodeToSchema(Node node) {
@@ -64,7 +64,7 @@ class SchemaParser {
 
 		String name = n.getInlineText();
 
-		Matcher m = P.matcher(name);
+		Matcher m = NAME_TYPE_PATTERN.matcher(name);
 		String type = "INLINE TEXT";
 
 		if (m.matches()) {
