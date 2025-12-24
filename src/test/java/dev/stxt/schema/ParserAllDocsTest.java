@@ -1,6 +1,7 @@
 package dev.stxt.schema;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -12,12 +13,9 @@ import dev.stxt.utils.FileUtils;
 import test.FileTestLoction;
 
 public class ParserAllDocsTest {
-	public static void main(String[] args){
-		new ParserAllDocsTest().mainTest();
-	}
 
 	@Test
-	public void mainTest(){
+	public void mainTest() throws IOException {
 		System.out.println("Inici");
 
 		// Create parser

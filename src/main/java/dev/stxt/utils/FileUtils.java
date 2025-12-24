@@ -14,11 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FileUtils {
-	private FileUtils() {
-		// No initialization
-	}
-
 	private static final String UTF8_BOM = "\uFEFF";
+	
+	private FileUtils() {
+	}
 
 	public static String removeUTF8BOM(String s) {
 		if (s.startsWith(UTF8_BOM))
@@ -45,11 +44,10 @@ public class FileUtils {
 		return new String(readFile(file), StandardCharsets.UTF_8);
 	}
 
-	public static List<File> getStxtFiles(File directory) {
+	public static List<File> getStxtFiles(File directory) throws IOException {
 		List<File> stxtFiles = new ArrayList<>();
 		Path startPath = Paths.get(directory.getAbsolutePath());
 
-		try {
 			Files.walkFileTree(startPath, new SimpleFileVisitor<Path>() {
 				@Override
 				public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
@@ -65,9 +63,6 @@ public class FileUtils {
 					return FileVisitResult.CONTINUE;
 				}
 			});
-		} catch (IOException e) {
-			System.err.println("Error search: " + e.getMessage());
-		}
 
 		return stxtFiles;
 	}

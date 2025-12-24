@@ -23,5 +23,4 @@ public class StringUtils {
 	public static String cleanSpaces(String input) {
 		return input.replaceAll("\\s+", "");
 	}
-
 }
