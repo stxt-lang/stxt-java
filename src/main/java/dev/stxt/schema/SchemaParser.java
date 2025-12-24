@@ -82,6 +82,7 @@ class SchemaParser {
 			int realLine = children.getLine();
 			for (String line : children.getMultilineText()) {
 				realLine++;
+				line = line.trim();
 				if (line.isEmpty())
 					continue;
 
@@ -99,16 +100,7 @@ class SchemaParser {
 	}
 
 	private static SchemaChild parseFromLine(String line, String namespace, int lineNum) {
-		if (line == null) {
-			throw new ValidationException(lineNum, "SCHEMA_CHILD_NULL", "line child cannot be null");
-		}
-
-		String trimmed = line.trim();
-		if (trimmed.isEmpty()) {
-			throw new ValidationException(lineNum, "SCHEMA_CHILD_EMPTY", "line cannot be empty");
-		}
-
-		Matcher m = CHILD_LINE_PATTERN.matcher(trimmed);
+		Matcher m = CHILD_LINE_PATTERN.matcher(line);
 		if (!m.matches()) {
 			throw new ValidationException(lineNum, "SCHEMA_CHILD_NOT_VALID", "line format not valid: " + line);
 		}
