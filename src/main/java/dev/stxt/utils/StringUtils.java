@@ -22,7 +22,7 @@ public class StringUtils {
 		return input.replaceAll("\\s+", "");
 	}
 	
-	private static final Pattern DIACRITICS = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+	private static final Pattern DIACRITICS = Pattern.compile("\\p{Mn}+");
 
 	private static String compactSpaces(String s) {
 		if (s == null)
