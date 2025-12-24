@@ -8,7 +8,7 @@
     "level" : 0,
     "children" : [
         {
-            "name" : "título",
+            "name" : "titulo",
             "namespace" : "com.dokumentando.documento",
             "multiline" : false,
             "inline_text" : "Receta de Pizza de Jamón",
@@ -16,9 +16,9 @@
             "line" : 6,
             "level" : 1,
             "children" : [ ],
-            "display_name" : "título(com.dokumentando.documento)",
+            "display_name" : "titulo(com.dokumentando.documento)",
             "text" : "Receta de Pizza de Jamón",
-            "qualified_name" : "com.dokumentando.documento:título"
+            "qualified_name" : "com.dokumentando.documento:titulo"
         },
         {
             "name" : "autor",
@@ -50,7 +50,7 @@
             "qualified_name" : "com.dokumentando.documento:cuerpo"
         },
         {
-            "name" : "fecha creación",
+            "name" : "fecha creacion",
             "namespace" : "com.dokumentando.documento",
             "multiline" : false,
             "inline_text" : "2024-06-08",
@@ -58,12 +58,12 @@
             "line" : 11,
             "level" : 1,
             "children" : [ ],
-            "display_name" : "fecha creación(com.dokumentando.documento)",
+            "display_name" : "fecha creacion(com.dokumentando.documento)",
             "text" : "2024-06-08",
-            "qualified_name" : "com.dokumentando.documento:fecha creación"
+            "qualified_name" : "com.dokumentando.documento:fecha creacion"
         },
         {
-            "name" : "última modificación",
+            "name" : "ultima modificacion",
             "namespace" : "com.dokumentando.documento",
             "multiline" : false,
             "inline_text" : "2024-06-08T14:30:00Z",
@@ -71,9 +71,9 @@
             "line" : 12,
             "level" : 1,
             "children" : [ ],
-            "display_name" : "última modificación(com.dokumentando.documento)",
+            "display_name" : "ultima modificacion(com.dokumentando.documento)",
             "text" : "2024-06-08T14:30:00Z",
-            "qualified_name" : "com.dokumentando.documento:última modificación"
+            "qualified_name" : "com.dokumentando.documento:ultima modificacion"
         },
         {
             "name" : "email contacto",
@@ -102,7 +102,7 @@
             "qualified_name" : "com.dokumentando.documento:sitio web"
         },
         {
-            "name" : "código postal",
+            "name" : "codigo postal",
             "namespace" : "com.dokumentando.documento",
             "multiline" : false,
             "inline_text" : "54321",
@@ -110,12 +110,12 @@
             "line" : 15,
             "level" : 1,
             "children" : [ ],
-            "display_name" : "código postal(com.dokumentando.documento)",
+            "display_name" : "codigo postal(com.dokumentando.documento)",
             "text" : "54321",
-            "qualified_name" : "com.dokumentando.documento:código postal"
+            "qualified_name" : "com.dokumentando.documento:codigo postal"
         },
         {
-            "name" : "es público",
+            "name" : "es publico",
             "namespace" : "com.dokumentando.documento",
             "multiline" : false,
             "inline_text" : "true",
@@ -123,9 +123,9 @@
             "line" : 16,
             "level" : 1,
             "children" : [ ],
-            "display_name" : "es público(com.dokumentando.documento)",
+            "display_name" : "es publico(com.dokumentando.documento)",
             "text" : "true",
-            "qualified_name" : "com.dokumentando.documento:es público"
+            "qualified_name" : "com.dokumentando.documento:es publico"
         },
         {
             "name" : "color tema",
@@ -163,7 +163,7 @@
             "level" : 1,
             "children" : [
                 {
-                    "name" : "sección",
+                    "name" : "seccion",
                     "namespace" : "com.dokumentando.documento",
                     "multiline" : false,
                     "inline_text" : "",
@@ -172,7 +172,7 @@
                     "level" : 2,
                     "children" : [
                         {
-                            "name" : "título",
+                            "name" : "titulo",
                             "namespace" : "com.dokumentando.documento",
                             "multiline" : false,
                             "inline_text" : "Ingredientes",
@@ -180,9 +180,9 @@
                             "line" : 21,
                             "level" : 3,
                             "children" : [ ],
-                            "display_name" : "título(com.dokumentando.documento)",
+                            "display_name" : "titulo(com.dokumentando.documento)",
                             "text" : "Ingredientes",
-                            "qualified_name" : "com.dokumentando.documento:título"
+                            "qualified_name" : "com.dokumentando.documento:titulo"
                         },
                         {
                             "name" : "contenido",
@@ -208,12 +208,12 @@
                             "qualified_name" : "com.dokumentando.documento:contenido"
                         }
                     ],
-                    "display_name" : "sección(com.dokumentando.documento)",
+                    "display_name" : "seccion(com.dokumentando.documento)",
                     "text" : "",
-                    "qualified_name" : "com.dokumentando.documento:sección"
+                    "qualified_name" : "com.dokumentando.documento:seccion"
                 },
                 {
-                    "name" : "sección",
+                    "name" : "seccion",
                     "namespace" : "com.dokumentando.documento",
                     "multiline" : false,
                     "inline_text" : "",
@@ -222,7 +222,7 @@
                     "level" : 2,
                     "children" : [
                         {
-                            "name" : "título",
+                            "name" : "titulo",
                             "namespace" : "com.dokumentando.documento",
                             "multiline" : false,
                             "inline_text" : "Instrucciones",
@@ -230,9 +230,9 @@
                             "line" : 33,
                             "level" : 3,
                             "children" : [ ],
-                            "display_name" : "título(com.dokumentando.documento)",
+                            "display_name" : "titulo(com.dokumentando.documento)",
                             "text" : "Instrucciones",
-                            "qualified_name" : "com.dokumentando.documento:título"
+                            "qualified_name" : "com.dokumentando.documento:titulo"
                         },
                         {
                             "name" : "contenido",
@@ -259,12 +259,12 @@
                             "qualified_name" : "com.dokumentando.documento:contenido"
                         }
                     ],
-                    "display_name" : "sección(com.dokumentando.documento)",
+                    "display_name" : "seccion(com.dokumentando.documento)",
                     "text" : "",
-                    "qualified_name" : "com.dokumentando.documento:sección"
+                    "qualified_name" : "com.dokumentando.documento:seccion"
                 },
                 {
-                    "name" : "sección",
+                    "name" : "seccion",
                     "namespace" : "com.dokumentando.documento",
                     "multiline" : false,
                     "inline_text" : "",
@@ -273,7 +273,7 @@
                     "level" : 2,
                     "children" : [
                         {
-                            "name" : "título",
+                            "name" : "titulo",
                             "namespace" : "com.dokumentando.documento",
                             "multiline" : false,
                             "inline_text" : "Información Nutricional",
@@ -281,9 +281,9 @@
                             "line" : 46,
                             "level" : 3,
                             "children" : [ ],
-                            "display_name" : "título(com.dokumentando.documento)",
+                            "display_name" : "titulo(com.dokumentando.documento)",
                             "text" : "Información Nutricional",
-                            "qualified_name" : "com.dokumentando.documento:título"
+                            "qualified_name" : "com.dokumentando.documento:titulo"
                         },
                         {
                             "name" : "contenido",
@@ -304,9 +304,9 @@
                             "qualified_name" : "com.dokumentando.documento:contenido"
                         }
                     ],
-                    "display_name" : "sección(com.dokumentando.documento)",
+                    "display_name" : "seccion(com.dokumentando.documento)",
                     "text" : "",
-                    "qualified_name" : "com.dokumentando.documento:sección"
+                    "qualified_name" : "com.dokumentando.documento:seccion"
                 }
             ],
             "display_name" : "secciones(com.dokumentando.documento)",

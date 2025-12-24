@@ -177,7 +177,7 @@
                     "qualified_name" : "com.gym.docs:titular cuenta"
                 },
                 {
-                    "name" : "número cuenta",
+                    "name" : "numero cuenta",
                     "namespace" : "com.gym.docs",
                     "multiline" : false,
                     "inline_text" : "0000-0000-00-000000000",
@@ -185,9 +185,9 @@
                     "line" : 92,
                     "level" : 2,
                     "children" : [ ],
-                    "display_name" : "número cuenta(com.gym.docs)",
+                    "display_name" : "numero cuenta(com.gym.docs)",
                     "text" : "0000-0000-00-000000000",
-                    "qualified_name" : "com.gym.docs:número cuenta"
+                    "qualified_name" : "com.gym.docs:numero cuenta"
                 }
             ],
             "display_name" : "datos bancarios(com.gym.docs)",

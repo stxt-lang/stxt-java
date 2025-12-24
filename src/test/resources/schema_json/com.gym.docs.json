@@ -88,13 +88,13 @@
                     "count" : "?",
                     "qualified_name" : "com.gym.docs:titular cuenta"
                 },
-                "com.gym.docs:número cuenta" : {
-                    "name" : "número cuenta",
+                "com.gym.docs:numero cuenta" : {
+                    "name" : "numero cuenta",
                     "namespace" : "com.gym.docs",
                     "min" : 1,
                     "max" : 1,
                     "count" : "1",
-                    "qualified_name" : "com.gym.docs:número cuenta"
+                    "qualified_name" : "com.gym.docs:numero cuenta"
                 }
             }
         },
@@ -133,8 +133,8 @@
             "type" : "INLINE TEXT",
             "children" : { }
         },
-        "número cuenta" : {
-            "name" : "número cuenta",
+        "numero cuenta" : {
+            "name" : "numero cuenta",
             "type" : "INLINE TEXT",
             "children" : { }
         }

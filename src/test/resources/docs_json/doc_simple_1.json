@@ -8,7 +8,7 @@
     "level" : 0,
     "children" : [
         {
-            "name" : "título",
+            "name" : "titulo",
             "namespace" : "com.dokumentando.doc",
             "multiline" : false,
             "inline_text" : "Primer documento simple",
@@ -16,9 +16,9 @@
             "line" : 2,
             "level" : 1,
             "children" : [ ],
-            "display_name" : "título(com.dokumentando.doc)",
+            "display_name" : "titulo(com.dokumentando.doc)",
             "text" : "Primer documento simple",
-            "qualified_name" : "com.dokumentando.doc:título"
+            "qualified_name" : "com.dokumentando.doc:titulo"
         },
         {
             "name" : "description",

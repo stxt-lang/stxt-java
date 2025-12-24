@@ -4,6 +4,14 @@
             "name" : "documento",
             "type" : "INLINE TEXT",
             "children" : {
+                "com.dokumentando.doc:titulo" : {
+                    "name" : "titulo",
+                    "namespace" : "com.dokumentando.doc",
+                    "min" : 1,
+                    "max" : 1,
+                    "count" : "1",
+                    "qualified_name" : "com.dokumentando.doc:titulo"
+                },
                 "com.dokumentando.doc:description" : {
                     "name" : "description",
                     "namespace" : "com.dokumentando.doc",
@@ -27,14 +35,6 @@
                     "max" : 1,
                     "count" : "1",
                     "qualified_name" : "com.dokumentando.doc:tipo documento"
-                },
-                "com.dokumentando.doc:título" : {
-                    "name" : "título",
-                    "namespace" : "com.dokumentando.doc",
-                    "min" : 1,
-                    "max" : 1,
-                    "count" : "1",
-                    "qualified_name" : "com.dokumentando.doc:título"
                 }
             }
         },
@@ -42,23 +42,23 @@
             "name" : "secciones",
             "type" : "INLINE TEXT",
             "children" : {
-                "com.dokumentando.doc:sección" : {
-                    "name" : "sección",
+                "com.dokumentando.doc:seccion" : {
+                    "name" : "seccion",
                     "namespace" : "com.dokumentando.doc",
                     "min" : 1,
                     "max" : null,
                     "count" : "+",
-                    "qualified_name" : "com.dokumentando.doc:sección"
+                    "qualified_name" : "com.dokumentando.doc:seccion"
                 }
             }
         },
-        "título" : {
-            "name" : "título",
+        "titulo" : {
+            "name" : "titulo",
             "type" : "INLINE TEXT",
             "children" : { }
         },
-        "sección" : {
-            "name" : "sección",
+        "seccion" : {
+            "name" : "seccion",
             "type" : "TEXT",
             "children" : { }
         },

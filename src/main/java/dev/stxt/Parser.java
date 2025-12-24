@@ -1,7 +1,7 @@
 package dev.stxt;
 
 import static dev.stxt.Constants.EMPTY_NAMESPACE;
-import static dev.stxt.utils.StringUtils.compactSpaces;
+import static dev.stxt.utils.StringUtils.normalizeName;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -18,6 +18,7 @@ import dev.stxt.processors.Processor;
 import dev.stxt.processors.Transformer;
 import dev.stxt.processors.Validator;
 import dev.stxt.utils.FileUtils;
+import dev.stxt.utils.StringUtils;
 
 public class Parser {
 	
@@ -172,13 +173,13 @@ public class Parser {
 
 		// Inline value
 		if (nodeIndex != -1) {
-			name = compactSpaces(line.substring(0, nodeIndex));
+			name = line.substring(0, nodeIndex);
 			value = line.substring(nodeIndex + 1).trim();
 		}
 
 		// Multiline Text
 		if (textIndex != -1) {
-			name = compactSpaces(line.substring(0, textIndex));
+			name = line.substring(0, textIndex);
 			value = line.substring(textIndex + 2).trim();
 			if (!value.isEmpty())
 				throw new ParseException(lineNumber, "INLINE_VALUE_NOT_VALID", "Line not valid: " + line);
@@ -188,6 +189,9 @@ public class Parser {
 		// Namespace por defecto: heredado del padre
 		String namespace = parent != null ? parent.getNamespace() : EMPTY_NAMESPACE;
 
+		name = normalizeName(name);
+		
+		
 		int namespaceIndx = name.indexOf("(");
 		int namespaceEnd = name.lastIndexOf(')');
 
@@ -202,8 +206,14 @@ public class Parser {
 			if (namespace.isEmpty())
 				throw new ParseException(lineNumber, "INVALID_NAMESPACE_DEF", "Line not valid: " + line);
 
-			name = compactSpaces(name.substring(0, namespaceIndx));
+			name = normalizeName(name.substring(0, namespaceIndx));
 		}
+		
+		
+		
+		
+		
+		
 
 		// Validamos nombre
 		if (name.isEmpty())

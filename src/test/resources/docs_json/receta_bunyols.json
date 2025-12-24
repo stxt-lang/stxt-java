@@ -8,7 +8,7 @@
     "level" : 0,
     "children" : [
         {
-            "name" : "título",
+            "name" : "titulo",
             "namespace" : "com.kocinando.receta1",
             "multiline" : false,
             "inline_text" : "Buñuelos de Girona",
@@ -16,12 +16,12 @@
             "line" : 3,
             "level" : 1,
             "children" : [ ],
-            "display_name" : "título(com.kocinando.receta1)",
+            "display_name" : "titulo(com.kocinando.receta1)",
             "text" : "Buñuelos de Girona",
-            "qualified_name" : "com.kocinando.receta1:título"
+            "qualified_name" : "com.kocinando.receta1:titulo"
         },
         {
-            "name" : "descripción",
+            "name" : "descripcion",
             "namespace" : "com.kocinando.receta1",
             "multiline" : true,
             "inline_text" : "",
@@ -35,9 +35,9 @@
             "line" : 5,
             "level" : 1,
             "children" : [ ],
-            "display_name" : "descripción(com.kocinando.receta1)",
+            "display_name" : "descripcion(com.kocinando.receta1)",
             "text" : "Esta es una receta para hacer buñuelos en la época de Cuaresma. Son conocidos\ntambién como Buñuelos del Empordà. Normalmente son servidos\ncomo postre, y hay cantidad suficiente hasta para 12 personas. Es una receta\nfácil de hacer.\n",
-            "qualified_name" : "com.kocinando.receta1:descripción"
+            "qualified_name" : "com.kocinando.receta1:descripcion"
         },
         {
             "name" : "ingredientes",
@@ -66,7 +66,7 @@
             "qualified_name" : "com.kocinando.receta1:ingredientes"
         },
         {
-            "name" : "preparación",
+            "name" : "preparacion",
             "namespace" : "com.kocinando.receta1",
             "multiline" : true,
             "inline_text" : "",
@@ -84,9 +84,9 @@
             "line" : 24,
             "level" : 1,
             "children" : [ ],
-            "display_name" : "preparación(com.kocinando.receta1)",
+            "display_name" : "preparacion(com.kocinando.receta1)",
             "text" : "En un recipiente pondremos la harina y el resto de ingredientes.\nLa mantequilla se funde con un poco de leche, al igual que la levadura.\nLa leche para deshacer la levadura sólo tiene que estar ligeramente templada,\nya que de lo contrario perdería seguramente su efecto.\nSe mezcla todo muy bien, y se deja reposar tapado por espacio de 3-5 horas\n(hasta que sube la masa).\nCon una cuchara o cucharadita según se quieran de tamaño, se fríen en abundante\naceite hasta coger color. Conforme se van sacando se espolvorean con un poco\nde la mezcla del grassolis, y se pasan por azúcar.",
-            "qualified_name" : "com.kocinando.receta1:preparación"
+            "qualified_name" : "com.kocinando.receta1:preparacion"
         }
     ],
     "display_name" : "receta(com.kocinando.receta1)",

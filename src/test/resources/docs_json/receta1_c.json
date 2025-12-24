@@ -21,7 +21,7 @@
             "qualified_name" : "com.kocinando.receta:nombre receta"
         },
         {
-            "name" : "descripción",
+            "name" : "descripcion",
             "namespace" : "com.kocinando.receta",
             "multiline" : false,
             "inline_text" : "Esta es una receta de ejemplo",
@@ -29,9 +29,9 @@
             "line" : 7,
             "level" : 1,
             "children" : [ ],
-            "display_name" : "descripción(com.kocinando.receta)",
+            "display_name" : "descripcion(com.kocinando.receta)",
             "text" : "Esta es una receta de ejemplo",
-            "qualified_name" : "com.kocinando.receta:descripción"
+            "qualified_name" : "com.kocinando.receta:descripcion"
         },
         {
             "name" : "pasos",
@@ -56,7 +56,7 @@
                     "qualified_name" : "com.kocinando.receta:paso"
                 },
                 {
-                    "name" : "descripción",
+                    "name" : "descripcion",
                     "namespace" : "com.kocinando.receta",
                     "multiline" : true,
                     "inline_text" : "",
@@ -67,9 +67,9 @@
                     "line" : 10,
                     "level" : 2,
                     "children" : [ ],
-                    "display_name" : "descripción(com.kocinando.receta)",
+                    "display_name" : "descripcion(com.kocinando.receta)",
                     "text" : "Esta receta te guiará a través de los pasos necesarios para preparar una deliciosa pizza de jamón en casa.\nSigue las instrucciones cuidadosamente para obtener los mejores resultados.",
-                    "qualified_name" : "com.kocinando.receta:descripción"
+                    "qualified_name" : "com.kocinando.receta:descripcion"
                 }
             ],
             "display_name" : "pasos(com.kocinando.receta)",
@@ -166,7 +166,7 @@
             "level" : 1,
             "children" : [
                 {
-                    "name" : "título",
+                    "name" : "titulo",
                     "namespace" : "com.dokumentando.doc",
                     "multiline" : false,
                     "inline_text" : "Primer documento simple",
@@ -174,9 +174,9 @@
                     "line" : 20,
                     "level" : 2,
                     "children" : [ ],
-                    "display_name" : "título(com.dokumentando.doc)",
+                    "display_name" : "titulo(com.dokumentando.doc)",
                     "text" : "Primer documento simple",
-                    "qualified_name" : "com.dokumentando.doc:título"
+                    "qualified_name" : "com.dokumentando.doc:titulo"
                 },
                 {
                     "name" : "description",

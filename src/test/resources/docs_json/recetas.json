@@ -30,7 +30,7 @@
                     "qualified_name" : "com.kocinando.receta:nombre receta"
                 },
                 {
-                    "name" : "descripción",
+                    "name" : "descripcion",
                     "namespace" : "com.kocinando.receta",
                     "multiline" : false,
                     "inline_text" : "Esta es una receta de ejemplo",
@@ -38,9 +38,9 @@
                     "line" : 9,
                     "level" : 2,
                     "children" : [ ],
-                    "display_name" : "descripción(com.kocinando.receta)",
+                    "display_name" : "descripcion(com.kocinando.receta)",
                     "text" : "Esta es una receta de ejemplo",
-                    "qualified_name" : "com.kocinando.receta:descripción"
+                    "qualified_name" : "com.kocinando.receta:descripcion"
                 },
                 {
                     "name" : "ingredientes",
@@ -277,7 +277,7 @@
                             "qualified_name" : "com.kocinando.receta:paso"
                         },
                         {
-                            "name" : "descripción",
+                            "name" : "descripcion",
                             "namespace" : "com.kocinando.receta",
                             "multiline" : true,
                             "inline_text" : "",
@@ -296,9 +296,9 @@
                             "line" : 29,
                             "level" : 3,
                             "children" : [ ],
-                            "display_name" : "descripción(com.kocinando.receta)",
+                            "display_name" : "descripcion(com.kocinando.receta)",
                             "text" : "Hay que vigilar este Paso, ya que\nno se puede garantizar su buen funcionamiento.\nEn caso de error consultar realizar una llamada\nal servicio único.\n\nEsta es otra linea\n# Hola\nMundo\n\n",
-                            "qualified_name" : "com.kocinando.receta:descripción"
+                            "qualified_name" : "com.kocinando.receta:descripcion"
                         }
                     ],
                     "display_name" : "pasos(com.kocinando.receta)",
@@ -333,7 +333,7 @@
                     "qualified_name" : "com.kocinando.receta:nombre receta"
                 },
                 {
-                    "name" : "descripción",
+                    "name" : "descripcion",
                     "namespace" : "com.kocinando.receta",
                     "multiline" : false,
                     "inline_text" : "Esta es una receta de ejemplo",
@@ -341,9 +341,9 @@
                     "line" : 43,
                     "level" : 2,
                     "children" : [ ],
-                    "display_name" : "descripción(com.kocinando.receta)",
+                    "display_name" : "descripcion(com.kocinando.receta)",
                     "text" : "Esta es una receta de ejemplo",
-                    "qualified_name" : "com.kocinando.receta:descripción"
+                    "qualified_name" : "com.kocinando.receta:descripcion"
                 },
                 {
                     "name" : "ingredientes",
@@ -580,7 +580,7 @@
                             "qualified_name" : "com.kocinando.receta:paso"
                         },
                         {
-                            "name" : "descripción",
+                            "name" : "descripcion",
                             "namespace" : "com.kocinando.receta",
                             "multiline" : true,
                             "inline_text" : "",
@@ -593,9 +593,9 @@
                             "line" : 62,
                             "level" : 3,
                             "children" : [ ],
-                            "display_name" : "descripción(com.kocinando.receta)",
+                            "display_name" : "descripcion(com.kocinando.receta)",
                             "text" : "Hay que vigilar este Paso, ya que\nno se puede garantizar su buen funcionamiento.\nEn caso de error consultar realizar una llamada\nal servicio único",
-                            "qualified_name" : "com.kocinando.receta:descripción"
+                            "qualified_name" : "com.kocinando.receta:descripcion"
                         },
                         {
                             "name" : "paso",

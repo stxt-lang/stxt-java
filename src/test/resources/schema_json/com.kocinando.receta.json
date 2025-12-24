@@ -4,14 +4,6 @@
             "name" : "receta",
             "type" : "INLINE TEXT",
             "children" : {
-                "com.kocinando.receta:calorías" : {
-                    "name" : "calorías",
-                    "namespace" : "com.kocinando.receta",
-                    "min" : null,
-                    "max" : 1,
-                    "count" : "?",
-                    "qualified_name" : "com.kocinando.receta:calorías"
-                },
                 "com.kocinando.receta:ingredientes" : {
                     "name" : "ingredientes",
                     "namespace" : "com.kocinando.receta",
@@ -28,13 +20,21 @@
                     "count" : "*",
                     "qualified_name" : "com.dokumentando.doc:documento"
                 },
-                "com.kocinando.receta:descripción" : {
-                    "name" : "descripción",
+                "com.kocinando.receta:descripcion" : {
+                    "name" : "descripcion",
                     "namespace" : "com.kocinando.receta",
                     "min" : null,
                     "max" : 1,
                     "count" : "?",
-                    "qualified_name" : "com.kocinando.receta:descripción"
+                    "qualified_name" : "com.kocinando.receta:descripcion"
+                },
+                "com.kocinando.receta:calorias" : {
+                    "name" : "calorias",
+                    "namespace" : "com.kocinando.receta",
+                    "min" : null,
+                    "max" : 1,
+                    "count" : "?",
+                    "qualified_name" : "com.kocinando.receta:calorias"
                 },
                 "com.kocinando.receta:pasos" : {
                     "name" : "pasos",
@@ -75,8 +75,8 @@
             "type" : "INLINE TEXT",
             "children" : { }
         },
-        "descripción" : {
-            "name" : "descripción",
+        "descripcion" : {
+            "name" : "descripcion",
             "type" : "TEXT",
             "children" : { }
         },
@@ -143,13 +143,13 @@
             "name" : "pasos",
             "type" : "INLINE TEXT",
             "children" : {
-                "com.kocinando.receta:descripción" : {
-                    "name" : "descripción",
+                "com.kocinando.receta:descripcion" : {
+                    "name" : "descripcion",
                     "namespace" : "com.kocinando.receta",
                     "min" : null,
                     "max" : null,
                     "count" : null,
-                    "qualified_name" : "com.kocinando.receta:descripción"
+                    "qualified_name" : "com.kocinando.receta:descripcion"
                 },
                 "com.kocinando.receta:paso" : {
                     "name" : "paso",
@@ -171,8 +171,8 @@
             "type" : "INLINE TEXT",
             "children" : { }
         },
-        "calorías" : {
-            "name" : "calorías",
+        "calorias" : {
+            "name" : "calorias",
             "type" : "NUMBER",
             "children" : { }
         },

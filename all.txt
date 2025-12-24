@@ -339,7 +339,7 @@ public final class HexadecimalValidator implements TypeValidator {
 	@Override
 	public void validate(Node n) {
 		// Elimina espacios, tabs y saltos de línea
-		String value = StringUtils.cleanupString(n.getText());
+		String value = StringUtils.cleanSpaces(n.getText());
 
 		if (value.isEmpty()) {
 			throw invalid(n, "Invalid hexadecimal (empty)");
@@ -423,7 +423,7 @@ public final class Base64Validator implements TypeValidator {
 	@Override
 	public void validate(Node n) {
 		try {
-			Base64.getDecoder().decode(StringUtils.cleanupString(n.getText()));
+			Base64.getDecoder().decode(StringUtils.cleanSpaces(n.getText()));
 		} catch (Exception e) {
 			throw new ValidationException(n.getLine(), "INVALID_VALUE", "Node '" + n.getName() + "' Invalid Base64");
 		}
@@ -924,7 +924,7 @@ class SchemaParser {
 			throw new ValidationException(n.getLine(), "NODE_NAME_INVALID", "Line not valid: " + n.getInlineText());
 		}
 
-		result.name = StringUtils.compactString(name.toLowerCase(Locale.ROOT));
+		result.name = StringUtils.compactSpaces(name.toLowerCase(Locale.ROOT));
 		result.type = type;
 
 		Node children = n.getChild("children");
@@ -969,7 +969,7 @@ class SchemaParser {
 		if (name == null || name.trim().isEmpty()) {
 			throw new ValidationException(lineNum, "SCHEMA_CHILD_NAME_EMPTY", "Name cannot be empty: " + line);
 		}
-		child.name = StringUtils.compactString(name.trim().toLowerCase(Locale.ROOT));
+		child.name = StringUtils.compactSpaces(name.trim().toLowerCase(Locale.ROOT));
 
 		String ns = m.group("ns");
 		if (ns != null && !ns.trim().isEmpty())
@@ -1239,7 +1239,7 @@ Fichero: dev/stxt/Parser.java
 package dev.stxt;
 
 import static dev.stxt.Constants.EMPTY_NAMESPACE;
-import static dev.stxt.utils.StringUtils.compactString;
+import static dev.stxt.utils.StringUtils.compactSpaces;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -1256,6 +1256,7 @@ import dev.stxt.processors.Processor;
 import dev.stxt.processors.Transformer;
 import dev.stxt.processors.Validator;
 import dev.stxt.utils.FileUtils;
+import dev.stxt.utils.StringUtils;
 
 public class Parser {
 	
@@ -1410,13 +1411,13 @@ public class Parser {
 
 		// Inline value
 		if (nodeIndex != -1) {
-			name = compactString(line.substring(0, nodeIndex));
+			name = compactSpaces(line.substring(0, nodeIndex));
 			value = line.substring(nodeIndex + 1).trim();
 		}
 
 		// Multiline Text
 		if (textIndex != -1) {
-			name = compactString(line.substring(0, textIndex));
+			name = compactSpaces(line.substring(0, textIndex));
 			value = line.substring(textIndex + 2).trim();
 			if (!value.isEmpty())
 				throw new ParseException(lineNumber, "INLINE_VALUE_NOT_VALID", "Line not valid: " + line);
@@ -1426,6 +1427,10 @@ public class Parser {
 		// Namespace por defecto: heredado del padre
 		String namespace = parent != null ? parent.getNamespace() : EMPTY_NAMESPACE;
 
+		
+		name = StringUtils.removeDiacritics(name).toLowerCase(Locale.ROOT);
+		
+		
 		int namespaceIndx = name.indexOf("(");
 		int namespaceEnd = name.lastIndexOf(')');
 
@@ -1440,8 +1445,14 @@ public class Parser {
 			if (namespace.isEmpty())
 				throw new ParseException(lineNumber, "INVALID_NAMESPACE_DEF", "Line not valid: " + line);
 
-			name = compactString(name.substring(0, namespaceIndx));
+			name = compactSpaces(name.substring(0, namespaceIndx));
 		}
+		
+		
+		
+		
+		
+		
 
 		// Validamos nombre
 		if (name.isEmpty())
@@ -1628,11 +1639,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FileUtils {
-	private FileUtils() {
-		// No initialization
-	}
-
 	private static final String UTF8_BOM = "\uFEFF";
+	
+	private FileUtils() {
+	}
 
 	public static String removeUTF8BOM(String s) {
 		if (s.startsWith(UTF8_BOM))
@@ -1659,11 +1669,10 @@ public class FileUtils {
 		return new String(readFile(file), StandardCharsets.UTF_8);
 	}
 
-	public static List<File> getStxtFiles(File directory) {
+	public static List<File> getStxtFiles(File directory) throws IOException {
 		List<File> stxtFiles = new ArrayList<>();
 		Path startPath = Paths.get(directory.getAbsolutePath());
 
-		try {
 			Files.walkFileTree(startPath, new SimpleFileVisitor<Path>() {
 				@Override
 				public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
@@ -1679,9 +1688,6 @@ public class FileUtils {
 					return FileVisitResult.CONTINUE;
 				}
 			});
-		} catch (IOException e) {
-			System.err.println("Error search: " + e.getMessage());
-		}
 
 		return stxtFiles;
 	}
@@ -1705,11 +1711,13 @@ Fichero: dev/stxt/utils/StringUtils.java
 ```
 package dev.stxt.utils;
 
+import java.text.Normalizer;
+import java.util.regex.Pattern;
+
 public class StringUtils {
 	private StringUtils() {
 	}
 
-	// Trim derecha
 	public static String rightTrim(String s) {
 		if (s == null)
 			return null;
@@ -1720,18 +1728,22 @@ public class StringUtils {
 		return s.substring(0, i + 1);
 	}
 
-	// Trim a ambos lados y compacta espacios/tabs internos a uno
-	public static String compactString(String s) {
+	public static String compactSpaces(String s) {
 		if (s == null)
 			return null;
-		// \s+ coincide con uno o más espacios en blanco (incluye tab, etc.)
 		return s.trim().replaceAll("\\s+", " ");
 	}
 
-	public static String cleanupString(String input) {
+	public static String cleanSpaces(String input) {
 		return input.replaceAll("\\s+", "");
 	}
+	
+	private static final Pattern DIACRITICS = Pattern.compile("\\p{M}+"); // Marks (acentos, diéresis, etc.)
 
+    public static String removeDiacritics(String input) {
+        String normalized = Normalizer.normalize(input, Normalizer.Form.NFD);
+        return DIACRITICS.matcher(normalized).replaceAll("");
+    }	
 }
 
 ```

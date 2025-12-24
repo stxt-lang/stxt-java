@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import dev.stxt.utils.StringUtils;
+
 public class Node {
 	private final String name;
 	private final String namespace;
@@ -20,7 +22,7 @@ public class Node {
 	public Node(int line, int level, String name, String namespace, boolean multiline, String inlineText) {
 		this.level = level;
 		this.line = line;
-		this.name = name.toLowerCase(Locale.ROOT);
+		this.name = StringUtils.normalizeName(name);
 		this.namespace = namespace;
 		this.inlineText = (inlineText == null ? "" : inlineText);
 		this.multiline = multiline;
@@ -101,7 +103,7 @@ public class Node {
 
 	// Fast access methods to children
 	public List<Node> getChildren(String cname) {
-		String key = cname.toLowerCase(Locale.ROOT);
+		String key = StringUtils.normalizeName(cname);
 		List<Node> result = new ArrayList<Node>();
 
 		for (Node child : children) {
