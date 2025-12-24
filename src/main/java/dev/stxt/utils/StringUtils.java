@@ -22,22 +22,20 @@ public class StringUtils {
 		return input.replaceAll("\\s+", "");
 	}
 	
-	private static final Pattern DIACRITICS = Pattern.compile("\\p{M}+"); // Marks (acentos, diéresis, etc.)
+	private static final Pattern DIACRITICS = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
 
-    private static String removeDiacritics(String input) {
-        String normalized = Normalizer.normalize(input, Normalizer.Form.NFD);
-        return DIACRITICS.matcher(normalized).replaceAll("");
-    }	
-    
 	private static String compactSpaces(String s) {
 		if (s == null)
 			return null;
 		return s.trim().replaceAll("\\s+", " ");
 	}
 
-    public static String normalizeName(String name)
-    {
-    	if (name == null) return "";
-    	return compactSpaces(removeDiacritics(name.trim().toLowerCase(Locale.ROOT)));
-    }
+	public static String normalizeName(String name) {
+	    if (name == null) return "";
+	    String s = name.trim();
+	    s = Normalizer.normalize(s, Normalizer.Form.NFKD);
+	    s = DIACRITICS.matcher(s).replaceAll("");
+	    s = s.toLowerCase(Locale.ROOT);
+	    return compactSpaces(s);
+	}
 }

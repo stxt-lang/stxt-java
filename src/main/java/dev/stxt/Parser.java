@@ -158,7 +158,7 @@ public class Parser {
 		}
 	}
 
-	private static final Pattern P = Pattern.compile("^\\s*([A-Za-z0-9]+(?:\\s+[A-Za-z0-9]+)*)(?:\\s*\\(\\s*(@?[A-Za-z0-9]+(?:\\.[A-Za-z0-9]+)*)\\s*\\))?\\s*$");		
+	private static final Pattern NAME_PATTERN = Pattern.compile("^\\s*([a-z0-9\\-_]+(?:\\s+[a-z0-9\\-_]+)*)(?:\\s*\\(\\s*(@?[a-z0-9]+(?:\\.[a-z0-9]+)*)\\s*\\))?\\s*$");		
 	private Node createNode(LineIndent result, int lineNumber, int level, Node parent) {
 		String line = result.lineWithoutIndent;
 		String name = null;
@@ -191,7 +191,7 @@ public class Parser {
 		String namespace = parent != null ? parent.getNamespace() : EMPTY_NAMESPACE;
 
 		name = normalizeName(name);
-		Matcher m = P.matcher(name);
+		Matcher m = NAME_PATTERN.matcher(name);
 		if (!m.matches())
 	        throw new ParseException(lineNumber, "INVALID_NAMESPACE_DEF", "Line not valid: " + line);
 		
