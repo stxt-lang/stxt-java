@@ -30,7 +30,7 @@ class SchemaParser {
 					"Se espera schema(" + Schema.SCHEMA_NAMESPACE + ") y es " + nodeName + "(" + namespaceSchema + ")");
 		}
 		String namespace = node.getInlineText().trim().toLowerCase(Locale.ROOT);
-		schema.namespace = namespace;
+		schema.setNamespace(namespace);
 
 		// Obtenemos los nodos
 		List<Node> nodes = node.getChildren("node");
@@ -38,20 +38,20 @@ class SchemaParser {
 		Set<String> allNames = new HashSet<String>(); // Para validar que
 														// existan los childs
 		for (Node n : nodes) {
-			SchemaNode schNode = createFrom(n, schema.namespace);
-			schema.nodes.put(schNode.name, schNode);
+			SchemaNode schNode = createFrom(n, schema.getNamespace());
+			schema.getNodes().put(schNode.getName(), schNode);
 
-			allNames.add(schNode.name);
+			allNames.add(schNode.getName());
 		}
 
 		// Validamos que todos los nombres estén definidos
-		for (SchemaNode schNode : schema.nodes.values()) {
-			for (SchemaChild schChild : schNode.children.values()) {
-				if (schChild.namespace.equals(namespace)) // Sólo validamos del mismo namespace
+		for (SchemaNode schNode : schema.getNodes().values()) {
+			for (SchemaChild schChild : schNode.getChildren().values()) {
+				if (schChild.getNamespace().equals(namespace)) // Sólo validamos del mismo namespace
 				{
-					if (!allNames.contains(schChild.name))
+					if (!allNames.contains(schChild.getName()))
 						throw new ValidationException(0, "CHILD_NOT_DEFINED",
-								"Child " + schChild.name + " not defined in " + namespace);
+								"Child " + schChild.getName() + " not defined in " + namespace);
 				}
 			}
 		}
@@ -74,8 +74,8 @@ class SchemaParser {
 			throw new ValidationException(n.getLine(), "NODE_NAME_INVALID", "Line not valid: " + n.getInlineText());
 		}
 
-		result.name = StringUtils.normalizeName(name);
-		result.type = type;
+		result.setName(StringUtils.normalizeName(name));
+		result.setType(type);
 
 		Node children = n.getChild("children");
 		if (children != null) {
@@ -88,10 +88,10 @@ class SchemaParser {
 				SchemaChild schemaChild = parseFromLine(line, namespace, realLine);
 				updateCount(schemaChild);
 				String qname = schemaChild.getQualifiedName();
-				if (result.children.containsKey(qname))
+				if (result.getChildren().containsKey(qname))
 					throw new ValidationException(realLine, "DUPLICATED_CHILD", qname);
 
-				result.children.put(qname, schemaChild);
+				result.getChildren().put(qname, schemaChild);
 			}
 		}
 
@@ -119,38 +119,38 @@ class SchemaParser {
 		if (name == null || name.trim().isEmpty()) {
 			throw new ValidationException(lineNum, "SCHEMA_CHILD_NAME_EMPTY", "Name cannot be empty: " + line);
 		}
-		child.name = StringUtils.normalizeName(name);
+		child.setName(StringUtils.normalizeName(name));
 
 		String ns = m.group("ns");
 		if (ns != null && !ns.trim().isEmpty())
-			child.namespace = ns.trim().toLowerCase(Locale.ROOT);
+			child.setNamespace(ns.trim().toLowerCase(Locale.ROOT));
 		else
-			child.namespace = namespace;
+			child.setNamespace(namespace);
 
 		String count = m.group("count");
-		child.count = count;
+		child.setCount(count);
 		return child;
 	}
 
 	private static void updateCount(SchemaChild child) {
-		String count = child.count;
+		String count = child.getCount();
 
 		if (count == null || count.isEmpty() || count.equals("*")) {
 			// No min, no max para empty y "*"
 		} else if (count.equals("?")) {
-			child.max = 1;
+			child.setMax(1);
 		} else if (count.equals("+")) {
-			child.min = 1;
+			child.setMin(1);
 		} else if (count.endsWith("+")) {
 			int expectedNum = Integer.parseInt(count.substring(0, count.length() - 1));
-			child.min = expectedNum;
+			child.setMin(expectedNum);
 		} else if (count.endsWith("-")) {
 			int expectedNum = Integer.parseInt(count.substring(0, count.length() - 1));
-			child.max = expectedNum;
+			child.setMax(expectedNum);
 		} else {
 			int expectedNum = Integer.parseInt(count);
-			child.min = expectedNum;
-			child.max = expectedNum;
+			child.setMin(expectedNum);
+			child.setMax(expectedNum);
 		}
 	}
 }

@@ -42,9 +42,9 @@ class SchemaValidator implements Validator {
 	
 	public void validateAgainstSchema(Node node, Schema sch) {
 		// Obtenemos node
-		SchemaNode schemaNode = sch.nodes.get(node.getName());
+		SchemaNode schemaNode = sch.getNodes().get(node.getName());
 		if (schemaNode == null) {
-			String error = "NOT EXIST NODE " + node.getName() + " for namespace " + sch.namespace;
+			String error = "NOT EXIST NODE " + node.getName() + " for namespace " + sch.getNamespace();
 			throw new ValidationException(node.getLine(), "NODE_NOT_EXIST_IN_SCHEMA", error);
 		}
 
@@ -54,7 +54,7 @@ class SchemaValidator implements Validator {
 	}
 
 	private static void validateValue(SchemaNode nsNode, Node n) {
-		String nodeType = nsNode.type;
+		String nodeType = nsNode.getType();
 
 		TypeValidator validator = TypeRegistry.get(nodeType);
 		if (validator == null)
@@ -72,14 +72,14 @@ class SchemaValidator implements Validator {
 			count.put(childName, count.getOrDefault(childName, 0) + 1);
 		}
 
-		for (SchemaChild chNode : nsNode.children.values()) {
+		for (SchemaChild chNode : nsNode.getChildren().values()) {
 			validateCount(chNode, count.getOrDefault(chNode.getQualifiedName(), 0), node);
 		}
 	}
 
 	private static void validateCount(SchemaChild chNode, int num, Node node) {
-		Integer min = chNode.min;
-		Integer max = chNode.max;
+		Integer min = chNode.getMin();
+		Integer max = chNode.getMax();
 
 		if (min != null && num < min)
 			throw new ValidationException(node.getLine(), "INVALID_NUMBER",

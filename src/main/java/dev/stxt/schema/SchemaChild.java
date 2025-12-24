@@ -1,13 +1,53 @@
 package dev.stxt.schema;
 
 class SchemaChild {
-	public String name;
-	public String namespace;
-	public Integer min = null;
-	public Integer max = null;
-	public String count = null;
+	private String name;
+	private String namespace;
+	private Integer min = null;
+	private Integer max = null;
+	private String count = null;
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getNamespace() {
+		return namespace;
+	}
+
+	public void setNamespace(String namespace) {
+		this.namespace = namespace;
+	}
+
+	public Integer getMin() {
+		return min;
+	}
+
+	public void setMin(Integer min) {
+		this.min = min;
+	}
+
+	public Integer getMax() {
+		return max;
+	}
+
+	public void setMax(Integer max) {
+		this.max = max;
+	}
+
+	public String getCount() {
+		return count;
+	}
+
+	public void setCount(String count) {
+		this.count = count;
+	}
 
 	public String getQualifiedName() {
-	    return namespace == null || namespace.isEmpty() ? name : namespace + ":" + name;
+		return namespace == null || namespace.isEmpty() ? name : namespace + ":" + name;
 	}
 }

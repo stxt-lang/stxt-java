@@ -43,8 +43,8 @@ final class SchemaProviderCache implements SchemaProvider {
 		Schema sch = SchemaParser.transformNodeToSchema(root);
 
 		// Comprobar namespace esperado
-		if (!sch.namespace.equalsIgnoreCase(namespace))
-			throw new SchemaException("INVALID_SCHEMA", "Schema namespace is " + sch.namespace + ", and expected is " + namespace);
+		if (!sch.getNamespace().equalsIgnoreCase(namespace))
+			throw new SchemaException("INVALID_SCHEMA", "Schema namespace is " + sch.getNamespace() + ", and expected is " + namespace);
 
 		// Insertamos en cache
 		cache.put(namespace, sch);
