@@ -18,7 +18,8 @@ package dev.stxt;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
+
+import dev.stxt.utils.StringUtils;
 
 public class Node {
 	private final String name;
@@ -35,7 +36,7 @@ public class Node {
 	public Node(int line, int level, String name, String namespace, boolean multiline, String inlineText) {
 		this.level = level;
 		this.line = line;
-		this.name = name.toLowerCase(Locale.ROOT);
+		this.name = StringUtils.normalizeName(name);
 		this.namespace = namespace;
 		this.inlineText = (inlineText == null ? "" : inlineText);
 		this.multiline = multiline;
@@ -116,7 +117,7 @@ public class Node {
 
 	// Fast access methods to children
 	public List<Node> getChildren(String cname) {
-		String key = cname.toLowerCase(Locale.ROOT);
+		String key = StringUtils.normalizeName(cname);
 		List<Node> result = new ArrayList<Node>();
 
 		for (Node child : children) {
@@ -924,7 +925,7 @@ class SchemaParser {
 			throw new ValidationException(n.getLine(), "NODE_NAME_INVALID", "Line not valid: " + n.getInlineText());
 		}
 
-		result.name = StringUtils.compactSpaces(name.toLowerCase(Locale.ROOT));
+		result.name = StringUtils.normalizeName(name);
 		result.type = type;
 
 		Node children = n.getChild("children");
@@ -969,7 +970,7 @@ class SchemaParser {
 		if (name == null || name.trim().isEmpty()) {
 			throw new ValidationException(lineNum, "SCHEMA_CHILD_NAME_EMPTY", "Name cannot be empty: " + line);
 		}
-		child.name = StringUtils.compactSpaces(name.trim().toLowerCase(Locale.ROOT));
+		child.name = StringUtils.normalizeName(name);
 
 		String ns = m.group("ns");
 		if (ns != null && !ns.trim().isEmpty())
@@ -1239,7 +1240,7 @@ Fichero: dev/stxt/Parser.java
 package dev.stxt;
 
 import static dev.stxt.Constants.EMPTY_NAMESPACE;
-import static dev.stxt.utils.StringUtils.compactSpaces;
+import static dev.stxt.utils.StringUtils.normalizeName;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -1411,13 +1412,13 @@ public class Parser {
 
 		// Inline value
 		if (nodeIndex != -1) {
-			name = compactSpaces(line.substring(0, nodeIndex));
+			name = line.substring(0, nodeIndex);
 			value = line.substring(nodeIndex + 1).trim();
 		}
 
 		// Multiline Text
 		if (textIndex != -1) {
-			name = compactSpaces(line.substring(0, textIndex));
+			name = line.substring(0, textIndex);
 			value = line.substring(textIndex + 2).trim();
 			if (!value.isEmpty())
 				throw new ParseException(lineNumber, "INLINE_VALUE_NOT_VALID", "Line not valid: " + line);
@@ -1427,8 +1428,7 @@ public class Parser {
 		// Namespace por defecto: heredado del padre
 		String namespace = parent != null ? parent.getNamespace() : EMPTY_NAMESPACE;
 
-		
-		name = StringUtils.removeDiacritics(name).toLowerCase(Locale.ROOT);
+		name = normalizeName(name);
 		
 		
 		int namespaceIndx = name.indexOf("(");
@@ -1445,15 +1445,10 @@ public class Parser {
 			if (namespace.isEmpty())
 				throw new ParseException(lineNumber, "INVALID_NAMESPACE_DEF", "Line not valid: " + line);
 
-			name = compactSpaces(name.substring(0, namespaceIndx));
+			name = normalizeName(name.substring(0, namespaceIndx));
 		}
 		
 		
-		
-		
-		
-		
-
 		// Validamos nombre
 		if (name.isEmpty())
 			throw new ParseException(lineNumber, "INVALID_LINE", "Line not valid: " + line);
@@ -1712,6 +1707,7 @@ Fichero: dev/stxt/utils/StringUtils.java
 package dev.stxt.utils;
 
 import java.text.Normalizer;
+import java.util.Locale;
 import java.util.regex.Pattern;
 
 public class StringUtils {
@@ -1728,22 +1724,28 @@ public class StringUtils {
 		return s.substring(0, i + 1);
 	}
 
-	public static String compactSpaces(String s) {
-		if (s == null)
-			return null;
-		return s.trim().replaceAll("\\s+", " ");
-	}
-
 	public static String cleanSpaces(String input) {
 		return input.replaceAll("\\s+", "");
 	}
 	
 	private static final Pattern DIACRITICS = Pattern.compile("\\p{M}+"); // Marks (acentos, diéresis, etc.)
 
-    public static String removeDiacritics(String input) {
+    private static String removeDiacritics(String input) {
         String normalized = Normalizer.normalize(input, Normalizer.Form.NFD);
         return DIACRITICS.matcher(normalized).replaceAll("");
     }	
+    
+	private static String compactSpaces(String s) {
+		if (s == null)
+			return null;
+		return s.trim().replaceAll("\\s+", " ");
+	}
+
+    public static String normalizeName(String name)
+    {
+    	if (name == null) return "";
+    	return compactSpaces(removeDiacritics(name.trim().toLowerCase(Locale.ROOT)));
+    }
 }
 
 ```
