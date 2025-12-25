@@ -44,7 +44,7 @@ public final class NameNamespaceParser {
             throw new ParseException(lineNumber, "INVALID_LINE", "Line not valid: " + fullLine);
         }
 
-        String namespace = inheritedNs;
+        String namespace = inheritedNs != null ? inheritedNs : Constants.EMPTY_NAMESPACE;
         if (m.group(2) != null) {
             namespace = m.group(2);
         }

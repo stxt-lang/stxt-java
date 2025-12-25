@@ -1,8 +1,5 @@
 package dev.stxt;
 
-import static dev.stxt.Constants.EMPTY_NAMESPACE;
-import static dev.stxt.utils.StringUtils.normalizeName;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.StringReader;
@@ -10,7 +7,6 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import dev.stxt.processors.Filter;
@@ -158,9 +154,8 @@ public class Parser {
 		}
 	}
 
-	private static final Pattern NAME_PATTERN = Pattern.compile("^\\s*([a-z0-9\\-_]+(?:\\s+[a-z0-9\\-_]+)*)(?:\\s*\\(\\s*(@?[a-z0-9]+(?:\\.[a-z0-9]+)*)\\s*\\))?\\s*$");		
 	private Node createNode(LineIndent result, int lineNumber, int level, Node parent) {
-		String line = result.lineWithoutIndent;
+		final String line = result.lineWithoutIndent;
 		String name = null;
 		String value = null;
 		boolean multiline = false;
@@ -188,16 +183,9 @@ public class Parser {
 		}
 
 		// Namespace por defecto: heredado del padre
-		String namespace = parent != null ? parent.getNamespace() : EMPTY_NAMESPACE;
-
-		name = normalizeName(name);
-		Matcher m = NAME_PATTERN.matcher(name);
-		if (!m.matches())
-	        throw new ParseException(lineNumber, "INVALID_NAMESPACE_DEF", "Line not valid: " + line);
-		
-		name = m.group(1);
-		if (m.group(2)!=null)
-			namespace = m.group(2);
+		NameNamespace nn = NameNamespaceParser.parse(name, parent != null ? parent.getNamespace(): null, lineNumber, line);
+		name = nn.getName();
+		String namespace = nn.getNamespace();
 		
 		// Validamos nombre
 		if (name.isEmpty())
