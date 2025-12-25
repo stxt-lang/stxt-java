@@ -1,6 +1,8 @@
 * TEXT
 * VALUE (default)
 * value y text, no multiline y inline
+* El transformer sólo vea el nodo justo después de crearlo, sin childs, etc... y lo transforma justo en ese momento, no al final. 
+	Entonces el freeze se hace antes de pasar por validators, etc.
 
 * Template (@stxt.schema): demo.com
 	Tree >>
