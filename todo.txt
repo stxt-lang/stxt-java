@@ -1,4 +1,4 @@
-* Distinguir name de NormalizedName!! Ahora se pierde name, y debería ser sólo compact string
+* Distinguir name de NormalizedName!! Ahora se pierde name, y debería ser sólo compact string. Quizá mejor un rawName, que sólo sea compact string, y así ya está
 * TEXT
 * VALUE (default)
 * value y text, no multiline y inline
