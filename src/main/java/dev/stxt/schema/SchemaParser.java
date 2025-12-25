@@ -12,8 +12,14 @@ import dev.stxt.processors.ValidationException;
 import dev.stxt.utils.StringUtils;
 
 class SchemaParser {
-	private static final Pattern CHILD_LINE_PATTERN = Pattern
-			.compile("^\\s*(?:(?<ns>[^:()]+):)?(?<name>[^()]+?)\\s*(?:\\(\\s*(?<count>[^()\\s][^)]*?)\\s*\\))?\\s*$");
+	private static final Pattern CHILD_LINE_PATTERN = Pattern.compile(
+		    "^\\s*" +
+		    "(?:\\(\\s*(?<count>[^()\\s][^)]*?)\\s*\\)\\s*)?" + // (count)
+		    "(?<name>[^()]+?)" +                               // name
+		    "\\s*(?:\\(\\s*(?<ns>[^()]+?)\\s*\\))?" +          // (namespace)
+		    "\\s*$"
+		);
+	
 	private static final Pattern NAME_TYPE_PATTERN = Pattern
 			.compile("^\\s*(?<name>[^()]+?)\\s*(?:\\(\\s*(?<type>[^()]+?)\\s*\\))?\\s*$");
 
