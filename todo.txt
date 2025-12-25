@@ -11,7 +11,7 @@
 			Child: Node 3
 				Min: 3
 				Max: 4
-			Child: Demo
+			Child: Demo (com.google)
 			Child: Demo 3
 
 dev.stxt
