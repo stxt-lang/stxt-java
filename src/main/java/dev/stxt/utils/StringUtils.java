@@ -24,7 +24,7 @@ public class StringUtils {
 	
 	private static final Pattern DIACRITICS = Pattern.compile("\\p{Mn}+");
 
-	private static String compactSpaces(String s) {
+	public static String compactSpaces(String s) {
 		if (s == null)
 			return null;
 		return s.trim().replaceAll("\\s+", " ");
