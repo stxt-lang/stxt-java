@@ -9,7 +9,6 @@
                     "namespace" : "com.kocinando.receta",
                     "min" : 1,
                     "max" : null,
-                    "count" : "+",
                     "qualified_name" : "com.kocinando.receta:receta"
                 }
             }

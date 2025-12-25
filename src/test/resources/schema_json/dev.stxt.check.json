@@ -9,7 +9,6 @@
                     "namespace" : "dev.stxt.check",
                     "min" : 1,
                     "max" : null,
-                    "count" : "+",
                     "qualified_name" : "dev.stxt.check:number"
                 },
                 "dev.stxt.check:text" : {
@@ -17,7 +16,6 @@
                     "namespace" : "dev.stxt.check",
                     "min" : 1,
                     "max" : null,
-                    "count" : "+",
                     "qualified_name" : "dev.stxt.check:text"
                 },
                 "dev.stxt.check:base64" : {
@@ -25,7 +23,6 @@
                     "namespace" : "dev.stxt.check",
                     "min" : 1,
                     "max" : null,
-                    "count" : "+",
                     "qualified_name" : "dev.stxt.check:base64"
                 },
                 "dev.stxt.check:natural" : {
@@ -33,7 +30,6 @@
                     "namespace" : "dev.stxt.check",
                     "min" : 1,
                     "max" : null,
-                    "count" : "+",
                     "qualified_name" : "dev.stxt.check:natural"
                 },
                 "dev.stxt.check:integer" : {
@@ -41,7 +37,6 @@
                     "namespace" : "dev.stxt.check",
                     "min" : 1,
                     "max" : null,
-                    "count" : "+",
                     "qualified_name" : "dev.stxt.check:integer"
                 },
                 "dev.stxt.check:boolean" : {
@@ -49,7 +44,6 @@
                     "namespace" : "dev.stxt.check",
                     "min" : 1,
                     "max" : null,
-                    "count" : "+",
                     "qualified_name" : "dev.stxt.check:boolean"
                 },
                 "dev.stxt.check:url" : {
@@ -57,7 +51,6 @@
                     "namespace" : "dev.stxt.check",
                     "min" : 1,
                     "max" : null,
-                    "count" : "+",
                     "qualified_name" : "dev.stxt.check:url"
                 },
                 "dev.stxt.check:hexadecimal" : {
@@ -65,7 +58,6 @@
                     "namespace" : "dev.stxt.check",
                     "min" : 1,
                     "max" : null,
-                    "count" : "+",
                     "qualified_name" : "dev.stxt.check:hexadecimal"
                 }
             }

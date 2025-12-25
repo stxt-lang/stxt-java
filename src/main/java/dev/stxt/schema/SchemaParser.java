@@ -87,7 +87,6 @@ class SchemaParser {
 					continue;
 
 				SchemaChild schemaChild = parseFromLine(line, namespace, realLine);
-				updateCount(schemaChild);
 				String qname = schemaChild.getQualifiedName();
 				if (result.getChildren().containsKey(qname))
 					throw new ValidationException(realLine, "DUPLICATED_CHILD", qname);
@@ -120,13 +119,11 @@ class SchemaParser {
 			child.setNamespace(namespace);
 
 		String count = m.group("count");
-		child.setCount(count);
+		updateCount(child, count);
 		return child;
 	}
 
-	private static void updateCount(SchemaChild child) {
-		String count = child.getCount();
-
+	private static void updateCount(SchemaChild child, String count) {
 		if (count == null || count.isEmpty() || count.equals("*")) {
 			// No min, no max para empty y "*"
 		} else if (count.equals("?")) {

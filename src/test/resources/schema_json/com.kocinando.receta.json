@@ -9,7 +9,6 @@
                     "namespace" : "com.kocinando.receta",
                     "min" : 1,
                     "max" : 1,
-                    "count" : "1",
                     "qualified_name" : "com.kocinando.receta:ingredientes"
                 },
                 "com.dokumentando.doc:documento" : {
@@ -17,7 +16,6 @@
                     "namespace" : "com.dokumentando.doc",
                     "min" : null,
                     "max" : null,
-                    "count" : "*",
                     "qualified_name" : "com.dokumentando.doc:documento"
                 },
                 "com.kocinando.receta:descripcion" : {
@@ -25,7 +23,6 @@
                     "namespace" : "com.kocinando.receta",
                     "min" : null,
                     "max" : 1,
-                    "count" : "?",
                     "qualified_name" : "com.kocinando.receta:descripcion"
                 },
                 "com.kocinando.receta:calorias" : {
@@ -33,7 +30,6 @@
                     "namespace" : "com.kocinando.receta",
                     "min" : null,
                     "max" : 1,
-                    "count" : "?",
                     "qualified_name" : "com.kocinando.receta:calorias"
                 },
                 "com.kocinando.receta:pasos" : {
@@ -41,7 +37,6 @@
                     "namespace" : "com.kocinando.receta",
                     "min" : 1,
                     "max" : 1,
-                    "count" : "1",
                     "qualified_name" : "com.kocinando.receta:pasos"
                 },
                 "com.kocinando.receta:nombre receta" : {
@@ -49,7 +44,6 @@
                     "namespace" : "com.kocinando.receta",
                     "min" : 1,
                     "max" : 1,
-                    "count" : "1",
                     "qualified_name" : "com.kocinando.receta:nombre receta"
                 },
                 "com.kocinando.receta:dificultad" : {
@@ -57,7 +51,6 @@
                     "namespace" : "com.kocinando.receta",
                     "min" : null,
                     "max" : 1,
-                    "count" : "?",
                     "qualified_name" : "com.kocinando.receta:dificultad"
                 },
                 "com.kocinando.receta:comensales" : {
@@ -65,7 +58,6 @@
                     "namespace" : "com.kocinando.receta",
                     "min" : null,
                     "max" : 1,
-                    "count" : "?",
                     "qualified_name" : "com.kocinando.receta:comensales"
                 }
             }
@@ -89,7 +81,6 @@
                     "namespace" : "com.kocinando.receta",
                     "min" : 1,
                     "max" : null,
-                    "count" : "+",
                     "qualified_name" : "com.kocinando.receta:ingrediente"
                 }
             }
@@ -103,7 +94,6 @@
                     "namespace" : "com.kocinando.receta",
                     "min" : 1,
                     "max" : 1,
-                    "count" : "1",
                     "qualified_name" : "com.kocinando.receta:unidades"
                 },
                 "com.kocinando.receta:cantidad" : {
@@ -111,7 +101,6 @@
                     "namespace" : "com.kocinando.receta",
                     "min" : 1,
                     "max" : 1,
-                    "count" : "1",
                     "qualified_name" : "com.kocinando.receta:cantidad"
                 },
                 "com.kocinando.receta:nombre" : {
@@ -119,7 +108,6 @@
                     "namespace" : "com.kocinando.receta",
                     "min" : 1,
                     "max" : 1,
-                    "count" : "1",
                     "qualified_name" : "com.kocinando.receta:nombre"
                 }
             }
@@ -148,7 +136,6 @@
                     "namespace" : "com.kocinando.receta",
                     "min" : null,
                     "max" : null,
-                    "count" : null,
                     "qualified_name" : "com.kocinando.receta:descripcion"
                 },
                 "com.kocinando.receta:paso" : {
@@ -156,7 +143,6 @@
                     "namespace" : "com.kocinando.receta",
                     "min" : 1,
                     "max" : null,
-                    "count" : "+",
                     "qualified_name" : "com.kocinando.receta:paso"
                 }
             }

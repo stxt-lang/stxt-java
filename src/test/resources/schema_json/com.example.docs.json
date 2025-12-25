@@ -9,7 +9,6 @@
                     "namespace" : "com.example.docs",
                     "min" : null,
                     "max" : null,
-                    "count" : "*",
                     "qualified_name" : "com.example.docs:cc"
                 },
                 "com.example.docs:bcc" : {
@@ -17,7 +16,6 @@
                     "namespace" : "com.example.docs",
                     "min" : null,
                     "max" : null,
-                    "count" : "*",
                     "qualified_name" : "com.example.docs:bcc"
                 },
                 "com.example.docs:to" : {
@@ -25,7 +23,6 @@
                     "namespace" : "com.example.docs",
                     "min" : null,
                     "max" : null,
-                    "count" : "*",
                     "qualified_name" : "com.example.docs:to"
                 },
                 "com.example.docs:from" : {
@@ -33,7 +30,6 @@
                     "namespace" : "com.example.docs",
                     "min" : null,
                     "max" : null,
-                    "count" : null,
                     "qualified_name" : "com.example.docs:from"
                 },
                 "com.example.docs:body content" : {
@@ -41,7 +37,6 @@
                     "namespace" : "com.example.docs",
                     "min" : 1,
                     "max" : 1,
-                    "count" : "1",
                     "qualified_name" : "com.example.docs:body content"
                 },
                 "com.example.docs:title" : {
@@ -49,7 +44,6 @@
                     "namespace" : "com.example.docs",
                     "min" : null,
                     "max" : 1,
-                    "count" : "?",
                     "qualified_name" : "com.example.docs:title"
                 },
                 "com.google:metadata" : {
@@ -57,7 +51,6 @@
                     "namespace" : "com.google",
                     "min" : null,
                     "max" : 1,
-                    "count" : "?",
                     "qualified_name" : "com.google:metadata"
                 }
             }

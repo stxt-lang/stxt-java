@@ -5,7 +5,6 @@ class SchemaChild {
 	private String namespace;
 	private Integer min = null;
 	private Integer max = null;
-	private String count = null;
 
 	public String getName() {
 		return name;
@@ -37,14 +36,6 @@ class SchemaChild {
 
 	public void setMax(Integer max) {
 		this.max = max;
-	}
-
-	public String getCount() {
-		return count;
-	}
-
-	public void setCount(String count) {
-		this.count = count;
 	}
 
 	public String getQualifiedName() {

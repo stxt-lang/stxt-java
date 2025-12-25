@@ -9,7 +9,6 @@
                     "namespace" : "com.gym.docs",
                     "min" : 1,
                     "max" : 1,
-                    "count" : "1",
                     "qualified_name" : "com.gym.docs:datos personales"
                 },
                 "com.gym.docs:datos bancarios" : {
@@ -17,7 +16,6 @@
                     "namespace" : "com.gym.docs",
                     "min" : 1,
                     "max" : 1,
-                    "count" : "1",
                     "qualified_name" : "com.gym.docs:datos bancarios"
                 }
             }
@@ -31,7 +29,6 @@
                     "namespace" : "com.gym.docs",
                     "min" : 1,
                     "max" : 1,
-                    "count" : "1",
                     "qualified_name" : "com.gym.docs:nombre"
                 },
                 "com.gym.docs:primer apellido" : {
@@ -39,7 +36,6 @@
                     "namespace" : "com.gym.docs",
                     "min" : 1,
                     "max" : 1,
-                    "count" : "1",
                     "qualified_name" : "com.gym.docs:primer apellido"
                 },
                 "com.gym.docs:segundo apellido" : {
@@ -47,7 +43,6 @@
                     "namespace" : "com.gym.docs",
                     "min" : null,
                     "max" : 1,
-                    "count" : "?",
                     "qualified_name" : "com.gym.docs:segundo apellido"
                 },
                 "com.gym.docs:cliente vip" : {
@@ -55,7 +50,6 @@
                     "namespace" : "com.gym.docs",
                     "min" : null,
                     "max" : 1,
-                    "count" : "?",
                     "qualified_name" : "com.gym.docs:cliente vip"
                 },
                 "com.gym.docs:edad" : {
@@ -63,7 +57,6 @@
                     "namespace" : "com.gym.docs",
                     "min" : null,
                     "max" : 1,
-                    "count" : "?",
                     "qualified_name" : "com.gym.docs:edad"
                 },
                 "com.gym.docs:foto" : {
@@ -71,7 +64,6 @@
                     "namespace" : "com.gym.docs",
                     "min" : null,
                     "max" : null,
-                    "count" : "*",
                     "qualified_name" : "com.gym.docs:foto"
                 }
             }
@@ -85,7 +77,6 @@
                     "namespace" : "com.gym.docs",
                     "min" : null,
                     "max" : 1,
-                    "count" : "?",
                     "qualified_name" : "com.gym.docs:titular cuenta"
                 },
                 "com.gym.docs:numero cuenta" : {
@@ -93,7 +84,6 @@
                     "namespace" : "com.gym.docs",
                     "min" : 1,
                     "max" : 1,
-                    "count" : "1",
                     "qualified_name" : "com.gym.docs:numero cuenta"
                 }
             }
