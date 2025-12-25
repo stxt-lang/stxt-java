@@ -1,5 +1,6 @@
 package dev.stxt.schema;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -10,10 +11,11 @@ import dev.stxt.resources.ResourcesLoader;
 import dev.stxt.resources.ResourcesLoaderDirectory;
 import test.FileTestLoction;
 import test.JSON;
+import test.JSONFile;
 
 public class SchemaParserTest {
 	@Test
-	void testReadSchema() {
+	void testReadSchema() throws IOException {
 		// Validator
 		ResourcesLoader resourcesLoader = new ResourcesLoaderDirectory(FileTestLoction.getFile(""));
 		String schema = resourcesLoader.retrieve("@stxt.schema", "com.example.docs");
@@ -24,12 +26,12 @@ public class SchemaParserTest {
 		for (Node node : nodes) {
 			System.out.println(JSON.toJson(node));
 			Schema sch = SchemaParser.transformNodeToSchema(node);
-			checkSchema(sch);
+			showSchema(sch);
+			JSONFile.checkContentWithJsonFile(sch, "schema_json", "com.example.docs");
 		}
 	}
 
-	private void checkSchema(Schema sch) {
-		// TODO Auto-generated method stub
+	private void showSchema(Schema sch) {
 		System.out.println("SCH => " + JSON.toJsonPretty(sch));
 	}
 
