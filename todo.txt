@@ -1,3 +1,7 @@
+* TEXT
+* VALUE (default)
+* value y text, no multiline y inline
+
 * Template (@stxt.schema): demo.com
 	Tree >>
 		Hola: 
@@ -13,6 +17,8 @@
 				Max: 4
 			Child: Demo (com.google)
 			Child: Demo 3
+				Hola mundo
+				Esto es un texto
 
 dev.stxt
 * Poner getParent() en los childs
