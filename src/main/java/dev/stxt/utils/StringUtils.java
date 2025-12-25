@@ -24,13 +24,13 @@ public class StringUtils {
 	
 	private static final Pattern DIACRITICS = Pattern.compile("\\p{Mn}+");
 
-	public static String compactSpaces(String s) {
+	private static String compactSpaces(String s) {
 		if (s == null)
 			return null;
 		return s.trim().replaceAll("\\s+", " ");
 	}
 
-	public static String normalizeName(String name) {
+	public static String normalizeSimple(String name) {
 	    if (name == null) return "";
 	    String s = name.trim();
 	    s = Normalizer.normalize(s, Normalizer.Form.NFKD);
@@ -55,7 +55,7 @@ public class StringUtils {
      * 5) map non-alnum to '-'
      * 6) collapse '-' and trim
      */
-    public static String normalizeNodeName(String input) {
+    public static String normalizeFull(String input) {
         if (input == null) return "";
 
         String s = input.trim();

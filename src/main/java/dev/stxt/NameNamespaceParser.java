@@ -3,7 +3,7 @@ package dev.stxt;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static dev.stxt.utils.StringUtils.normalizeName;
+import static dev.stxt.utils.StringUtils.normalizeSimple;
 
 public final class NameNamespaceParser {
 
@@ -33,7 +33,7 @@ public final class NameNamespaceParser {
             throw new ParseException(lineNumber, "INVALID_LINE", "Line not valid: " + fullLine);
         }
 
-        String normalized = normalizeName(rawName);
+        String normalized = normalizeSimple(rawName);
         Matcher m = NAME_PATTERN.matcher(normalized);
         if (!m.matches()) {
             throw new ParseException(lineNumber, "INVALID_NAMESPACE_DEF", "Line not valid: " + fullLine);

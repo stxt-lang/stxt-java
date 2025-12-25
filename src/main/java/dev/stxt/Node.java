@@ -22,8 +22,8 @@ public class Node {
 	public Node(int line, int level, String name, String namespace, boolean multiline, String inlineText) {
 		this.level = level;
 		this.line = line;
-		this.name = StringUtils.normalizeName(name);
-		this.normalizedName = StringUtils.normalizeNodeName(name);
+		this.name = StringUtils.normalizeSimple(name);
+		this.normalizedName = StringUtils.normalizeFull(name);
 		this.namespace = namespace;
 		this.inlineText = (inlineText == null ? "" : inlineText);
 		this.multiline = multiline;
@@ -108,7 +108,7 @@ public class Node {
 
 	// Fast access methods to children
 	public List<Node> getChildren(String cname) {
-		String key = StringUtils.normalizeName(cname);
+		String key = StringUtils.normalizeSimple(cname);
 		List<Node> result = new ArrayList<Node>();
 
 		for (Node child : children) {
