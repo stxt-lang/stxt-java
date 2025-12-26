@@ -45,7 +45,6 @@ Schema (@stxt.schema): com.kocinando.receta
 		Children:
 			Child: Paso
 				Min: 1
-				Max: 1
 			Child: Descripción
 	Node: Paso
 		Type: NATURAL
