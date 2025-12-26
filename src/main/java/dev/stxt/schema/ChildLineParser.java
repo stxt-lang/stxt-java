@@ -70,6 +70,27 @@ public final class ChildLineParser {
 
         return new ChildLine(count, name, namespace);
     }
+    
+	public static void updateCount(SchemaChild child, String count) {
+		if (count == null || count.isEmpty() || count.equals("*")) {
+			// No min, no max para empty y "*"
+		} else if (count.equals("?")) {
+			child.setMax(1);
+		} else if (count.equals("+")) {
+			child.setMin(1);
+		} else if (count.endsWith("+")) {
+			int expectedNum = Integer.parseInt(count.substring(0, count.length() - 1));
+			child.setMin(expectedNum);
+		} else if (count.endsWith("-")) {
+			int expectedNum = Integer.parseInt(count.substring(0, count.length() - 1));
+			child.setMax(expectedNum);
+		} else {
+			int expectedNum = Integer.parseInt(count);
+			child.setMin(expectedNum);
+			child.setMax(expectedNum);
+		}
+	}
+    
 }
 
 final class ChildLine {

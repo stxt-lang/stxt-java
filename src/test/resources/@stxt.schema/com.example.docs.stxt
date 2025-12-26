@@ -1,16 +1,21 @@
 Schema (@stxt.schema): com.example.docs
 	Node: Email
-		Children >>
-			From
-			To (*)
-			Cc (*)
-			Bcc (*)
-			Title (?)
-			Body    Content (1)
-			com.google:Metadata (?)
+		Children:
+			Child: From
+			Child: To
+			Child: Cc
+			Child: Bcc
+			Child: Title
+				Max: 1
+			Child: Body    Content
+				Min: 1
+				Max: 1
+			Child: Metadata (com.google)
+				Max: 1
 	Node: From
 	Node: To
 	Node: Cc
 	Node: Bcc
 	Node: Title
-	Node: Body   Content (TEXT)
+	Node: Body   Content
+		Type: TEXT
