@@ -1,27 +1,44 @@
 Schema (@stxt.schema): com.gym.docs
 	Node: Cliente
-		Children >>
-			Datos Personales (1)
-			Datos Bancarios (1)
+		Children:
+			Child: Datos Personales
+				Min: 1
+				Max: 1
+			Child: Datos Bancarios
+				Min: 1
+				Max: 1
 
 	Node: Datos Personales
-		Children >>
-			Nombre (1)
-			Primer apellido (1)
-			Segundo apellido (?)
-			Edad (?) 
-			Cliente vip (?)
-			Foto (*)
+		Children:
+			Child: Nombre
+				Min: 1
+				Max: 1
+			Child: Primer apellido
+				Min: 1
+				Max: 1
+			Child: Segundo apellido
+				Max: 1
+			Child: Edad
+				Max: 1
+			Child: Cliente vip
+				Max: 1
+			Child: Foto
 	Node: Datos Bancarios
-		Children >>
-			Titular cuenta (?)
-			Número cuenta (1)
+		Children:
+			Child: Titular cuenta
+				Max: 1
+			Child: Número cuenta
+				Min: 1
+				Max: 1
 			
 	Node: Nombre
 	Node: Primer apellido
 	Node: Segundo apellido
-	Node: Edad (NUMBER)
-	Node: Cliente vip (BOOLEAN)
-	Node: Foto (BASE64)
+	Node: Edad
+		Type: NUMBER
+	Node: Cliente vip
+		Type: BOOLEAN
+	Node: Foto
+		Type: BASE64
 	Node: Titular cuenta
 	Node: Número cuenta
