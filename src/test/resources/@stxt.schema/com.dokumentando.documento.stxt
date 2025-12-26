@@ -1,39 +1,78 @@
 Schema (@stxt.schema): com.dokumentando.documento
 	Node: Sección
-		Children >>
-			Título (1)
-			Contenido (1)
+		Children:
+			Child: Título
+				Min: 1
+				Max: 1
+			Child: Contenido
+				Min: 1
+				Max: 1
 	Node: Documento
-		Children >>
-			Título (1)
-			Cuerpo (1)
-			Autor (1)
-			Fecha Creación (1)
-			Última modificación (1)
-			Email Contacto (1)
-			Sitio Web (1)
-			Código postal
-			Es Público (1)
-			Color Tema (?)
-			Secciones (1)
-			Tipo Documento (1)
+		Children:
+			Child: Título
+				Min: 1
+				Max: 1
+			Child: Cuerpo
+				Min: 1
+				Max: 1
+			Child: Autor
+				Min: 1
+				Max: 1
+			Child: Fecha Creación
+				Min: 1
+				Max: 1
+			Child: Última modificación
+				Min: 1
+				Max: 1
+			Child: Email Contacto
+				Min: 1
+				Max: 1
+			Child: Sitio Web
+				Min: 1
+				Max: 1
+			Child: Código postal
+			Child: Es Público
+				Min: 1
+				Max: 1
+			Child: Color Tema
+				Max: 1
+			Child: Secciones
+				Min: 1
+				Max: 1
+			Child: Tipo Documento
+				Min: 1
+				Max: 1
 	Node: Título
-	Node: Contenido (TEXT)
-	Node: Cuerpo (TEXT)
+	Node: Contenido
+		Type: TEXT
+	Node: Cuerpo 
+		Type: TEXT
 	Node: Autor
-	Node: Fecha creación (DATE)
-	Node: Última modificación (TIMESTAMP)
-	Node: Email contacto (EMAIL)
-	Node: Sitio Web (URL)
-	Node: Código postal (NUMBER)
-	Node: Es público (BOOLEAN)
-	Node: Color Tema (HEXADECIMAL)
+	Node: Fecha creación
+		Type: DATE
+	Node: Última modificación 
+		Type: TIMESTAMP
+	Node: Email contacto 
+		Type: EMAIL
+	Node: Sitio Web 
+		Type: URL
+	Node: Código postal 
+		Type: NUMBER
+	Node: Es público 
+		Type: BOOLEAN
+	Node: Color Tema 
+		Type: HEXADECIMAL
 	Node: Secciones
-		Children >>
-			Sección (+)
+		Children:
+			Child: Sección
+				Min: 1
 	Node: Sección
-		Children >>
-			Título (1)
-			Contenido (1)
+		Children:
+			Child: Título
+				Min: 1
+				Max: 1
+			Child: Contenido
+				Min: 1
+				Max: 1
 	Node: Tipo documento
 	
