@@ -30,4 +30,3 @@ Schema (@stxt.schema): @stxt.schema
     Node: Max
         Type: NATURAL
     Node: Type
-            
