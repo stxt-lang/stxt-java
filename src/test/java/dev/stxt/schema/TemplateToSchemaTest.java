@@ -20,11 +20,11 @@ public class TemplateToSchemaTest {
 		ResourcesLoader resourcesLoader = new ResourcesLoaderDirectory(FileTestLoction.getFile(""));
 		String schema = resourcesLoader.retrieve("@stxt.template", "com.example.docs");
 		System.out.println("exists: " + schema);
-
+		System.out.println("==========================================================");
 		Parser parser = new Parser();
 		List<Node> nodes = parser.parse(schema);
 		for (Node node : nodes) {
-			System.out.println(JSON.toJson(node));
+			//System.out.println(JSON.toJsonPretty(node));
 			Schema sch = TemplateSchemaParser.transformNodeToSchema(node);
 			showSchema(sch);
 			JSONFile.checkContentWithJsonFile(sch, "schema_json", "com.example.docs");

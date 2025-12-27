@@ -1,4 +1,4 @@
-Schema (@stxt.schema): @stxt.schema
+Template (@stxt.template): @stxt.schema
     Schema:
     	Description: (?)
         Node: (+)
