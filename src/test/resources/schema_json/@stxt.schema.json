@@ -1,0 +1,105 @@
+{
+    "nodes" : {
+        "schema" : {
+            "name" : "schema",
+            "type" : "INLINE TEXT",
+            "children" : {
+                "@stxt.schema:description" : {
+                    "name" : "description",
+                    "namespace" : "@stxt.schema",
+                    "min" : null,
+                    "max" : 1,
+                    "qualified_name" : "@stxt.schema:description"
+                },
+                "@stxt.schema:node" : {
+                    "name" : "node",
+                    "namespace" : "@stxt.schema",
+                    "min" : 1,
+                    "max" : null,
+                    "qualified_name" : "@stxt.schema:node"
+                }
+            }
+        },
+        "node" : {
+            "name" : "node",
+            "type" : "INLINE TEXT",
+            "children" : {
+                "@stxt.schema:type" : {
+                    "name" : "type",
+                    "namespace" : "@stxt.schema",
+                    "min" : null,
+                    "max" : 1,
+                    "qualified_name" : "@stxt.schema:type"
+                },
+                "@stxt.schema:description" : {
+                    "name" : "description",
+                    "namespace" : "@stxt.schema",
+                    "min" : null,
+                    "max" : 1,
+                    "qualified_name" : "@stxt.schema:description"
+                },
+                "@stxt.schema:children" : {
+                    "name" : "children",
+                    "namespace" : "@stxt.schema",
+                    "min" : null,
+                    "max" : 1,
+                    "qualified_name" : "@stxt.schema:children"
+                }
+            }
+        },
+        "children" : {
+            "name" : "children",
+            "type" : "INLINE TEXT",
+            "children" : {
+                "@stxt.schema:child" : {
+                    "name" : "child",
+                    "namespace" : "@stxt.schema",
+                    "min" : 1,
+                    "max" : null,
+                    "qualified_name" : "@stxt.schema:child"
+                }
+            }
+        },
+        "description" : {
+            "name" : "description",
+            "type" : "TEXT",
+            "children" : { }
+        },
+        "child" : {
+            "name" : "child",
+            "type" : "INLINE TEXT",
+            "children" : {
+                "@stxt.schema:min" : {
+                    "name" : "min",
+                    "namespace" : "@stxt.schema",
+                    "min" : null,
+                    "max" : 1,
+                    "qualified_name" : "@stxt.schema:min"
+                },
+                "@stxt.schema:max" : {
+                    "name" : "max",
+                    "namespace" : "@stxt.schema",
+                    "min" : null,
+                    "max" : 1,
+                    "qualified_name" : "@stxt.schema:max"
+                }
+            }
+        },
+        "min" : {
+            "name" : "min",
+            "type" : "NATURAL",
+            "children" : { }
+        },
+        "max" : {
+            "name" : "max",
+            "type" : "NATURAL",
+            "children" : { }
+        },
+        "type" : {
+            "name" : "type",
+            "type" : "INLINE TEXT",
+            "children" : { }
+        }
+    },
+    "namespace" : "@stxt.schema"
+}
