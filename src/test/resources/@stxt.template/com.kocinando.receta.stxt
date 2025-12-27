@@ -1,55 +1,16 @@
 Template (@stxt.template): com.kocinando.receta
-	Node: Receta
-		Children:
-			Child: Nombre Receta
-				Min: 1
-				Max: 1
-			Child: Descripción
-				Max: 1
-			Child: Ingredientes
-				Min: 1
-				Max: 1
-			Child: Pasos
-				Min: 1
-				Max: 1
-			Child: Dificultad
-				Max: 1
-			Child: Calorías
-				Max: 1
-			Child: Comensales
-				Max: 1
-			Child: Documento (com.dokumentando.doc)
-	Node: Nombre Receta
-	Node: Descripción
-		Type: TEXT
-	Node: Ingredientes
-		Children:
-			Child: Ingrediente
-				Min: 1
-	Node: Ingrediente
-		Children:
-			Child: Cantidad
-				Min: 1
-				Max: 1
-			Child: Unidades
-				Min: 1
-				Max: 1
-			Child: Nombre
-				Min: 1
-				Max: 1
-	Node: Cantidad
-		Type: NUMBER
-	Node: Unidades
-	Node: Nombre
-	Node: Pasos
-		Children:
-			Child: Paso
-				Min: 1
-			Child: Descripción
-	Node: Paso
-		Type: NATURAL
-	Node: Dificultad
-	Node: Calorías
-		Type: NUMBER
-	Node: Comensales
-		Type: NUMBER
+	Receta:
+		Nombre Receta: (1)
+		Descripción: (?) TEXT
+		Ingredientes: (1)
+			Ingrediente: (+)
+				Cantidad: (1) NUMBER
+				Unidades: (1)
+				Nombre: (1)
+		Pasos: (1)
+			Paso: (+) NATURAL
+			Descripción:
+		Dificultad: (?)
+		Calorías: (?) NUMBER
+		Comensales: (?) NUMBER
+		Documento (com.dokumentando.doc): (*)

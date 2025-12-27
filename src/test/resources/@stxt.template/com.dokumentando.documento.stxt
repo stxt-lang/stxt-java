@@ -7,7 +7,7 @@ Template (@stxt.template): com.dokumentando.documento
 		Cuerpo: (1) TEXT
 		Autor: (1)
 		Fecha Creación: (1) DATE
-		Última modificación: (1) TIMESPAMP
+		Última modificación: (1) TIMESTAMP
 		Email Contacto: (1) EMAIL
 		Sitio Web: (1) URL
 		Código postal: (*) NUMBER

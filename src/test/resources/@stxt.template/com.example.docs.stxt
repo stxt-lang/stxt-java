@@ -1,21 +1,9 @@
 Template (@stxt.template): com.example.docs
-	Node: Email
-		Children:
-			Child: From
-			Child: To
-			Child: Cc
-			Child: Bcc
-			Child: Title
-				Max: 1
-			Child: Body    Content
-				Min: 1
-				Max: 1
-			Child: Metadata (com.google)
-				Max: 1
-	Node: From
-	Node: To
-	Node: Cc
-	Node: Bcc
-	Node: Title
-	Node: Body   Content
-		Type: TEXT
+	Email:
+		From:
+		To:
+		Cc:
+		Bcc:
+		Title: (?)
+		Body    Content: (1) TEXT
+		Metadata (com.google): (?) 
