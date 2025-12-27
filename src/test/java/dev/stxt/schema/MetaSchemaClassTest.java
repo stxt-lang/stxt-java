@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import test.JSON;
 import test.JSONFile;
 
-public class SchemaParserMetadataClass {
+public class MetaSchemaClassTest {
 	@Test
 	void testReadSchema() throws IOException {
 		// Validator

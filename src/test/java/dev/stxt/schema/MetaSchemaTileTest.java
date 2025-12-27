@@ -13,7 +13,7 @@ import test.FileTestLoction;
 import test.JSON;
 import test.JSONFile;
 
-public class SchemaParserMetadataFile {
+public class MetaSchemaTileTest {
 	@Test
 	void testReadSchema() throws IOException {
 		// Validator
