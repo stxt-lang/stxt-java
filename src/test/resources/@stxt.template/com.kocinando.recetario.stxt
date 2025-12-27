@@ -1,5 +1,3 @@
 Template (@stxt.template): com.kocinando.recetario
-	Node: Recetario
-		Children:
-			Child: Receta (com.kocinando.receta)
-				Min: 1 
+	Recetario:
+		Receta (com.kocinando.receta): (+)

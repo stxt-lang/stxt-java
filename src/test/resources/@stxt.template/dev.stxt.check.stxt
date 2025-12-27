@@ -1,36 +1,10 @@
 Template (@stxt.template): dev.stxt.check
-	Node: Type List
-		Children:
-			Child: text
-				Min: 1
-			Child: natural
-				Min: 1
-			Child: integer
-				Min: 1
-			Child: number
-				Min: 1
-			Child: hexadecimal
-				Min: 1
-			Child: base64
-				Min: 1
-			Child: boolean
-				Min: 1
-			Child: url
-				Min: 1
-	Node: text
-		Type: TEXT 
-	Node: natural 
-		Type: NATURAL
-	Node: integer 
-		Type: INTEGER
-	Node: number 
-		Type: NUMBER
-	Node: hexadecimal 
-		Type: HEXADECIMAL
-	Node: Base64 
-		Type: BASE64
-	Node: Boolean 
-		Type: BOOLEAN
-	Node: Url 
-		Type: URL
-	
+	Type List:
+		text: (?) TEXT
+		natural: (?) NATURAL
+		integer: (?) INTEGER
+		number: (?) NUMBER
+		hexadecimal: (?) HEXADECIMAL
+		base64: (?) BASE64
+		boolean: (?) BOOLEAN
+		url: (?) URL
