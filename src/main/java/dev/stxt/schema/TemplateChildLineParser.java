@@ -41,6 +41,8 @@ public final class TemplateChildLineParser {
 
         // name (obligatorio)
         String type = m.group("type");
+        type = type.trim();
+        if (type.isEmpty()) type = null;
 
         // count (opcional)
         String count = m.group("count");
