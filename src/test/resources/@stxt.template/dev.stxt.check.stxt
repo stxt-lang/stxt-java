@@ -1,10 +1,10 @@
 Template (@stxt.template): dev.stxt.check
 	Type List:
-		text: (?) TEXT
-		natural: (?) NATURAL
-		integer: (?) INTEGER
-		number: (?) NUMBER
-		hexadecimal: (?) HEXADECIMAL
-		base64: (?) BASE64
-		boolean: (?) BOOLEAN
-		url: (?) URL
+		Text: (?) TEXT
+		Natural: (?) NATURAL
+		Integer: (?) INTEGER
+		Number: (?) NUMBER
+		Hexadecimal: (?) HEXADECIMAL
+		Base64: (?) BASE64
+		Boolean: (?) BOOLEAN
+		Url: (?) URL
