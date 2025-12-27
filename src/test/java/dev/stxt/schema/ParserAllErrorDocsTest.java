@@ -18,9 +18,9 @@ import dev.stxt.utils.FileUtils;
 import test.FileTestLoction;
 import test.JSONFile;
 
-public class ParserAllDocsErrorTest {
+public class ParserAllErrorDocsTest {
 	public static void main(String[] args) throws IOException {
-		new ParserAllDocsErrorTest().mainTest();
+		new ParserAllErrorDocsTest().mainTest();
 	}
 
 	@Test
