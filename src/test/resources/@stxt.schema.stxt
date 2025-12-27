@@ -1,0 +1,33 @@
+Schema (@stxt.schema): @stxt.schema
+    Node: Schema
+        Children:
+            Child: Description
+            	Max: 1
+            Child: Node
+            	Min: 1
+    Node: Node
+        Children:
+    		Child: Type
+    			Max: 1
+            Child: Children
+            	Max: 1
+            Child: Description
+            	Max: 1
+    Node: Children
+    	Children:
+    		Child: Child
+    			Min: 1
+    Node: Description
+    	Type: TEXT
+    Node: Child
+    	Children:
+    		Child: Min
+    			Max: 1
+    		Child: Max
+    			Max: 1
+    Node: Min
+    	Type: NATURAL
+    Node: Max
+    	Type: NATURAL
+    Node: Type
+    		
