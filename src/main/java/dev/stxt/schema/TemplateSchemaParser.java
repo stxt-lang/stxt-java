@@ -29,19 +29,17 @@ public class TemplateSchemaParser {
 		if (namespace.equals("@stxt.template")) namespace = schema.getNamespace(); // Es del template
 		else return; // No hacemos nada con creación de nodos que no son de @stxt.template!!
 		
-		String qualifiedName = namespace + ":" + name;
-
 		// Miramos datos
 		ChildLine cl = TemplateChildLineParser.parse(node.getInlineText(), node.getLine());
 		System.out.println(cl);
 		
 		// Miramos si es nuevo y añadimos en listado
-		SchemaNode schemaNode = schema.getNodes().get(qualifiedName);
+		SchemaNode schemaNode = schema.getNodes().get(name);
 		if (schemaNode == null) {	// Nuevo
 			schemaNode = new SchemaNode();
 			schemaNode.setName(name);
 			schemaNode.setType(cl.getType() == null? "INLINE TEXT": cl.getType());
-			schema.getNodes().put(qualifiedName, schemaNode);
+			schema.getNodes().put(name, schemaNode);
 		}
 		else {
 			// TODO Si existe type error! ya estaba definido
