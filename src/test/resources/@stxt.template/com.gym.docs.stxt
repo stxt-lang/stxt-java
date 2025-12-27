@@ -4,7 +4,7 @@ Template (@stxt.template): com.gym.docs
 			Nombre: (1)
 			Primer apellido: (1)
 			Segundo apellido: (?)
-			Edad: NUMBER (?)
+			Edad: (?) NUMBER
 			Cliente vip: (?) BOOLEAN
 			Foto: BASE64
 		Datos Bancarios: (1)
