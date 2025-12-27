@@ -1,5 +1,7 @@
 package dev.stxt;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -8,7 +10,6 @@ import org.junit.jupiter.api.Test;
 
 import test.FileTestLoction;
 import test.JSON;
-import static org.junit.jupiter.api.Assertions.*;
 
 public class ParserTestValidator {
 	public static void main(String[] args) throws IOException, ParseException {
