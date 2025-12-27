@@ -2,7 +2,7 @@ Template (@stxt.template): com.dokumentando.doc
 	Documento:
 		Título: (1)
 		Secciones: (1)
-			Sección (+) TEXT
+			Sección: (+) TEXT
 		Description: (1) TEXT
-		Tipo documento (1)
+		Tipo documento: (1)
 
