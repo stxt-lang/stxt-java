@@ -1,0 +1,78 @@
+Template (@stxt.template): com.dokumentando.documento
+	Node: Sección
+		Children:
+			Child: Título
+				Min: 1
+				Max: 1
+			Child: Contenido
+				Min: 1
+				Max: 1
+	Node: Documento
+		Children:
+			Child: Título
+				Min: 1
+				Max: 1
+			Child: Cuerpo
+				Min: 1
+				Max: 1
+			Child: Autor
+				Min: 1
+				Max: 1
+			Child: Fecha Creación
+				Min: 1
+				Max: 1
+			Child: Última modificación
+				Min: 1
+				Max: 1
+			Child: Email Contacto
+				Min: 1
+				Max: 1
+			Child: Sitio Web
+				Min: 1
+				Max: 1
+			Child: Código postal
+			Child: Es Público
+				Min: 1
+				Max: 1
+			Child: Color Tema
+				Max: 1
+			Child: Secciones
+				Min: 1
+				Max: 1
+			Child: Tipo Documento
+				Min: 1
+				Max: 1
+	Node: Título
+	Node: Contenido
+		Type: TEXT
+	Node: Cuerpo 
+		Type: TEXT
+	Node: Autor
+	Node: Fecha creación
+		Type: DATE
+	Node: Última modificación 
+		Type: TIMESTAMP
+	Node: Email contacto 
+		Type: EMAIL
+	Node: Sitio Web 
+		Type: URL
+	Node: Código postal 
+		Type: NUMBER
+	Node: Es público 
+		Type: BOOLEAN
+	Node: Color Tema 
+		Type: HEXADECIMAL
+	Node: Secciones
+		Children:
+			Child: Sección
+				Min: 1
+	Node: Sección
+		Children:
+			Child: Título
+				Min: 1
+				Max: 1
+			Child: Contenido
+				Min: 1
+				Max: 1
+	Node: Tipo documento
+	

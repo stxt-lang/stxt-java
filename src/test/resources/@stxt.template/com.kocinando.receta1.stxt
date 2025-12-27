@@ -1,0 +1,22 @@
+Template (@stxt.template): com.kocinando.receta1
+	Node: Receta
+		Children:
+			Child: Título
+				Min: 1
+				Max: 1
+			Child: Descripción
+				Min: 1
+				Max: 1
+			Child: Ingredientes
+				Min: 1
+				Max: 1
+			Child: Preparación
+				Min: 1
+				Max: 1
+	Node: Título
+	Node: Descripción
+		Type: TEXT
+	Node: Ingredientes
+		Type: TEXT
+	Node: Preparación
+		Type: TEXT

@@ -1,0 +1,44 @@
+Template (@stxt.template): com.gym.docs
+	Node: Cliente
+		Children:
+			Child: Datos Personales
+				Min: 1
+				Max: 1
+			Child: Datos Bancarios
+				Min: 1
+				Max: 1
+
+	Node: Datos Personales
+		Children:
+			Child: Nombre
+				Min: 1
+				Max: 1
+			Child: Primer apellido
+				Min: 1
+				Max: 1
+			Child: Segundo apellido
+				Max: 1
+			Child: Edad
+				Max: 1
+			Child: Cliente vip
+				Max: 1
+			Child: Foto
+	Node: Datos Bancarios
+		Children:
+			Child: Titular cuenta
+				Max: 1
+			Child: Número cuenta
+				Min: 1
+				Max: 1
+			
+	Node: Nombre
+	Node: Primer apellido
+	Node: Segundo apellido
+	Node: Edad
+		Type: NUMBER
+	Node: Cliente vip
+		Type: BOOLEAN
+	Node: Foto
+		Type: BASE64
+	Node: Titular cuenta
+	Node: Número cuenta
