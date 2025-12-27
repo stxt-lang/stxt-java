@@ -1,0 +1,10 @@
+Schema (@stxt.schema): @stxt.schema
+    Schema:
+    	Description: (?)
+        Node: (+)
+        	Type: (?)
+        	Children: (?)
+        		Child: (+)
+        			Min: (?) NATURAL
+        			Max: (?) NATURAL
+        	Description: (?) TEXT
