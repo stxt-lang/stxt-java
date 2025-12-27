@@ -2,32 +2,32 @@ Schema (@stxt.schema): @stxt.schema
     Node: Schema
         Children:
             Child: Description
-            	Max: 1
+                Max: 1
             Child: Node
-            	Min: 1
+                Min: 1
     Node: Node
         Children:
-    		Child: Type
-    			Max: 1
+            Child: Type
+                Max: 1
             Child: Children
-            	Max: 1
+                Max: 1
             Child: Description
-            	Max: 1
+                Max: 1
     Node: Children
-    	Children:
-    		Child: Child
-    			Min: 1
+        Children:
+            Child: Child
+                Min: 1
     Node: Description
-    	Type: TEXT
+        Type: TEXT
     Node: Child
-    	Children:
-    		Child: Min
-    			Max: 1
-    		Child: Max
-    			Max: 1
+        Children:
+            Child: Min
+                Max: 1
+            Child: Max
+                Max: 1
     Node: Min
-    	Type: NATURAL
+        Type: NATURAL
     Node: Max
-    	Type: NATURAL
+        Type: NATURAL
     Node: Type
-    		
+            
