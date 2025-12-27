@@ -14,4 +14,4 @@ Template (@stxt.template): com.dokumentando.documento
 			Sección: (+)
 				Título: (1)
 				Contenido: (1) TEXT
-		Tipo Documento: (*)
+		Tipo Documento: (1)
