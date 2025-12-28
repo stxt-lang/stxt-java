@@ -4,10 +4,10 @@ import dev.stxt.Node;
 import dev.stxt.processors.ValidationException;
 import dev.stxt.schema.TypeValidator;
 
-public final class InlineTextValidator implements TypeValidator {
-	public static final InlineTextValidator INSTANCE = new InlineTextValidator();
+public final class ValueNodeValidator implements TypeValidator {
+	public static final ValueNodeValidator INSTANCE = new ValueNodeValidator();
 
-	private InlineTextValidator() {
+	private ValueNodeValidator() {
 	}
 
 	@Override
