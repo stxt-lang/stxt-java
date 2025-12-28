@@ -2,7 +2,7 @@
     "nodes" : {
         "receta" : {
             "name" : "receta",
-            "type" : "VALUE",
+            "type" : "VALUE_NODE",
             "children" : {
                 "com.kocinando.receta1:ingredientes" : {
                     "name" : "ingredientes",
@@ -36,7 +36,7 @@
         },
         "titulo" : {
             "name" : "titulo",
-            "type" : "VALUE",
+            "type" : "VALUE_NODE",
             "children" : { }
         },
         "descripcion" : {

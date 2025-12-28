@@ -53,7 +53,7 @@ public class TemplateSchemaParser {
 		// Miramos si es nuevo y añadimos en listado
 		SchemaNode schemaNode = schema.getNodes().get(name);
 		if (schemaNode == null) {	// Nuevo
-			String type = cl.getType() == null? "VALUE": cl.getType();
+			String type = cl.getType() == null? "VALUE_NODE": cl.getType();
 			schemaNode = new SchemaNode();
 			schemaNode.setName(name);
 			schemaNode.setType(type);

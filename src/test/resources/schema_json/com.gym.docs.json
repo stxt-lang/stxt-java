@@ -2,7 +2,7 @@
     "nodes" : {
         "cliente" : {
             "name" : "cliente",
-            "type" : "VALUE",
+            "type" : "VALUE_NODE",
             "children" : {
                 "com.gym.docs:datos personales" : {
                     "name" : "datos personales",
@@ -22,7 +22,7 @@
         },
         "datos personales" : {
             "name" : "datos personales",
-            "type" : "VALUE",
+            "type" : "VALUE_NODE",
             "children" : {
                 "com.gym.docs:nombre" : {
                     "name" : "nombre",
@@ -70,7 +70,7 @@
         },
         "datos bancarios" : {
             "name" : "datos bancarios",
-            "type" : "VALUE",
+            "type" : "VALUE_NODE",
             "children" : {
                 "com.gym.docs:titular cuenta" : {
                     "name" : "titular cuenta",
@@ -90,17 +90,17 @@
         },
         "nombre" : {
             "name" : "nombre",
-            "type" : "VALUE",
+            "type" : "VALUE_NODE",
             "children" : { }
         },
         "primer apellido" : {
             "name" : "primer apellido",
-            "type" : "VALUE",
+            "type" : "VALUE_NODE",
             "children" : { }
         },
         "segundo apellido" : {
             "name" : "segundo apellido",
-            "type" : "VALUE",
+            "type" : "VALUE_NODE",
             "children" : { }
         },
         "edad" : {
@@ -120,12 +120,12 @@
         },
         "titular cuenta" : {
             "name" : "titular cuenta",
-            "type" : "VALUE",
+            "type" : "VALUE_NODE",
             "children" : { }
         },
         "numero cuenta" : {
             "name" : "numero cuenta",
-            "type" : "VALUE",
+            "type" : "VALUE_NODE",
             "children" : { }
         }
     },

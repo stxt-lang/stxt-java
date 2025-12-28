@@ -2,7 +2,7 @@
     "nodes" : {
         "recetario" : {
             "name" : "recetario",
-            "type" : "VALUE",
+            "type" : "VALUE_NODE",
             "children" : {
                 "com.kocinando.receta:receta" : {
                     "name" : "receta",

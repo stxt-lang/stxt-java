@@ -2,7 +2,7 @@
     "nodes" : {
         "receta" : {
             "name" : "receta",
-            "type" : "VALUE",
+            "type" : "VALUE_NODE",
             "children" : {
                 "com.kocinando.receta:ingredientes" : {
                     "name" : "ingredientes",
@@ -64,7 +64,7 @@
         },
         "nombre receta" : {
             "name" : "nombre receta",
-            "type" : "VALUE",
+            "type" : "VALUE_NODE",
             "children" : { }
         },
         "descripcion" : {
@@ -74,7 +74,7 @@
         },
         "ingredientes" : {
             "name" : "ingredientes",
-            "type" : "VALUE",
+            "type" : "VALUE_NODE",
             "children" : {
                 "com.kocinando.receta:ingrediente" : {
                     "name" : "ingrediente",
@@ -87,7 +87,7 @@
         },
         "ingrediente" : {
             "name" : "ingrediente",
-            "type" : "VALUE",
+            "type" : "VALUE_NODE",
             "children" : {
                 "com.kocinando.receta:unidades" : {
                     "name" : "unidades",
@@ -119,17 +119,17 @@
         },
         "unidades" : {
             "name" : "unidades",
-            "type" : "VALUE",
+            "type" : "VALUE_NODE",
             "children" : { }
         },
         "nombre" : {
             "name" : "nombre",
-            "type" : "VALUE",
+            "type" : "VALUE_NODE",
             "children" : { }
         },
         "pasos" : {
             "name" : "pasos",
-            "type" : "VALUE",
+            "type" : "VALUE_NODE",
             "children" : {
                 "com.kocinando.receta:descripcion" : {
                     "name" : "descripcion",
@@ -154,7 +154,7 @@
         },
         "dificultad" : {
             "name" : "dificultad",
-            "type" : "VALUE",
+            "type" : "VALUE_NODE",
             "children" : { }
         },
         "calorias" : {

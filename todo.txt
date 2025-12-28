@@ -1,5 +1,5 @@
 * TEXT
-* VALUE (default)
+* VALUE_NODE (default)
 * value y text, no multilineText y inlineText
 * El transformer sólo vea el nodo justo después de crearlo, sin childs, etc... y lo transforma justo en ese momento, no al final. 
 	Entonces el freeze se hace antes de pasar por validators, etc.
@@ -13,7 +13,7 @@
 			
 * Schema (@stxt.schema): demo.com
 	Node: Node 1
-		Type: VALUE
+		Type: VALUE_NODE
 		Children:
 			Child: Node 3
 				Min: 3

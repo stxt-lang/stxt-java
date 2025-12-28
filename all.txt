@@ -748,11 +748,11 @@ import dev.stxt.resources.ResourceNotFoundException;
 
 final class SchemaProviderMeta implements SchemaProvider {
 	private static final String META_TEXT = "Schema (@stxt.schema): @stxt.schema\n"
-			+ "    Node: Schema (VALUE)\n"
+			+ "    Node: Schema (VALUE_NODE)\n"
 			+ "        Children>>\n"
 			+ "            Description (?)\n"
 			+ "            Node (+)\n"
-			+ "    Node: Node (VALUE)\n"
+			+ "    Node: Node (VALUE_NODE)\n"
 			+ "        Children>>\n"
 			+ "            Children (?)\n"
 			+ "            Description (?)\n"
@@ -916,7 +916,7 @@ class SchemaParser {
 		String name = n.getInlineText();
 
 		Matcher m = P.matcher(name);
-		String type = "VALUE";
+		String type = "VALUE_NODE";
 
 		if (m.matches()) {
 			name = m.group("name").trim();
@@ -1031,7 +1031,7 @@ import dev.stxt.schema.type.UrlValidator;
 
 class TypeRegistry {
 	private static final String TEXT = "TEXT";
-	private static final String INLINE_TEXT = "VALUE";
+	private static final String INLINE_TEXT = "VALUE_NODE";
 	private static final String MULTILINE_TEXT = "TEXT_NODE";
 	private static final String NUMBER = "NUMBER";
 	private static final String BOOLEAN = "BOOLEAN";

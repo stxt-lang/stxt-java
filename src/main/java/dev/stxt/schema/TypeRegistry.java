@@ -20,7 +20,7 @@ import dev.stxt.schema.type.UrlValidator;
 
 class TypeRegistry {
 	private static final String TEXT = "TEXT";
-	private static final String INLINE_TEXT = "VALUE";
+	private static final String INLINE_TEXT = "VALUE_NODE";
 	private static final String TEXT_NODE = "TEXT_NODE";
 	private static final String NUMBER = "NUMBER";
 	private static final String BOOLEAN = "BOOLEAN";
