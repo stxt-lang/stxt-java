@@ -23,7 +23,7 @@ public class ParserTestValidator {
 		// Create parser
 		Parser parser = createBasicParser();
 		ValidatorCountTest validator = new ValidatorCountTest();
-		parser.register(validator);
+		parser.registerValidator(validator);
 
 		File f = FileTestLoction.getFile("docs/client.stxt");
 		System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");

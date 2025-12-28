@@ -32,7 +32,7 @@ final class SchemaProviderCache implements SchemaProvider {
 		// Cargamos schema
 		String textSchema = resourcesLoader.retrieve(Schema.SCHEMA_NAMESPACE, namespace);
 		Parser parser = new Parser();
-		parser.register(schemaValidator);
+		parser.registerValidator(schemaValidator);
 		List<Node> nodes = parser.parse(textSchema);
 
 		if (nodes.size() != 1)

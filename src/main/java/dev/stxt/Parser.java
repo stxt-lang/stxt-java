@@ -9,10 +9,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
-import dev.stxt.processors.Filter;
 import dev.stxt.processors.Observer;
-import dev.stxt.processors.Processor;
-import dev.stxt.processors.Transformer;
 import dev.stxt.processors.Validator;
 import dev.stxt.utils.FileUtils;
 
@@ -23,35 +20,19 @@ public class Parser {
 	 */
 	
 	private List<Validator> validators;
-	private List<Transformer> transformers;
-	private List<Filter> filters;
 	private List<Observer> observers;
 
-	public void register(Processor p) {
-	    if (p instanceof Validator) {
-	        if (validators == null) {
-	            validators = new ArrayList<Validator>();
-	        }
-	        validators.add((Validator) p);
-	    }
-	    if (p instanceof Transformer) {
-	        if (transformers == null) {
-	            transformers = new ArrayList<Transformer>();
-	        }
-	        transformers.add((Transformer) p);
-	    }
-	    if (p instanceof Filter) {
-	        if (filters == null) {
-	            filters = new ArrayList<Filter>();
-	        }
-	        filters.add((Filter) p);
-	    }
-	    if (p instanceof Observer) {
-	        if (observers == null) {
-	            observers = new ArrayList<Observer>();
-	        }
-	        observers.add((Observer) p);
-	    }
+	public void registerValidator(Validator v) {
+        if (validators == null) {
+            validators = new ArrayList<Validator>();
+        }
+        validators.add(v);
+	}
+	public void registerObserver(Observer o) {
+        if (observers == null) {
+            observers = new ArrayList<Observer>();
+        }
+        observers.add(o);
 	}
 
 	/** 
@@ -196,7 +177,9 @@ public class Parser {
 		validateNamespaceFormat(namespace, lineNumber);
 
 		// Creamos nodo
-		return transform(new Node(lineNumber, level, name, namespace, textNode, value));
+		Node nodeResult = new Node(lineNumber, level, name, namespace, textNode, value);
+		observe(nodeResult);
+		return nodeResult;
 	}
 
 	/**
@@ -223,42 +206,25 @@ public class Parser {
 	// Métodos de validación, transformación, etc.
 	// -------------------------------------------
 	
-	private Node transform(Node node) {
-	    if (transformers != null) {
-	        for (Transformer t : transformers) {
-	            node = t.transform(node);
-	            if (node == null) return null;
-	        }
-	    }
+	private Node observe(Node node) {
+	    if (observers != null)
+	        for (Observer o: observers)
+	            o.onCreate(node);
+	    
 		return node;
 	}
 	
 	private Node finishNode(Node node) {
-	    Node current = node;
+		node.freeze();
+		
+	    if (observers != null)
+	        for (Observer o : observers)
+	            o.onFinish(node);
 
-	    // 1) Filters
-	    if (filters != null) {
-	        for (Filter f : filters) {
-	            if (!f.accept(current)) {
-	                return null; // filtrado
-	            }
-	        }
-	    }
+	    if (validators != null)
+	        for (Validator v : validators)
+	            v.validate(node);
 
-	    // 3) Observers (solo inspección)
-	    if (observers != null) {
-	        for (Observer o : observers) {
-	            o.process(current);
-	        }
-	    }
-
-	    // 4) Validators
-	    if (validators != null) {
-	        for (Validator v : validators) {
-	            v.validate(current);
-	        }
-	    }
-
-	    return current;
+	    return node;
 	}	
 }
