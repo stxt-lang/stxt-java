@@ -25,7 +25,7 @@ class SchemaParser {
 			throw new SchemaException("NOT_STXT_SCHEMA",
 					"Se espera schema(" + Schema.SCHEMA_NAMESPACE + ") y es " + nodeName + "(" + namespaceSchema + ")");
 		}
-		String namespace = node.getInlineText().trim().toLowerCase(Locale.ROOT);
+		String namespace = node.getValue().trim().toLowerCase(Locale.ROOT);
 		schema.setNamespace(namespace);
 
 		// Para validar
@@ -56,10 +56,10 @@ class SchemaParser {
 	private static SchemaNode createFrom(Node n, String namespace) {
 		SchemaNode result = new SchemaNode();
 
-		String name = n.getInlineText();
+		String name = n.getValue();
 		String type = "INLINE TEXT";
 		Node typeNode = n.getChild("type");
-		if (typeNode != null) type = typeNode.getInlineText();
+		if (typeNode != null) type = typeNode.getValue();
 
 		result.setName(StringUtils.normalizeSimple(name));
 		result.setType(type);
@@ -75,7 +75,7 @@ class SchemaParser {
 
 	private static void putChildToSchemaNode(SchemaNode schemaNode, Node child, String defNamespace) {
 		// Obtenemos name y namespace
-		NameNamespace ns = NameNamespaceParser.parse(child.getInlineText(), defNamespace, child.getLine(), child.getInlineText());
+		NameNamespace ns = NameNamespaceParser.parse(child.getValue(), defNamespace, child.getLine(), child.getValue());
 		String name = ns.getName();
 		String namespace = ns.getNamespace() != null ? ns.getNamespace(): defNamespace;
 		
@@ -94,11 +94,11 @@ class SchemaParser {
 		
 		try
 		{
-			return Integer.parseInt(n.getInlineText());
+			return Integer.parseInt(n.getValue());
 		}
 		catch (Exception e)
 		{
-			throw new ParseException(node.getLine(), "INVALID_INTEGER", "Integer not valid: " + n.getInlineText());
+			throw new ParseException(node.getLine(), "INVALID_INTEGER", "Integer not valid: " + n.getValue());
 		}
 	}
 

@@ -15,7 +15,7 @@ public final class UrlValidator implements TypeValidator {
 
 	@Override
 	public void validate(Node n) {
-		String url = n.getInlineText();
+		String url = n.getValue();
 		try {
 			URI uri = new URI(url);
 			boolean ok = uri.getScheme() != null && uri.getHost() != null;

@@ -12,7 +12,7 @@ public final class EmptyValidator implements TypeValidator {
 
 	@Override
 	public void validate(Node n) {
-		if (!n.getInlineText().isEmpty() || n.getMultilineText().size() > 0) {
+		if (!n.getValue().isEmpty() || n.getTextLines().size() > 0) {
 			throw new ValidationException(n.getLine(), "INVALID_VALUE", "Node '" + n.getName() + "' has to be empty");
 		}
 	}

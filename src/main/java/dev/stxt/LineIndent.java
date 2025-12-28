@@ -21,7 +21,7 @@ class LineIndent {
 
 	public static LineIndent parseLine(String line, int numLine, ParseState parseState) {
 		int stackSize = parseState.getStack().size();
-		boolean lastNodeMultiline = stackSize > 0 && parseState.getStack().peek().isMultiline();
+		boolean lastNodeMultiline = stackSize > 0 && parseState.getStack().peek().isTextNode();
 
 		// Empty line
 		if (line.trim().isEmpty()) {

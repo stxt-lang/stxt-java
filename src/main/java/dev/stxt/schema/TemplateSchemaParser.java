@@ -13,7 +13,7 @@ public class TemplateSchemaParser {
 		Schema result = new Schema();
 		
 		// Insertamos namespace
-		String namespace = node.getInlineText();
+		String namespace = node.getValue();
 		result.setNamespace(namespace);
 		
 		// Buscamos nodo structure
@@ -38,7 +38,7 @@ public class TemplateSchemaParser {
 		String namespace = node.getNamespace();
 		
 		// Miramos datos
-		ChildLine cl = TemplateChildLineParser.parse(node.getInlineText(), node.getLine());
+		ChildLine cl = TemplateChildLineParser.parse(node.getValue(), node.getLine());
 		
 		if (namespace.isEmpty()) namespace = schema.getNamespace(); // Es del template
 		else {
@@ -71,7 +71,7 @@ public class TemplateSchemaParser {
 		
 		// Insertamos childs
 		for (Node child: childrenNode) {
-			cl = TemplateChildLineParser.parse(child.getInlineText(), child.getLine());
+			cl = TemplateChildLineParser.parse(child.getValue(), child.getLine());
 			
 			String childName = child.getName();
 			String childNamespace = child.getNamespace();

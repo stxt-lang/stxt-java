@@ -10,30 +10,30 @@ public class Node {
 	private final String name;
 	private final String normalizedName;
 	private final String namespace;
-	private final boolean multiline;
+	private final boolean textNode;
 
-	private final String inlineText;
-	private List<String> multilineText = new ArrayList<>();
+	private final String value;
+	private List<String> textLines = new ArrayList<>();
 	private final int line;
 	private final int level;
 	private List<Node> children = new ArrayList<>();
 	private boolean isFrozen = false;
 
-	public Node(int line, int level, String name, String namespace, boolean multiline, String inlineText) {
+	public Node(int line, int level, String name, String namespace, boolean textNode, String value) {
 		this.level = level;
 		this.line = line;
 		this.name = StringUtils.normalizeSimple(name);
 		this.normalizedName = StringUtils.normalizeFull(name);
 		this.namespace = namespace;
-		this.inlineText = (inlineText == null ? "" : inlineText);
-		this.multiline = multiline;
+		this.value = (value == null ? "" : value.trim());
+		this.textNode = textNode;
 
-		if (!this.inlineText.isEmpty() && this.isMultiline())
-			throw new IllegalArgumentException("Not empty value with multiline");
+		if (!this.value.isEmpty() && this.isTextNode())
+			throw new IllegalArgumentException("Not empty value with textNode");
 	}
 
 	public void addTextLine(String line) {
-		this.multilineText.add(line);
+		this.textLines.add(line);
 	}
 
 	public String getName() {
@@ -60,12 +60,12 @@ public class Node {
 		return children;
 	}
 
-	public String getInlineText() {
-		return inlineText;
+	public String getValue() {
+		return value;
 	}
 
-	public List<String> getMultilineText() {
-		return multilineText;
+	public List<String> getTextLines() {
+		return textLines;
 	}
 
 	public int getLine() {
@@ -76,15 +76,15 @@ public class Node {
 		return level;
 	}
 
-	public boolean isMultiline() {
-		return multiline;
+	public boolean isTextNode() {
+		return textNode;
 	}
 
 	public String getText() {
-		if (isMultiline())
-			return String.join("\n", multilineText);
+		if (isTextNode())
+			return String.join("\n", textLines);
 		else
-			return inlineText;
+			return value;
 	}
 
 	public void freeze()
@@ -92,7 +92,7 @@ public class Node {
 		if (isFrozen) return;
 		for (Node n: children) n.freeze();
 		this.children = Collections.unmodifiableList(this.children);
-		this.multilineText = Collections.unmodifiableList(this.multilineText);		
+		this.textLines = Collections.unmodifiableList(this.textLines);		
 		
 		isFrozen = true;
 	}
