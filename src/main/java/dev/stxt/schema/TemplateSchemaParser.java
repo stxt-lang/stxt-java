@@ -35,23 +35,23 @@ public class TemplateSchemaParser {
 		
 		// Miramos si es nuevo y añadimos en listado
 		SchemaNode schemaNode = schema.getNodes().get(name);
+		String type = cl.getType() == null? "INLINE TEXT": cl.getType();
 		if (schemaNode == null) {	// Nuevo
 			schemaNode = new SchemaNode();
 			schemaNode.setName(name);
-			schemaNode.setType(cl.getType() == null? "INLINE TEXT": cl.getType());
+			schemaNode.setType(type);
 			schema.getNodes().put(name, schemaNode);
+		} else {
+			if (cl.getType()!=null)
+				throw new ParseException(node.getLine(), "TYPE_DEFINED_MULTIPLE_TIMES", "Type only can defined one time");
 		}
-		else {
-			// TODO Si existe type error! ya estaba definido
-		}
-			
 		
 		// Una vez ya existe, si tiene hijos los intentamos crear.
 		List<Node> childrenNode = node.getChildren();
 		if (childrenNode.size()>0) {
 			// Si ya tenía error!!
 			if(schemaNode.getChildren().size()>0)
-				throw new ParseException(0, "", "childs only can defined one time");
+				throw new ParseException(node.getLine(), "CHILDREN_DEFINED_MULTIPLE_TIMES", "children only can defined one time");
 			
 			// Insertamos childs
 			for (Node child: childrenNode) {

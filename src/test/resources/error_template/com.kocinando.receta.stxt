@@ -9,7 +9,7 @@ Template (@stxt.template): com.kocinando.receta
 				Nombre: (1)
 		Pasos: (1)
 			Paso: (+) NATURAL
-			Descripción: NUMBER
+			Descripción: TEXT
 		Dificultad: (?)
 		Calorías: (?) NUMBER
 		Comensales: (?) NUMBER
