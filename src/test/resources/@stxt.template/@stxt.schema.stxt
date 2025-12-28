@@ -3,7 +3,7 @@ Template (@stxt.template): @stxt.schema
     	Description: (?) TEXT
         Node: (+)
         	Type: (?)
-        	Description: (?)
+        	Description: (?) @Description
         	Children: (?)
         		Child: (+)
         			Min: (?) NATURAL
