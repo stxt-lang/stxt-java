@@ -2,7 +2,7 @@
     "nodes" : {
         "type list" : {
             "name" : "type list",
-            "type" : "INLINE TEXT",
+            "type" : "TEXT_VALUE",
             "children" : {
                 "dev.stxt.check:number" : {
                     "name" : "number",

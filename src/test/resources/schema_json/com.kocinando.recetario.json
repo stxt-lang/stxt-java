@@ -2,7 +2,7 @@
     "nodes" : {
         "recetario" : {
             "name" : "recetario",
-            "type" : "INLINE TEXT",
+            "type" : "TEXT_VALUE",
             "children" : {
                 "com.kocinando.receta:receta" : {
                     "name" : "receta",

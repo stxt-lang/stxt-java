@@ -2,7 +2,7 @@
     "nodes" : {
         "receta" : {
             "name" : "receta",
-            "type" : "INLINE TEXT",
+            "type" : "TEXT_VALUE",
             "children" : {
                 "com.kocinando.receta:ingredientes" : {
                     "name" : "ingredientes",
@@ -64,7 +64,7 @@
         },
         "nombre receta" : {
             "name" : "nombre receta",
-            "type" : "INLINE TEXT",
+            "type" : "TEXT_VALUE",
             "children" : { }
         },
         "descripcion" : {
@@ -74,7 +74,7 @@
         },
         "ingredientes" : {
             "name" : "ingredientes",
-            "type" : "INLINE TEXT",
+            "type" : "TEXT_VALUE",
             "children" : {
                 "com.kocinando.receta:ingrediente" : {
                     "name" : "ingrediente",
@@ -87,7 +87,7 @@
         },
         "ingrediente" : {
             "name" : "ingrediente",
-            "type" : "INLINE TEXT",
+            "type" : "TEXT_VALUE",
             "children" : {
                 "com.kocinando.receta:unidades" : {
                     "name" : "unidades",
@@ -119,17 +119,17 @@
         },
         "unidades" : {
             "name" : "unidades",
-            "type" : "INLINE TEXT",
+            "type" : "TEXT_VALUE",
             "children" : { }
         },
         "nombre" : {
             "name" : "nombre",
-            "type" : "INLINE TEXT",
+            "type" : "TEXT_VALUE",
             "children" : { }
         },
         "pasos" : {
             "name" : "pasos",
-            "type" : "INLINE TEXT",
+            "type" : "TEXT_VALUE",
             "children" : {
                 "com.kocinando.receta:descripcion" : {
                     "name" : "descripcion",
@@ -154,7 +154,7 @@
         },
         "dificultad" : {
             "name" : "dificultad",
-            "type" : "INLINE TEXT",
+            "type" : "TEXT_VALUE",
             "children" : { }
         },
         "calorias" : {

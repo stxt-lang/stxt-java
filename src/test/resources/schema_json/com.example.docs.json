@@ -2,7 +2,7 @@
     "nodes" : {
         "email" : {
             "name" : "email",
-            "type" : "INLINE TEXT",
+            "type" : "TEXT_VALUE",
             "children" : {
                 "com.example.docs:cc" : {
                     "name" : "cc",
@@ -57,27 +57,27 @@
         },
         "from" : {
             "name" : "from",
-            "type" : "INLINE TEXT",
+            "type" : "TEXT_VALUE",
             "children" : { }
         },
         "to" : {
             "name" : "to",
-            "type" : "INLINE TEXT",
+            "type" : "TEXT_VALUE",
             "children" : { }
         },
         "cc" : {
             "name" : "cc",
-            "type" : "INLINE TEXT",
+            "type" : "TEXT_VALUE",
             "children" : { }
         },
         "bcc" : {
             "name" : "bcc",
-            "type" : "INLINE TEXT",
+            "type" : "TEXT_VALUE",
             "children" : { }
         },
         "title" : {
             "name" : "title",
-            "type" : "INLINE TEXT",
+            "type" : "TEXT_VALUE",
             "children" : { }
         },
         "body content" : {

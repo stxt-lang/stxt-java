@@ -57,7 +57,7 @@ class SchemaParser {
 		SchemaNode result = new SchemaNode();
 
 		String name = n.getValue();
-		String type = "INLINE TEXT";
+		String type = "TEXT_VALUE";
 		Node typeNode = n.getChild("type");
 		if (typeNode != null) type = typeNode.getValue();
 
