@@ -158,7 +158,7 @@ public class Parser {
 		final String line = result.lineWithoutIndent;
 		String name = null;
 		String value = null;
-		boolean multiline = false;
+		boolean textNode = false;
 
 		int nodeIndex = line.indexOf(':');
 		int textIndex = line.indexOf(">>");
@@ -167,19 +167,19 @@ public class Parser {
 			throw new ParseException(lineNumber, "INVALID_LINE", "Line not valid: " + line);
 		}
 
-		// Inline value
+		// Value
 		if (nodeIndex != -1) {
 			name = line.substring(0, nodeIndex);
 			value = line.substring(nodeIndex + 1).trim();
 		}
 
-		// Multiline Text
+		// Text
 		if (textIndex != -1) {
 			name = line.substring(0, textIndex);
 			value = line.substring(textIndex + 2).trim();
 			if (!value.isEmpty())
 				throw new ParseException(lineNumber, "INLINE_VALUE_NOT_VALID", "Line not valid: " + line);
-			multiline = true;
+			textNode = true;
 		}
 
 		// Namespace por defecto: heredado del padre
@@ -195,7 +195,7 @@ public class Parser {
 		namespace = namespace.toLowerCase(Locale.ROOT);
 		validateNamespaceFormat(namespace, lineNumber);
 
-		return new Node(lineNumber, level, name, namespace, multiline, value);
+		return new Node(lineNumber, level, name, namespace, textNode, value);
 	}
 
 	/**
