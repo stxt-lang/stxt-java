@@ -1,26 +1,6 @@
-* TEXT
-* VALUE_NODE (default)
-* value y text, no multilineText y inlineText
 * El transformer sólo vea el nodo justo después de crearlo, sin childs, etc... y lo transforma justo en ese momento, no al final. 
 	Entonces el freeze se hace antes de pasar por validators, etc.
 * Distinguir name de NormalizedName!! Ahora se pierde name, y debería ser sólo compact string. Quizá mejor un rawName, que sólo sea compact string, y así ya está
-
-* Template (@stxt.schema): demo.com
-	Tree >>
-		Hola: 
-			Node 1: (3) TEXT
-			Node 2: (*)
-			
-* Schema (@stxt.schema): demo.com
-	Node: Node 1
-		Type: VALUE_NODE
-		Children:
-			Child: Node 3
-				Min: 3
-				Max: 4
-			Child: Demo (com.google)
-			Child: Demo 3
-				Min: 4
 
 dev.stxt
 * Poner getParent() en los childs
