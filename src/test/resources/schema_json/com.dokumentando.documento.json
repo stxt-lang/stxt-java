@@ -2,7 +2,7 @@
     "nodes" : {
         "seccion" : {
             "name" : "seccion",
-            "type" : "TEXT_VALUE",
+            "type" : "VALUE",
             "children" : {
                 "com.dokumentando.documento:titulo" : {
                     "name" : "titulo",
@@ -22,7 +22,7 @@
         },
         "documento" : {
             "name" : "documento",
-            "type" : "TEXT_VALUE",
+            "type" : "VALUE",
             "children" : {
                 "com.dokumentando.documento:codigo postal" : {
                     "name" : "codigo postal",
@@ -112,7 +112,7 @@
         },
         "titulo" : {
             "name" : "titulo",
-            "type" : "TEXT_VALUE",
+            "type" : "VALUE",
             "children" : { }
         },
         "contenido" : {
@@ -127,7 +127,7 @@
         },
         "autor" : {
             "name" : "autor",
-            "type" : "TEXT_VALUE",
+            "type" : "VALUE",
             "children" : { }
         },
         "fecha creacion" : {
@@ -167,7 +167,7 @@
         },
         "secciones" : {
             "name" : "secciones",
-            "type" : "TEXT_VALUE",
+            "type" : "VALUE",
             "children" : {
                 "com.dokumentando.documento:seccion" : {
                     "name" : "seccion",
@@ -180,7 +180,7 @@
         },
         "tipo documento" : {
             "name" : "tipo documento",
-            "type" : "TEXT_VALUE",
+            "type" : "VALUE",
             "children" : { }
         }
     },

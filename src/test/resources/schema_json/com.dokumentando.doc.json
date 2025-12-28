@@ -2,7 +2,7 @@
     "nodes" : {
         "documento" : {
             "name" : "documento",
-            "type" : "TEXT_VALUE",
+            "type" : "VALUE",
             "children" : {
                 "com.dokumentando.doc:titulo" : {
                     "name" : "titulo",
@@ -36,7 +36,7 @@
         },
         "secciones" : {
             "name" : "secciones",
-            "type" : "TEXT_VALUE",
+            "type" : "VALUE",
             "children" : {
                 "com.dokumentando.doc:seccion" : {
                     "name" : "seccion",
@@ -49,7 +49,7 @@
         },
         "titulo" : {
             "name" : "titulo",
-            "type" : "TEXT_VALUE",
+            "type" : "VALUE",
             "children" : { }
         },
         "seccion" : {
@@ -64,7 +64,7 @@
         },
         "tipo documento" : {
             "name" : "tipo documento",
-            "type" : "TEXT_VALUE",
+            "type" : "VALUE",
             "children" : { }
         }
     },

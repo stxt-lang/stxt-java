@@ -2,7 +2,7 @@
     "nodes" : {
         "schema" : {
             "name" : "schema",
-            "type" : "TEXT_VALUE",
+            "type" : "VALUE",
             "children" : {
                 "@stxt.schema:description" : {
                     "name" : "description",
@@ -22,7 +22,7 @@
         },
         "node" : {
             "name" : "node",
-            "type" : "TEXT_VALUE",
+            "type" : "VALUE",
             "children" : {
                 "@stxt.schema:type" : {
                     "name" : "type",
@@ -49,7 +49,7 @@
         },
         "children" : {
             "name" : "children",
-            "type" : "TEXT_VALUE",
+            "type" : "VALUE",
             "children" : {
                 "@stxt.schema:child" : {
                     "name" : "child",
@@ -67,7 +67,7 @@
         },
         "child" : {
             "name" : "child",
-            "type" : "TEXT_VALUE",
+            "type" : "VALUE",
             "children" : {
                 "@stxt.schema:min" : {
                     "name" : "min",
@@ -97,7 +97,7 @@
         },
         "type" : {
             "name" : "type",
-            "type" : "TEXT_VALUE",
+            "type" : "VALUE",
             "children" : { }
         }
     },
