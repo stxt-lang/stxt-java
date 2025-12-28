@@ -5,12 +5,12 @@ import java.util.regex.Pattern;
 
 import dev.stxt.Node;
 import dev.stxt.processors.ValidationException;
-import dev.stxt.schema.TypeValidator;
+import dev.stxt.schema.Type;
 
 /**
  * Base validator for simple regex-based value checks.
  */
-abstract class RegexValueValidator implements TypeValidator {
+abstract class RegexValueValidator implements Type {
 	private final Pattern pattern;
 	private final String error;
 

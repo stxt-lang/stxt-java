@@ -9,4 +9,9 @@ public final class IntegerValidator extends RegexValueValidator {
 	private IntegerValidator() {
 		super(P_INTEGER, "Invalid integer");
 	}
+
+	@Override
+	public String getName() {
+		return "INTEGER";
+	}
 }

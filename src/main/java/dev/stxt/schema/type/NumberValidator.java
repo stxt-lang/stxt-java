@@ -16,4 +16,9 @@ public final class NumberValidator extends RegexValueValidator {
     private NumberValidator() {
         super(P_NUMBER, "Invalid number");
     }
+
+	@Override
+	public String getName() {
+		return "NUMBER";
+	}
 }

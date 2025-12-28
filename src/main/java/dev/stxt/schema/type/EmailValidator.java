@@ -11,4 +11,9 @@ public final class EmailValidator extends RegexValueValidator {
 	private EmailValidator() {
 		super(P_EMAIL, "Invalid email");
 	}
+
+	@Override
+	public String getName() {
+		return "EMAIL";
+	}
 }

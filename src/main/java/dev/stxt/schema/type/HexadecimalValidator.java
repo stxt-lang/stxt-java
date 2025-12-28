@@ -2,10 +2,10 @@ package dev.stxt.schema.type;
 
 import dev.stxt.Node;
 import dev.stxt.processors.ValidationException;
-import dev.stxt.schema.TypeValidator;
+import dev.stxt.schema.Type;
 import dev.stxt.utils.StringUtils;
 
-public final class HexadecimalValidator implements TypeValidator {
+public final class HexadecimalValidator implements Type {
 	public static final HexadecimalValidator INSTANCE = new HexadecimalValidator();
 
 	private HexadecimalValidator() {
@@ -49,5 +49,10 @@ public final class HexadecimalValidator implements TypeValidator {
 				"INVALID_VALUE",
 				n.getName() + ": " + msg
 		);
+	}
+
+	@Override
+	public String getName() {
+		return "HEXADECIMAL";
 	}
 }

@@ -56,7 +56,7 @@ class SchemaValidator implements Validator {
 	private static void validateValue(SchemaNode nsNode, Node n) {
 		String nodeType = nsNode.getType();
 
-		TypeValidator validator = TypeRegistry.get(nodeType);
+		Type validator = TypeRegistry.get(nodeType);
 		if (validator == null)
 			throw new ValidationException(n.getLine(), "TYPE_NOT_SUPPORTED", "Node type not supported: " + nodeType);
 

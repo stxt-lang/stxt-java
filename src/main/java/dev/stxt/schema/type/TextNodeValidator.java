@@ -2,14 +2,19 @@ package dev.stxt.schema.type;
 
 import dev.stxt.Node;
 import dev.stxt.processors.ValidationException;
-import dev.stxt.schema.TypeValidator;
+import dev.stxt.schema.Type;
 
-public final class TextNodeValidator implements TypeValidator {
+public final class TextNodeValidator implements Type {
 	public static final TextNodeValidator INSTANCE = new TextNodeValidator();
 
 	private TextNodeValidator() {
 	}
 
+	@Override
+	public String getName() {
+		return "TEXT_NODE";
+	}
+	
 	@Override
 	public void validate(Node n) {
 		if (!n.getValue().isEmpty()) {
@@ -17,4 +22,5 @@ public final class TextNodeValidator implements TypeValidator {
 					"Not allowed inline text in node " + n.getQualifiedName());
 		}
 	}
+
 }

@@ -9,4 +9,9 @@ public final class NaturalValidator extends RegexValueValidator {
 	private NaturalValidator() {
 		super(P_NATURAL, "Invalid natural");
 	}
+
+	@Override
+	public String getName() {
+		return "NATURAL";
+	}
 }

@@ -12,4 +12,9 @@ public final class TimestampValidator extends RegexValueValidator {
 	private TimestampValidator() {
 		super(P_TIMESTAMP, "Invalid timestamp");
 	}
+
+	@Override
+	public String getName() {
+		return "TIMESTAMP";
+	}
 }

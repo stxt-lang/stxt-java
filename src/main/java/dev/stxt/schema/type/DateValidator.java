@@ -9,4 +9,9 @@ public final class DateValidator extends RegexValueValidator {
 	private DateValidator() {
 		super(P_DATE, "Invalid date");
 	}
+
+	@Override
+	public String getName() {
+		return "DATE";
+	}
 }

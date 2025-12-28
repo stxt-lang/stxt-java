@@ -2,9 +2,9 @@ package dev.stxt.schema.type;
 
 import dev.stxt.Node;
 import dev.stxt.processors.ValidationException;
-import dev.stxt.schema.TypeValidator;
+import dev.stxt.schema.Type;
 
-public final class TextValidator implements TypeValidator {
+public final class TextValidator implements Type {
 	public static final TextValidator INSTANCE = new TextValidator();
 
 	private TextValidator() {
@@ -16,5 +16,10 @@ public final class TextValidator implements TypeValidator {
 			throw new ValidationException(n.getLine(), "NOT_ALLOWED_CHILDREN_TEXT",
 					"Not allowed children nodes in node " + n.getQualifiedName());
 		}
+	}
+
+	@Override
+	public String getName() {
+		return "TEXT";
 	}
 }

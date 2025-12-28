@@ -5,9 +5,9 @@ import java.net.URISyntaxException;
 
 import dev.stxt.Node;
 import dev.stxt.processors.ValidationException;
-import dev.stxt.schema.TypeValidator;
+import dev.stxt.schema.Type;
 
-public final class UrlValidator implements TypeValidator {
+public final class UrlValidator implements Type {
 	public static final UrlValidator INSTANCE = new UrlValidator();
 
 	private UrlValidator() {
@@ -24,5 +24,10 @@ public final class UrlValidator implements TypeValidator {
 		} catch (URISyntaxException | IllegalArgumentException e) {
 			throw new ValidationException(n.getLine(), "INVALID_VALUE", "Invalid URL: " + url);
 		}
+	}
+
+	@Override
+	public String getName() {
+		return "URL";
 	}
 }
