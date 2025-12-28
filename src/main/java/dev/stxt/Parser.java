@@ -75,7 +75,7 @@ public class Parser {
 	}
 
 	private void processLine(String line, int lineNumber, ParseState state) {
-		LineIndent lineIndent = LineIndent.parseLine(line, lineNumber, state);
+		LineIndent lineIndent = LineIndentParser.parseLine(line, lineNumber, state);
 		if (lineIndent == null)
 			return;
 

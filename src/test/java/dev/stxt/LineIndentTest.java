@@ -31,7 +31,7 @@ class LineIndentTest {
 	void emptyLine_outsideMultiline_isIgnored() throws ParseException {
 		ParseState state = newEmptyState();
 
-		LineIndent li = LineIndent.parseLine("   ", 1, state);
+		LineIndent li = LineIndentParser.parseLine("   ", 1, state);
 
 		assertNull(li);
 	}
@@ -40,7 +40,7 @@ class LineIndentTest {
 	void commentLine_outsideMultiline_isIgnored() throws ParseException {
 		ParseState state = newEmptyState();
 
-		LineIndent rs = LineIndent.parseLine("   # This is a comment", 1, state);
+		LineIndent rs = LineIndentParser.parseLine("   # This is a comment", 1, state);
 		assertNull(rs, "Debe ser null");
 	}
 
@@ -48,7 +48,7 @@ class LineIndentTest {
 	void indentationWithSpaces_multipleOfFour_isValid() throws ParseException {
 		ParseState state = newEmptyState();
 
-		LineIndent li = LineIndent.parseLine("    Title", 1, state); // 4 espacios
+		LineIndent li = LineIndentParser.parseLine("    Title", 1, state); // 4 espacios
 
 		assertNotNull(li);
 		assertEquals(1, li.indentLevel);
@@ -59,7 +59,7 @@ class LineIndentTest {
 	void indentationWithTab_isValid() throws ParseException {
 		ParseState state = newEmptyState();
 
-		LineIndent li = LineIndent.parseLine("\tTitle", 1, state); // 1 tab
+		LineIndent li = LineIndentParser.parseLine("\tTitle", 1, state); // 1 tab
 
 		assertNotNull(li);
 		assertEquals(1, li.indentLevel);
@@ -76,7 +76,7 @@ class LineIndentTest {
 		// stackSize = 1, multiline = true
 		// 4 espacios => level 1 == stackSize → dentro del bloque TEXT
 
-		LineIndent li = LineIndent.parseLine("    # not a comment", 2, state);
+		LineIndent li = LineIndentParser.parseLine("    # not a comment", 2, state);
 
 		assertNotNull(li);
 		// nivel 1, mismo que el nodo TEXT
@@ -92,7 +92,7 @@ class LineIndentTest {
 		// 8 espacios => level llega a 1 (stackSize) y se corta ahí
 		// Dentro del bloque, se conserva la indentación adicional como texto
 
-		LineIndent li = LineIndent.parseLine("        line", 3, state);
+		LineIndent li = LineIndentParser.parseLine("        line", 3, state);
 
 		assertNotNull(li);
 		// Se devuelve el nivel del nodo multilínea (no se consumen más niveles
@@ -109,7 +109,7 @@ class LineIndentTest {
 		// stackSize = 1, multiline = true
 		// línea vacía → se preserva como texto, con indentLevel = stackSize
 
-		LineIndent li = LineIndent.parseLine("   \t  \t  ", 4, state);
+		LineIndent li = LineIndentParser.parseLine("   \t  \t  ", 4, state);
 
 		assertNotNull(li);
 		assertEquals(1, li.indentLevel);
@@ -123,7 +123,7 @@ class LineIndentTest {
 		// Comentario con indentación < stackSize → se trata como comentario general y
 		// se ignora
 
-		LineIndent li = LineIndent.parseLine("# outside text", 5, state);
+		LineIndent li = LineIndentParser.parseLine("# outside text", 5, state);
 
 		assertNull(li);
 	}
