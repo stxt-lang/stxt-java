@@ -7,14 +7,12 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.regex.Pattern;
 
 import dev.stxt.processors.Observer;
 import dev.stxt.processors.Validator;
 import dev.stxt.utils.FileUtils;
 
 public class Parser {
-	
 	/** 
 	 *  Configuración de procesadores
 	 */
@@ -128,8 +126,16 @@ public class Parser {
 		}
 	}
 
-	private Node createNode(LineIndent result, int lineNumber, int level, Node parent) {
-		final String line = result.lineWithoutIndent;
+	/**
+	 * 
+	 * @param lineIndent
+	 * @param lineNumber
+	 * @param level
+	 * @param parent
+	 * @return
+	 */
+	private Node createNode(LineIndent lineIndent, int lineNumber, int level, Node parent) {
+		final String line = lineIndent.lineWithoutIndent;
 		String name = null;
 		String value = null;
 		boolean textNode = false;
@@ -167,31 +173,11 @@ public class Parser {
 
 		// check namespace
 		namespace = namespace.toLowerCase(Locale.ROOT);
-		validateNamespaceFormat(namespace, lineNumber);
+		NamespaceValidator.validateNamespaceFormat(namespace, lineNumber);
 
 		// Creamos nodo
 		return new Node(lineNumber, level, name, namespace, textNode, value);
 	}
-
-	/**
-	 * Valida el namespace lógico.
-	 *
-	 * Reglas:
-	 * - Solo minúsculas, dígitos y punto.
-	 * - Puede empezar opcionalmente por '@'.
-	 * - Debe ser una o varias etiquetas estilo dominio separadas por '.':
-	 *   etiqueta := [a-z0-9]+
-	 * ejemplos válidos: "xxx", "xxx.ddd", "zzz.ttt.ooo", "@xxx", "@xxx.ddd".
-	 */
-	private static final Pattern NAMESPACE_FORMAT = Pattern.compile("^@?[a-z0-9]+(\\.[a-z0-9]+)*$");
-	private void validateNamespaceFormat(String namespace, int lineNumber) {
-		if (namespace == null || namespace.isEmpty())
-			return;
-
-		if (!NAMESPACE_FORMAT.matcher(namespace).matches())
-			throw new ParseException(lineNumber, "INVALID_NAMESPACE", "Namespace not valid: " + namespace);
-	}
-	
 
 	// -------------------------------------------
 	// Métodos de validación, transformación, etc.
