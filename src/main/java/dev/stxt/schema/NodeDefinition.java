@@ -3,10 +3,10 @@ package dev.stxt.schema;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SchemaNode {
+public class NodeDefinition {
 	private String name;
 	private String type;
-	private Map<String, SchemaChild> children = new HashMap<>();
+	private Map<String, ChildDefinition> children = new HashMap<>();
 	
 	public String getName() {
 		return name;
@@ -20,10 +20,10 @@ public class SchemaNode {
 	public void setType(String type) {
 		this.type = type;
 	}
-	public Map<String, SchemaChild> getChildren() {
+	public Map<String, ChildDefinition> getChildren() {
 		return children;
 	}
-	public void setChildren(Map<String, SchemaChild> children) {
+	public void setChildren(Map<String, ChildDefinition> children) {
 		this.children = children;
 	}
 }

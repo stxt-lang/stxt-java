@@ -6,13 +6,13 @@ import java.util.Map;
 public class Schema {
 	public static final String SCHEMA_NAMESPACE = "@stxt.schema";
 
-	private Map<String, SchemaNode> nodes = new LinkedHashMap<String, SchemaNode>();
+	private Map<String, NodeDefinition> nodes = new LinkedHashMap<String, NodeDefinition>();
 	private String namespace;
 	
-	public Map<String, SchemaNode> getNodes() {
+	public Map<String, NodeDefinition> getNodes() {
 		return nodes;
 	}
-	public void setNodes(Map<String, SchemaNode> nodes) {
+	public void setNodes(Map<String, NodeDefinition> nodes) {
 		this.nodes = nodes;
 	}
 	public String getNamespace() {

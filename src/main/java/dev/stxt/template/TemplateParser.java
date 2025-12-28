@@ -6,8 +6,8 @@ import dev.stxt.Node;
 import dev.stxt.Parser;
 import dev.stxt.exceptions.ParseException;
 import dev.stxt.schema.Schema;
-import dev.stxt.schema.SchemaChild;
-import dev.stxt.schema.SchemaNode;
+import dev.stxt.schema.ChildDefinition;
+import dev.stxt.schema.NodeDefinition;
 import dev.stxt.utils.StringUtils;
 
 public class TemplateParser {
@@ -54,10 +54,10 @@ public class TemplateParser {
 		}
 		
 		// Miramos si es nuevo y añadimos en listado
-		SchemaNode schemaNode = schema.getNodes().get(name);
+		NodeDefinition schemaNode = schema.getNodes().get(name);
 		if (schemaNode == null) {	// Nuevo
 			String type = cl.getType() == null? "VALUE_NODE": cl.getType();
-			schemaNode = new SchemaNode();
+			schemaNode = new NodeDefinition();
 			schemaNode.setName(name);
 			schemaNode.setType(type);
 			schema.getNodes().put(name, schemaNode);
@@ -81,7 +81,7 @@ public class TemplateParser {
 			if (childNamespace.isEmpty()) childNamespace = schema.getNamespace();
 			String childQualifiedName = childNamespace + ":" + childName;
 			
-			SchemaChild schChild = new SchemaChild();
+			ChildDefinition schChild = new ChildDefinition();
 			schChild.setName(childName);
 			schChild.setNamespace(childNamespace);
 			schChild.setMin(cl.getMin());

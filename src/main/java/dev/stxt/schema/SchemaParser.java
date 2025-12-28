@@ -34,14 +34,14 @@ class SchemaParser {
 		
 		// Obtenemos los nodos
 		for (Node n : node.getChildren("node")) {
-			SchemaNode schNode = createFrom(n, schema.getNamespace());
+			NodeDefinition schNode = createFrom(n, schema.getNamespace());
 			schema.getNodes().put(schNode.getName(), schNode);
 			allNames.add(schNode.getName());
 		}
 
 		// Validamos que todos los nombres estén definidos
-		for (SchemaNode schNode : schema.getNodes().values()) {
-			for (SchemaChild schChild : schNode.getChildren().values()) {
+		for (NodeDefinition schNode : schema.getNodes().values()) {
+			for (ChildDefinition schChild : schNode.getChildren().values()) {
 				if (schChild.getNamespace().equals(namespace)) // Sólo validamos del mismo namespace
 				{
 					if (!allNames.contains(schChild.getName()))
@@ -54,8 +54,8 @@ class SchemaParser {
 		return schema;
 	}
 
-	private static SchemaNode createFrom(Node n, String namespace) {
-		SchemaNode result = new SchemaNode();
+	private static NodeDefinition createFrom(Node n, String namespace) {
+		NodeDefinition result = new NodeDefinition();
 
 		String name = n.getValue();
 		String type = "VALUE_NODE";
@@ -74,13 +74,13 @@ class SchemaParser {
 		return result;
 	}
 
-	private static void putChildToSchemaNode(SchemaNode schemaNode, Node child, String defNamespace) {
+	private static void putChildToSchemaNode(NodeDefinition schemaNode, Node child, String defNamespace) {
 		// Obtenemos name y namespace
 		NameNamespace ns = NameNamespaceParser.parse(child.getValue(), defNamespace, child.getLine(), child.getValue());
 		String name = ns.getName();
 		String namespace = ns.getNamespace() != null ? ns.getNamespace(): defNamespace;
 		
-		SchemaChild schemaChild = new SchemaChild();
+		ChildDefinition schemaChild = new ChildDefinition();
 		schemaChild.setName(name);
 		schemaChild.setNamespace(namespace);
 		schemaChild.setMin(getInteger(child, "min"));
