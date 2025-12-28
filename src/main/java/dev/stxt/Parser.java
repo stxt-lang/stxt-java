@@ -104,7 +104,11 @@ public class Parser {
 		// 4) Creamos el nuevo nodo y lo dejamos "abierto" en la pila (NO lo adjuntamos aún)
 		Node parent = stack.isEmpty() ? null : stack.peek();
 		Node node = createNode(lineIndent, lineNumber, currentLevel, parent);
+		
+		// Pasamos a observers
+		observeNode(node);
 
+		// Añadimos a stack
 		stack.push(node);
 	}
 
@@ -117,21 +121,10 @@ public class Parser {
 
 		while (stack.size() > targetLevel) {
 			Node completed = stack.pop();
+			finishNode(completed);
 
-			Node processed = finishNode(completed);
-
-			if (processed == null) {
-				// Eliminado por transformer (null) o por filter
-				continue;
-			}
-
-			if (stack.isEmpty()) {
-				// Es un documento raíz
-				state.addDocument(processed);
-			} else {
-				// Se adjunta al padre que sigue en la pila
-				stack.peek().getChildren().add(processed);
-			}
+			if (stack.isEmpty())	state.addDocument(completed);
+			else					stack.peek().getChildren().add(completed);
 		}
 	}
 
@@ -177,9 +170,7 @@ public class Parser {
 		validateNamespaceFormat(namespace, lineNumber);
 
 		// Creamos nodo
-		Node nodeResult = new Node(lineNumber, level, name, namespace, textNode, value);
-		observe(nodeResult);
-		return nodeResult;
+		return new Node(lineNumber, level, name, namespace, textNode, value);
 	}
 
 	/**
@@ -206,7 +197,7 @@ public class Parser {
 	// Métodos de validación, transformación, etc.
 	// -------------------------------------------
 	
-	private Node observe(Node node) {
+	private Node observeNode(Node node) {
 	    if (observers != null)
 	        for (Observer o: observers)
 	            o.onCreate(node);
@@ -214,7 +205,7 @@ public class Parser {
 		return node;
 	}
 	
-	private Node finishNode(Node node) {
+	private void finishNode(Node node) {
 		node.freeze();
 		
 	    if (observers != null)
@@ -224,7 +215,5 @@ public class Parser {
 	    if (validators != null)
 	        for (Validator v : validators)
 	            v.validate(node);
-
-	    return node;
 	}	
 }
