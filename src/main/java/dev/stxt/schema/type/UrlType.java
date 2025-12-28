@@ -7,10 +7,10 @@ import dev.stxt.Node;
 import dev.stxt.processors.ValidationException;
 import dev.stxt.schema.Type;
 
-public final class UrlValidator implements Type {
-	public static final UrlValidator INSTANCE = new UrlValidator();
+public final class UrlType implements Type {
+	public static final UrlType INSTANCE = new UrlType();
 
-	private UrlValidator() {
+	private UrlType() {
 	}
 
 	@Override

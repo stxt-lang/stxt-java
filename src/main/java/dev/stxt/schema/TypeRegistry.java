@@ -4,42 +4,42 @@ import java.util.HashMap;
 import java.util.Map;
 
 import dev.stxt.STXTException;
-import dev.stxt.schema.type.Base64Validator;
-import dev.stxt.schema.type.BooleanValidator;
-import dev.stxt.schema.type.DateValidator;
-import dev.stxt.schema.type.EmailValidator;
-import dev.stxt.schema.type.EmptyValidator;
-import dev.stxt.schema.type.HexadecimalValidator;
-import dev.stxt.schema.type.ValueNodeValidator;
-import dev.stxt.schema.type.IntegerValidator;
-import dev.stxt.schema.type.TextNodeValidator;
-import dev.stxt.schema.type.NaturalValidator;
-import dev.stxt.schema.type.NumberValidator;
-import dev.stxt.schema.type.TextValidator;
-import dev.stxt.schema.type.TimestampValidator;
-import dev.stxt.schema.type.UrlValidator;
+import dev.stxt.schema.type.Base64Type;
+import dev.stxt.schema.type.BooleanType;
+import dev.stxt.schema.type.DateType;
+import dev.stxt.schema.type.EmailType;
+import dev.stxt.schema.type.EmptyType;
+import dev.stxt.schema.type.HexadecimalTypeç;
+import dev.stxt.schema.type.ValueNodeType;
+import dev.stxt.schema.type.IntegerType;
+import dev.stxt.schema.type.TextNodeType;
+import dev.stxt.schema.type.NaturalType;
+import dev.stxt.schema.type.NumberType;
+import dev.stxt.schema.type.TextType;
+import dev.stxt.schema.type.TimestampType;
+import dev.stxt.schema.type.UrlType;
 
 class TypeRegistry {
 	private static final Map<String, Type> REGISTRY = new HashMap<>();
 
 	static {
 		// Tipos principales
-		register(ValueNodeValidator.INSTANCE);
-		register(TextNodeValidator.INSTANCE);
+		register(ValueNodeType.INSTANCE);
+		register(TextNodeType.INSTANCE);
 		
 		// Subtipos
-		register(TextValidator.INSTANCE);
-		register(BooleanValidator.INSTANCE);
-		register(UrlValidator.INSTANCE);
-		register(IntegerValidator.INSTANCE);
-		register(NaturalValidator.INSTANCE);
-		register(NumberValidator.INSTANCE);
-		register(DateValidator.INSTANCE);
-		register(TimestampValidator.INSTANCE);
-		register(EmailValidator.INSTANCE);
-		register(HexadecimalValidator.INSTANCE);
-		register(Base64Validator.INSTANCE);
-		register(EmptyValidator.INSTANCE);
+		register(TextType.INSTANCE);
+		register(BooleanType.INSTANCE);
+		register(UrlType.INSTANCE);
+		register(IntegerType.INSTANCE);
+		register(NaturalType.INSTANCE);
+		register(NumberType.INSTANCE);
+		register(DateType.INSTANCE);
+		register(TimestampType.INSTANCE);
+		register(EmailType.INSTANCE);
+		register(HexadecimalTypeç.INSTANCE);
+		register(Base64Type.INSTANCE);
+		register(EmptyType.INSTANCE);
 	}
 
 	public static Type get(String nodeType) {

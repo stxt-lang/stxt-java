@@ -7,10 +7,10 @@ import dev.stxt.processors.ValidationException;
 import dev.stxt.schema.Type;
 import dev.stxt.utils.StringUtils;
 
-public final class Base64Validator implements Type {
-	public static final Base64Validator INSTANCE = new Base64Validator();
+public final class Base64Type implements Type {
+	public static final Base64Type INSTANCE = new Base64Type();
 
-	private Base64Validator() {
+	private Base64Type() {
 	}
 
 	@Override

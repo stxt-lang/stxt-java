@@ -4,10 +4,10 @@ import dev.stxt.Node;
 import dev.stxt.processors.ValidationException;
 import dev.stxt.schema.Type;
 
-public final class ValueNodeValidator implements Type {
-	public static final ValueNodeValidator INSTANCE = new ValueNodeValidator();
+public final class ValueNodeType implements Type {
+	public static final ValueNodeType INSTANCE = new ValueNodeType();
 
-	private ValueNodeValidator() {
+	private ValueNodeType() {
 	}
 
 	@Override

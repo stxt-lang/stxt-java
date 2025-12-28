@@ -5,10 +5,10 @@ import dev.stxt.processors.ValidationException;
 import dev.stxt.schema.Type;
 import dev.stxt.utils.StringUtils;
 
-public final class HexadecimalValidator implements Type {
-	public static final HexadecimalValidator INSTANCE = new HexadecimalValidator();
+public final class HexadecimalTypeç implements Type {
+	public static final HexadecimalTypeç INSTANCE = new HexadecimalTypeç();
 
-	private HexadecimalValidator() {
+	private HexadecimalTypeç() {
 	}
 
 	@Override

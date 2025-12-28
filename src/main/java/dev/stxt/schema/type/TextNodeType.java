@@ -4,10 +4,10 @@ import dev.stxt.Node;
 import dev.stxt.processors.ValidationException;
 import dev.stxt.schema.Type;
 
-public final class TextNodeValidator implements Type {
-	public static final TextNodeValidator INSTANCE = new TextNodeValidator();
+public final class TextNodeType implements Type {
+	public static final TextNodeType INSTANCE = new TextNodeType();
 
-	private TextNodeValidator() {
+	private TextNodeType() {
 	}
 
 	@Override

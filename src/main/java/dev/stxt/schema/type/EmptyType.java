@@ -4,10 +4,10 @@ import dev.stxt.Node;
 import dev.stxt.processors.ValidationException;
 import dev.stxt.schema.Type;
 
-public final class EmptyValidator implements Type {
-	public static final EmptyValidator INSTANCE = new EmptyValidator();
+public final class EmptyType implements Type {
+	public static final EmptyType INSTANCE = new EmptyType();
 
-	private EmptyValidator() {
+	private EmptyType() {
 	}
 
 	@Override
