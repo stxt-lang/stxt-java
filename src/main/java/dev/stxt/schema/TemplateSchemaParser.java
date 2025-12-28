@@ -4,6 +4,7 @@ import java.util.List;
 
 import dev.stxt.Node;
 import dev.stxt.ParseException;
+import dev.stxt.Parser;
 import dev.stxt.utils.StringUtils;
 
 public class TemplateSchemaParser {
@@ -15,15 +16,23 @@ public class TemplateSchemaParser {
 		String namespace = node.getInlineText();
 		result.setNamespace(namespace);
 		
+		// Buscamos nodo structure
+		String text = node.getChild("structure").getText();
+		int offset = node.getLine();
+		
+		// Parseamos para los nodos
+		Parser parser = new Parser();
+		List<Node> nodes = parser.parse(text);
+		
 		// Vamos iterando todos los nodos insertando
-		for (Node n: node.getChildren())
-			addToSchema(result, n);
+		for (Node n: nodes)
+			addToSchema(result, n, offset);
 		
 		// Retornamos resultado
 		return result;
 	}
 
-	private static void addToSchema(Schema schema, Node node) {
+	private static void addToSchema(Schema schema, Node node, int offset) {
 		// Obtenemos nombre qualificado
 		String name = node.getName();
 		String namespace = node.getNamespace();
@@ -31,12 +40,12 @@ public class TemplateSchemaParser {
 		// Miramos datos
 		ChildLine cl = TemplateChildLineParser.parse(node.getInlineText(), node.getLine());
 		
-		if (namespace.equals("@stxt.template")) namespace = schema.getNamespace(); // Es del template
+		if (namespace.isEmpty()) namespace = schema.getNamespace(); // Es del template
 		else {
 			// Validamos type vacío
 			String type = cl.getType();
 			if (type != null && !type.trim().isEmpty()) 
-				throw new ParseException(node.getLine(), "TYPE_DEFINITION_NOT_ALLOWED", "Not allowed type definition in external namespaces");
+				throw new ParseException(node.getLine() + offset, "TYPE_DEFINITION_NOT_ALLOWED", "Not allowed type definition in external namespaces");
 			
 			return; // No hacemos nada con creación de nodos que no son de @stxt.template!!
 		}
@@ -53,8 +62,8 @@ public class TemplateSchemaParser {
 			String type = StringUtils.normalizeSimple(cl.getType());
 			if (type.equals("@" + name)) return; // OK Definition
 			if (type.startsWith("@"))
-				new ParseException(node.getLine(), "NODE_REFERENCE_NOT_VALID", "Reference must be '" + "@" + name + "', not '" + type + "'");
-			throw new ParseException(node.getLine(), "NODE_DEFINED_MULTIPLE_TIMES", "Nodes only can defined the first time: " + name);
+				new ParseException(node.getLine() + offset, "NODE_REFERENCE_NOT_VALID", "Reference must be '" + "@" + name + "', not '" + type + "'");
+			throw new ParseException(node.getLine() + offset, "NODE_DEFINED_MULTIPLE_TIMES", "Nodes only can defined the first time: " + name);
 		}
 		
 		// Una vez ya existe, si tiene hijos los intentamos crear.
@@ -66,7 +75,7 @@ public class TemplateSchemaParser {
 			
 			String childName = child.getName();
 			String childNamespace = child.getNamespace();
-			if (childNamespace.equals("@stxt.template")) childNamespace = schema.getNamespace();
+			if (childNamespace.isEmpty()) childNamespace = schema.getNamespace();
 			String childQualifiedName = childNamespace + ":" + childName;
 			
 			SchemaChild schChild = new SchemaChild();
@@ -76,7 +85,7 @@ public class TemplateSchemaParser {
 			schChild.setMax(cl.getMax());
 			schemaNode.getChildren().put(childQualifiedName, schChild);
 			
-			addToSchema(schema, child);
+			addToSchema(schema, child, offset);
 		}
 	}
 }

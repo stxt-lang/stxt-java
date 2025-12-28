@@ -1,12 +1,13 @@
 Template (@stxt.template): com.gym.docs
-	Cliente:
-		Datos Personales: (1)
-			Nombre: (1)
-			Primer apellido: (1)
-			Segundo apellido: (?)
-			Edad: (?) NUMBER
-			Cliente vip: (?) BOOLEAN
-			Foto: BASE64
-		Datos Bancarios: (1)
-			Titular cuenta: (?)
-			Número cuenta: (1)
+	Structure >>
+		Cliente:
+			Datos Personales: (1)
+				Nombre: (1)
+				Primer apellido: (1)
+				Segundo apellido: (?)
+				Edad: (?) NUMBER
+				Cliente vip: (?) BOOLEAN
+				Foto: BASE64
+			Datos Bancarios: (1)
+				Titular cuenta: (?)
+				Número cuenta: (1)

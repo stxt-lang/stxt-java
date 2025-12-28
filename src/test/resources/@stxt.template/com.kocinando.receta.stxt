@@ -1,16 +1,17 @@
 Template (@stxt.template): com.kocinando.receta
-	Receta:
-		Nombre Receta: (1)
-		Descripción: (?) TEXT
-		Ingredientes: (1)
-			Ingrediente: (+)
-				Cantidad: (1) NUMBER
-				Unidades: (1)
-				Nombre: (1)
-		Pasos: (1)
-			Paso: (+) NATURAL
-			Descripción: @Descripción
-		Dificultad: (?)
-		Calorías: (?) NUMBER
-		Comensales: (?) NUMBER
-		Documento (com.dokumentando.doc): (*)
+	Structure >>
+		Receta:
+			Nombre Receta: (1)
+			Descripción: (?) TEXT
+			Ingredientes: (1)
+				Ingrediente: (+)
+					Cantidad: (1) NUMBER
+					Unidades: (1)
+					Nombre: (1)
+			Pasos: (1)
+				Paso: (+) NATURAL
+				Descripción: @Descripción
+			Dificultad: (?)
+			Calorías: (?) NUMBER
+			Comensales: (?) NUMBER
+			Documento (com.dokumentando.doc): (*)
