@@ -9,44 +9,59 @@ public final class ChildLineParser {
 
     private static final Pattern CHILD_LINE_PATTERN = Pattern.compile(
             "^\\s*" +
-            "(?:\\(\\s*(?<count>[^()\\s][^)]*?)\\s*\\)\\s*)?" + // (count)
-            "(?<type>[^()]*)" +                                // type (puede estar vacío)
+            "(?:\\(\\s*(?<count>[^()\\s][^)]*?)\\s*\\)\\s*)?" +
+            "(?<type>[^()]*)" +                                
             "\\s*$"
         );
     
     private ChildLineParser() {
-        // utility
     }
 
-    /**
-     * Parsea una línea de hijo del tipo:
-     *   (count) name (namespace)
-     * donde \`(count)\` y \`(namespace)\` son opcionales.
-     *
-     * @param rawLine     Línea tal cual del fichero.
-     * @param inheritedNs Namespace heredado (puede ser \`null\`).
-     * @param lineNumber  Número de línea para errores.
-     */
-    public static ChildLine parse(
-            String rawLine,
-            int lineNumber
-    ) {
+    public static ChildLine parse(String rawLine, int lineNumber) {
     	if (rawLine.trim().isEmpty())
-    		return new ChildLine(null, null, lineNumber, rawLine);
+    		return new ChildLine(null, null, null);
     	
         Matcher m = CHILD_LINE_PATTERN.matcher(rawLine);
         if (!m.matches()) {
             throw new ParseException(lineNumber, "INVALID_CHILD_LINE", "Line not valid: " + rawLine);
         }
 
-        // name (obligatorio)
         String type = m.group("type");
         type = type.trim();
         if (type.isEmpty()) type = null;
 
-        // count (opcional)
         String count = m.group("count");
-        return new ChildLine(count, type, lineNumber, rawLine);
+        Integer min = null;
+        Integer max = null;
+        
+		if (count == null || count.isEmpty() || count.equals("*")) {
+			min = null;
+			max = null;
+		} else if (count.equals("?")) {
+			min = null;
+			max = 1;
+		} else if (count.equals("+")) {
+			min = 1;
+			max = null;
+		} else if (count.endsWith("+")) {
+			int expectedNum = Integer.parseInt(count.substring(0, count.length() - 1));
+			min = expectedNum;
+			max = null;
+		} else if (count.endsWith("-")) {
+			int expectedNum = Integer.parseInt(count.substring(0, count.length() - 1));
+			min = null;
+			max = expectedNum;
+		} else {
+            try {
+                int expectedNum = Integer.parseInt(count);
+    			min = expectedNum;
+    			max = expectedNum;
+            } catch (NumberFormatException ex) {
+                throw new ParseException(lineNumber, "INVALID_CHILD_COUNT", "Invalid count " + count + " in line: " + rawLine);
+            }
+		}
+        
+        return new ChildLine(type, min, max);
     }
 }
 
