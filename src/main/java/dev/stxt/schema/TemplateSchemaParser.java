@@ -7,7 +7,7 @@ import dev.stxt.ParseException;
 import dev.stxt.utils.StringUtils;
 
 public class TemplateSchemaParser {
-
+	
 	public static Schema transformNodeToSchema(Node node) {
 		Schema result = new Schema();
 		
@@ -27,12 +27,19 @@ public class TemplateSchemaParser {
 		// Obtenemos nombre qualificado
 		String name = node.getName();
 		String namespace = node.getNamespace();
-		if (namespace.equals("@stxt.template")) namespace = schema.getNamespace(); // Es del template
-		else return; // No hacemos nada con creación de nodos que no son de @stxt.template!!
 		
 		// Miramos datos
 		ChildLine cl = TemplateChildLineParser.parse(node.getInlineText(), node.getLine());
-		System.out.println(cl);
+		
+		if (namespace.equals("@stxt.template")) namespace = schema.getNamespace(); // Es del template
+		else {
+			// Validamos type vacío
+			String type = cl.getType();
+			if (type != null && !type.trim().isEmpty()) 
+				throw new ParseException(node.getLine(), "TYPE_DEFINITION_NOT_ALLOWED", "Not allowed type definition in external namespaces");
+			
+			return; // No hacemos nada con creación de nodos que no son de @stxt.template!!
+		}
 		
 		// Miramos si es nuevo y añadimos en listado
 		SchemaNode schemaNode = schema.getNodes().get(name);
@@ -55,9 +62,7 @@ public class TemplateSchemaParser {
 		
 		// Insertamos childs
 		for (Node child: childrenNode) {
-			System.out.println("=>" + child.getName() + " -> " + child.getNamespace());
 			cl = TemplateChildLineParser.parse(child.getInlineText(), child.getLine());
-			System.out.println(" ==> " + cl);
 			
 			String childName = child.getName();
 			String childNamespace = child.getNamespace();
