@@ -195,7 +195,8 @@ public class Parser {
 		namespace = namespace.toLowerCase(Locale.ROOT);
 		validateNamespaceFormat(namespace, lineNumber);
 
-		return new Node(lineNumber, level, name, namespace, textNode, value);
+		// Creamos nodo
+		return transform(new Node(lineNumber, level, name, namespace, textNode, value));
 	}
 
 	/**
@@ -217,26 +218,25 @@ public class Parser {
 			throw new ParseException(lineNumber, "INVALID_NAMESPACE", "Namespace not valid: " + namespace);
 	}
 	
-	/**
-	 * Aplica el pipeline a un nodo ya completo (con hijos añadidos):
-	 * 1) Transformers en cadena (pueden devolver un nodo nuevo o null para eliminar)
-	 * 2) Filters (si alguno no acepta -> null)
-	 * 3) Validators (solo si el nodo sigue vivo)
-	 */
+
+	// -------------------------------------------
+	// Métodos de validación, transformación, etc.
+	// -------------------------------------------
+	
+	private Node transform(Node node) {
+	    if (transformers != null) {
+	        for (Transformer t : transformers) {
+	            node = t.transform(node);
+	            if (node == null) return null;
+	        }
+	    }
+		return node;
+	}
+	
 	private Node finishNode(Node node) {
 	    Node current = node;
 
-	    // 1) Transformers
-	    if (transformers != null) {
-	        for (Transformer t : transformers) {
-	            current = t.transform(current);
-	            if (current == null) {
-	                return null; // eliminado
-	            }
-	        }
-	    }
-
-	    // 2) Filters
+	    // 1) Filters
 	    if (filters != null) {
 	        for (Filter f : filters) {
 	            if (!f.accept(current)) {
