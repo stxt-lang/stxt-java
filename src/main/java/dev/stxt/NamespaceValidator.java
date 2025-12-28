@@ -2,6 +2,8 @@ package dev.stxt;
 
 import java.util.regex.Pattern;
 
+import dev.stxt.exceptions.ParseException;
+
 public class NamespaceValidator {
 	/**
 	 * Valida el namespace lógico.

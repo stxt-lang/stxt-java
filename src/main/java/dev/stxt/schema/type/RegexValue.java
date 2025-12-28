@@ -4,7 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import dev.stxt.Node;
-import dev.stxt.processors.ValidationException;
+import dev.stxt.exceptions.ValidationException;
 import dev.stxt.schema.Type;
 
 /**

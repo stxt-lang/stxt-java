@@ -1,6 +1,4 @@
-package dev.stxt.schema;
-
-import dev.stxt.STXTException;
+package dev.stxt.exceptions;
 
 public class SchemaException extends STXTException {
     private static final long serialVersionUID = 1L;

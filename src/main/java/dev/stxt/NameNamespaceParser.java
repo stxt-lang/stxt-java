@@ -3,6 +3,8 @@ package dev.stxt;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import dev.stxt.exceptions.ParseException;
+
 import static dev.stxt.utils.StringUtils.normalizeSimple;
 
 public final class NameNamespaceParser {

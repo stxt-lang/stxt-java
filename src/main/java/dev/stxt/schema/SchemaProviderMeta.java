@@ -4,7 +4,8 @@ import java.util.List;
 
 import dev.stxt.Node;
 import dev.stxt.Parser;
-import dev.stxt.resources.ResourceNotFoundException;
+import dev.stxt.exceptions.ResourceNotFoundException;
+import dev.stxt.exceptions.SchemaException;
 
 final class SchemaProviderMeta implements SchemaProvider {
 	private static final String META_TEXT = "Schema (@stxt.schema): @stxt.schema\n"

@@ -1,4 +1,4 @@
-package dev.stxt;
+package dev.stxt.exceptions;
 
 public class STXTException extends RuntimeException {
 	

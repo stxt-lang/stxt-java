@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import dev.stxt.exceptions.ParseException;
+import dev.stxt.exceptions.STXTIOException;
 import dev.stxt.processors.Observer;
 import dev.stxt.processors.Validator;
 import dev.stxt.utils.FileUtils;

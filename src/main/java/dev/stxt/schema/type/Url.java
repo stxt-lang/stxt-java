@@ -4,7 +4,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import dev.stxt.Node;
-import dev.stxt.processors.ValidationException;
+import dev.stxt.exceptions.ValidationException;
 import dev.stxt.schema.Type;
 
 public final class Url implements Type {

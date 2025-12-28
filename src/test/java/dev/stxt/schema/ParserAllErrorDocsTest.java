@@ -10,8 +10,8 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
-import dev.stxt.ParseException;
 import dev.stxt.Parser;
+import dev.stxt.exceptions.ParseException;
 import dev.stxt.resources.ResourcesLoader;
 import dev.stxt.resources.ResourcesLoaderDirectory;
 import dev.stxt.utils.FileUtils;

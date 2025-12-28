@@ -1,6 +1,4 @@
-package dev.stxt.processors;
-
-import dev.stxt.ParseException;
+package dev.stxt.exceptions;
 
 public class ValidationException extends ParseException {
 	private static final long serialVersionUID = 1L;

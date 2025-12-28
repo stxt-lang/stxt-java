@@ -1,4 +1,4 @@
-package dev.stxt;
+package dev.stxt.exceptions;
 
 public class ParseException extends LineAwareException {
 	private static final long serialVersionUID = 1L;

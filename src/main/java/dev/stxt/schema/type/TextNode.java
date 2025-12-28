@@ -1,7 +1,7 @@
 package dev.stxt.schema.type;
 
 import dev.stxt.Node;
-import dev.stxt.processors.ValidationException;
+import dev.stxt.exceptions.ValidationException;
 import dev.stxt.schema.Type;
 
 public final class TextNode implements Type {

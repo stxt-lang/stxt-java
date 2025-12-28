@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.Test;
 
+import dev.stxt.exceptions.ParseException;
+
 class LineIndentTest {
 
 	// ------------------------

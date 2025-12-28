@@ -5,6 +5,8 @@ import static dev.stxt.Constants.TAB;
 import static dev.stxt.Constants.TAB_SPACES;
 import static dev.stxt.utils.StringUtils.rightTrim;
 
+import dev.stxt.exceptions.ParseException;
+
 public class LineIndentParser {
 	// -------------------------------------------------
 	// parseLine

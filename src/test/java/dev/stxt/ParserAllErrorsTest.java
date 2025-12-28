@@ -13,6 +13,7 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import dev.stxt.exceptions.ParseException;
 import test.FileTestLoction;
 import test.JSON;
 import test.JSONFile;

@@ -2,8 +2,9 @@ package dev.stxt.resources;
 
 import java.io.File;
 
-import dev.stxt.STXTException;
-import dev.stxt.STXTIOException;
+import dev.stxt.exceptions.ResourceNotFoundException;
+import dev.stxt.exceptions.STXTException;
+import dev.stxt.exceptions.STXTIOException;
 import dev.stxt.utils.FileUtils;
 
 public class ResourcesLoaderDirectory implements ResourcesLoader {

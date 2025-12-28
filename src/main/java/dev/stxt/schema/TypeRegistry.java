@@ -3,7 +3,7 @@ package dev.stxt.schema;
 import java.util.HashMap;
 import java.util.Map;
 
-import dev.stxt.STXTException;
+import dev.stxt.exceptions.STXTException;
 import dev.stxt.schema.type.Base64;
 import dev.stxt.schema.type.Boolean;
 import dev.stxt.schema.type.Date;

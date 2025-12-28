@@ -3,7 +3,7 @@ package dev.stxt.template;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import dev.stxt.ParseException;
+import dev.stxt.exceptions.ParseException;
 
 public final class ChildLineParser {
 

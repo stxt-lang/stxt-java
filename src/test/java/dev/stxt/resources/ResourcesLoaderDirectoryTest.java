@@ -9,7 +9,8 @@ import java.io.File;
 
 import org.junit.jupiter.api.Test;
 
-import dev.stxt.STXTException;
+import dev.stxt.exceptions.ResourceNotFoundException;
+import dev.stxt.exceptions.STXTException;
 import test.FileTestLoction;
 
 public class ResourcesLoaderDirectoryTest {

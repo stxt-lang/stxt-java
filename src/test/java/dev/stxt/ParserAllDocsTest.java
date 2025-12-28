@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import dev.stxt.exceptions.ParseException;
 import dev.stxt.utils.FileUtils;
 import test.FileTestLoction;
 import test.JSONFile;

@@ -7,8 +7,9 @@ import java.util.Set;
 import dev.stxt.NameNamespace;
 import dev.stxt.NameNamespaceParser;
 import dev.stxt.Node;
-import dev.stxt.ParseException;
-import dev.stxt.processors.ValidationException;
+import dev.stxt.exceptions.ParseException;
+import dev.stxt.exceptions.SchemaException;
+import dev.stxt.exceptions.ValidationException;
 import dev.stxt.utils.StringUtils;
 
 class SchemaParser {

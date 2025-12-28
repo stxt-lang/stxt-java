@@ -3,8 +3,8 @@ package dev.stxt.template;
 import java.util.List;
 
 import dev.stxt.Node;
-import dev.stxt.ParseException;
 import dev.stxt.Parser;
+import dev.stxt.exceptions.ParseException;
 import dev.stxt.schema.Schema;
 import dev.stxt.schema.SchemaChild;
 import dev.stxt.schema.SchemaNode;

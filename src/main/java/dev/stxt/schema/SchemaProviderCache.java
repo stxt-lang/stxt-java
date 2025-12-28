@@ -7,6 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import dev.stxt.Node;
 import dev.stxt.Parser;
+import dev.stxt.exceptions.SchemaException;
 import dev.stxt.resources.ResourcesLoader;
 
 final class SchemaProviderCache implements SchemaProvider {

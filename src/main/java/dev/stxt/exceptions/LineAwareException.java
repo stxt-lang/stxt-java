@@ -1,4 +1,4 @@
-package dev.stxt;
+package dev.stxt.exceptions;
 
 public abstract class LineAwareException extends STXTException {
 	
