@@ -1,6 +1,10 @@
-package dev.stxt.schema;
+package dev.stxt.template;
 
 import org.junit.jupiter.api.Test;
+
+import dev.stxt.template.ChildLine;
+import dev.stxt.template.ChildLineParser;
+
 import org.junit.jupiter.api.Assertions;
 
 public class TemplateChildParserTest {
@@ -14,7 +18,7 @@ public class TemplateChildParserTest {
 	}
 
 	private void checkLine(String string, Integer min, Integer max, String type) {
-		ChildLine cl = TemplateChildLineParser.parse(string, 0);
+		ChildLine cl = ChildLineParser.parse(string, 0);
 		System.out.println("cl = " + cl);
 		Assertions.assertEquals(min, cl.getMin());
 		Assertions.assertEquals(max, cl.getMax());

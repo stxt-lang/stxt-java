@@ -1,6 +1,6 @@
 package dev.stxt.schema;
 
-class SchemaChild {
+public class SchemaChild {
 	private String name;
 	private String namespace;
 	private Integer min = null;

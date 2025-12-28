@@ -3,7 +3,7 @@ package dev.stxt.schema;
 import java.util.HashMap;
 import java.util.Map;
 
-class SchemaNode {
+public class SchemaNode {
 	private String name;
 	private String type;
 	private Map<String, SchemaChild> children = new HashMap<>();

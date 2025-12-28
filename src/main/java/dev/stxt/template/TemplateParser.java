@@ -1,13 +1,16 @@
-package dev.stxt.schema;
+package dev.stxt.template;
 
 import java.util.List;
 
 import dev.stxt.Node;
 import dev.stxt.ParseException;
 import dev.stxt.Parser;
+import dev.stxt.schema.Schema;
+import dev.stxt.schema.SchemaChild;
+import dev.stxt.schema.SchemaNode;
 import dev.stxt.utils.StringUtils;
 
-public class TemplateSchemaParser {
+public class TemplateParser {
 	
 	public static Schema transformNodeToSchema(Node node) {
 		Schema result = new Schema();
@@ -38,7 +41,7 @@ public class TemplateSchemaParser {
 		String namespace = node.getNamespace();
 		
 		// Miramos datos
-		ChildLine cl = TemplateChildLineParser.parse(node.getValue(), node.getLine());
+		ChildLine cl = ChildLineParser.parse(node.getValue(), node.getLine());
 		
 		if (namespace.isEmpty()) namespace = schema.getNamespace(); // Es del template
 		else {
@@ -71,7 +74,7 @@ public class TemplateSchemaParser {
 		
 		// Insertamos childs
 		for (Node child: childrenNode) {
-			cl = TemplateChildLineParser.parse(child.getValue(), child.getLine());
+			cl = ChildLineParser.parse(child.getValue(), child.getLine());
 			
 			String childName = child.getName();
 			String childNamespace = child.getNamespace();

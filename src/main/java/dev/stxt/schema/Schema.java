@@ -3,7 +3,7 @@ package dev.stxt.schema;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-class Schema {
+public class Schema {
 	public static final String SCHEMA_NAMESPACE = "@stxt.schema";
 
 	private Map<String, SchemaNode> nodes = new LinkedHashMap<String, SchemaNode>();

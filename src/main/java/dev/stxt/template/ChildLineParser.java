@@ -1,11 +1,11 @@
-package dev.stxt.schema;
+package dev.stxt.template;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import dev.stxt.ParseException;
 
-public final class TemplateChildLineParser {
+public final class ChildLineParser {
 
     private static final Pattern CHILD_LINE_PATTERN = Pattern.compile(
             "^\\s*" +
@@ -14,7 +14,7 @@ public final class TemplateChildLineParser {
             "\\s*$"
         );
     
-    private TemplateChildLineParser() {
+    private ChildLineParser() {
         // utility
     }
 

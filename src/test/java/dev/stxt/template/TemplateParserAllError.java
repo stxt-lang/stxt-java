@@ -1,4 +1,4 @@
-package dev.stxt.schema;
+package dev.stxt.template;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -13,6 +13,8 @@ import org.junit.jupiter.api.Test;
 import dev.stxt.Node;
 import dev.stxt.ParseException;
 import dev.stxt.Parser;
+import dev.stxt.schema.Schema;
+import dev.stxt.template.TemplateParser;
 import dev.stxt.utils.FileUtils;
 import test.FileTestLoction;
 import test.JSON;
@@ -38,7 +40,7 @@ public class TemplateParserAllError {
 				System.out.println("***************************************************");
 				System.out.println("FILE: " + file.getAbsolutePath());
 				Node node = parser.parseFile(file).get(0);
-				Schema sch = TemplateSchemaParser.transformNodeToSchema(node);
+				Schema sch = TemplateParser.transformNodeToSchema(node);
 				System.out.println(JSON.toJsonPretty(sch));
 				fail("Debería haber saltado excepción!!");
 			} catch (ParseException e) {
