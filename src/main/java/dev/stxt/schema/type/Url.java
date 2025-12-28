@@ -7,10 +7,10 @@ import dev.stxt.Node;
 import dev.stxt.processors.ValidationException;
 import dev.stxt.schema.Type;
 
-public final class UrlType implements Type {
-	public static final UrlType INSTANCE = new UrlType();
+public final class Url implements Type {
+	public static final Url INSTANCE = new Url();
 
-	private UrlType() {
+	private Url() {
 	}
 
 	@Override

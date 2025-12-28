@@ -2,11 +2,11 @@ package dev.stxt.schema.type;
 
 import java.util.regex.Pattern;
 
-public final class DateType extends RegexValueType {
+public final class Date extends RegexValue {
 	private static final Pattern P_DATE = Pattern.compile("^\\d{4}-\\d{2}-\\d{2}$");
-	public static final DateType INSTANCE = new DateType();
+	public static final Date INSTANCE = new Date();
 
-	private DateType() {
+	private Date() {
 		super(P_DATE, "Invalid date");
 	}
 

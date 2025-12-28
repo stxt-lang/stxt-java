@@ -4,42 +4,42 @@ import java.util.HashMap;
 import java.util.Map;
 
 import dev.stxt.STXTException;
-import dev.stxt.schema.type.Base64Type;
-import dev.stxt.schema.type.BooleanType;
-import dev.stxt.schema.type.DateType;
-import dev.stxt.schema.type.EmailType;
-import dev.stxt.schema.type.EmptyType;
-import dev.stxt.schema.type.HexadecimalTypeç;
-import dev.stxt.schema.type.ValueNodeType;
-import dev.stxt.schema.type.IntegerType;
-import dev.stxt.schema.type.TextNodeType;
-import dev.stxt.schema.type.NaturalType;
-import dev.stxt.schema.type.NumberType;
-import dev.stxt.schema.type.TextType;
-import dev.stxt.schema.type.TimestampType;
-import dev.stxt.schema.type.UrlType;
+import dev.stxt.schema.type.Base64;
+import dev.stxt.schema.type.Boolean;
+import dev.stxt.schema.type.Date;
+import dev.stxt.schema.type.Email;
+import dev.stxt.schema.type.Empty;
+import dev.stxt.schema.type.Hexadecimal;
+import dev.stxt.schema.type.ValueNode;
+import dev.stxt.schema.type.Integer;
+import dev.stxt.schema.type.TextNode;
+import dev.stxt.schema.type.Natural;
+import dev.stxt.schema.type.Number;
+import dev.stxt.schema.type.Text;
+import dev.stxt.schema.type.Timestamp;
+import dev.stxt.schema.type.Url;
 
 class TypeRegistry {
 	private static final Map<String, Type> REGISTRY = new HashMap<>();
 
 	static {
 		// Tipos principales
-		register(ValueNodeType.INSTANCE);
-		register(TextNodeType.INSTANCE);
+		register(ValueNode.INSTANCE);
+		register(TextNode.INSTANCE);
 		
 		// Subtipos
-		register(TextType.INSTANCE);
-		register(BooleanType.INSTANCE);
-		register(UrlType.INSTANCE);
-		register(IntegerType.INSTANCE);
-		register(NaturalType.INSTANCE);
-		register(NumberType.INSTANCE);
-		register(DateType.INSTANCE);
-		register(TimestampType.INSTANCE);
-		register(EmailType.INSTANCE);
-		register(HexadecimalTypeç.INSTANCE);
-		register(Base64Type.INSTANCE);
-		register(EmptyType.INSTANCE);
+		register(Text.INSTANCE);
+		register(Boolean.INSTANCE);
+		register(Url.INSTANCE);
+		register(Integer.INSTANCE);
+		register(Natural.INSTANCE);
+		register(Number.INSTANCE);
+		register(Date.INSTANCE);
+		register(Timestamp.INSTANCE);
+		register(Email.INSTANCE);
+		register(Hexadecimal.INSTANCE);
+		register(Base64.INSTANCE);
+		register(Empty.INSTANCE);
 	}
 
 	public static Type get(String nodeType) {

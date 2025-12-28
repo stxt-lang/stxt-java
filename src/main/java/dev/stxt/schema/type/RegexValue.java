@@ -10,11 +10,11 @@ import dev.stxt.schema.Type;
 /**
  * Base validator for simple regex-based value checks.
  */
-abstract class RegexValueType implements Type {
+abstract class RegexValue implements Type {
 	private final Pattern pattern;
 	private final String error;
 
-	protected RegexValueType(Pattern pattern, String error) {
+	protected RegexValue(Pattern pattern, String error) {
 		this.pattern = pattern;
 		this.error = error;
 	}

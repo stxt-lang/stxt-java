@@ -4,10 +4,10 @@ import dev.stxt.Node;
 import dev.stxt.processors.ValidationException;
 import dev.stxt.schema.Type;
 
-public final class TextNodeType implements Type {
-	public static final TextNodeType INSTANCE = new TextNodeType();
+public final class TextNode implements Type {
+	public static final TextNode INSTANCE = new TextNode();
 
-	private TextNodeType() {
+	private TextNode() {
 	}
 
 	@Override

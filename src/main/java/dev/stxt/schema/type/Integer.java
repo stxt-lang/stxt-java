@@ -2,11 +2,11 @@ package dev.stxt.schema.type;
 
 import java.util.regex.Pattern;
 
-public final class IntegerType extends RegexValueType {
+public final class Integer extends RegexValue {
 	private static final Pattern P_INTEGER = Pattern.compile("^(\\-|\\+)?\\d+$");
-	public static final IntegerType INSTANCE = new IntegerType();
+	public static final Integer INSTANCE = new Integer();
 
-	private IntegerType() {
+	private Integer() {
 		super(P_INTEGER, "Invalid integer");
 	}
 
