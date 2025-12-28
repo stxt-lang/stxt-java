@@ -11,7 +11,7 @@ import dev.stxt.schema.type.EmptyValidator;
 import dev.stxt.schema.type.HexadecimalValidator;
 import dev.stxt.schema.type.InlineTextValidator;
 import dev.stxt.schema.type.IntegerValidator;
-import dev.stxt.schema.type.MultilineTextValidator;
+import dev.stxt.schema.type.TextNodeValidator;
 import dev.stxt.schema.type.NaturalValidator;
 import dev.stxt.schema.type.NumberValidator;
 import dev.stxt.schema.type.TextValidator;
@@ -21,7 +21,7 @@ import dev.stxt.schema.type.UrlValidator;
 class TypeRegistry {
 	private static final String TEXT = "TEXT";
 	private static final String INLINE_TEXT = "INLINE TEXT";
-	private static final String MULTILINE_TEXT = "MULTILINE TEXT";
+	private static final String TEXT_NODE = "MULTILINE TEXT";
 	private static final String NUMBER = "NUMBER";
 	private static final String BOOLEAN = "BOOLEAN";
 	private static final String DATE = "DATE";
@@ -50,7 +50,7 @@ class TypeRegistry {
 		REGISTRY.put(EMPTY, EmptyValidator.INSTANCE);
 		REGISTRY.put(TEXT, TextValidator.INSTANCE);
 		REGISTRY.put(INLINE_TEXT, InlineTextValidator.INSTANCE);
-		REGISTRY.put(MULTILINE_TEXT, MultilineTextValidator.INSTANCE);
+		REGISTRY.put(TEXT_NODE, TextNodeValidator.INSTANCE);
 	}
 
 	public static TypeValidator get(String nodeType) {

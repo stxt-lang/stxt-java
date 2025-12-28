@@ -21,11 +21,11 @@ class LineIndent {
 
 	public static LineIndent parseLine(String line, int numLine, ParseState parseState) {
 		int stackSize = parseState.getStack().size();
-		boolean lastNodeMultiline = stackSize > 0 && parseState.getStack().peek().isTextNode();
+		boolean lastNodeText = stackSize > 0 && parseState.getStack().peek().isTextNode();
 
 		// Empty line
 		if (line.trim().isEmpty()) {
-			if (lastNodeMultiline)
+			if (lastNodeText)
 				return new LineIndent(stackSize, "");
 			else
 				return null;
@@ -56,7 +56,7 @@ class LineIndent {
 			pointer++;
 
 			// Dentro de multilínea: no consumir más niveles de los del nodo
-			if (lastNodeMultiline && level >= stackSize) {
+			if (lastNodeText && level >= stackSize) {
 				return new LineIndent(level, rightTrim(line.substring(pointer)));
 			}
 		}

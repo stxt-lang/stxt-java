@@ -102,11 +102,11 @@ public class Parser {
 
 		ArrayDeque<Node> stack = state.getStack();
 		Node lastNode = !stack.isEmpty() ? stack.peek() : null;
-		boolean lastNodeMultiline = lastNode != null && lastNode.isTextNode();
+		boolean lastNodeText = lastNode != null && lastNode.isTextNode();
 
-		// 1) Si estamos dentro de un nodo multilínea, y el nivel indica que sigue siendo texto,
+		// 1) Si estamos dentro de un nodo texto, y el nivel indica que sigue siendo texto,
 		// añadimos línea de texto y no creamos nodo.
-		if (lastNodeMultiline && currentLevel >= stack.size()) {
+		if (lastNodeText && currentLevel >= stack.size()) {
 			lastNode.addTextLine(lineIndent.lineWithoutIndent);
 			return;
 		}
