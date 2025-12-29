@@ -71,11 +71,7 @@ public class Node {
 	}
 
 	public String getQualifiedName() {
-		return namespace == null || namespace.isEmpty() ? name : namespace + ":" + name;
-	}
-
-	public String getDisplayName() {
-	    return (namespace == null || namespace.isEmpty()) ? name : name + "(" + namespace + ")";
+		return namespace == null || namespace.isEmpty() ? normalizedName : namespace + ":" + normalizedName;
 	}
 
 	public String getNamespace() {
@@ -134,11 +130,11 @@ public class Node {
 
 	// Fast access methods to children
 	public List<Node> getChildren(String cname) {
-		String key = StringUtils.normalizeSimple(cname);
+		String key = StringUtils.normalizeFull(cname);
 		List<Node> result = new ArrayList<Node>();
 
 		for (Node child : children) {
-			if (child.getName().equals(key))
+			if (child.getNormalizedName().equals(key))
 				result.add(child);
 		}
 
@@ -773,7 +769,7 @@ class SchemaValidator implements Validator {
 	
 	public void validateAgainstSchema(Node node, Schema sch) {
 		// Obtenemos node
-		NodeDefinition schemaNode = sch.getNodes().get(node.getName());
+		NodeDefinition schemaNode = sch.getNodes().get(node.getNormalizedName());
 		if (schemaNode == null) {
 			String error = "NOT EXIST NODE " + node.getName() + " for namespace " + sch.getNamespace();
 			throw new ValidationException(node.getLine(), "NODE_NOT_EXIST_IN_SCHEMA", error);
@@ -830,18 +826,20 @@ Fichero: dev/stxt/schema/ChildDefinition.java
 ```
 package dev.stxt.schema;
 
+import dev.stxt.utils.StringUtils;
+
 public class ChildDefinition {
-	private String name;
+	private String normalizedName;
 	private String namespace;
 	private Integer min = null;
 	private Integer max = null;
 
-	public String getName() {
-		return name;
+	public String getNormalizedName() {
+		return normalizedName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setNormalizedName(String name) {
+		this.normalizedName = StringUtils.normalizeFull(name);
 	}
 
 	public String getNamespace() {
@@ -869,7 +867,7 @@ public class ChildDefinition {
 	}
 
 	public String getQualifiedName() {
-		return namespace == null || namespace.isEmpty() ? name : namespace + ":" + name;
+		return namespace == null || namespace.isEmpty() ? normalizedName : namespace + ":" + normalizedName;
 	}
 }
 
@@ -1047,7 +1045,6 @@ import dev.stxt.Node;
 import dev.stxt.exceptions.ParseException;
 import dev.stxt.exceptions.SchemaException;
 import dev.stxt.exceptions.ValidationException;
-import dev.stxt.utils.StringUtils;
 
 class SchemaParser {
 
@@ -1055,7 +1052,7 @@ class SchemaParser {
 		Schema schema = new Schema();
 
 		// Node name
-		String nodeName = node.getName();
+		String nodeName = node.getNormalizedName();
 		String namespaceSchema = node.getNamespace();
 
 		// Obtenemos name y namespace
@@ -1072,8 +1069,8 @@ class SchemaParser {
 		// Obtenemos los nodos
 		for (Node n : node.getChildren("node")) {
 			NodeDefinition schNode = createFrom(n, schema.getNamespace());
-			schema.getNodes().put(schNode.getName(), schNode);
-			allNames.add(schNode.getName());
+			schema.getNodes().put(schNode.getNormalizedName(), schNode);
+			allNames.add(schNode.getNormalizedName());
 		}
 
 		// Validamos que todos los nombres estén definidos
@@ -1081,9 +1078,9 @@ class SchemaParser {
 			for (ChildDefinition schChild : schNode.getChildren().values()) {
 				if (schChild.getNamespace().equals(namespace)) // Sólo validamos del mismo namespace
 				{
-					if (!allNames.contains(schChild.getName()))
+					if (!allNames.contains(schChild.getNormalizedName()))
 						throw new ValidationException(0, "CHILD_NOT_DEFINED",
-								"Child " + schChild.getName() + " not defined in " + namespace);
+								"Child " + schChild.getNormalizedName() + " not defined in " + namespace);
 				}
 			}
 		}
@@ -1099,7 +1096,7 @@ class SchemaParser {
 		Node typeNode = n.getChild("type");
 		if (typeNode != null) type = typeNode.getValue();
 
-		result.setName(StringUtils.normalizeSimple(name));
+		result.setNormalizedName(name);
 		result.setType(type);
 
 		Node children = n.getChild("children");
@@ -1118,7 +1115,7 @@ class SchemaParser {
 		String namespace = ns.getNamespace() != null ? ns.getNamespace(): defNamespace;
 		
 		ChildDefinition schemaChild = new ChildDefinition();
-		schemaChild.setName(name);
+		schemaChild.setNormalizedName(name);
 		schemaChild.setNamespace(namespace);
 		schemaChild.setMin(getInteger(child, "min"));
 		schemaChild.setMax(getInteger(child, "max"));
@@ -1225,16 +1222,18 @@ package dev.stxt.schema;
 import java.util.HashMap;
 import java.util.Map;
 
+import dev.stxt.utils.StringUtils;
+
 public class NodeDefinition {
-	private String name;
+	private String normalizedName;
 	private String type;
 	private Map<String, ChildDefinition> children = new HashMap<>();
 	
-	public String getName() {
-		return name;
+	public String getNormalizedName() {
+		return normalizedName;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setNormalizedName(String name) {
+		this.normalizedName = StringUtils.normalizeFull(name);
 	}
 	public String getType() {
 		return type;
@@ -1454,7 +1453,7 @@ public class TemplateParser {
 
 	private static void addToSchema(Schema schema, Node node, int offset) {
 		// Obtenemos nombre qualificado
-		String name = node.getName();
+		String normalizedName = node.getNormalizedName();
 		String namespace = node.getNamespace();
 		
 		// Miramos datos
@@ -1471,19 +1470,23 @@ public class TemplateParser {
 		}
 		
 		// Miramos si es nuevo y añadimos en listado
-		NodeDefinition schemaNode = schema.getNodes().get(name);
+		NodeDefinition schemaNode = schema.getNodes().get(normalizedName);
 		if (schemaNode == null) {	// Nuevo
 			String type = cl.getType() == null? "VALUE_NODE": cl.getType();
 			schemaNode = new NodeDefinition();
-			schemaNode.setName(name);
+			schemaNode.setNormalizedName(normalizedName);
 			schemaNode.setType(type);
-			schema.getNodes().put(name, schemaNode);
+			schema.getNodes().put(normalizedName, schemaNode);
 		} else {
-			String type = StringUtils.normalizeSimple(cl.getType());
-			if (type.equals("@" + name)) return; // OK Definition
-			if (type.startsWith("@"))
-				new ParseException(node.getLine() + offset, "NODE_REFERENCE_NOT_VALID", "Reference must be '" + "@" + name + "', not '" + type + "'");
-			throw new ParseException(node.getLine() + offset, "NODE_DEFINED_MULTIPLE_TIMES", "Nodes only can defined the first time: " + name);
+			String type = cl.getType();
+			if (!type.startsWith("@"))
+				throw new ParseException(node.getLine() + offset, "NODE_DEFINED_MULTIPLE_TIMES", "Multiple node reference must start with @: " + node.getName());				
+				
+			type = type.substring(1);
+			type = StringUtils.normalizeFull(type);
+			
+			if (type.equals(normalizedName)) return; // OK Definition
+				new ParseException(node.getLine() + offset, "NODE_REFERENCE_NOT_VALID", "Reference must be '" + "@" + node.getName() + "', not '" + type + "'");
 		}
 		
 		// Una vez ya existe, si tiene hijos los intentamos crear.
@@ -1493,13 +1496,13 @@ public class TemplateParser {
 		for (Node child: childrenNode) {
 			cl = ChildLineParser.parse(child.getValue(), child.getLine());
 			
-			String childName = child.getName();
+			String childName = child.getNormalizedName();
 			String childNamespace = child.getNamespace();
 			if (childNamespace.isEmpty()) childNamespace = schema.getNamespace();
 			String childQualifiedName = childNamespace + ":" + childName;
 			
 			ChildDefinition schChild = new ChildDefinition();
-			schChild.setName(childName);
+			schChild.setNormalizedName(childName);
 			schChild.setNamespace(childNamespace);
 			schChild.setMin(cl.getMin());
 			schChild.setMax(cl.getMax());
@@ -2122,89 +2125,39 @@ public class StringUtils {
 		return input.replaceAll("\\s+", "");
 	}
 	
-	private static final Pattern DIACRITICS = Pattern.compile("\\p{Mn}+");
-
 	private static String compactSpaces(String s) {
 		if (s == null)
 			return null;
 		return s.trim().replaceAll("\\s+", " ");
 	}
 
-	public static String normalizeSimple(String name) {
-	    if (name == null) return "";
-	    String s = name.trim();
+	private static final Pattern DIACRITICS = Pattern.compile("\\p{Mn}+");
+	private static String normalizeCore(String input) {
+	    if (input == null) return "";
+	    String s = input.trim();
+	    if (s.isEmpty()) return "";
+
 	    s = Normalizer.normalize(s, Normalizer.Form.NFKD);
 	    s = DIACRITICS.matcher(s).replaceAll("");
 	    s = s.toLowerCase(Locale.ROOT);
 	    return compactSpaces(s);
 	}
+
+	public static String normalizeSimple(String input) {
+	    return normalizeCore(input);
+	}
+
+	public static String normalizeFull(String input) {
+	    String s = normalizeCore(input);
+	    if (s.isEmpty()) return "";
+
+	    // cualquier cosa que no sea [a-z0-9] => '-'
+	    s = s.replaceAll("[^a-z0-9]+", "-");
+	    // trim de '-'
+	    s = s.replaceAll("^-+|-+$", "");
+	    return s;
+	}
 	
-    /**
-     * Normalize a node name into a stable ASCII "slug".
-     *
-     * Output:
-     * - only [a-z0-9-]
-     * - words separated by single '-'
-     * - trimmed (no leading/trailing '-')
-     *
-     * Pipeline:
-     * 1) trim
-     * 2) NFKD
-     * 3) remove combining marks (Mn)
-     * 4) lowercase (Locale.ROOT)
-     * 5) map non-alnum to '-'
-     * 6) collapse '-' and trim
-     */
-    public static String normalizeFull(String input) {
-        if (input == null) return "";
-
-        String s = input.trim();
-        if (s.isEmpty()) return "";
-
-        // 1) Unicode compatibility decomposition
-        s = Normalizer.normalize(s, Normalizer.Form.NFKD);
-
-        // 2) Build slug
-        StringBuilder out = new StringBuilder(s.length());
-        boolean lastWasDash = false;
-
-        for (int i = 0; i < s.length(); i++) {
-            char ch = s.charAt(i);
-
-            // Remove combining marks (accents, diaeresis, etc.)
-            int type = Character.getType(ch);
-            if (type == Character.NON_SPACING_MARK) { // Mn
-                continue;
-            }
-
-            // Lowercase in a locale-stable way
-            ch = Character.toLowerCase(ch);
-
-            // Keep ASCII a-z / 0-9; everything else becomes a separator '-'
-            boolean isAsciiLower = (ch >= 'a' && ch <= 'z');
-            boolean isDigit = (ch >= '0' && ch <= '9');
-
-            if (isAsciiLower || isDigit) {
-                out.append(ch);
-                lastWasDash = false;
-            } else {
-                // treat any non-alnum as separator '-'
-                if (!lastWasDash && out.length() > 0) {
-                    out.append('-');
-                    lastWasDash = true;
-                }
-            }
-        }
-
-        // 3) Trim trailing '-'
-        int len = out.length();
-        while (len > 0 && out.charAt(len - 1) == '-') {
-            out.setLength(len - 1);
-            len--;
-        }
-
-        return out.toString();
-    }	
 }
 
 ```
