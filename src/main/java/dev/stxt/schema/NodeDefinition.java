@@ -30,7 +30,4 @@ public class NodeDefinition {
 	public Map<String, ChildDefinition> getChildren() {
 		return children;
 	}
-	public void setChildren(Map<String, ChildDefinition> children) {
-		this.children = children;
-	}
 }

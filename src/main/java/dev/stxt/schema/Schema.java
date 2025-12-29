@@ -12,9 +12,6 @@ public class Schema {
 	public Map<String, NodeDefinition> getNodes() {
 		return nodes;
 	}
-	public void setNodes(Map<String, NodeDefinition> nodes) {
-		this.nodes = nodes;
-	}
 	public String getNamespace() {
 		return namespace;
 	}
