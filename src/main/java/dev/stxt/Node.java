@@ -112,7 +112,7 @@ public class Node {
 		List<Node> result = new ArrayList<Node>();
 
 		for (Node child : children) {
-			if (child.getName().equals(key))
+			if (child.getNormalizedName().equals(key))
 				result.add(child);
 		}
 
