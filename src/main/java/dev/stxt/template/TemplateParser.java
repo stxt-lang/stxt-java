@@ -37,7 +37,7 @@ public class TemplateParser {
 
 	private static void addToSchema(Schema schema, Node node, int offset) {
 		// Obtenemos nombre qualificado
-		String name = node.getName();
+		String name = node.getNormalizedName();
 		String namespace = node.getNamespace();
 		
 		// Miramos datos
@@ -76,7 +76,7 @@ public class TemplateParser {
 		for (Node child: childrenNode) {
 			cl = ChildLineParser.parse(child.getValue(), child.getLine());
 			
-			String childName = child.getName();
+			String childName = child.getNormalizedName();
 			String childNamespace = child.getNamespace();
 			if (childNamespace.isEmpty()) childNamespace = schema.getNamespace();
 			String childQualifiedName = childNamespace + ":" + childName;

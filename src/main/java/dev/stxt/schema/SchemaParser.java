@@ -18,7 +18,7 @@ class SchemaParser {
 		Schema schema = new Schema();
 
 		// Node name
-		String nodeName = node.getName();
+		String nodeName = node.getNormalizedName();
 		String namespaceSchema = node.getNamespace();
 
 		// Obtenemos name y namespace
