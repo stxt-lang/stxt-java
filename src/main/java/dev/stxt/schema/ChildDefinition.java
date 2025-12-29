@@ -25,9 +25,6 @@ public class ChildDefinition {
 		return normalizedName;
 	}
 
-	public void setName(String name) {
-	}
-
 	public String getNamespace() {
 		return namespace;
 	}
