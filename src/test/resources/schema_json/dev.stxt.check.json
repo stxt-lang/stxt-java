@@ -1,60 +1,60 @@
 {
     "nodes" : {
         "type-list" : {
-            "name" : "type-list",
+            "normalized_name" : "type-list",
             "type" : "VALUE_NODE",
             "children" : {
                 "dev.stxt.check:number" : {
-                    "name" : "number",
+                    "normalized_name" : "number",
                     "namespace" : "dev.stxt.check",
                     "min" : 1,
                     "max" : null,
                     "qualified_name" : "dev.stxt.check:number"
                 },
                 "dev.stxt.check:text" : {
-                    "name" : "text",
+                    "normalized_name" : "text",
                     "namespace" : "dev.stxt.check",
                     "min" : 1,
                     "max" : null,
                     "qualified_name" : "dev.stxt.check:text"
                 },
                 "dev.stxt.check:base64" : {
-                    "name" : "base64",
+                    "normalized_name" : "base64",
                     "namespace" : "dev.stxt.check",
                     "min" : 1,
                     "max" : null,
                     "qualified_name" : "dev.stxt.check:base64"
                 },
                 "dev.stxt.check:natural" : {
-                    "name" : "natural",
+                    "normalized_name" : "natural",
                     "namespace" : "dev.stxt.check",
                     "min" : 1,
                     "max" : null,
                     "qualified_name" : "dev.stxt.check:natural"
                 },
                 "dev.stxt.check:integer" : {
-                    "name" : "integer",
+                    "normalized_name" : "integer",
                     "namespace" : "dev.stxt.check",
                     "min" : 1,
                     "max" : null,
                     "qualified_name" : "dev.stxt.check:integer"
                 },
                 "dev.stxt.check:boolean" : {
-                    "name" : "boolean",
+                    "normalized_name" : "boolean",
                     "namespace" : "dev.stxt.check",
                     "min" : 1,
                     "max" : null,
                     "qualified_name" : "dev.stxt.check:boolean"
                 },
                 "dev.stxt.check:url" : {
-                    "name" : "url",
+                    "normalized_name" : "url",
                     "namespace" : "dev.stxt.check",
                     "min" : 1,
                     "max" : null,
                     "qualified_name" : "dev.stxt.check:url"
                 },
                 "dev.stxt.check:hexadecimal" : {
-                    "name" : "hexadecimal",
+                    "normalized_name" : "hexadecimal",
                     "namespace" : "dev.stxt.check",
                     "min" : 1,
                     "max" : null,
@@ -63,42 +63,42 @@
             }
         },
         "text" : {
-            "name" : "text",
+            "normalized_name" : "text",
             "type" : "TEXT",
             "children" : { }
         },
         "natural" : {
-            "name" : "natural",
+            "normalized_name" : "natural",
             "type" : "NATURAL",
             "children" : { }
         },
         "integer" : {
-            "name" : "integer",
+            "normalized_name" : "integer",
             "type" : "INTEGER",
             "children" : { }
         },
         "number" : {
-            "name" : "number",
+            "normalized_name" : "number",
             "type" : "NUMBER",
             "children" : { }
         },
         "hexadecimal" : {
-            "name" : "hexadecimal",
+            "normalized_name" : "hexadecimal",
             "type" : "HEXADECIMAL",
             "children" : { }
         },
         "base64" : {
-            "name" : "base64",
+            "normalized_name" : "base64",
             "type" : "BASE64",
             "children" : { }
         },
         "boolean" : {
-            "name" : "boolean",
+            "normalized_name" : "boolean",
             "type" : "BOOLEAN",
             "children" : { }
         },
         "url" : {
-            "name" : "url",
+            "normalized_name" : "url",
             "type" : "URL",
             "children" : { }
         }

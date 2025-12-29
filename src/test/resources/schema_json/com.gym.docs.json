@@ -1,18 +1,18 @@
 {
     "nodes" : {
         "cliente" : {
-            "name" : "cliente",
+            "normalized_name" : "cliente",
             "type" : "VALUE_NODE",
             "children" : {
                 "com.gym.docs:datos-bancarios" : {
-                    "name" : "datos-bancarios",
+                    "normalized_name" : "datos-bancarios",
                     "namespace" : "com.gym.docs",
                     "min" : 1,
                     "max" : 1,
                     "qualified_name" : "com.gym.docs:datos-bancarios"
                 },
                 "com.gym.docs:datos-personales" : {
-                    "name" : "datos-personales",
+                    "normalized_name" : "datos-personales",
                     "namespace" : "com.gym.docs",
                     "min" : 1,
                     "max" : 1,
@@ -21,46 +21,46 @@
             }
         },
         "datos-personales" : {
-            "name" : "datos-personales",
+            "normalized_name" : "datos-personales",
             "type" : "VALUE_NODE",
             "children" : {
                 "com.gym.docs:nombre" : {
-                    "name" : "nombre",
+                    "normalized_name" : "nombre",
                     "namespace" : "com.gym.docs",
                     "min" : 1,
                     "max" : 1,
                     "qualified_name" : "com.gym.docs:nombre"
                 },
                 "com.gym.docs:cliente-vip" : {
-                    "name" : "cliente-vip",
+                    "normalized_name" : "cliente-vip",
                     "namespace" : "com.gym.docs",
                     "min" : null,
                     "max" : 1,
                     "qualified_name" : "com.gym.docs:cliente-vip"
                 },
                 "com.gym.docs:segundo-apellido" : {
-                    "name" : "segundo-apellido",
+                    "normalized_name" : "segundo-apellido",
                     "namespace" : "com.gym.docs",
                     "min" : null,
                     "max" : 1,
                     "qualified_name" : "com.gym.docs:segundo-apellido"
                 },
                 "com.gym.docs:primer-apellido" : {
-                    "name" : "primer-apellido",
+                    "normalized_name" : "primer-apellido",
                     "namespace" : "com.gym.docs",
                     "min" : 1,
                     "max" : 1,
                     "qualified_name" : "com.gym.docs:primer-apellido"
                 },
                 "com.gym.docs:edad" : {
-                    "name" : "edad",
+                    "normalized_name" : "edad",
                     "namespace" : "com.gym.docs",
                     "min" : null,
                     "max" : 1,
                     "qualified_name" : "com.gym.docs:edad"
                 },
                 "com.gym.docs:foto" : {
-                    "name" : "foto",
+                    "normalized_name" : "foto",
                     "namespace" : "com.gym.docs",
                     "min" : null,
                     "max" : null,
@@ -68,49 +68,19 @@
                 }
             }
         },
-        "nombre" : {
-            "name" : "nombre",
-            "type" : "VALUE_NODE",
-            "children" : { }
-        },
-        "primer-apellido" : {
-            "name" : "primer-apellido",
-            "type" : "VALUE_NODE",
-            "children" : { }
-        },
-        "segundo-apellido" : {
-            "name" : "segundo-apellido",
-            "type" : "VALUE_NODE",
-            "children" : { }
-        },
-        "edad" : {
-            "name" : "edad",
-            "type" : "NUMBER",
-            "children" : { }
-        },
-        "cliente-vip" : {
-            "name" : "cliente-vip",
-            "type" : "BOOLEAN",
-            "children" : { }
-        },
-        "foto" : {
-            "name" : "foto",
-            "type" : "BASE64",
-            "children" : { }
-        },
         "datos-bancarios" : {
-            "name" : "datos-bancarios",
+            "normalized_name" : "datos-bancarios",
             "type" : "VALUE_NODE",
             "children" : {
                 "com.gym.docs:numero-cuenta" : {
-                    "name" : "numero-cuenta",
+                    "normalized_name" : "numero-cuenta",
                     "namespace" : "com.gym.docs",
                     "min" : 1,
                     "max" : 1,
                     "qualified_name" : "com.gym.docs:numero-cuenta"
                 },
                 "com.gym.docs:titular-cuenta" : {
-                    "name" : "titular-cuenta",
+                    "normalized_name" : "titular-cuenta",
                     "namespace" : "com.gym.docs",
                     "min" : null,
                     "max" : 1,
@@ -118,13 +88,43 @@
                 }
             }
         },
+        "nombre" : {
+            "normalized_name" : "nombre",
+            "type" : "VALUE_NODE",
+            "children" : { }
+        },
+        "primer-apellido" : {
+            "normalized_name" : "primer-apellido",
+            "type" : "VALUE_NODE",
+            "children" : { }
+        },
+        "segundo-apellido" : {
+            "normalized_name" : "segundo-apellido",
+            "type" : "VALUE_NODE",
+            "children" : { }
+        },
+        "edad" : {
+            "normalized_name" : "edad",
+            "type" : "NUMBER",
+            "children" : { }
+        },
+        "cliente-vip" : {
+            "normalized_name" : "cliente-vip",
+            "type" : "BOOLEAN",
+            "children" : { }
+        },
+        "foto" : {
+            "normalized_name" : "foto",
+            "type" : "BASE64",
+            "children" : { }
+        },
         "titular-cuenta" : {
-            "name" : "titular-cuenta",
+            "normalized_name" : "titular-cuenta",
             "type" : "VALUE_NODE",
             "children" : { }
         },
         "numero-cuenta" : {
-            "name" : "numero-cuenta",
+            "normalized_name" : "numero-cuenta",
             "type" : "VALUE_NODE",
             "children" : { }
         }

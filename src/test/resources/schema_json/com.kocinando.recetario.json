@@ -1,11 +1,11 @@
 {
     "nodes" : {
         "recetario" : {
-            "name" : "recetario",
+            "normalized_name" : "recetario",
             "type" : "VALUE_NODE",
             "children" : {
                 "com.kocinando.receta:receta" : {
-                    "name" : "receta",
+                    "normalized_name" : "receta",
                     "namespace" : "com.kocinando.receta",
                     "min" : 1,
                     "max" : null,

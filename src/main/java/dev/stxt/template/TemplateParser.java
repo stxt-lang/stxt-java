@@ -82,7 +82,7 @@ public class TemplateParser {
 			String childQualifiedName = childNamespace + ":" + childName;
 			
 			ChildDefinition schChild = new ChildDefinition();
-			schChild.setName(childName);
+			schChild.setNormalizedName(childName);
 			schChild.setNamespace(childNamespace);
 			schChild.setMin(cl.getMin());
 			schChild.setMax(cl.getMax());

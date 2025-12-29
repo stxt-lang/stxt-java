@@ -3,17 +3,17 @@ package dev.stxt.schema;
 import dev.stxt.utils.StringUtils;
 
 public class ChildDefinition {
-	private String name;
+	private String normalizedName;
 	private String namespace;
 	private Integer min = null;
 	private Integer max = null;
 
-	public String getName() {
-		return name;
+	public String getNormalizedName() {
+		return normalizedName;
 	}
 
-	public void setName(String name) {
-		this.name = StringUtils.normalizeFull(name);
+	public void setNormalizedName(String name) {
+		this.normalizedName = StringUtils.normalizeFull(name);
 	}
 
 	public String getNamespace() {
@@ -41,6 +41,6 @@ public class ChildDefinition {
 	}
 
 	public String getQualifiedName() {
-		return namespace == null || namespace.isEmpty() ? name : namespace + ":" + name;
+		return namespace == null || namespace.isEmpty() ? normalizedName : namespace + ":" + normalizedName;
 	}
 }

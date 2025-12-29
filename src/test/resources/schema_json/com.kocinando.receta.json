@@ -1,60 +1,60 @@
 {
     "nodes" : {
         "receta" : {
-            "name" : "receta",
+            "normalized_name" : "receta",
             "type" : "VALUE_NODE",
             "children" : {
                 "com.kocinando.receta:ingredientes" : {
-                    "name" : "ingredientes",
+                    "normalized_name" : "ingredientes",
                     "namespace" : "com.kocinando.receta",
                     "min" : 1,
                     "max" : 1,
                     "qualified_name" : "com.kocinando.receta:ingredientes"
                 },
                 "com.dokumentando.doc:documento" : {
-                    "name" : "documento",
+                    "normalized_name" : "documento",
                     "namespace" : "com.dokumentando.doc",
                     "min" : null,
                     "max" : null,
                     "qualified_name" : "com.dokumentando.doc:documento"
                 },
                 "com.kocinando.receta:nombre-receta" : {
-                    "name" : "nombre-receta",
+                    "normalized_name" : "nombre-receta",
                     "namespace" : "com.kocinando.receta",
                     "min" : 1,
                     "max" : 1,
                     "qualified_name" : "com.kocinando.receta:nombre-receta"
                 },
                 "com.kocinando.receta:descripcion" : {
-                    "name" : "descripcion",
+                    "normalized_name" : "descripcion",
                     "namespace" : "com.kocinando.receta",
                     "min" : null,
                     "max" : 1,
                     "qualified_name" : "com.kocinando.receta:descripcion"
                 },
                 "com.kocinando.receta:calorias" : {
-                    "name" : "calorias",
+                    "normalized_name" : "calorias",
                     "namespace" : "com.kocinando.receta",
                     "min" : null,
                     "max" : 1,
                     "qualified_name" : "com.kocinando.receta:calorias"
                 },
                 "com.kocinando.receta:pasos" : {
-                    "name" : "pasos",
+                    "normalized_name" : "pasos",
                     "namespace" : "com.kocinando.receta",
                     "min" : 1,
                     "max" : 1,
                     "qualified_name" : "com.kocinando.receta:pasos"
                 },
                 "com.kocinando.receta:dificultad" : {
-                    "name" : "dificultad",
+                    "normalized_name" : "dificultad",
                     "namespace" : "com.kocinando.receta",
                     "min" : null,
                     "max" : 1,
                     "qualified_name" : "com.kocinando.receta:dificultad"
                 },
                 "com.kocinando.receta:comensales" : {
-                    "name" : "comensales",
+                    "normalized_name" : "comensales",
                     "namespace" : "com.kocinando.receta",
                     "min" : null,
                     "max" : 1,
@@ -63,21 +63,21 @@
             }
         },
         "nombre-receta" : {
-            "name" : "nombre-receta",
+            "normalized_name" : "nombre-receta",
             "type" : "VALUE_NODE",
             "children" : { }
         },
         "descripcion" : {
-            "name" : "descripcion",
+            "normalized_name" : "descripcion",
             "type" : "TEXT",
             "children" : { }
         },
         "ingredientes" : {
-            "name" : "ingredientes",
+            "normalized_name" : "ingredientes",
             "type" : "VALUE_NODE",
             "children" : {
                 "com.kocinando.receta:ingrediente" : {
-                    "name" : "ingrediente",
+                    "normalized_name" : "ingrediente",
                     "namespace" : "com.kocinando.receta",
                     "min" : 1,
                     "max" : null,
@@ -86,25 +86,25 @@
             }
         },
         "ingrediente" : {
-            "name" : "ingrediente",
+            "normalized_name" : "ingrediente",
             "type" : "VALUE_NODE",
             "children" : {
                 "com.kocinando.receta:unidades" : {
-                    "name" : "unidades",
+                    "normalized_name" : "unidades",
                     "namespace" : "com.kocinando.receta",
                     "min" : 1,
                     "max" : 1,
                     "qualified_name" : "com.kocinando.receta:unidades"
                 },
                 "com.kocinando.receta:cantidad" : {
-                    "name" : "cantidad",
+                    "normalized_name" : "cantidad",
                     "namespace" : "com.kocinando.receta",
                     "min" : 1,
                     "max" : 1,
                     "qualified_name" : "com.kocinando.receta:cantidad"
                 },
                 "com.kocinando.receta:nombre" : {
-                    "name" : "nombre",
+                    "normalized_name" : "nombre",
                     "namespace" : "com.kocinando.receta",
                     "min" : 1,
                     "max" : 1,
@@ -113,33 +113,33 @@
             }
         },
         "cantidad" : {
-            "name" : "cantidad",
+            "normalized_name" : "cantidad",
             "type" : "NUMBER",
             "children" : { }
         },
         "unidades" : {
-            "name" : "unidades",
+            "normalized_name" : "unidades",
             "type" : "VALUE_NODE",
             "children" : { }
         },
         "nombre" : {
-            "name" : "nombre",
+            "normalized_name" : "nombre",
             "type" : "VALUE_NODE",
             "children" : { }
         },
         "pasos" : {
-            "name" : "pasos",
+            "normalized_name" : "pasos",
             "type" : "VALUE_NODE",
             "children" : {
                 "com.kocinando.receta:descripcion" : {
-                    "name" : "descripcion",
+                    "normalized_name" : "descripcion",
                     "namespace" : "com.kocinando.receta",
                     "min" : null,
                     "max" : null,
                     "qualified_name" : "com.kocinando.receta:descripcion"
                 },
                 "com.kocinando.receta:paso" : {
-                    "name" : "paso",
+                    "normalized_name" : "paso",
                     "namespace" : "com.kocinando.receta",
                     "min" : 1,
                     "max" : null,
@@ -148,22 +148,22 @@
             }
         },
         "paso" : {
-            "name" : "paso",
+            "normalized_name" : "paso",
             "type" : "NATURAL",
             "children" : { }
         },
         "dificultad" : {
-            "name" : "dificultad",
+            "normalized_name" : "dificultad",
             "type" : "VALUE_NODE",
             "children" : { }
         },
         "calorias" : {
-            "name" : "calorias",
+            "normalized_name" : "calorias",
             "type" : "NUMBER",
             "children" : { }
         },
         "comensales" : {
-            "name" : "comensales",
+            "normalized_name" : "comensales",
             "type" : "NUMBER",
             "children" : { }
         }

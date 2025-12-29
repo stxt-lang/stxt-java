@@ -35,8 +35,8 @@ class SchemaParser {
 		// Obtenemos los nodos
 		for (Node n : node.getChildren("node")) {
 			NodeDefinition schNode = createFrom(n, schema.getNamespace());
-			schema.getNodes().put(schNode.getName(), schNode);
-			allNames.add(schNode.getName());
+			schema.getNodes().put(schNode.getNormalizedName(), schNode);
+			allNames.add(schNode.getNormalizedName());
 		}
 
 		// Validamos que todos los nombres estén definidos
@@ -44,9 +44,9 @@ class SchemaParser {
 			for (ChildDefinition schChild : schNode.getChildren().values()) {
 				if (schChild.getNamespace().equals(namespace)) // Sólo validamos del mismo namespace
 				{
-					if (!allNames.contains(schChild.getName()))
+					if (!allNames.contains(schChild.getNormalizedName()))
 						throw new ValidationException(0, "CHILD_NOT_DEFINED",
-								"Child " + schChild.getName() + " not defined in " + namespace);
+								"Child " + schChild.getNormalizedName() + " not defined in " + namespace);
 				}
 			}
 		}
@@ -81,7 +81,7 @@ class SchemaParser {
 		String namespace = ns.getNamespace() != null ? ns.getNamespace(): defNamespace;
 		
 		ChildDefinition schemaChild = new ChildDefinition();
-		schemaChild.setName(name);
+		schemaChild.setNormalizedName(name);
 		schemaChild.setNamespace(namespace);
 		schemaChild.setMin(getInteger(child, "min"));
 		schemaChild.setMax(getInteger(child, "max"));

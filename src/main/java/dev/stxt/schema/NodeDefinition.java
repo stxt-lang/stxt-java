@@ -6,15 +6,15 @@ import java.util.Map;
 import dev.stxt.utils.StringUtils;
 
 public class NodeDefinition {
-	private String name;
+	private String normalizedName;
 	private String type;
 	private Map<String, ChildDefinition> children = new HashMap<>();
 	
-	public String getName() {
-		return name;
+	public String getNormalizedName() {
+		return normalizedName;
 	}
 	public void setName(String name) {
-		this.name = StringUtils.normalizeFull(name);
+		this.normalizedName = StringUtils.normalizeFull(name);
 	}
 	public String getType() {
 		return type;

@@ -1,32 +1,32 @@
 {
     "nodes" : {
         "receta" : {
-            "name" : "receta",
+            "normalized_name" : "receta",
             "type" : "VALUE_NODE",
             "children" : {
                 "com.kocinando.receta1:ingredientes" : {
-                    "name" : "ingredientes",
+                    "normalized_name" : "ingredientes",
                     "namespace" : "com.kocinando.receta1",
                     "min" : 1,
                     "max" : 1,
                     "qualified_name" : "com.kocinando.receta1:ingredientes"
                 },
                 "com.kocinando.receta1:titulo" : {
-                    "name" : "titulo",
+                    "normalized_name" : "titulo",
                     "namespace" : "com.kocinando.receta1",
                     "min" : 1,
                     "max" : 1,
                     "qualified_name" : "com.kocinando.receta1:titulo"
                 },
                 "com.kocinando.receta1:descripcion" : {
-                    "name" : "descripcion",
+                    "normalized_name" : "descripcion",
                     "namespace" : "com.kocinando.receta1",
                     "min" : 1,
                     "max" : 1,
                     "qualified_name" : "com.kocinando.receta1:descripcion"
                 },
                 "com.kocinando.receta1:preparacion" : {
-                    "name" : "preparacion",
+                    "normalized_name" : "preparacion",
                     "namespace" : "com.kocinando.receta1",
                     "min" : 1,
                     "max" : 1,
@@ -35,22 +35,22 @@
             }
         },
         "titulo" : {
-            "name" : "titulo",
+            "normalized_name" : "titulo",
             "type" : "VALUE_NODE",
             "children" : { }
         },
         "descripcion" : {
-            "name" : "descripcion",
+            "normalized_name" : "descripcion",
             "type" : "TEXT",
             "children" : { }
         },
         "ingredientes" : {
-            "name" : "ingredientes",
+            "normalized_name" : "ingredientes",
             "type" : "TEXT",
             "children" : { }
         },
         "preparacion" : {
-            "name" : "preparacion",
+            "normalized_name" : "preparacion",
             "type" : "TEXT",
             "children" : { }
         }
