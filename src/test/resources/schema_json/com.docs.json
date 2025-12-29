@@ -1,0 +1,103 @@
+{
+    "nodes" : {
+        "email" : {
+            "normalized_name" : "email",
+            "type" : "VALUE_NODE",
+            "children" : {
+                "com.docs:cc" : {
+                    "normalized_name" : "cc",
+                    "namespace" : "com.docs",
+                    "min" : null,
+                    "max" : null,
+                    "qualified_name" : "com.docs:cc"
+                },
+                "com.docs:from" : {
+                    "normalized_name" : "from",
+                    "namespace" : "com.docs",
+                    "min" : null,
+                    "max" : null,
+                    "qualified_name" : "com.docs:from"
+                },
+                "com.docs:bcc" : {
+                    "normalized_name" : "bcc",
+                    "namespace" : "com.docs",
+                    "min" : null,
+                    "max" : null,
+                    "qualified_name" : "com.docs:bcc"
+                },
+                "com.docs:body-content" : {
+                    "normalized_name" : "body-content",
+                    "namespace" : "com.docs",
+                    "min" : 1,
+                    "max" : 1,
+                    "qualified_name" : "com.docs:body-content"
+                },
+                "com.docs:title" : {
+                    "normalized_name" : "title",
+                    "namespace" : "com.docs",
+                    "min" : null,
+                    "max" : 1,
+                    "qualified_name" : "com.docs:title"
+                },
+                "com.docs:to" : {
+                    "normalized_name" : "to",
+                    "namespace" : "com.docs",
+                    "min" : null,
+                    "max" : null,
+                    "qualified_name" : "com.docs:to"
+                },
+                "com.google:metadata" : {
+                    "normalized_name" : "metadata",
+                    "namespace" : "com.google",
+                    "min" : null,
+                    "max" : 1,
+                    "qualified_name" : "com.google:metadata"
+                }
+            }
+        },
+        "from" : {
+            "normalized_name" : "from",
+            "type" : "VALUE_NODE",
+            "children" : { }
+        },
+        "to" : {
+            "normalized_name" : "to",
+            "type" : "VALUE_NODE",
+            "children" : { }
+        },
+        "cc" : {
+            "normalized_name" : "cc",
+            "type" : "VALUE_NODE",
+            "children" : { }
+        },
+        "bcc" : {
+            "normalized_name" : "bcc",
+            "type" : "VALUE_NODE",
+            "children" : { }
+        },
+        "title" : {
+            "normalized_name" : "title",
+            "type" : "VALUE_NODE",
+            "children" : { }
+        },
+        "body-content" : {
+            "normalized_name" : "body-content",
+            "type" : "TEXT",
+            "children" : { }
+        },
+        "demo" : {
+            "normalized_name" : "demo",
+            "type" : "VALUE_NODE",
+            "children" : {
+                "com.docs:body-content" : {
+                    "normalized_name" : "body-content",
+                    "namespace" : "com.docs",
+                    "min" : null,
+                    "max" : 1,
+                    "qualified_name" : "com.docs:body-content"
+                }
+            }
+        }
+    },
+    "namespace" : "com.docs"
+}

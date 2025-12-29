@@ -62,11 +62,15 @@ public class TemplateParser {
 			schemaNode.setType(type);
 			schema.getNodes().put(normalizedName, schemaNode);
 		} else {
-			String type = StringUtils.normalizeSimple(cl.getType());
-			if (type.equals("@" + normalizedName)) return; // OK Definition
-			if (type.startsWith("@"))
+			String type = cl.getType();
+			if (!type.startsWith("@"))
+				throw new ParseException(node.getLine() + offset, "NODE_DEFINED_MULTIPLE_TIMES", "Multiple node reference must start with @: " + node.getName());				
+				
+			type = type.substring(1);
+			type = StringUtils.normalizeFull(type);
+			
+			if (type.equals(normalizedName)) return; // OK Definition
 				new ParseException(node.getLine() + offset, "NODE_REFERENCE_NOT_VALID", "Reference must be '" + "@" + node.getName() + "', not '" + type + "'");
-			throw new ParseException(node.getLine() + offset, "NODE_DEFINED_MULTIPLE_TIMES", "Nodes only can defined the first time: " + node.getName());
 		}
 		
 		// Una vez ya existe, si tiene hijos los intentamos crear.
