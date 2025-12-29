@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 
 import dev.stxt.utils.FileUtils;
 
-public class AllForIA {
+public class AllForAI {
 	public static void main(String[] args) {
 		try {
 			String contenido = leerTodoSrcMainJava();
