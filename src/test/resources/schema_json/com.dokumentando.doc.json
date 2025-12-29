@@ -34,6 +34,11 @@
                 }
             }
         },
+        "titulo" : {
+            "name" : "titulo",
+            "type" : "VALUE_NODE",
+            "children" : { }
+        },
         "secciones" : {
             "name" : "secciones",
             "type" : "VALUE_NODE",
@@ -46,11 +51,6 @@
                     "qualified_name" : "com.dokumentando.doc:seccion"
                 }
             }
-        },
-        "titulo" : {
-            "name" : "titulo",
-            "type" : "VALUE_NODE",
-            "children" : { }
         },
         "seccion" : {
             "name" : "seccion",

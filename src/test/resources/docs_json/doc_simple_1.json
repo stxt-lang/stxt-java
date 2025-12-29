@@ -39,7 +39,7 @@
             "qualified_name" : "com.dokumentando.doc:description"
         },
         {
-            "name" : "tipo-documento",
+            "name" : "tipo documento",
             "normalized_name" : "tipo-documento",
             "namespace" : "com.dokumentando.doc",
             "text_node" : false,

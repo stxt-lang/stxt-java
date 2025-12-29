@@ -68,26 +68,6 @@
                 }
             }
         },
-        "datos-bancarios" : {
-            "name" : "datos-bancarios",
-            "type" : "VALUE_NODE",
-            "children" : {
-                "com.gym.docs:numero-cuenta" : {
-                    "name" : "numero-cuenta",
-                    "namespace" : "com.gym.docs",
-                    "min" : 1,
-                    "max" : 1,
-                    "qualified_name" : "com.gym.docs:numero-cuenta"
-                },
-                "com.gym.docs:titular-cuenta" : {
-                    "name" : "titular-cuenta",
-                    "namespace" : "com.gym.docs",
-                    "min" : null,
-                    "max" : 1,
-                    "qualified_name" : "com.gym.docs:titular-cuenta"
-                }
-            }
-        },
         "nombre" : {
             "name" : "nombre",
             "type" : "VALUE_NODE",
@@ -117,6 +97,26 @@
             "name" : "foto",
             "type" : "BASE64",
             "children" : { }
+        },
+        "datos-bancarios" : {
+            "name" : "datos-bancarios",
+            "type" : "VALUE_NODE",
+            "children" : {
+                "com.gym.docs:numero-cuenta" : {
+                    "name" : "numero-cuenta",
+                    "namespace" : "com.gym.docs",
+                    "min" : 1,
+                    "max" : 1,
+                    "qualified_name" : "com.gym.docs:numero-cuenta"
+                },
+                "com.gym.docs:titular-cuenta" : {
+                    "name" : "titular-cuenta",
+                    "namespace" : "com.gym.docs",
+                    "min" : null,
+                    "max" : 1,
+                    "qualified_name" : "com.gym.docs:titular-cuenta"
+                }
+            }
         },
         "titular-cuenta" : {
             "name" : "titular-cuenta",

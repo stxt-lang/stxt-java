@@ -9,7 +9,7 @@
     "level" : 0,
     "children" : [
         {
-            "name" : "datos-personales",
+            "name" : "datos personales",
             "normalized_name" : "datos-personales",
             "namespace" : "com.gym.docs",
             "text_node" : false,
@@ -32,7 +32,7 @@
                     "qualified_name" : "com.gym.docs:nombre"
                 },
                 {
-                    "name" : "primer-apellido",
+                    "name" : "primer apellido",
                     "normalized_name" : "primer-apellido",
                     "namespace" : "com.gym.docs",
                     "text_node" : false,
@@ -58,7 +58,7 @@
                     "qualified_name" : "com.gym.docs:edad"
                 },
                 {
-                    "name" : "cliente-vip",
+                    "name" : "cliente vip",
                     "normalized_name" : "cliente-vip",
                     "namespace" : "com.gym.docs",
                     "text_node" : false,
@@ -156,7 +156,7 @@
             "qualified_name" : "com.gym.docs:datos-personales"
         },
         {
-            "name" : "datos-bancarios",
+            "name" : "datos bancarios",
             "normalized_name" : "datos-bancarios",
             "namespace" : "com.gym.docs",
             "text_node" : false,
@@ -166,7 +166,7 @@
             "level" : 1,
             "children" : [
                 {
-                    "name" : "titular-cuenta",
+                    "name" : "titular cuenta",
                     "normalized_name" : "titular-cuenta",
                     "namespace" : "com.gym.docs",
                     "text_node" : false,
@@ -179,7 +179,7 @@
                     "qualified_name" : "com.gym.docs:titular-cuenta"
                 },
                 {
-                    "name" : "numero-cuenta",
+                    "name" : "numero cuenta",
                     "normalized_name" : "numero-cuenta",
                     "namespace" : "com.gym.docs",
                     "text_node" : false,

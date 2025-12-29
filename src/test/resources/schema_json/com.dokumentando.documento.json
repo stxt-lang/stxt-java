@@ -1,25 +1,5 @@
 {
     "nodes" : {
-        "seccion" : {
-            "name" : "seccion",
-            "type" : "VALUE_NODE",
-            "children" : {
-                "com.dokumentando.documento:titulo" : {
-                    "name" : "titulo",
-                    "namespace" : "com.dokumentando.documento",
-                    "min" : 1,
-                    "max" : 1,
-                    "qualified_name" : "com.dokumentando.documento:titulo"
-                },
-                "com.dokumentando.documento:contenido" : {
-                    "name" : "contenido",
-                    "namespace" : "com.dokumentando.documento",
-                    "min" : 1,
-                    "max" : 1,
-                    "qualified_name" : "com.dokumentando.documento:contenido"
-                }
-            }
-        },
         "documento" : {
             "name" : "documento",
             "type" : "VALUE_NODE",
@@ -115,11 +95,6 @@
             "type" : "VALUE_NODE",
             "children" : { }
         },
-        "contenido" : {
-            "name" : "contenido",
-            "type" : "TEXT",
-            "children" : { }
-        },
         "cuerpo" : {
             "name" : "cuerpo",
             "type" : "TEXT",
@@ -177,6 +152,31 @@
                     "qualified_name" : "com.dokumentando.documento:seccion"
                 }
             }
+        },
+        "seccion" : {
+            "name" : "seccion",
+            "type" : "VALUE_NODE",
+            "children" : {
+                "com.dokumentando.documento:titulo" : {
+                    "name" : "titulo",
+                    "namespace" : "com.dokumentando.documento",
+                    "min" : 1,
+                    "max" : 1,
+                    "qualified_name" : "com.dokumentando.documento:titulo"
+                },
+                "com.dokumentando.documento:contenido" : {
+                    "name" : "contenido",
+                    "namespace" : "com.dokumentando.documento",
+                    "min" : 1,
+                    "max" : 1,
+                    "qualified_name" : "com.dokumentando.documento:contenido"
+                }
+            }
+        },
+        "contenido" : {
+            "name" : "contenido",
+            "type" : "TEXT",
+            "children" : { }
         },
         "tipo-documento" : {
             "name" : "tipo-documento",

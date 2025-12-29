@@ -9,7 +9,7 @@
     "level" : 0,
     "children" : [
         {
-            "name" : "nombre-receta",
+            "name" : "nombre receta",
             "normalized_name" : "nombre-receta",
             "namespace" : "com.kocinando.receta",
             "text_node" : false,

@@ -20,6 +20,11 @@
                 }
             }
         },
+        "description" : {
+            "name" : "description",
+            "type" : "TEXT",
+            "children" : { }
+        },
         "node" : {
             "name" : "node",
             "type" : "VALUE_NODE",
@@ -47,6 +52,11 @@
                 }
             }
         },
+        "type" : {
+            "name" : "type",
+            "type" : "VALUE_NODE",
+            "children" : { }
+        },
         "children" : {
             "name" : "children",
             "type" : "VALUE_NODE",
@@ -59,11 +69,6 @@
                     "qualified_name" : "@stxt.schema:child"
                 }
             }
-        },
-        "description" : {
-            "name" : "description",
-            "type" : "TEXT",
-            "children" : { }
         },
         "child" : {
             "name" : "child",
@@ -93,11 +98,6 @@
         "max" : {
             "name" : "max",
             "type" : "NATURAL",
-            "children" : { }
-        },
-        "type" : {
-            "name" : "type",
-            "type" : "VALUE_NODE",
             "children" : { }
         }
     },

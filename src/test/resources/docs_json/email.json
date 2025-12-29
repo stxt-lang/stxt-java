@@ -61,7 +61,7 @@
             "qualified_name" : "com.example.docs:title"
         },
         {
-            "name" : "body-content",
+            "name" : "body content",
             "normalized_name" : "body-content",
             "namespace" : "com.example.docs",
             "text_node" : true,

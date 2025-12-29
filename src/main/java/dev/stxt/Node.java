@@ -22,7 +22,7 @@ public class Node {
 	public Node(int line, int level, String name, String namespace, boolean textNode, String value) {
 		this.level = level;
 		this.line = line;
-		this.name = StringUtils.normalizeFull(name);
+		this.name = StringUtils.normalizeSimple(name);
 		this.normalizedName = StringUtils.normalizeFull(name);
 		this.namespace = namespace;
 		this.value = (value == null ? "" : value.trim());
@@ -45,7 +45,7 @@ public class Node {
 	}
 
 	public String getQualifiedName() {
-		return namespace == null || namespace.isEmpty() ? name : namespace + ":" + name;
+		return namespace == null || namespace.isEmpty() ? normalizedName : namespace + ":" + normalizedName;
 	}
 
 	public String getNamespace() {
