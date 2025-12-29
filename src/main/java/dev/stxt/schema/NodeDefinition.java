@@ -8,26 +8,24 @@ import dev.stxt.exceptions.SchemaException;
 import dev.stxt.utils.StringUtils;
 
 public class NodeDefinition {
-	private String name;
-	private String normalizedName;
-	private String type;
-	private Map<String, ChildDefinition> children = new HashMap<>();
+	private final String name;
+	private final String normalizedName;
+	private final String type;
+	private final Map<String, ChildDefinition> children = new HashMap<>();
 	
+	public NodeDefinition(String name, String type) {
+		this.name = StringUtils.normalizeSimple(name);
+		this.normalizedName = StringUtils.normalizeFull(name);
+		this.type = type;
+	}
 	public String getName() {
 		return name;
 	}
 	public String getNormalizedName() {
 		return normalizedName;
 	}
-	public void setName(String name) {
-		this.name = StringUtils.normalizeSimple(name);
-		this.normalizedName = StringUtils.normalizeFull(name);
-	}
 	public String getType() {
 		return type;
-	}
-	public void setType(String type) {
-		this.type = type;
 	}
 	public Map<String, ChildDefinition> getChildren() {
 		return Collections.unmodifiableMap(children);

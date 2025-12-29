@@ -54,16 +54,13 @@ class SchemaParser {
 	}
 
 	private static NodeDefinition createFrom(Node n, String namespace) {
-		NodeDefinition result = new NodeDefinition();
-
 		String name = n.getValue();
 		String type = "VALUE_NODE";
 		Node typeNode = n.getChild("type");
 		if (typeNode != null) type = typeNode.getValue();
 
-		result.setName(name);
-		result.setType(type);
-
+		NodeDefinition result = new NodeDefinition(name, type);
+		
 		Node children = n.getChild("children");
 		if (children != null) {
 			for (Node child: children.getChildren("child"))
