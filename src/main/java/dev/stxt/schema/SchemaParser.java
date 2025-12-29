@@ -34,7 +34,7 @@ class SchemaParser {
 		// Obtenemos los nodos
 		for (Node n : node.getChildren("node")) {
 			NodeDefinition schNode = createFrom(n, schema.getNamespace());
-			schema.getNodes().put(schNode.getNormalizedName(), schNode);
+			schema.addNodeDefinition(schNode);
 			allNames.add(schNode.getNormalizedName());
 		}
 
@@ -85,7 +85,7 @@ class SchemaParser {
 		schemaChild.setMin(getInteger(child, "min"));
 		schemaChild.setMax(getInteger(child, "max"));
 		
-		schemaNode.getChildren().put(schemaChild.getQualifiedName(), schemaChild);
+		schemaNode.addChildDefinition(schemaChild);
 	}
 
 	private static Integer getInteger(Node node, String name) {

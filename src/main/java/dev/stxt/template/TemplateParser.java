@@ -37,8 +37,8 @@ public class TemplateParser {
 
 	private static void addToSchema(Schema schema, Node node, int offset) {
 		// Obtenemos nombre qualificado
-		String normalizedName = node.getNormalizedName();
 		String namespace = node.getNamespace();
+		String name = node.getName();
 		
 		// Miramos datos
 		ChildLine cl = ChildLineParser.parse(node.getValue(), node.getLine());
@@ -54,13 +54,13 @@ public class TemplateParser {
 		}
 		
 		// Miramos si es nuevo y añadimos en listado
-		NodeDefinition schemaNode = schema.getNodes().get(normalizedName);
+		NodeDefinition schemaNode = schema.getNodeDefinition(name);
 		if (schemaNode == null) {	// Nuevo
 			String type = cl.getType() == null? "VALUE_NODE": cl.getType();
 			schemaNode = new NodeDefinition();
 			schemaNode.setName(node.getName());
 			schemaNode.setType(type);
-			schema.getNodes().put(normalizedName, schemaNode);
+			schema.addNodeDefinition(schemaNode);
 		} else {
 			String type = cl.getType();
 			if (!type.startsWith("@"))
@@ -69,7 +69,7 @@ public class TemplateParser {
 			type = type.substring(1);
 			type = StringUtils.normalizeFull(type);
 			
-			if (type.equals(normalizedName)) return; // OK Definition
+			if (type.equals(node.getNormalizedName())) return; // OK Definition
 			throw new ParseException(node.getLine() + offset, "NODE_REFERENCE_NOT_VALID", "Reference must be '" + "@" + node.getName() + "', not '" + type + "'");
 		}
 		
@@ -83,14 +83,13 @@ public class TemplateParser {
 			String childName = child.getName();
 			String childNamespace = child.getNamespace();
 			if (childNamespace.isEmpty()) childNamespace = schema.getNamespace();
-			String childQualifiedName = childNamespace + ":" + child.getNormalizedName();
 			
 			ChildDefinition schChild = new ChildDefinition();
 			schChild.setName(childName);
 			schChild.setNamespace(childNamespace);
 			schChild.setMin(cl.getMin());
 			schChild.setMax(cl.getMax());
-			schemaNode.getChildren().put(childQualifiedName, schChild);
+			schemaNode.addChildDefinition(schChild);
 			
 			addToSchema(schema, child, offset);
 		}

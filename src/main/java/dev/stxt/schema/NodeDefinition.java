@@ -1,8 +1,10 @@
 package dev.stxt.schema;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import dev.stxt.exceptions.SchemaException;
 import dev.stxt.utils.StringUtils;
 
 public class NodeDefinition {
@@ -28,6 +30,11 @@ public class NodeDefinition {
 		this.type = type;
 	}
 	public Map<String, ChildDefinition> getChildren() {
-		return children;
+		return Collections.unmodifiableMap(children);
+	}
+	public void addChildDefinition(ChildDefinition childDefinition) {
+		String qname = childDefinition.getQualifiedName();
+		//if (children.containsKey(qname)) throw new SchemaException("CHILD_DEF_ALREADY_DEFINED", "Exists a previous node definition with: " + qname);
+		children.put(qname, childDefinition);
 	}
 }
