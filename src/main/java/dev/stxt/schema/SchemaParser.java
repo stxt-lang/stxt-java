@@ -61,7 +61,7 @@ class SchemaParser {
 		Node typeNode = n.getChild("type");
 		if (typeNode != null) type = typeNode.getValue();
 
-		result.setNormalizedName(name);
+		result.setName(name);
 		result.setType(type);
 
 		Node children = n.getChild("children");
@@ -80,7 +80,7 @@ class SchemaParser {
 		String namespace = ns.getNamespace() != null ? ns.getNamespace(): defNamespace;
 		
 		ChildDefinition schemaChild = new ChildDefinition();
-		schemaChild.setNormalizedName(name);
+		schemaChild.setName(name);
 		schemaChild.setNamespace(namespace);
 		schemaChild.setMin(getInteger(child, "min"));
 		schemaChild.setMax(getInteger(child, "max"));

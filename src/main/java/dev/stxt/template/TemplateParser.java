@@ -58,7 +58,7 @@ public class TemplateParser {
 		if (schemaNode == null) {	// Nuevo
 			String type = cl.getType() == null? "VALUE_NODE": cl.getType();
 			schemaNode = new NodeDefinition();
-			schemaNode.setNormalizedName(normalizedName);
+			schemaNode.setName(normalizedName);
 			schemaNode.setType(type);
 			schema.getNodes().put(normalizedName, schemaNode);
 		} else {
@@ -86,7 +86,7 @@ public class TemplateParser {
 			String childQualifiedName = childNamespace + ":" + childName;
 			
 			ChildDefinition schChild = new ChildDefinition();
-			schChild.setNormalizedName(childName);
+			schChild.setName(childName);
 			schChild.setNamespace(childNamespace);
 			schChild.setMin(cl.getMin());
 			schChild.setMax(cl.getMax());

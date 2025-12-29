@@ -12,7 +12,7 @@ public class ChildDefinition {
 		return normalizedName;
 	}
 
-	public void setNormalizedName(String name) {
+	public void setName(String name) {
 		this.normalizedName = StringUtils.normalizeFull(name);
 	}
 
