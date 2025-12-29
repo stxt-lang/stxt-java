@@ -838,7 +838,7 @@ public class ChildDefinition {
 		return normalizedName;
 	}
 
-	public void setNormalizedName(String name) {
+	public void setName(String name) {
 		this.normalizedName = StringUtils.normalizeFull(name);
 	}
 
@@ -1096,7 +1096,7 @@ class SchemaParser {
 		Node typeNode = n.getChild("type");
 		if (typeNode != null) type = typeNode.getValue();
 
-		result.setNormalizedName(name);
+		result.setName(name);
 		result.setType(type);
 
 		Node children = n.getChild("children");
@@ -1115,7 +1115,7 @@ class SchemaParser {
 		String namespace = ns.getNamespace() != null ? ns.getNamespace(): defNamespace;
 		
 		ChildDefinition schemaChild = new ChildDefinition();
-		schemaChild.setNormalizedName(name);
+		schemaChild.setName(name);
 		schemaChild.setNamespace(namespace);
 		schemaChild.setMin(getInteger(child, "min"));
 		schemaChild.setMax(getInteger(child, "max"));
@@ -1232,7 +1232,7 @@ public class NodeDefinition {
 	public String getNormalizedName() {
 		return normalizedName;
 	}
-	public void setNormalizedName(String name) {
+	public void setName(String name) {
 		this.normalizedName = StringUtils.normalizeFull(name);
 	}
 	public String getType() {
@@ -1474,7 +1474,7 @@ public class TemplateParser {
 		if (schemaNode == null) {	// Nuevo
 			String type = cl.getType() == null? "VALUE_NODE": cl.getType();
 			schemaNode = new NodeDefinition();
-			schemaNode.setNormalizedName(normalizedName);
+			schemaNode.setName(normalizedName);
 			schemaNode.setType(type);
 			schema.getNodes().put(normalizedName, schemaNode);
 		} else {
@@ -1486,7 +1486,7 @@ public class TemplateParser {
 			type = StringUtils.normalizeFull(type);
 			
 			if (type.equals(normalizedName)) return; // OK Definition
-				new ParseException(node.getLine() + offset, "NODE_REFERENCE_NOT_VALID", "Reference must be '" + "@" + node.getName() + "', not '" + type + "'");
+			throw new ParseException(node.getLine() + offset, "NODE_REFERENCE_NOT_VALID", "Reference must be '" + "@" + node.getName() + "', not '" + type + "'");
 		}
 		
 		// Una vez ya existe, si tiene hijos los intentamos crear.
@@ -1502,7 +1502,7 @@ public class TemplateParser {
 			String childQualifiedName = childNamespace + ":" + childName;
 			
 			ChildDefinition schChild = new ChildDefinition();
-			schChild.setNormalizedName(childName);
+			schChild.setName(childName);
 			schChild.setNamespace(childNamespace);
 			schChild.setMin(cl.getMin());
 			schChild.setMax(cl.getMax());

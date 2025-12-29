@@ -70,7 +70,7 @@ public class TemplateParser {
 			type = StringUtils.normalizeFull(type);
 			
 			if (type.equals(normalizedName)) return; // OK Definition
-				new ParseException(node.getLine() + offset, "NODE_REFERENCE_NOT_VALID", "Reference must be '" + "@" + node.getName() + "', not '" + type + "'");
+			throw new ParseException(node.getLine() + offset, "NODE_REFERENCE_NOT_VALID", "Reference must be '" + "@" + node.getName() + "', not '" + type + "'");
 		}
 		
 		// Una vez ya existe, si tiene hijos los intentamos crear.
