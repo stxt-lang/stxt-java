@@ -24,9 +24,10 @@ public class Node {
 		this.line = line;
 		this.name = StringUtils.compactSpaces(name);
 		this.normalizedName = StringUtils.normalizeFull(name);
-		this.namespace = namespace;
+		this.namespace = StringUtils.lowerCase(namespace);
 		this.value = (value == null ? "" : value.trim());
 		this.textNode = textNode;
+		NamespaceValidator.validateNamespaceFormat(namespace, line);
 
 		if (!this.value.isEmpty() && this.isTextNode())
 			throw new IllegalArgumentException("Not empty value with textNode");
