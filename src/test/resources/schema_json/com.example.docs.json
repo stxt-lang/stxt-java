@@ -32,13 +32,6 @@
                     "max" : null,
                     "qualified_name" : "com.example.docs:from"
                 },
-                "com.example.docs:body content" : {
-                    "name" : "body content",
-                    "namespace" : "com.example.docs",
-                    "min" : 1,
-                    "max" : 1,
-                    "qualified_name" : "com.example.docs:body content"
-                },
                 "com.example.docs:title" : {
                     "name" : "title",
                     "namespace" : "com.example.docs",
@@ -52,6 +45,13 @@
                     "min" : null,
                     "max" : 1,
                     "qualified_name" : "com.google:metadata"
+                },
+                "com.example.docs:body-content" : {
+                    "name" : "body-content",
+                    "namespace" : "com.example.docs",
+                    "min" : 1,
+                    "max" : 1,
+                    "qualified_name" : "com.example.docs:body-content"
                 }
             }
         },
@@ -80,8 +80,8 @@
             "type" : "VALUE_NODE",
             "children" : { }
         },
-        "body content" : {
-            "name" : "body content",
+        "body-content" : {
+            "name" : "body-content",
             "type" : "TEXT",
             "children" : { }
         }

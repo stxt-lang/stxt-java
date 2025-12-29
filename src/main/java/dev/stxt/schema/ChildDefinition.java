@@ -1,5 +1,7 @@
 package dev.stxt.schema;
 
+import dev.stxt.utils.StringUtils;
+
 public class ChildDefinition {
 	private String name;
 	private String namespace;
@@ -11,7 +13,7 @@ public class ChildDefinition {
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		this.name = StringUtils.normalizeFull(name);
 	}
 
 	public String getNamespace() {

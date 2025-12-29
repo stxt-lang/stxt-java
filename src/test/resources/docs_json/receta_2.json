@@ -54,7 +54,7 @@
             "qualified_name" : "com.dokumentando.documento:cuerpo"
         },
         {
-            "name" : "fecha creacion",
+            "name" : "fecha-creacion",
             "normalized_name" : "fecha-creacion",
             "namespace" : "com.dokumentando.documento",
             "text_node" : false,
@@ -63,12 +63,12 @@
             "line" : 11,
             "level" : 1,
             "children" : [ ],
-            "display_name" : "fecha creacion(com.dokumentando.documento)",
+            "display_name" : "fecha-creacion(com.dokumentando.documento)",
             "text" : "2024-06-08",
-            "qualified_name" : "com.dokumentando.documento:fecha creacion"
+            "qualified_name" : "com.dokumentando.documento:fecha-creacion"
         },
         {
-            "name" : "ultima modificacion",
+            "name" : "ultima-modificacion",
             "normalized_name" : "ultima-modificacion",
             "namespace" : "com.dokumentando.documento",
             "text_node" : false,
@@ -77,12 +77,12 @@
             "line" : 12,
             "level" : 1,
             "children" : [ ],
-            "display_name" : "ultima modificacion(com.dokumentando.documento)",
+            "display_name" : "ultima-modificacion(com.dokumentando.documento)",
             "text" : "2024-06-08T14:30:00Z",
-            "qualified_name" : "com.dokumentando.documento:ultima modificacion"
+            "qualified_name" : "com.dokumentando.documento:ultima-modificacion"
         },
         {
-            "name" : "email contacto",
+            "name" : "email-contacto",
             "normalized_name" : "email-contacto",
             "namespace" : "com.dokumentando.documento",
             "text_node" : false,
@@ -91,12 +91,12 @@
             "line" : 13,
             "level" : 1,
             "children" : [ ],
-            "display_name" : "email contacto(com.dokumentando.documento)",
+            "display_name" : "email-contacto(com.dokumentando.documento)",
             "text" : "maria.lopez@example.com",
-            "qualified_name" : "com.dokumentando.documento:email contacto"
+            "qualified_name" : "com.dokumentando.documento:email-contacto"
         },
         {
-            "name" : "sitio web",
+            "name" : "sitio-web",
             "normalized_name" : "sitio-web",
             "namespace" : "com.dokumentando.documento",
             "text_node" : false,
@@ -105,12 +105,12 @@
             "line" : 14,
             "level" : 1,
             "children" : [ ],
-            "display_name" : "sitio web(com.dokumentando.documento)",
+            "display_name" : "sitio-web(com.dokumentando.documento)",
             "text" : "https://www.recetasdeliciosas.com/pizza-jamon",
-            "qualified_name" : "com.dokumentando.documento:sitio web"
+            "qualified_name" : "com.dokumentando.documento:sitio-web"
         },
         {
-            "name" : "codigo postal",
+            "name" : "codigo-postal",
             "normalized_name" : "codigo-postal",
             "namespace" : "com.dokumentando.documento",
             "text_node" : false,
@@ -119,12 +119,12 @@
             "line" : 15,
             "level" : 1,
             "children" : [ ],
-            "display_name" : "codigo postal(com.dokumentando.documento)",
+            "display_name" : "codigo-postal(com.dokumentando.documento)",
             "text" : "54321",
-            "qualified_name" : "com.dokumentando.documento:codigo postal"
+            "qualified_name" : "com.dokumentando.documento:codigo-postal"
         },
         {
-            "name" : "es publico",
+            "name" : "es-publico",
             "normalized_name" : "es-publico",
             "namespace" : "com.dokumentando.documento",
             "text_node" : false,
@@ -133,12 +133,12 @@
             "line" : 16,
             "level" : 1,
             "children" : [ ],
-            "display_name" : "es publico(com.dokumentando.documento)",
+            "display_name" : "es-publico(com.dokumentando.documento)",
             "text" : "true",
-            "qualified_name" : "com.dokumentando.documento:es publico"
+            "qualified_name" : "com.dokumentando.documento:es-publico"
         },
         {
-            "name" : "color tema",
+            "name" : "color-tema",
             "normalized_name" : "color-tema",
             "namespace" : "com.dokumentando.documento",
             "text_node" : false,
@@ -147,12 +147,12 @@
             "line" : 17,
             "level" : 1,
             "children" : [ ],
-            "display_name" : "color tema(com.dokumentando.documento)",
+            "display_name" : "color-tema(com.dokumentando.documento)",
             "text" : "#FF6347",
-            "qualified_name" : "com.dokumentando.documento:color tema"
+            "qualified_name" : "com.dokumentando.documento:color-tema"
         },
         {
-            "name" : "tipo documento",
+            "name" : "tipo-documento",
             "normalized_name" : "tipo-documento",
             "namespace" : "com.dokumentando.documento",
             "text_node" : false,
@@ -161,9 +161,9 @@
             "line" : 18,
             "level" : 1,
             "children" : [ ],
-            "display_name" : "tipo documento(com.dokumentando.documento)",
+            "display_name" : "tipo-documento(com.dokumentando.documento)",
             "text" : "artículo",
-            "qualified_name" : "com.dokumentando.documento:tipo documento"
+            "qualified_name" : "com.dokumentando.documento:tipo-documento"
         },
         {
             "name" : "secciones",

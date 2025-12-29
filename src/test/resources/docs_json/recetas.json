@@ -19,7 +19,7 @@
             "level" : 1,
             "children" : [
                 {
-                    "name" : "nombre receta",
+                    "name" : "nombre-receta",
                     "normalized_name" : "nombre-receta",
                     "namespace" : "com.kocinando.receta",
                     "text_node" : false,
@@ -28,9 +28,9 @@
                     "line" : 8,
                     "level" : 2,
                     "children" : [ ],
-                    "display_name" : "nombre receta(com.kocinando.receta)",
+                    "display_name" : "nombre-receta(com.kocinando.receta)",
                     "text" : "Una receta",
-                    "qualified_name" : "com.kocinando.receta:nombre receta"
+                    "qualified_name" : "com.kocinando.receta:nombre-receta"
                 },
                 {
                     "name" : "descripcion",
@@ -344,7 +344,7 @@
             "level" : 1,
             "children" : [
                 {
-                    "name" : "nombre receta",
+                    "name" : "nombre-receta",
                     "normalized_name" : "nombre-receta",
                     "namespace" : "com.kocinando.receta",
                     "text_node" : false,
@@ -353,9 +353,9 @@
                     "line" : 42,
                     "level" : 2,
                     "children" : [ ],
-                    "display_name" : "nombre receta(com.kocinando.receta)",
+                    "display_name" : "nombre-receta(com.kocinando.receta)",
                     "text" : "Una receta",
-                    "qualified_name" : "com.kocinando.receta:nombre receta"
+                    "qualified_name" : "com.kocinando.receta:nombre-receta"
                 },
                 {
                     "name" : "descripcion",

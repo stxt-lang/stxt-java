@@ -22,7 +22,7 @@ public class Node {
 	public Node(int line, int level, String name, String namespace, boolean textNode, String value) {
 		this.level = level;
 		this.line = line;
-		this.name = StringUtils.normalizeSimple(name);
+		this.name = StringUtils.normalizeFull(name);
 		this.normalizedName = StringUtils.normalizeFull(name);
 		this.namespace = namespace;
 		this.value = (value == null ? "" : value.trim());
@@ -108,7 +108,7 @@ public class Node {
 
 	// Fast access methods to children
 	public List<Node> getChildren(String cname) {
-		String key = StringUtils.normalizeSimple(cname);
+		String key = StringUtils.normalizeFull(cname);
 		List<Node> result = new ArrayList<Node>();
 
 		for (Node child : children) {

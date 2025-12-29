@@ -1,5 +1,5 @@
 {
-    "name" : "type list",
+    "name" : "type-list",
     "normalized_name" : "type-list",
     "namespace" : "dev.stxt.check",
     "text_node" : false,
@@ -258,7 +258,7 @@
             "qualified_name" : "dev.stxt.check:url"
         }
     ],
-    "display_name" : "type list(dev.stxt.check)",
+    "display_name" : "type-list(dev.stxt.check)",
     "text" : "",
-    "qualified_name" : "dev.stxt.check:type list"
+    "qualified_name" : "dev.stxt.check:type-list"
 }

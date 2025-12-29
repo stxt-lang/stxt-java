@@ -24,13 +24,6 @@
             "name" : "documento",
             "type" : "VALUE_NODE",
             "children" : {
-                "com.dokumentando.documento:codigo postal" : {
-                    "name" : "codigo postal",
-                    "namespace" : "com.dokumentando.documento",
-                    "min" : null,
-                    "max" : null,
-                    "qualified_name" : "com.dokumentando.documento:codigo postal"
-                },
                 "com.dokumentando.documento:titulo" : {
                     "name" : "titulo",
                     "namespace" : "com.dokumentando.documento",
@@ -38,19 +31,33 @@
                     "max" : 1,
                     "qualified_name" : "com.dokumentando.documento:titulo"
                 },
-                "com.dokumentando.documento:email contacto" : {
-                    "name" : "email contacto",
+                "com.dokumentando.documento:ultima-modificacion" : {
+                    "name" : "ultima-modificacion",
                     "namespace" : "com.dokumentando.documento",
                     "min" : 1,
                     "max" : 1,
-                    "qualified_name" : "com.dokumentando.documento:email contacto"
+                    "qualified_name" : "com.dokumentando.documento:ultima-modificacion"
                 },
-                "com.dokumentando.documento:color tema" : {
-                    "name" : "color tema",
+                "com.dokumentando.documento:fecha-creacion" : {
+                    "name" : "fecha-creacion",
+                    "namespace" : "com.dokumentando.documento",
+                    "min" : 1,
+                    "max" : 1,
+                    "qualified_name" : "com.dokumentando.documento:fecha-creacion"
+                },
+                "com.dokumentando.documento:tipo-documento" : {
+                    "name" : "tipo-documento",
+                    "namespace" : "com.dokumentando.documento",
+                    "min" : 1,
+                    "max" : 1,
+                    "qualified_name" : "com.dokumentando.documento:tipo-documento"
+                },
+                "com.dokumentando.documento:codigo-postal" : {
+                    "name" : "codigo-postal",
                     "namespace" : "com.dokumentando.documento",
                     "min" : null,
-                    "max" : 1,
-                    "qualified_name" : "com.dokumentando.documento:color tema"
+                    "max" : null,
+                    "qualified_name" : "com.dokumentando.documento:codigo-postal"
                 },
                 "com.dokumentando.documento:autor" : {
                     "name" : "autor",
@@ -59,26 +66,26 @@
                     "max" : 1,
                     "qualified_name" : "com.dokumentando.documento:autor"
                 },
-                "com.dokumentando.documento:ultima modificacion" : {
-                    "name" : "ultima modificacion",
+                "com.dokumentando.documento:es-publico" : {
+                    "name" : "es-publico",
                     "namespace" : "com.dokumentando.documento",
                     "min" : 1,
                     "max" : 1,
-                    "qualified_name" : "com.dokumentando.documento:ultima modificacion"
+                    "qualified_name" : "com.dokumentando.documento:es-publico"
                 },
-                "com.dokumentando.documento:fecha creacion" : {
-                    "name" : "fecha creacion",
+                "com.dokumentando.documento:email-contacto" : {
+                    "name" : "email-contacto",
                     "namespace" : "com.dokumentando.documento",
                     "min" : 1,
                     "max" : 1,
-                    "qualified_name" : "com.dokumentando.documento:fecha creacion"
+                    "qualified_name" : "com.dokumentando.documento:email-contacto"
                 },
-                "com.dokumentando.documento:es publico" : {
-                    "name" : "es publico",
+                "com.dokumentando.documento:sitio-web" : {
+                    "name" : "sitio-web",
                     "namespace" : "com.dokumentando.documento",
                     "min" : 1,
                     "max" : 1,
-                    "qualified_name" : "com.dokumentando.documento:es publico"
+                    "qualified_name" : "com.dokumentando.documento:sitio-web"
                 },
                 "com.dokumentando.documento:secciones" : {
                     "name" : "secciones",
@@ -87,26 +94,19 @@
                     "max" : 1,
                     "qualified_name" : "com.dokumentando.documento:secciones"
                 },
-                "com.dokumentando.documento:sitio web" : {
-                    "name" : "sitio web",
-                    "namespace" : "com.dokumentando.documento",
-                    "min" : 1,
-                    "max" : 1,
-                    "qualified_name" : "com.dokumentando.documento:sitio web"
-                },
-                "com.dokumentando.documento:tipo documento" : {
-                    "name" : "tipo documento",
-                    "namespace" : "com.dokumentando.documento",
-                    "min" : 1,
-                    "max" : 1,
-                    "qualified_name" : "com.dokumentando.documento:tipo documento"
-                },
                 "com.dokumentando.documento:cuerpo" : {
                     "name" : "cuerpo",
                     "namespace" : "com.dokumentando.documento",
                     "min" : 1,
                     "max" : 1,
                     "qualified_name" : "com.dokumentando.documento:cuerpo"
+                },
+                "com.dokumentando.documento:color-tema" : {
+                    "name" : "color-tema",
+                    "namespace" : "com.dokumentando.documento",
+                    "min" : null,
+                    "max" : 1,
+                    "qualified_name" : "com.dokumentando.documento:color-tema"
                 }
             }
         },
@@ -130,38 +130,38 @@
             "type" : "VALUE_NODE",
             "children" : { }
         },
-        "fecha creacion" : {
-            "name" : "fecha creacion",
+        "fecha-creacion" : {
+            "name" : "fecha-creacion",
             "type" : "DATE",
             "children" : { }
         },
-        "ultima modificacion" : {
-            "name" : "ultima modificacion",
+        "ultima-modificacion" : {
+            "name" : "ultima-modificacion",
             "type" : "TIMESTAMP",
             "children" : { }
         },
-        "email contacto" : {
-            "name" : "email contacto",
+        "email-contacto" : {
+            "name" : "email-contacto",
             "type" : "EMAIL",
             "children" : { }
         },
-        "sitio web" : {
-            "name" : "sitio web",
+        "sitio-web" : {
+            "name" : "sitio-web",
             "type" : "URL",
             "children" : { }
         },
-        "codigo postal" : {
-            "name" : "codigo postal",
+        "codigo-postal" : {
+            "name" : "codigo-postal",
             "type" : "NUMBER",
             "children" : { }
         },
-        "es publico" : {
-            "name" : "es publico",
+        "es-publico" : {
+            "name" : "es-publico",
             "type" : "BOOLEAN",
             "children" : { }
         },
-        "color tema" : {
-            "name" : "color tema",
+        "color-tema" : {
+            "name" : "color-tema",
             "type" : "HEXADECIMAL",
             "children" : { }
         },
@@ -178,8 +178,8 @@
                 }
             }
         },
-        "tipo documento" : {
-            "name" : "tipo documento",
+        "tipo-documento" : {
+            "name" : "tipo-documento",
             "type" : "VALUE_NODE",
             "children" : { }
         }

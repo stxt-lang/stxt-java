@@ -18,6 +18,13 @@
                     "max" : null,
                     "qualified_name" : "com.dokumentando.doc:documento"
                 },
+                "com.kocinando.receta:nombre-receta" : {
+                    "name" : "nombre-receta",
+                    "namespace" : "com.kocinando.receta",
+                    "min" : 1,
+                    "max" : 1,
+                    "qualified_name" : "com.kocinando.receta:nombre-receta"
+                },
                 "com.kocinando.receta:descripcion" : {
                     "name" : "descripcion",
                     "namespace" : "com.kocinando.receta",
@@ -39,13 +46,6 @@
                     "max" : 1,
                     "qualified_name" : "com.kocinando.receta:pasos"
                 },
-                "com.kocinando.receta:nombre receta" : {
-                    "name" : "nombre receta",
-                    "namespace" : "com.kocinando.receta",
-                    "min" : 1,
-                    "max" : 1,
-                    "qualified_name" : "com.kocinando.receta:nombre receta"
-                },
                 "com.kocinando.receta:dificultad" : {
                     "name" : "dificultad",
                     "namespace" : "com.kocinando.receta",
@@ -62,8 +62,8 @@
                 }
             }
         },
-        "nombre receta" : {
-            "name" : "nombre receta",
+        "nombre-receta" : {
+            "name" : "nombre-receta",
             "type" : "VALUE_NODE",
             "children" : { }
         },

@@ -65,7 +65,7 @@
             "qualified_name" : "com.example.docs:title"
         },
         {
-            "name" : "body content",
+            "name" : "body-content",
             "normalized_name" : "body-content",
             "namespace" : "com.example.docs",
             "text_node" : true,
@@ -77,9 +77,9 @@
             "line" : 6,
             "level" : 1,
             "children" : [ ],
-            "display_name" : "body content(com.example.docs)",
+            "display_name" : "body-content(com.example.docs)",
             "text" : "Hello Mery!!\nThe book is finished!!",
-            "qualified_name" : "com.example.docs:body content"
+            "qualified_name" : "com.example.docs:body-content"
         }
     ],
     "display_name" : "email(com.example.docs)",

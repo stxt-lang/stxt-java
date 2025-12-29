@@ -41,7 +41,7 @@
             "qualified_name" : "com.dokumentando.doc:description"
         },
         {
-            "name" : "tipo documento",
+            "name" : "tipo-documento",
             "normalized_name" : "tipo-documento",
             "namespace" : "com.dokumentando.doc",
             "text_node" : false,
@@ -50,9 +50,9 @@
             "line" : 7,
             "level" : 1,
             "children" : [ ],
-            "display_name" : "tipo documento(com.dokumentando.doc)",
+            "display_name" : "tipo-documento(com.dokumentando.doc)",
             "text" : "informe",
-            "qualified_name" : "com.dokumentando.doc:tipo documento"
+            "qualified_name" : "com.dokumentando.doc:tipo-documento"
         }
     ],
     "display_name" : "documento(com.dokumentando.doc)",

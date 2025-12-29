@@ -9,7 +9,7 @@
     "level" : 0,
     "children" : [
         {
-            "name" : "nombre receta",
+            "name" : "nombre-receta",
             "normalized_name" : "nombre-receta",
             "namespace" : "com.kocinando.receta",
             "text_node" : false,
@@ -18,9 +18,9 @@
             "line" : 7,
             "level" : 1,
             "children" : [ ],
-            "display_name" : "nombre receta(com.kocinando.receta)",
+            "display_name" : "nombre-receta(com.kocinando.receta)",
             "text" : "Hola!",
-            "qualified_name" : "com.kocinando.receta:nombre receta"
+            "qualified_name" : "com.kocinando.receta:nombre-receta"
         },
         {
             "name" : "ingredientes",

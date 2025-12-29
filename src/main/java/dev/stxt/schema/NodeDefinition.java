@@ -3,6 +3,8 @@ package dev.stxt.schema;
 import java.util.HashMap;
 import java.util.Map;
 
+import dev.stxt.utils.StringUtils;
+
 public class NodeDefinition {
 	private String name;
 	private String type;
@@ -12,7 +14,7 @@ public class NodeDefinition {
 		return name;
 	}
 	public void setName(String name) {
-		this.name = name;
+		this.name = StringUtils.normalizeFull(name);
 	}
 	public String getType() {
 		return type;
