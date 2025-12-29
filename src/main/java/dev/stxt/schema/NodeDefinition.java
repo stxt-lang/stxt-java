@@ -13,7 +13,7 @@ public class NodeDefinition {
 	public String getNormalizedName() {
 		return normalizedName;
 	}
-	public void setName(String name) {
+	public void setNormalizedName(String name) {
 		this.normalizedName = StringUtils.normalizeFull(name);
 	}
 	public String getType() {

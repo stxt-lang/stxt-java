@@ -10,7 +10,6 @@ import dev.stxt.Node;
 import dev.stxt.exceptions.ParseException;
 import dev.stxt.exceptions.SchemaException;
 import dev.stxt.exceptions.ValidationException;
-import dev.stxt.utils.StringUtils;
 
 class SchemaParser {
 
@@ -62,7 +61,7 @@ class SchemaParser {
 		Node typeNode = n.getChild("type");
 		if (typeNode != null) type = typeNode.getValue();
 
-		result.setName(StringUtils.normalizeSimple(name));
+		result.setNormalizedName(name);
 		result.setType(type);
 
 		Node children = n.getChild("children");
