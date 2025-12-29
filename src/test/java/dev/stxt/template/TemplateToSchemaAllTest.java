@@ -10,7 +10,6 @@ import dev.stxt.Parser;
 import dev.stxt.resources.ResourcesLoader;
 import dev.stxt.resources.ResourcesLoaderDirectory;
 import dev.stxt.schema.Schema;
-import dev.stxt.template.TemplateParser;
 import test.FileTestLoction;
 import test.JSON;
 import test.JSONFile;

@@ -1,11 +1,7 @@
 package dev.stxt.template;
 
-import org.junit.jupiter.api.Test;
-
-import dev.stxt.template.ChildLine;
-import dev.stxt.template.ChildLineParser;
-
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class TemplateChildParserTest {
 	@Test
