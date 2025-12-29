@@ -23,7 +23,7 @@ public class Schema {
 	
 	public void addNodeDefinition(NodeDefinition nodeDefinition) {
 		String qname = nodeDefinition.getNormalizedName();
-		//if (nodes.containsKey(qname)) throw new SchemaException("NODE_DEF_ALREADY_DEFINED", "Exists a previous node definition with: " + qname);
+		if (nodes.containsKey(qname)) throw new SchemaException("NODE_DEF_ALREADY_DEFINED", "Exists a previous node definition with: " + qname);
 		nodes.put(qname, nodeDefinition);
 	}
 	

@@ -34,7 +34,7 @@ public class NodeDefinition {
 	}
 	public void addChildDefinition(ChildDefinition childDefinition) {
 		String qname = childDefinition.getQualifiedName();
-		//if (children.containsKey(qname)) throw new SchemaException("CHILD_DEF_ALREADY_DEFINED", "Exists a previous node definition with: " + qname);
+		if (children.containsKey(qname)) throw new SchemaException("CHILD_DEF_ALREADY_DEFINED", "Exists a previous node definition with: " + qname);
 		children.put(qname, childDefinition);
 	}
 }
