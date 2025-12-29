@@ -37,7 +37,7 @@ public class TemplateParser {
 
 	private static void addToSchema(Schema schema, Node node, int offset) {
 		// Obtenemos nombre qualificado
-		String name = node.getNormalizedName();
+		String normalizedName = node.getNormalizedName();
 		String namespace = node.getNamespace();
 		
 		// Miramos datos
@@ -54,19 +54,19 @@ public class TemplateParser {
 		}
 		
 		// Miramos si es nuevo y añadimos en listado
-		NodeDefinition schemaNode = schema.getNodes().get(name);
+		NodeDefinition schemaNode = schema.getNodes().get(normalizedName);
 		if (schemaNode == null) {	// Nuevo
 			String type = cl.getType() == null? "VALUE_NODE": cl.getType();
 			schemaNode = new NodeDefinition();
-			schemaNode.setNormalizedName(name);
+			schemaNode.setNormalizedName(normalizedName);
 			schemaNode.setType(type);
-			schema.getNodes().put(name, schemaNode);
+			schema.getNodes().put(normalizedName, schemaNode);
 		} else {
 			String type = StringUtils.normalizeSimple(cl.getType());
-			if (type.equals("@" + name)) return; // OK Definition
+			if (type.equals("@" + normalizedName)) return; // OK Definition
 			if (type.startsWith("@"))
-				new ParseException(node.getLine() + offset, "NODE_REFERENCE_NOT_VALID", "Reference must be '" + "@" + name + "', not '" + type + "'");
-			throw new ParseException(node.getLine() + offset, "NODE_DEFINED_MULTIPLE_TIMES", "Nodes only can defined the first time: " + name);
+				new ParseException(node.getLine() + offset, "NODE_REFERENCE_NOT_VALID", "Reference must be '" + "@" + node.getName() + "', not '" + type + "'");
+			throw new ParseException(node.getLine() + offset, "NODE_DEFINED_MULTIPLE_TIMES", "Nodes only can defined the first time: " + node.getName());
 		}
 		
 		// Una vez ya existe, si tiene hijos los intentamos crear.
