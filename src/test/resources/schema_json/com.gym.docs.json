@@ -1,13 +1,13 @@
 {
     "nodes" : {
         "cliente" : {
-            "name" : "cliente",
+            "name" : "Cliente",
             "normalized_name" : "cliente",
             "type" : "VALUE_NODE",
             "children" : {
                 "com.gym.docs:datos-bancarios" : {
                     "normalized_name" : "datos-bancarios",
-                    "name" : "datos bancarios",
+                    "name" : "Datos Bancarios",
                     "namespace" : "com.gym.docs",
                     "min" : 1,
                     "max" : 1,
@@ -15,7 +15,7 @@
                 },
                 "com.gym.docs:datos-personales" : {
                     "normalized_name" : "datos-personales",
-                    "name" : "datos personales",
+                    "name" : "Datos Personales",
                     "namespace" : "com.gym.docs",
                     "min" : 1,
                     "max" : 1,
@@ -24,13 +24,13 @@
             }
         },
         "datos-personales" : {
-            "name" : "datos personales",
+            "name" : "Datos Personales",
             "normalized_name" : "datos-personales",
             "type" : "VALUE_NODE",
             "children" : {
                 "com.gym.docs:nombre" : {
                     "normalized_name" : "nombre",
-                    "name" : "nombre",
+                    "name" : "Nombre",
                     "namespace" : "com.gym.docs",
                     "min" : 1,
                     "max" : 1,
@@ -38,7 +38,7 @@
                 },
                 "com.gym.docs:cliente-vip" : {
                     "normalized_name" : "cliente-vip",
-                    "name" : "cliente vip",
+                    "name" : "Cliente vip",
                     "namespace" : "com.gym.docs",
                     "min" : null,
                     "max" : 1,
@@ -46,7 +46,7 @@
                 },
                 "com.gym.docs:segundo-apellido" : {
                     "normalized_name" : "segundo-apellido",
-                    "name" : "segundo apellido",
+                    "name" : "Segundo apellido",
                     "namespace" : "com.gym.docs",
                     "min" : null,
                     "max" : 1,
@@ -54,7 +54,7 @@
                 },
                 "com.gym.docs:primer-apellido" : {
                     "normalized_name" : "primer-apellido",
-                    "name" : "primer apellido",
+                    "name" : "Primer apellido",
                     "namespace" : "com.gym.docs",
                     "min" : 1,
                     "max" : 1,
@@ -62,7 +62,7 @@
                 },
                 "com.gym.docs:edad" : {
                     "normalized_name" : "edad",
-                    "name" : "edad",
+                    "name" : "Edad",
                     "namespace" : "com.gym.docs",
                     "min" : null,
                     "max" : 1,
@@ -70,7 +70,7 @@
                 },
                 "com.gym.docs:foto" : {
                     "normalized_name" : "foto",
-                    "name" : "foto",
+                    "name" : "Foto",
                     "namespace" : "com.gym.docs",
                     "min" : null,
                     "max" : null,
@@ -79,13 +79,13 @@
             }
         },
         "datos-bancarios" : {
-            "name" : "datos bancarios",
+            "name" : "Datos Bancarios",
             "normalized_name" : "datos-bancarios",
             "type" : "VALUE_NODE",
             "children" : {
                 "com.gym.docs:numero-cuenta" : {
                     "normalized_name" : "numero-cuenta",
-                    "name" : "numero cuenta",
+                    "name" : "Número cuenta",
                     "namespace" : "com.gym.docs",
                     "min" : 1,
                     "max" : 1,
@@ -93,7 +93,7 @@
                 },
                 "com.gym.docs:titular-cuenta" : {
                     "normalized_name" : "titular-cuenta",
-                    "name" : "titular cuenta",
+                    "name" : "Titular cuenta",
                     "namespace" : "com.gym.docs",
                     "min" : null,
                     "max" : 1,
@@ -102,49 +102,49 @@
             }
         },
         "nombre" : {
-            "name" : "nombre",
+            "name" : "Nombre",
             "normalized_name" : "nombre",
             "type" : "VALUE_NODE",
             "children" : { }
         },
         "primer-apellido" : {
-            "name" : "primer apellido",
+            "name" : "Primer apellido",
             "normalized_name" : "primer-apellido",
             "type" : "VALUE_NODE",
             "children" : { }
         },
         "segundo-apellido" : {
-            "name" : "segundo apellido",
+            "name" : "Segundo apellido",
             "normalized_name" : "segundo-apellido",
             "type" : "VALUE_NODE",
             "children" : { }
         },
         "edad" : {
-            "name" : "edad",
+            "name" : "Edad",
             "normalized_name" : "edad",
             "type" : "NUMBER",
             "children" : { }
         },
         "cliente-vip" : {
-            "name" : "cliente vip",
+            "name" : "Cliente vip",
             "normalized_name" : "cliente-vip",
             "type" : "BOOLEAN",
             "children" : { }
         },
         "foto" : {
-            "name" : "foto",
+            "name" : "Foto",
             "normalized_name" : "foto",
             "type" : "BASE64",
             "children" : { }
         },
         "titular-cuenta" : {
-            "name" : "titular cuenta",
+            "name" : "Titular cuenta",
             "normalized_name" : "titular-cuenta",
             "type" : "VALUE_NODE",
             "children" : { }
         },
         "numero-cuenta" : {
-            "name" : "numero cuenta",
+            "name" : "Número cuenta",
             "normalized_name" : "numero-cuenta",
             "type" : "VALUE_NODE",
             "children" : { }

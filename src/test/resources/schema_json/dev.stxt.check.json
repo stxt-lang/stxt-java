@@ -1,7 +1,7 @@
 {
     "nodes" : {
         "type-list" : {
-            "name" : "type list",
+            "name" : "Type List",
             "normalized_name" : "type-list",
             "type" : "VALUE_NODE",
             "children" : {
@@ -102,19 +102,19 @@
             "children" : { }
         },
         "base64" : {
-            "name" : "base64",
+            "name" : "Base64",
             "normalized_name" : "base64",
             "type" : "BASE64",
             "children" : { }
         },
         "boolean" : {
-            "name" : "boolean",
+            "name" : "Boolean",
             "normalized_name" : "boolean",
             "type" : "BOOLEAN",
             "children" : { }
         },
         "url" : {
-            "name" : "url",
+            "name" : "Url",
             "normalized_name" : "url",
             "type" : "URL",
             "children" : { }

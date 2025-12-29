@@ -14,7 +14,7 @@ public class NodeDefinition {
 	private final Map<String, ChildDefinition> children = new HashMap<>();
 	
 	public NodeDefinition(String name, String type) {
-		this.name = StringUtils.normalizeSimple(name);
+		this.name = StringUtils.compactSpaces(name);
 		this.normalizedName = StringUtils.normalizeFull(name);
 		this.type = type;
 	}

@@ -13,7 +13,9 @@ public class AllJSONDelete {
 
 	private static void delete(String dir) {
 		File dirDelete = FileTestLoction.getFile(dir);
-		for (File f: dirDelete.listFiles())
+		for (File f: dirDelete.listFiles()) {
+			System.out.println("Delete: " + f.getAbsolutePath());
 			f.delete();
+		}
 	}
 }

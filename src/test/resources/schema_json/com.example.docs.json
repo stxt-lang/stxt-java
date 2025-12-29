@@ -1,13 +1,13 @@
 {
     "nodes" : {
         "email" : {
-            "name" : "email",
+            "name" : "Email",
             "normalized_name" : "email",
             "type" : "VALUE_NODE",
             "children" : {
                 "com.example.docs:cc" : {
                     "normalized_name" : "cc",
-                    "name" : "cc",
+                    "name" : "Cc",
                     "namespace" : "com.example.docs",
                     "min" : null,
                     "max" : null,
@@ -15,7 +15,7 @@
                 },
                 "com.example.docs:bcc" : {
                     "normalized_name" : "bcc",
-                    "name" : "bcc",
+                    "name" : "Bcc",
                     "namespace" : "com.example.docs",
                     "min" : null,
                     "max" : null,
@@ -23,7 +23,7 @@
                 },
                 "com.example.docs:to" : {
                     "normalized_name" : "to",
-                    "name" : "to",
+                    "name" : "To",
                     "namespace" : "com.example.docs",
                     "min" : null,
                     "max" : null,
@@ -31,7 +31,7 @@
                 },
                 "com.example.docs:from" : {
                     "normalized_name" : "from",
-                    "name" : "from",
+                    "name" : "From",
                     "namespace" : "com.example.docs",
                     "min" : null,
                     "max" : null,
@@ -39,7 +39,7 @@
                 },
                 "com.example.docs:title" : {
                     "normalized_name" : "title",
-                    "name" : "title",
+                    "name" : "Title",
                     "namespace" : "com.example.docs",
                     "min" : null,
                     "max" : 1,
@@ -47,7 +47,7 @@
                 },
                 "com.google:metadata" : {
                     "normalized_name" : "metadata",
-                    "name" : "metadata",
+                    "name" : "Metadata",
                     "namespace" : "com.google",
                     "min" : null,
                     "max" : 1,
@@ -55,7 +55,7 @@
                 },
                 "com.example.docs:body-content" : {
                     "normalized_name" : "body-content",
-                    "name" : "body content",
+                    "name" : "Body Content",
                     "namespace" : "com.example.docs",
                     "min" : 1,
                     "max" : 1,
@@ -64,37 +64,37 @@
             }
         },
         "from" : {
-            "name" : "from",
+            "name" : "From",
             "normalized_name" : "from",
             "type" : "VALUE_NODE",
             "children" : { }
         },
         "to" : {
-            "name" : "to",
+            "name" : "To",
             "normalized_name" : "to",
             "type" : "VALUE_NODE",
             "children" : { }
         },
         "cc" : {
-            "name" : "cc",
+            "name" : "Cc",
             "normalized_name" : "cc",
             "type" : "VALUE_NODE",
             "children" : { }
         },
         "bcc" : {
-            "name" : "bcc",
+            "name" : "Bcc",
             "normalized_name" : "bcc",
             "type" : "VALUE_NODE",
             "children" : { }
         },
         "title" : {
-            "name" : "title",
+            "name" : "Title",
             "normalized_name" : "title",
             "type" : "VALUE_NODE",
             "children" : { }
         },
         "body-content" : {
-            "name" : "body content",
+            "name" : "Body Content",
             "normalized_name" : "body-content",
             "type" : "TEXT",
             "children" : { }

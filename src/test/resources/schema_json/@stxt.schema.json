@@ -1,13 +1,13 @@
 {
     "nodes" : {
         "schema" : {
-            "name" : "schema",
+            "name" : "Schema",
             "normalized_name" : "schema",
             "type" : "VALUE_NODE",
             "children" : {
                 "@stxt.schema:description" : {
                     "normalized_name" : "description",
-                    "name" : "description",
+                    "name" : "Description",
                     "namespace" : "@stxt.schema",
                     "min" : null,
                     "max" : 1,
@@ -15,7 +15,7 @@
                 },
                 "@stxt.schema:node" : {
                     "normalized_name" : "node",
-                    "name" : "node",
+                    "name" : "Node",
                     "namespace" : "@stxt.schema",
                     "min" : 1,
                     "max" : null,
@@ -24,13 +24,13 @@
             }
         },
         "node" : {
-            "name" : "node",
+            "name" : "Node",
             "normalized_name" : "node",
             "type" : "VALUE_NODE",
             "children" : {
                 "@stxt.schema:type" : {
                     "normalized_name" : "type",
-                    "name" : "type",
+                    "name" : "Type",
                     "namespace" : "@stxt.schema",
                     "min" : null,
                     "max" : 1,
@@ -38,7 +38,7 @@
                 },
                 "@stxt.schema:description" : {
                     "normalized_name" : "description",
-                    "name" : "description",
+                    "name" : "Description",
                     "namespace" : "@stxt.schema",
                     "min" : null,
                     "max" : 1,
@@ -46,7 +46,7 @@
                 },
                 "@stxt.schema:children" : {
                     "normalized_name" : "children",
-                    "name" : "children",
+                    "name" : "Children",
                     "namespace" : "@stxt.schema",
                     "min" : null,
                     "max" : 1,
@@ -55,13 +55,13 @@
             }
         },
         "children" : {
-            "name" : "children",
+            "name" : "Children",
             "normalized_name" : "children",
             "type" : "VALUE_NODE",
             "children" : {
                 "@stxt.schema:child" : {
                     "normalized_name" : "child",
-                    "name" : "child",
+                    "name" : "Child",
                     "namespace" : "@stxt.schema",
                     "min" : 1,
                     "max" : null,
@@ -70,19 +70,19 @@
             }
         },
         "description" : {
-            "name" : "description",
+            "name" : "Description",
             "normalized_name" : "description",
             "type" : "TEXT",
             "children" : { }
         },
         "child" : {
-            "name" : "child",
+            "name" : "Child",
             "normalized_name" : "child",
             "type" : "VALUE_NODE",
             "children" : {
                 "@stxt.schema:min" : {
                     "normalized_name" : "min",
-                    "name" : "min",
+                    "name" : "Min",
                     "namespace" : "@stxt.schema",
                     "min" : null,
                     "max" : 1,
@@ -90,7 +90,7 @@
                 },
                 "@stxt.schema:max" : {
                     "normalized_name" : "max",
-                    "name" : "max",
+                    "name" : "Max",
                     "namespace" : "@stxt.schema",
                     "min" : null,
                     "max" : 1,
@@ -99,19 +99,19 @@
             }
         },
         "min" : {
-            "name" : "min",
+            "name" : "Min",
             "normalized_name" : "min",
             "type" : "NATURAL",
             "children" : { }
         },
         "max" : {
-            "name" : "max",
+            "name" : "Max",
             "normalized_name" : "max",
             "type" : "NATURAL",
             "children" : { }
         },
         "type" : {
-            "name" : "type",
+            "name" : "Type",
             "normalized_name" : "type",
             "type" : "VALUE_NODE",
             "children" : { }
