@@ -1,11 +1,13 @@
 {
     "nodes" : {
         "schema" : {
+            "name" : "schema",
             "normalized_name" : "schema",
             "type" : "VALUE_NODE",
             "children" : {
                 "@stxt.schema:description" : {
                     "normalized_name" : "description",
+                    "name" : "description",
                     "namespace" : "@stxt.schema",
                     "min" : null,
                     "max" : 1,
@@ -13,6 +15,7 @@
                 },
                 "@stxt.schema:node" : {
                     "normalized_name" : "node",
+                    "name" : "node",
                     "namespace" : "@stxt.schema",
                     "min" : 1,
                     "max" : null,
@@ -21,11 +24,13 @@
             }
         },
         "node" : {
+            "name" : "node",
             "normalized_name" : "node",
             "type" : "VALUE_NODE",
             "children" : {
                 "@stxt.schema:type" : {
                     "normalized_name" : "type",
+                    "name" : "type",
                     "namespace" : "@stxt.schema",
                     "min" : null,
                     "max" : 1,
@@ -33,6 +38,7 @@
                 },
                 "@stxt.schema:description" : {
                     "normalized_name" : "description",
+                    "name" : "description",
                     "namespace" : "@stxt.schema",
                     "min" : null,
                     "max" : 1,
@@ -40,6 +46,7 @@
                 },
                 "@stxt.schema:children" : {
                     "normalized_name" : "children",
+                    "name" : "children",
                     "namespace" : "@stxt.schema",
                     "min" : null,
                     "max" : 1,
@@ -48,11 +55,13 @@
             }
         },
         "children" : {
+            "name" : "children",
             "normalized_name" : "children",
             "type" : "VALUE_NODE",
             "children" : {
                 "@stxt.schema:child" : {
                     "normalized_name" : "child",
+                    "name" : "child",
                     "namespace" : "@stxt.schema",
                     "min" : 1,
                     "max" : null,
@@ -61,16 +70,19 @@
             }
         },
         "description" : {
+            "name" : "description",
             "normalized_name" : "description",
             "type" : "TEXT",
             "children" : { }
         },
         "child" : {
+            "name" : "child",
             "normalized_name" : "child",
             "type" : "VALUE_NODE",
             "children" : {
                 "@stxt.schema:min" : {
                     "normalized_name" : "min",
+                    "name" : "min",
                     "namespace" : "@stxt.schema",
                     "min" : null,
                     "max" : 1,
@@ -78,6 +90,7 @@
                 },
                 "@stxt.schema:max" : {
                     "normalized_name" : "max",
+                    "name" : "max",
                     "namespace" : "@stxt.schema",
                     "min" : null,
                     "max" : 1,
@@ -86,16 +99,19 @@
             }
         },
         "min" : {
+            "name" : "min",
             "normalized_name" : "min",
             "type" : "NATURAL",
             "children" : { }
         },
         "max" : {
+            "name" : "max",
             "normalized_name" : "max",
             "type" : "NATURAL",
             "children" : { }
         },
         "type" : {
+            "name" : "type",
             "normalized_name" : "type",
             "type" : "VALUE_NODE",
             "children" : { }

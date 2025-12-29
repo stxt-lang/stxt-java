@@ -4,15 +4,21 @@ import dev.stxt.utils.StringUtils;
 
 public class ChildDefinition {
 	private String normalizedName;
+	private String name;
 	private String namespace;
 	private Integer min = null;
 	private Integer max = null;
+
+	public String getName() {
+		return name;
+	}
 
 	public String getNormalizedName() {
 		return normalizedName;
 	}
 
 	public void setName(String name) {
+		this.name = StringUtils.normalizeSimple(name);
 		this.normalizedName = StringUtils.normalizeFull(name);
 	}
 
