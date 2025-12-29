@@ -5,8 +5,6 @@ import java.util.regex.Pattern;
 
 import dev.stxt.exceptions.ParseException;
 
-import static dev.stxt.utils.StringUtils.lowerCase;
-
 public final class NameNamespaceParser {
 
     /**
