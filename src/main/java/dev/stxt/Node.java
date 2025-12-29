@@ -48,10 +48,6 @@ public class Node {
 		return namespace == null || namespace.isEmpty() ? name : namespace + ":" + name;
 	}
 
-	public String getDisplayName() {
-	    return (namespace == null || namespace.isEmpty()) ? name : name + "(" + namespace + ")";
-	}
-
 	public String getNamespace() {
 		return namespace;
 	}

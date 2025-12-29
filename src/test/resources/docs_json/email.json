@@ -18,7 +18,6 @@
             "line" : 2,
             "level" : 1,
             "children" : [ ],
-            "display_name" : "from(com.example.docs)",
             "text" : "John Smith",
             "qualified_name" : "com.example.docs:from"
         },
@@ -32,7 +31,6 @@
             "line" : 3,
             "level" : 1,
             "children" : [ ],
-            "display_name" : "to(com.example.docs)",
             "text" : "Mery Adams",
             "qualified_name" : "com.example.docs:to"
         },
@@ -46,7 +44,6 @@
             "line" : 4,
             "level" : 1,
             "children" : [ ],
-            "display_name" : "cc(com.example.docs)",
             "text" : "Keyla Brown",
             "qualified_name" : "com.example.docs:cc"
         },
@@ -60,7 +57,6 @@
             "line" : 5,
             "level" : 1,
             "children" : [ ],
-            "display_name" : "title(com.example.docs)",
             "text" : "Project report",
             "qualified_name" : "com.example.docs:title"
         },
@@ -77,12 +73,10 @@
             "line" : 6,
             "level" : 1,
             "children" : [ ],
-            "display_name" : "body-content(com.example.docs)",
             "text" : "Hello Mery!!\nThe book is finished!!",
             "qualified_name" : "com.example.docs:body-content"
         }
     ],
-    "display_name" : "email(com.example.docs)",
     "text" : "",
     "qualified_name" : "com.example.docs:email"
 }

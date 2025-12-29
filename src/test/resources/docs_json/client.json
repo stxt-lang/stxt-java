@@ -28,7 +28,6 @@
                     "line" : 13,
                     "level" : 2,
                     "children" : [ ],
-                    "display_name" : "nombre(com.gym.docs)",
                     "text" : "Shila",
                     "qualified_name" : "com.gym.docs:nombre"
                 },
@@ -42,7 +41,6 @@
                     "line" : 14,
                     "level" : 2,
                     "children" : [ ],
-                    "display_name" : "primer-apellido(com.gym.docs)",
                     "text" : "Kween",
                     "qualified_name" : "com.gym.docs:primer-apellido"
                 },
@@ -56,7 +54,6 @@
                     "line" : 15,
                     "level" : 2,
                     "children" : [ ],
-                    "display_name" : "edad(com.gym.docs)",
                     "text" : "28",
                     "qualified_name" : "com.gym.docs:edad"
                 },
@@ -70,7 +67,6 @@
                     "line" : 16,
                     "level" : 2,
                     "children" : [ ],
-                    "display_name" : "cliente-vip(com.gym.docs)",
                     "text" : "true",
                     "qualified_name" : "com.gym.docs:cliente-vip"
                 },
@@ -152,12 +148,10 @@
                     "line" : 17,
                     "level" : 2,
                     "children" : [ ],
-                    "display_name" : "foto(com.gym.docs)",
                     "text" : "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\n\n\n",
                     "qualified_name" : "com.gym.docs:foto"
                 }
             ],
-            "display_name" : "datos-personales(com.gym.docs)",
             "text" : "",
             "qualified_name" : "com.gym.docs:datos-personales"
         },
@@ -181,7 +175,6 @@
                     "line" : 91,
                     "level" : 2,
                     "children" : [ ],
-                    "display_name" : "titular-cuenta(com.gym.docs)",
                     "text" : "Joan Costa Mombiela",
                     "qualified_name" : "com.gym.docs:titular-cuenta"
                 },
@@ -195,17 +188,14 @@
                     "line" : 92,
                     "level" : 2,
                     "children" : [ ],
-                    "display_name" : "numero-cuenta(com.gym.docs)",
                     "text" : "0000-0000-00-000000000",
                     "qualified_name" : "com.gym.docs:numero-cuenta"
                 }
             ],
-            "display_name" : "datos-bancarios(com.gym.docs)",
             "text" : "",
             "qualified_name" : "com.gym.docs:datos-bancarios"
         }
     ],
-    "display_name" : "cliente(com.gym.docs)",
     "text" : "",
     "qualified_name" : "com.gym.docs:cliente"
 }
