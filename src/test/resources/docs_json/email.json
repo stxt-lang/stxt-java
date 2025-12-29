@@ -1,5 +1,5 @@
 {
-    "name" : "email",
+    "name" : "Email",
     "normalized_name" : "email",
     "namespace" : "com.example.docs",
     "text_node" : false,
@@ -9,7 +9,7 @@
     "level" : 0,
     "children" : [
         {
-            "name" : "from",
+            "name" : "From",
             "normalized_name" : "from",
             "namespace" : "com.example.docs",
             "text_node" : false,
@@ -22,7 +22,7 @@
             "qualified_name" : "com.example.docs:from"
         },
         {
-            "name" : "to",
+            "name" : "To",
             "normalized_name" : "to",
             "namespace" : "com.example.docs",
             "text_node" : false,
@@ -35,7 +35,7 @@
             "qualified_name" : "com.example.docs:to"
         },
         {
-            "name" : "cc",
+            "name" : "Cc",
             "normalized_name" : "cc",
             "namespace" : "com.example.docs",
             "text_node" : false,
@@ -48,7 +48,7 @@
             "qualified_name" : "com.example.docs:cc"
         },
         {
-            "name" : "title",
+            "name" : "Title",
             "normalized_name" : "title",
             "namespace" : "com.example.docs",
             "text_node" : false,
@@ -61,7 +61,7 @@
             "qualified_name" : "com.example.docs:title"
         },
         {
-            "name" : "body content",
+            "name" : "Body Content",
             "normalized_name" : "body-content",
             "namespace" : "com.example.docs",
             "text_node" : true,

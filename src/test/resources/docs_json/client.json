@@ -1,5 +1,5 @@
 {
-    "name" : "cliente",
+    "name" : "Cliente",
     "normalized_name" : "cliente",
     "namespace" : "com.gym.docs",
     "text_node" : false,
@@ -9,7 +9,7 @@
     "level" : 0,
     "children" : [
         {
-            "name" : "datos personales",
+            "name" : "Datos Personales",
             "normalized_name" : "datos-personales",
             "namespace" : "com.gym.docs",
             "text_node" : false,
@@ -19,7 +19,7 @@
             "level" : 1,
             "children" : [
                 {
-                    "name" : "nombre",
+                    "name" : "Nombre",
                     "normalized_name" : "nombre",
                     "namespace" : "com.gym.docs",
                     "text_node" : false,
@@ -32,7 +32,7 @@
                     "qualified_name" : "com.gym.docs:nombre"
                 },
                 {
-                    "name" : "primer apellido",
+                    "name" : "Primer apellido",
                     "normalized_name" : "primer-apellido",
                     "namespace" : "com.gym.docs",
                     "text_node" : false,
@@ -45,7 +45,7 @@
                     "qualified_name" : "com.gym.docs:primer-apellido"
                 },
                 {
-                    "name" : "edad",
+                    "name" : "Edad",
                     "normalized_name" : "edad",
                     "namespace" : "com.gym.docs",
                     "text_node" : false,
@@ -58,7 +58,7 @@
                     "qualified_name" : "com.gym.docs:edad"
                 },
                 {
-                    "name" : "cliente vip",
+                    "name" : "Cliente vip",
                     "normalized_name" : "cliente-vip",
                     "namespace" : "com.gym.docs",
                     "text_node" : false,
@@ -71,7 +71,7 @@
                     "qualified_name" : "com.gym.docs:cliente-vip"
                 },
                 {
-                    "name" : "foto",
+                    "name" : "Foto",
                     "normalized_name" : "foto",
                     "namespace" : "com.gym.docs",
                     "text_node" : true,
@@ -156,7 +156,7 @@
             "qualified_name" : "com.gym.docs:datos-personales"
         },
         {
-            "name" : "datos bancarios",
+            "name" : "Datos Bancarios",
             "normalized_name" : "datos-bancarios",
             "namespace" : "com.gym.docs",
             "text_node" : false,
@@ -166,7 +166,7 @@
             "level" : 1,
             "children" : [
                 {
-                    "name" : "titular cuenta",
+                    "name" : "Titular cuenta",
                     "normalized_name" : "titular-cuenta",
                     "namespace" : "com.gym.docs",
                     "text_node" : false,
@@ -179,7 +179,7 @@
                     "qualified_name" : "com.gym.docs:titular-cuenta"
                 },
                 {
-                    "name" : "numero cuenta",
+                    "name" : "Número cuenta",
                     "normalized_name" : "numero-cuenta",
                     "namespace" : "com.gym.docs",
                     "text_node" : false,

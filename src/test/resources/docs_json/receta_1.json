@@ -1,5 +1,5 @@
 {
-    "name" : "receta",
+    "name" : "Receta",
     "normalized_name" : "receta",
     "namespace" : "com.kocinando.receta",
     "text_node" : false,
@@ -9,7 +9,7 @@
     "level" : 0,
     "children" : [
         {
-            "name" : "nombre receta",
+            "name" : "Nombre Receta",
             "normalized_name" : "nombre-receta",
             "namespace" : "com.kocinando.receta",
             "text_node" : false,
@@ -22,7 +22,7 @@
             "qualified_name" : "com.kocinando.receta:nombre-receta"
         },
         {
-            "name" : "descripcion",
+            "name" : "Descripción",
             "normalized_name" : "descripcion",
             "namespace" : "com.kocinando.receta",
             "text_node" : false,
@@ -35,7 +35,7 @@
             "qualified_name" : "com.kocinando.receta:descripcion"
         },
         {
-            "name" : "pasos",
+            "name" : "Pasos",
             "normalized_name" : "pasos",
             "namespace" : "com.kocinando.receta",
             "text_node" : false,
@@ -45,7 +45,7 @@
             "level" : 1,
             "children" : [
                 {
-                    "name" : "paso",
+                    "name" : "Paso",
                     "normalized_name" : "paso",
                     "namespace" : "com.kocinando.receta",
                     "text_node" : false,
@@ -58,7 +58,7 @@
                     "qualified_name" : "com.kocinando.receta:paso"
                 },
                 {
-                    "name" : "descripcion",
+                    "name" : "Descripción",
                     "normalized_name" : "descripcion",
                     "namespace" : "com.kocinando.receta",
                     "text_node" : true,
@@ -78,7 +78,7 @@
             "qualified_name" : "com.kocinando.receta:pasos"
         },
         {
-            "name" : "dificultad",
+            "name" : "Dificultad",
             "normalized_name" : "dificultad",
             "namespace" : "com.kocinando.receta",
             "text_node" : false,
@@ -91,7 +91,7 @@
             "qualified_name" : "com.kocinando.receta:dificultad"
         },
         {
-            "name" : "ingredientes",
+            "name" : "Ingredientes",
             "normalized_name" : "ingredientes",
             "namespace" : "com.kocinando.receta",
             "text_node" : false,
@@ -101,7 +101,7 @@
             "level" : 1,
             "children" : [
                 {
-                    "name" : "ingrediente",
+                    "name" : "Ingrediente",
                     "normalized_name" : "ingrediente",
                     "namespace" : "com.kocinando.receta",
                     "text_node" : false,
@@ -111,7 +111,7 @@
                     "level" : 2,
                     "children" : [
                         {
-                            "name" : "cantidad",
+                            "name" : "Cantidad",
                             "normalized_name" : "cantidad",
                             "namespace" : "com.kocinando.receta",
                             "text_node" : false,
@@ -124,7 +124,7 @@
                             "qualified_name" : "com.kocinando.receta:cantidad"
                         },
                         {
-                            "name" : "unidades",
+                            "name" : "Unidades",
                             "normalized_name" : "unidades",
                             "namespace" : "com.kocinando.receta",
                             "text_node" : false,
@@ -137,7 +137,7 @@
                             "qualified_name" : "com.kocinando.receta:unidades"
                         },
                         {
-                            "name" : "nombre",
+                            "name" : "Nombre",
                             "normalized_name" : "nombre",
                             "namespace" : "com.kocinando.receta",
                             "text_node" : false,
@@ -158,7 +158,7 @@
             "qualified_name" : "com.kocinando.receta:ingredientes"
         },
         {
-            "name" : "documento",
+            "name" : "Documento",
             "normalized_name" : "documento",
             "namespace" : "com.dokumentando.doc",
             "text_node" : false,
@@ -168,7 +168,7 @@
             "level" : 1,
             "children" : [
                 {
-                    "name" : "titulo",
+                    "name" : "Título",
                     "normalized_name" : "titulo",
                     "namespace" : "com.dokumentando.doc",
                     "text_node" : false,
@@ -181,7 +181,7 @@
                     "qualified_name" : "com.dokumentando.doc:titulo"
                 },
                 {
-                    "name" : "description",
+                    "name" : "Description",
                     "normalized_name" : "description",
                     "namespace" : "com.dokumentando.doc",
                     "text_node" : true,
@@ -198,7 +198,7 @@
                     "qualified_name" : "com.dokumentando.doc:description"
                 },
                 {
-                    "name" : "tipo documento",
+                    "name" : "Tipo Documento",
                     "normalized_name" : "tipo-documento",
                     "namespace" : "com.dokumentando.doc",
                     "text_node" : false,

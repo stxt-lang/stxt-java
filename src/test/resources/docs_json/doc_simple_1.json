@@ -1,5 +1,5 @@
 {
-    "name" : "documento",
+    "name" : "Documento",
     "normalized_name" : "documento",
     "namespace" : "com.dokumentando.doc",
     "text_node" : false,
@@ -9,7 +9,7 @@
     "level" : 0,
     "children" : [
         {
-            "name" : "titulo",
+            "name" : "Título",
             "normalized_name" : "titulo",
             "namespace" : "com.dokumentando.doc",
             "text_node" : false,
@@ -22,7 +22,7 @@
             "qualified_name" : "com.dokumentando.doc:titulo"
         },
         {
-            "name" : "description",
+            "name" : "Description",
             "normalized_name" : "description",
             "namespace" : "com.dokumentando.doc",
             "text_node" : true,
@@ -39,7 +39,7 @@
             "qualified_name" : "com.dokumentando.doc:description"
         },
         {
-            "name" : "tipo documento",
+            "name" : "Tipo Documento",
             "normalized_name" : "tipo-documento",
             "namespace" : "com.dokumentando.doc",
             "text_node" : false,

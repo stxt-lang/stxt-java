@@ -1,5 +1,6 @@
 package dev.stxt.schema;
 
+import dev.stxt.NamespaceValidator;
 import dev.stxt.utils.StringUtils;
 
 public class ChildDefinition {
@@ -9,12 +10,13 @@ public class ChildDefinition {
 	private final Integer min;
 	private final Integer max;
 
-	public ChildDefinition(String name, String namespace, Integer min, Integer max) {
+	public ChildDefinition(String name, String namespace, Integer min, Integer max, int numLine) {
 		this.name = StringUtils.normalizeSimple(name);
 		this.normalizedName = StringUtils.normalizeFull(name);
-		this.namespace = namespace;
+		this.namespace = StringUtils.lowerCase(namespace);
 		this.min = min;
 		this.max = max;
+		NamespaceValidator.validateNamespaceFormat(namespace, numLine);
 	}
 
 	public String getName() {

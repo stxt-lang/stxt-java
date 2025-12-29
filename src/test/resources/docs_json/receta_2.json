@@ -1,5 +1,5 @@
 {
-    "name" : "documento",
+    "name" : "Documento",
     "normalized_name" : "documento",
     "namespace" : "com.dokumentando.documento",
     "text_node" : false,
@@ -9,7 +9,7 @@
     "level" : 0,
     "children" : [
         {
-            "name" : "titulo",
+            "name" : "Título",
             "normalized_name" : "titulo",
             "namespace" : "com.dokumentando.documento",
             "text_node" : false,
@@ -22,7 +22,7 @@
             "qualified_name" : "com.dokumentando.documento:titulo"
         },
         {
-            "name" : "autor",
+            "name" : "Autor",
             "normalized_name" : "autor",
             "namespace" : "com.dokumentando.documento",
             "text_node" : false,
@@ -35,7 +35,7 @@
             "qualified_name" : "com.dokumentando.documento:autor"
         },
         {
-            "name" : "cuerpo",
+            "name" : "Cuerpo",
             "normalized_name" : "cuerpo",
             "namespace" : "com.dokumentando.documento",
             "text_node" : true,
@@ -51,7 +51,7 @@
             "qualified_name" : "com.dokumentando.documento:cuerpo"
         },
         {
-            "name" : "fecha creacion",
+            "name" : "Fecha Creación",
             "normalized_name" : "fecha-creacion",
             "namespace" : "com.dokumentando.documento",
             "text_node" : false,
@@ -64,7 +64,7 @@
             "qualified_name" : "com.dokumentando.documento:fecha-creacion"
         },
         {
-            "name" : "ultima modificacion",
+            "name" : "Última modificación",
             "normalized_name" : "ultima-modificacion",
             "namespace" : "com.dokumentando.documento",
             "text_node" : false,
@@ -77,7 +77,7 @@
             "qualified_name" : "com.dokumentando.documento:ultima-modificacion"
         },
         {
-            "name" : "email contacto",
+            "name" : "Email Contacto",
             "normalized_name" : "email-contacto",
             "namespace" : "com.dokumentando.documento",
             "text_node" : false,
@@ -90,7 +90,7 @@
             "qualified_name" : "com.dokumentando.documento:email-contacto"
         },
         {
-            "name" : "sitio web",
+            "name" : "Sitio Web",
             "normalized_name" : "sitio-web",
             "namespace" : "com.dokumentando.documento",
             "text_node" : false,
@@ -103,7 +103,7 @@
             "qualified_name" : "com.dokumentando.documento:sitio-web"
         },
         {
-            "name" : "codigo postal",
+            "name" : "Código Postal",
             "normalized_name" : "codigo-postal",
             "namespace" : "com.dokumentando.documento",
             "text_node" : false,
@@ -116,7 +116,7 @@
             "qualified_name" : "com.dokumentando.documento:codigo-postal"
         },
         {
-            "name" : "es publico",
+            "name" : "Es Público",
             "normalized_name" : "es-publico",
             "namespace" : "com.dokumentando.documento",
             "text_node" : false,
@@ -129,7 +129,7 @@
             "qualified_name" : "com.dokumentando.documento:es-publico"
         },
         {
-            "name" : "color tema",
+            "name" : "Color Tema",
             "normalized_name" : "color-tema",
             "namespace" : "com.dokumentando.documento",
             "text_node" : false,
@@ -142,7 +142,7 @@
             "qualified_name" : "com.dokumentando.documento:color-tema"
         },
         {
-            "name" : "tipo documento",
+            "name" : "Tipo Documento",
             "normalized_name" : "tipo-documento",
             "namespace" : "com.dokumentando.documento",
             "text_node" : false,
@@ -155,7 +155,7 @@
             "qualified_name" : "com.dokumentando.documento:tipo-documento"
         },
         {
-            "name" : "secciones",
+            "name" : "Secciones",
             "normalized_name" : "secciones",
             "namespace" : "com.dokumentando.documento",
             "text_node" : false,
@@ -165,7 +165,7 @@
             "level" : 1,
             "children" : [
                 {
-                    "name" : "seccion",
+                    "name" : "Sección",
                     "normalized_name" : "seccion",
                     "namespace" : "com.dokumentando.documento",
                     "text_node" : false,
@@ -175,7 +175,7 @@
                     "level" : 2,
                     "children" : [
                         {
-                            "name" : "titulo",
+                            "name" : "Título",
                             "normalized_name" : "titulo",
                             "namespace" : "com.dokumentando.documento",
                             "text_node" : false,
@@ -188,7 +188,7 @@
                             "qualified_name" : "com.dokumentando.documento:titulo"
                         },
                         {
-                            "name" : "contenido",
+                            "name" : "Contenido",
                             "normalized_name" : "contenido",
                             "namespace" : "com.dokumentando.documento",
                             "text_node" : true,
@@ -215,7 +215,7 @@
                     "qualified_name" : "com.dokumentando.documento:seccion"
                 },
                 {
-                    "name" : "seccion",
+                    "name" : "Sección",
                     "normalized_name" : "seccion",
                     "namespace" : "com.dokumentando.documento",
                     "text_node" : false,
@@ -225,7 +225,7 @@
                     "level" : 2,
                     "children" : [
                         {
-                            "name" : "titulo",
+                            "name" : "Título",
                             "normalized_name" : "titulo",
                             "namespace" : "com.dokumentando.documento",
                             "text_node" : false,
@@ -238,7 +238,7 @@
                             "qualified_name" : "com.dokumentando.documento:titulo"
                         },
                         {
-                            "name" : "contenido",
+                            "name" : "Contenido",
                             "normalized_name" : "contenido",
                             "namespace" : "com.dokumentando.documento",
                             "text_node" : true,
@@ -266,7 +266,7 @@
                     "qualified_name" : "com.dokumentando.documento:seccion"
                 },
                 {
-                    "name" : "seccion",
+                    "name" : "Sección",
                     "normalized_name" : "seccion",
                     "namespace" : "com.dokumentando.documento",
                     "text_node" : false,
@@ -276,7 +276,7 @@
                     "level" : 2,
                     "children" : [
                         {
-                            "name" : "titulo",
+                            "name" : "Título",
                             "normalized_name" : "titulo",
                             "namespace" : "com.dokumentando.documento",
                             "text_node" : false,
@@ -289,7 +289,7 @@
                             "qualified_name" : "com.dokumentando.documento:titulo"
                         },
                         {
-                            "name" : "contenido",
+                            "name" : "Contenido",
                             "normalized_name" : "contenido",
                             "namespace" : "com.dokumentando.documento",
                             "text_node" : true,

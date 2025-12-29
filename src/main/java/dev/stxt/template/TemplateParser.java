@@ -76,13 +76,13 @@ public class TemplateParser {
 		
 		// Insertamos childs
 		for (Node child: childrenNode) {
-			cl = ChildLineParser.parse(child.getValue(), child.getLine());
+			cl = ChildLineParser.parse(child.getValue(), child.getLine() + offset);
 			
 			String childName = child.getName();
 			String childNamespace = child.getNamespace();
 			if (childNamespace.isEmpty()) childNamespace = schema.getNamespace();
 			
-			ChildDefinition schChild = new ChildDefinition(childName, childNamespace, cl.getMin(), cl.getMax());
+			ChildDefinition schChild = new ChildDefinition(childName, childNamespace, cl.getMin(), cl.getMax(), child.getLine() + offset);
 			schemaNode.addChildDefinition(schChild);
 			
 			addToSchema(schema, child, offset);

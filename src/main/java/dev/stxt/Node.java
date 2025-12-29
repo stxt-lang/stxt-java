@@ -22,7 +22,7 @@ public class Node {
 	public Node(int line, int level, String name, String namespace, boolean textNode, String value) {
 		this.level = level;
 		this.line = line;
-		this.name = StringUtils.normalizeSimple(name);
+		this.name = StringUtils.compactSpaces(name);
 		this.normalizedName = StringUtils.normalizeFull(name);
 		this.namespace = namespace;
 		this.value = (value == null ? "" : value.trim());

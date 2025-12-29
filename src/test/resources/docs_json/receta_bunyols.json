@@ -1,5 +1,5 @@
 {
-    "name" : "receta",
+    "name" : "Receta",
     "normalized_name" : "receta",
     "namespace" : "com.kocinando.receta1",
     "text_node" : false,
@@ -9,7 +9,7 @@
     "level" : 0,
     "children" : [
         {
-            "name" : "titulo",
+            "name" : "Título",
             "normalized_name" : "titulo",
             "namespace" : "com.kocinando.receta1",
             "text_node" : false,
@@ -22,7 +22,7 @@
             "qualified_name" : "com.kocinando.receta1:titulo"
         },
         {
-            "name" : "descripcion",
+            "name" : "Descripción",
             "normalized_name" : "descripcion",
             "namespace" : "com.kocinando.receta1",
             "text_node" : true,
@@ -41,7 +41,7 @@
             "qualified_name" : "com.kocinando.receta1:descripcion"
         },
         {
-            "name" : "ingredientes",
+            "name" : "Ingredientes",
             "normalized_name" : "ingredientes",
             "namespace" : "com.kocinando.receta1",
             "text_node" : true,
@@ -67,7 +67,7 @@
             "qualified_name" : "com.kocinando.receta1:ingredientes"
         },
         {
-            "name" : "preparacion",
+            "name" : "Preparación",
             "normalized_name" : "preparacion",
             "namespace" : "com.kocinando.receta1",
             "text_node" : true,

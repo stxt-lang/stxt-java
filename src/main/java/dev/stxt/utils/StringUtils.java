@@ -22,7 +22,12 @@ public class StringUtils {
 		return input.replaceAll("\\s+", "");
 	}
 	
-	private static String compactSpaces(String s) {
+	public static String lowerCase(String input) {
+		if (input == null) return "";
+		return input.toLowerCase(Locale.ROOT);
+	}
+	
+	public static String compactSpaces(String s) {
 		if (s == null)
 			return null;
 		return s.trim().replaceAll("\\s+", " ");

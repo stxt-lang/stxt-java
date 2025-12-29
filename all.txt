@@ -48,7 +48,7 @@ public class Node {
 	public Node(int line, int level, String name, String namespace, boolean textNode, String value) {
 		this.level = level;
 		this.line = line;
-		this.name = StringUtils.normalizeSimple(name);
+		this.name = StringUtils.compactSpaces(name);
 		this.normalizedName = StringUtils.normalizeFull(name);
 		this.namespace = namespace;
 		this.value = (value == null ? "" : value.trim());
@@ -826,6 +826,7 @@ Fichero: dev/stxt/schema/ChildDefinition.java
 ```
 package dev.stxt.schema;
 
+import dev.stxt.NamespaceValidator;
 import dev.stxt.utils.StringUtils;
 
 public class ChildDefinition {
@@ -835,12 +836,13 @@ public class ChildDefinition {
 	private final Integer min;
 	private final Integer max;
 
-	public ChildDefinition(String name, String namespace, Integer min, Integer max) {
+	public ChildDefinition(String name, String namespace, Integer min, Integer max, int numLine) {
 		this.name = StringUtils.normalizeSimple(name);
 		this.normalizedName = StringUtils.normalizeFull(name);
-		this.namespace = namespace;
+		this.namespace = StringUtils.lowerCase(namespace);
 		this.min = min;
 		this.max = max;
+		NamespaceValidator.validateNamespaceFormat(namespace, numLine);
 	}
 
 	public String getName() {
@@ -849,9 +851,6 @@ public class ChildDefinition {
 
 	public String getNormalizedName() {
 		return normalizedName;
-	}
-
-	public void setName(String name) {
 	}
 
 	public String getNamespace() {
@@ -1123,7 +1122,7 @@ class SchemaParser {
 		String name = ns.getName();
 		String namespace = ns.getNamespace() != null ? ns.getNamespace(): defNamespace;
 		
-		ChildDefinition schemaChild = new ChildDefinition(name, namespace, getInteger(child, "min"), getInteger(child, "max"));
+		ChildDefinition schemaChild = new ChildDefinition(name, namespace, getInteger(child, "min"), getInteger(child, "max"), child.getLine());
 		schemaNode.addChildDefinition(schemaChild);
 	}
 
@@ -1503,13 +1502,13 @@ public class TemplateParser {
 		
 		// Insertamos childs
 		for (Node child: childrenNode) {
-			cl = ChildLineParser.parse(child.getValue(), child.getLine());
+			cl = ChildLineParser.parse(child.getValue(), child.getLine() + offset);
 			
 			String childName = child.getName();
 			String childNamespace = child.getNamespace();
 			if (childNamespace.isEmpty()) childNamespace = schema.getNamespace();
 			
-			ChildDefinition schChild = new ChildDefinition(childName, childNamespace, cl.getMin(), cl.getMax());
+			ChildDefinition schChild = new ChildDefinition(childName, childNamespace, cl.getMin(), cl.getMax(), child.getLine() + offset);
 			schemaNode.addChildDefinition(schChild);
 			
 			addToSchema(schema, child, offset);
@@ -1963,7 +1962,7 @@ import java.util.regex.Pattern;
 
 import dev.stxt.exceptions.ParseException;
 
-import static dev.stxt.utils.StringUtils.normalizeSimple;
+import static dev.stxt.utils.StringUtils.lowerCase;
 
 public final class NameNamespaceParser {
 
@@ -1993,7 +1992,7 @@ public final class NameNamespaceParser {
             throw new ParseException(lineNumber, "INVALID_LINE", "Line not valid: " + fullLine);
         }
 
-        String normalized = normalizeSimple(rawName);
+        String normalized = lowerCase(rawName);
         Matcher m = NAME_PATTERN.matcher(normalized);
         if (!m.matches()) {
             throw new ParseException(lineNumber, "INVALID_NAMESPACE_DEF", "Line not valid: " + fullLine);
@@ -2129,7 +2128,12 @@ public class StringUtils {
 		return input.replaceAll("\\s+", "");
 	}
 	
-	private static String compactSpaces(String s) {
+	public static String lowerCase(String input) {
+		if (input == null) return "";
+		return input.toLowerCase(Locale.ROOT);
+	}
+	
+	public static String compactSpaces(String s) {
 		if (s == null)
 			return null;
 		return s.trim().replaceAll("\\s+", " ");

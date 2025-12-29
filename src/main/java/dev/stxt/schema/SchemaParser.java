@@ -76,7 +76,7 @@ class SchemaParser {
 		String name = ns.getName();
 		String namespace = ns.getNamespace() != null ? ns.getNamespace(): defNamespace;
 		
-		ChildDefinition schemaChild = new ChildDefinition(name, namespace, getInteger(child, "min"), getInteger(child, "max"));
+		ChildDefinition schemaChild = new ChildDefinition(name, namespace, getInteger(child, "min"), getInteger(child, "max"), child.getLine());
 		schemaNode.addChildDefinition(schemaChild);
 	}
 
