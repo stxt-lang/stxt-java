@@ -3,11 +3,19 @@ package dev.stxt.schema;
 import dev.stxt.utils.StringUtils;
 
 public class ChildDefinition {
-	private String normalizedName;
-	private String name;
-	private String namespace;
-	private Integer min = null;
-	private Integer max = null;
+	private final String normalizedName;
+	private final String name;
+	private final String namespace;
+	private final Integer min;
+	private final Integer max;
+
+	public ChildDefinition(String name, String namespace, Integer min, Integer max) {
+		this.name = StringUtils.normalizeSimple(name);
+		this.normalizedName = StringUtils.normalizeFull(name);
+		this.namespace = namespace;
+		this.min = min;
+		this.max = max;
+	}
 
 	public String getName() {
 		return name;
@@ -18,32 +26,18 @@ public class ChildDefinition {
 	}
 
 	public void setName(String name) {
-		this.name = StringUtils.normalizeSimple(name);
-		this.normalizedName = StringUtils.normalizeFull(name);
 	}
 
 	public String getNamespace() {
 		return namespace;
 	}
 
-	public void setNamespace(String namespace) {
-		this.namespace = namespace;
-	}
-
 	public Integer getMin() {
 		return min;
 	}
 
-	public void setMin(Integer min) {
-		this.min = min;
-	}
-
 	public Integer getMax() {
 		return max;
-	}
-
-	public void setMax(Integer max) {
-		this.max = max;
 	}
 
 	public String getQualifiedName() {
