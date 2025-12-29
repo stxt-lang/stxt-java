@@ -769,7 +769,7 @@ class SchemaValidator implements Validator {
 	
 	public void validateAgainstSchema(Node node, Schema sch) {
 		// Obtenemos node
-		NodeDefinition schemaNode = sch.getNodes().get(node.getNormalizedName());
+		NodeDefinition schemaNode = sch.getNodeDefinition(node.getName());
 		if (schemaNode == null) {
 			String error = "NOT EXIST NODE " + node.getName() + " for namespace " + sch.getNamespace();
 			throw new ValidationException(node.getLine(), "NODE_NOT_EXIST_IN_SCHEMA", error);
@@ -829,11 +829,19 @@ package dev.stxt.schema;
 import dev.stxt.utils.StringUtils;
 
 public class ChildDefinition {
-	private String normalizedName;
-	private String name;
-	private String namespace;
-	private Integer min = null;
-	private Integer max = null;
+	private final String normalizedName;
+	private final String name;
+	private final String namespace;
+	private final Integer min;
+	private final Integer max;
+
+	public ChildDefinition(String name, String namespace, Integer min, Integer max) {
+		this.name = StringUtils.normalizeSimple(name);
+		this.normalizedName = StringUtils.normalizeFull(name);
+		this.namespace = namespace;
+		this.min = min;
+		this.max = max;
+	}
 
 	public String getName() {
 		return name;
@@ -844,32 +852,18 @@ public class ChildDefinition {
 	}
 
 	public void setName(String name) {
-		this.name = StringUtils.normalizeSimple(name);
-		this.normalizedName = StringUtils.normalizeFull(name);
 	}
 
 	public String getNamespace() {
 		return namespace;
 	}
 
-	public void setNamespace(String namespace) {
-		this.namespace = namespace;
-	}
-
 	public Integer getMin() {
 		return min;
 	}
 
-	public void setMin(Integer min) {
-		this.min = min;
-	}
-
 	public Integer getMax() {
 		return max;
-	}
-
-	public void setMax(Integer max) {
-		this.max = max;
 	}
 
 	public String getQualifiedName() {
@@ -1012,8 +1006,12 @@ Fichero: dev/stxt/schema/Schema.java
 ```
 package dev.stxt.schema;
 
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import dev.stxt.exceptions.SchemaException;
+import dev.stxt.utils.StringUtils;
 
 public class Schema {
 	public static final String SCHEMA_NAMESPACE = "@stxt.schema";
@@ -1022,11 +1020,19 @@ public class Schema {
 	private String namespace;
 	
 	public Map<String, NodeDefinition> getNodes() {
-		return nodes;
+		return Collections.unmodifiableMap(nodes);
 	}
-	public void setNodes(Map<String, NodeDefinition> nodes) {
-		this.nodes = nodes;
+	
+	public NodeDefinition getNodeDefinition(String name) {
+		return nodes.get(StringUtils.normalizeFull(name));
 	}
+	
+	public void addNodeDefinition(NodeDefinition nodeDefinition) {
+		String qname = nodeDefinition.getNormalizedName();
+		if (nodes.containsKey(qname)) throw new SchemaException("NODE_DEF_ALREADY_DEFINED", "Exists a previous node definition with: " + qname);
+		nodes.put(qname, nodeDefinition);
+	}
+	
 	public String getNamespace() {
 		return namespace;
 	}
@@ -1075,7 +1081,7 @@ class SchemaParser {
 		// Obtenemos los nodos
 		for (Node n : node.getChildren("node")) {
 			NodeDefinition schNode = createFrom(n, schema.getNamespace());
-			schema.getNodes().put(schNode.getNormalizedName(), schNode);
+			schema.addNodeDefinition(schNode);
 			allNames.add(schNode.getNormalizedName());
 		}
 
@@ -1095,16 +1101,13 @@ class SchemaParser {
 	}
 
 	private static NodeDefinition createFrom(Node n, String namespace) {
-		NodeDefinition result = new NodeDefinition();
-
 		String name = n.getValue();
 		String type = "VALUE_NODE";
 		Node typeNode = n.getChild("type");
 		if (typeNode != null) type = typeNode.getValue();
 
-		result.setName(name);
-		result.setType(type);
-
+		NodeDefinition result = new NodeDefinition(name, type);
+		
 		Node children = n.getChild("children");
 		if (children != null) {
 			for (Node child: children.getChildren("child"))
@@ -1120,13 +1123,8 @@ class SchemaParser {
 		String name = ns.getName();
 		String namespace = ns.getNamespace() != null ? ns.getNamespace(): defNamespace;
 		
-		ChildDefinition schemaChild = new ChildDefinition();
-		schemaChild.setName(name);
-		schemaChild.setNamespace(namespace);
-		schemaChild.setMin(getInteger(child, "min"));
-		schemaChild.setMax(getInteger(child, "max"));
-		
-		schemaNode.getChildren().put(schemaChild.getQualifiedName(), schemaChild);
+		ChildDefinition schemaChild = new ChildDefinition(name, namespace, getInteger(child, "min"), getInteger(child, "max"));
+		schemaNode.addChildDefinition(schemaChild);
 	}
 
 	private static Integer getInteger(Node node, String name) {
@@ -1225,38 +1223,40 @@ Fichero: dev/stxt/schema/NodeDefinition.java
 ```
 package dev.stxt.schema;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import dev.stxt.exceptions.SchemaException;
 import dev.stxt.utils.StringUtils;
 
 public class NodeDefinition {
-	private String name;
-	private String normalizedName;
-	private String type;
-	private Map<String, ChildDefinition> children = new HashMap<>();
+	private final String name;
+	private final String normalizedName;
+	private final String type;
+	private final Map<String, ChildDefinition> children = new HashMap<>();
 	
+	public NodeDefinition(String name, String type) {
+		this.name = StringUtils.normalizeSimple(name);
+		this.normalizedName = StringUtils.normalizeFull(name);
+		this.type = type;
+	}
 	public String getName() {
 		return name;
 	}
 	public String getNormalizedName() {
 		return normalizedName;
 	}
-	public void setName(String name) {
-		this.name = StringUtils.normalizeSimple(name);
-		this.normalizedName = StringUtils.normalizeFull(name);
-	}
 	public String getType() {
 		return type;
 	}
-	public void setType(String type) {
-		this.type = type;
-	}
 	public Map<String, ChildDefinition> getChildren() {
-		return children;
+		return Collections.unmodifiableMap(children);
 	}
-	public void setChildren(Map<String, ChildDefinition> children) {
-		this.children = children;
+	public void addChildDefinition(ChildDefinition childDefinition) {
+		String qname = childDefinition.getQualifiedName();
+		if (children.containsKey(qname)) throw new SchemaException("CHILD_DEF_ALREADY_DEFINED", "Exists a previous node definition with: " + qname);
+		children.put(qname, childDefinition);
 	}
 }
 
@@ -1464,8 +1464,8 @@ public class TemplateParser {
 
 	private static void addToSchema(Schema schema, Node node, int offset) {
 		// Obtenemos nombre qualificado
-		String normalizedName = node.getNormalizedName();
 		String namespace = node.getNamespace();
+		String name = node.getName();
 		
 		// Miramos datos
 		ChildLine cl = ChildLineParser.parse(node.getValue(), node.getLine());
@@ -1481,13 +1481,11 @@ public class TemplateParser {
 		}
 		
 		// Miramos si es nuevo y añadimos en listado
-		NodeDefinition schemaNode = schema.getNodes().get(normalizedName);
+		NodeDefinition schemaNode = schema.getNodeDefinition(name);
 		if (schemaNode == null) {	// Nuevo
 			String type = cl.getType() == null? "VALUE_NODE": cl.getType();
-			schemaNode = new NodeDefinition();
-			schemaNode.setName(node.getName());
-			schemaNode.setType(type);
-			schema.getNodes().put(normalizedName, schemaNode);
+			schemaNode = new NodeDefinition(node.getName(), type);
+			schema.addNodeDefinition(schemaNode);
 		} else {
 			String type = cl.getType();
 			if (!type.startsWith("@"))
@@ -1496,7 +1494,7 @@ public class TemplateParser {
 			type = type.substring(1);
 			type = StringUtils.normalizeFull(type);
 			
-			if (type.equals(normalizedName)) return; // OK Definition
+			if (type.equals(node.getNormalizedName())) return; // OK Definition
 			throw new ParseException(node.getLine() + offset, "NODE_REFERENCE_NOT_VALID", "Reference must be '" + "@" + node.getName() + "', not '" + type + "'");
 		}
 		
@@ -1510,14 +1508,9 @@ public class TemplateParser {
 			String childName = child.getName();
 			String childNamespace = child.getNamespace();
 			if (childNamespace.isEmpty()) childNamespace = schema.getNamespace();
-			String childQualifiedName = childNamespace + ":" + child.getNormalizedName();
 			
-			ChildDefinition schChild = new ChildDefinition();
-			schChild.setName(childName);
-			schChild.setNamespace(childNamespace);
-			schChild.setMin(cl.getMin());
-			schChild.setMax(cl.getMax());
-			schemaNode.getChildren().put(childQualifiedName, schChild);
+			ChildDefinition schChild = new ChildDefinition(childName, childNamespace, cl.getMin(), cl.getMax());
+			schemaNode.addChildDefinition(schChild);
 			
 			addToSchema(schema, child, offset);
 		}
