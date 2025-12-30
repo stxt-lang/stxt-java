@@ -18,22 +18,6 @@ class ParseState {
 		return stack;
 	}
 
-	public boolean stackIsEmpty() {
-		return stack.isEmpty();
-	}
-
-	public Node stackPeek() {
-		return stack.peek();
-	}
-
-	public void stackPush(Node node) {
-		stack.push(node);
-	}
-
-	public Node stackPop() {
-		return stack.pop();
-	}
-
 	public List<Node> getDocuments() {
 		return documents;
 	}

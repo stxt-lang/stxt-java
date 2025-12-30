@@ -59,7 +59,11 @@ public class Node {
 	}
 
 	public List<Node> getChildren() {
-		return children;
+		return Collections.unmodifiableList(children);
+	}
+	
+	void addChild(Node node) {
+		children.add(node);
 	}
 
 	public String getValue() {

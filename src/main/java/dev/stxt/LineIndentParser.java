@@ -58,7 +58,7 @@ class LineIndentParser {
 		if (isCommentLine(line))
 			return null;
 
-		// Strange identation
+		// Strange indentation
 		if (spaces > 0)
 			throw new ParseException(numLine, "INVALID_NUMBER_SPACES", "There are " + spaces + " spaces before node");
 

@@ -119,7 +119,7 @@ public class Parser {
 			finishNode(completed);
 
 			if (stack.isEmpty())	state.addDocument(completed);
-			else					stack.peek().getChildren().add(completed);
+			else					stack.peek().addChild(completed);
 		}
 	}
 
