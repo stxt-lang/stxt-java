@@ -1,6 +1,2 @@
 dev.stxt
 * toString correcto con niveles y estructura estándar
-
-dev.stxt.resources
-Hacer ResourceLoaderMultiple y ResourceLoaderDirectorys (que ignore los no existentes)
-
