@@ -8,8 +8,8 @@ public final class NodeWriter {
     private NodeWriter() {}
 
     public enum IndentStyle {
-        TABS,
-        SPACES_4,
+        TABS,       // \t
+        SPACES_4    // "    "
     }
 
     public static String toSTXT(Node node) {
@@ -18,7 +18,7 @@ public final class NodeWriter {
 
     public static String toSTXT(Node node, IndentStyle style) {
         StringBuilder out = new StringBuilder(256);
-        writeNode(out, node, 0, style);
+        writeNode(out, node, 0, style, ""); // root: namespace "vacío" como base
         return out.toString();
     }
 
@@ -30,21 +30,21 @@ public final class NodeWriter {
         StringBuilder out = new StringBuilder();
         for (int i = 0; i < docs.size(); i++) {
             if (i > 0) out.append('\n');
-            writeNode(out, docs.get(i), 0, style);
+            writeNode(out, docs.get(i), 0, style, "");
         }
         return out.toString();
     }
 
     // ----------------- internals -----------------
 
-    private static void writeNode(StringBuilder out, Node n, int depth, IndentStyle style) {
+    private static void writeNode(StringBuilder out, Node n, int depth, IndentStyle style, String parentNs) {
         indent(out, depth, style);
 
-        // Nombre (con namespace explícito solo si es distinto del padre)
-        // Como Node no guarda el namespace heredado, imprimimos siempre "Name (ns)" cuando hay namespace.
-        // Si quieres el modo "heredado", lo implementamos con un parámetro parentNs.
-        if (n.getNamespace() != null && !n.getNamespace().isEmpty()) {
-            out.append(n.getName()).append(" (").append(n.getNamespace()).append(')');
+        String ns = safe(n.getNamespace());
+
+        // Imprime "(ns)" solo si cambia respecto al padre (namespace heredado)
+        if (!ns.isEmpty() && !ns.equals(parentNs)) {
+            out.append(n.getName()).append(" (").append(ns).append(')');
         } else {
             out.append(n.getName());
         }
@@ -52,7 +52,6 @@ public final class NodeWriter {
         if (n.isTextNode()) {
             out.append(" >>\n");
 
-            // líneas de texto tal cual, con indent depth+1
             for (String line : n.getTextLines()) {
                 indent(out, depth + 1, style);
                 out.append(line == null ? "" : line);
@@ -60,12 +59,13 @@ public final class NodeWriter {
             }
         } else {
             out.append(":");
-            if (!n.getValue().isEmpty()) out.append(' ').append(n.getValue());
+            String value = n.getValue();
+            if (value != null && !value.isEmpty()) out.append(' ').append(value);
             out.append('\n');
         }
 
         for (Node child : n.getChildren()) {
-            writeNode(out, child, depth + 1, style);
+            writeNode(out, child, depth + 1, style, ns);
         }
     }
 
@@ -80,5 +80,9 @@ public final class NodeWriter {
             default:
                 for (int i = 0; i < depth; i++) out.append("    ");
         }
+    }
+
+    private static String safe(String s) {
+        return s == null ? "" : s;
     }
 }
