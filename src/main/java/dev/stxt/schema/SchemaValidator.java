@@ -8,19 +8,15 @@ import dev.stxt.exceptions.ValidationException;
 import dev.stxt.processors.Validator;
 
 class SchemaValidator implements Validator {
-	// ------------------
-	// Variables públicas
-	// ------------------
-
 	private final SchemaProvider schemaProvider;
-	private boolean recursive = false;
+	private boolean recursiveValidation = false;
 
 	public SchemaValidator(SchemaProvider schemaProvider) {
 		this.schemaProvider = schemaProvider;
 	}
 	public SchemaValidator(SchemaProvider schemaProvider, boolean recursive) {
 		this.schemaProvider = schemaProvider;
-		this.recursive = recursive;
+		this.recursiveValidation = recursive;
 	}
 
 	@Override
@@ -35,7 +31,7 @@ class SchemaValidator implements Validator {
 		validateAgainstSchema(node, sch);
 		
 		// Validamos children
-		if (recursive)
+		if (recursiveValidation)
 			for (Node n: node.getChildren())
 				validate(n);
 	}
@@ -87,6 +83,5 @@ class SchemaValidator implements Validator {
 			throw new ValidationException(node.getLine(), "INVALID_NUMBER",
 					num + " nodes of '" + chNode.getQualifiedName() + " and max is " + max);
 	}
-
 
 }
