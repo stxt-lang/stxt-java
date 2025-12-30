@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import dev.stxt.exceptions.ParseException;
 import dev.stxt.exceptions.SchemaException;
 import dev.stxt.utils.StringUtils;
 
@@ -13,10 +14,13 @@ public class NodeDefinition {
 	private final String type;
 	private final Map<String, ChildDefinition> children = new HashMap<>();
 	
-	public NodeDefinition(String name, String type) {
+	public NodeDefinition(String name, String type, int line) {
 		this.name = StringUtils.compactSpaces(name);
 		this.normalizedName = StringUtils.normalize(name);
 		this.type = type;
+		if (this.normalizedName.isEmpty()) {
+		    throw new ParseException(line, "INVALID_NODE_NAME", "Node name not valid: " + name);
+		}
 	}
 	public String getName() {
 		return name;

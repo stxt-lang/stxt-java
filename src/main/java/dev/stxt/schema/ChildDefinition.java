@@ -1,6 +1,7 @@
 package dev.stxt.schema;
 
 import dev.stxt.NamespaceValidator;
+import dev.stxt.exceptions.ParseException;
 import dev.stxt.utils.StringUtils;
 
 public class ChildDefinition {
@@ -17,6 +18,9 @@ public class ChildDefinition {
 		this.min = min;
 		this.max = max;
 		NamespaceValidator.validateNamespaceFormat(this.namespace, numLine);
+		if (this.normalizedName.isEmpty()) {
+		    throw new ParseException(numLine, "INVALID_NODE_NAME", "Node name not valid: " + name);
+		}
 	}
 
 	public String getName() {

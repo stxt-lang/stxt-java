@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import dev.stxt.exceptions.ParseException;
 import dev.stxt.utils.StringUtils;
 
 public class Node {
@@ -57,6 +58,10 @@ public class Node {
 
 		if (!this.value.isEmpty() && this.isTextNode())
 			throw new IllegalArgumentException("Not empty value with textNode");
+		
+		if (this.normalizedName.isEmpty()) {
+		    throw new ParseException(line, "INVALID_NODE_NAME", "Node name not valid: " + name);
+		}
 	}
 
 	public void addTextLine(String line) {
@@ -826,6 +831,7 @@ Fichero: dev/stxt/schema/ChildDefinition.java
 package dev.stxt.schema;
 
 import dev.stxt.NamespaceValidator;
+import dev.stxt.exceptions.ParseException;
 import dev.stxt.utils.StringUtils;
 
 public class ChildDefinition {
@@ -842,6 +848,9 @@ public class ChildDefinition {
 		this.min = min;
 		this.max = max;
 		NamespaceValidator.validateNamespaceFormat(this.namespace, numLine);
+		if (this.normalizedName.isEmpty()) {
+		    throw new ParseException(numLine, "INVALID_NODE_NAME", "Node name not valid: " + name);
+		}
 	}
 
 	public String getName() {
@@ -1104,7 +1113,7 @@ class SchemaParser {
 		Node typeNode = n.getChild("type");
 		if (typeNode != null) type = typeNode.getValue();
 
-		NodeDefinition result = new NodeDefinition(name, type);
+		NodeDefinition result = new NodeDefinition(name, type, n.getLine());
 		
 		Node children = n.getChild("children");
 		if (children != null) {
@@ -1225,6 +1234,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import dev.stxt.exceptions.ParseException;
 import dev.stxt.exceptions.SchemaException;
 import dev.stxt.utils.StringUtils;
 
@@ -1234,10 +1244,13 @@ public class NodeDefinition {
 	private final String type;
 	private final Map<String, ChildDefinition> children = new HashMap<>();
 	
-	public NodeDefinition(String name, String type) {
+	public NodeDefinition(String name, String type, int line) {
 		this.name = StringUtils.compactSpaces(name);
 		this.normalizedName = StringUtils.normalize(name);
 		this.type = type;
+		if (this.normalizedName.isEmpty()) {
+		    throw new ParseException(line, "INVALID_NODE_NAME", "Node name not valid: " + name);
+		}
 	}
 	public String getName() {
 		return name;
@@ -1482,7 +1495,7 @@ public class TemplateParser {
 		NodeDefinition schemaNode = schema.getNodeDefinition(name);
 		if (schemaNode == null) {	// Nuevo
 			String type = cl.getType() == null? "VALUE_NODE": cl.getType();
-			schemaNode = new NodeDefinition(node.getName(), type);
+			schemaNode = new NodeDefinition(node.getName(), type, node.getLine() + offset);
 			schema.addNodeDefinition(schemaNode);
 		} else {
 			String type = cl.getType();

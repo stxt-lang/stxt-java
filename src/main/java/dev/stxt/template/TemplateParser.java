@@ -57,7 +57,7 @@ public class TemplateParser {
 		NodeDefinition schemaNode = schema.getNodeDefinition(name);
 		if (schemaNode == null) {	// Nuevo
 			String type = cl.getType() == null? "VALUE_NODE": cl.getType();
-			schemaNode = new NodeDefinition(node.getName(), type);
+			schemaNode = new NodeDefinition(node.getName(), type, node.getLine() + offset);
 			schema.addNodeDefinition(schemaNode);
 		} else {
 			String type = cl.getType();

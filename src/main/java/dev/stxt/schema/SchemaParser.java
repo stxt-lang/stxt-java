@@ -59,7 +59,7 @@ class SchemaParser {
 		Node typeNode = n.getChild("type");
 		if (typeNode != null) type = typeNode.getValue();
 
-		NodeDefinition result = new NodeDefinition(name, type);
+		NodeDefinition result = new NodeDefinition(name, type, n.getLine());
 		
 		Node children = n.getChild("children");
 		if (children != null) {
