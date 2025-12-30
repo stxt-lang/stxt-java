@@ -41,7 +41,7 @@ public class TemplateParser {
 		String name = node.getName();
 		
 		// Miramos datos
-		ChildLine cl = ChildLineParser.parse(node.getValue(), node.getLine());
+		ChildLine cl = ChildLineParser.parse(node.getValue(), node.getLine() + offset);
 		
 		if (namespace.isEmpty()) namespace = schema.getNamespace(); // Es del template
 		else {

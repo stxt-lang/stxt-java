@@ -16,7 +16,7 @@ public class ChildDefinition {
 		this.namespace = StringUtils.lowerCase(namespace);
 		this.min = min;
 		this.max = max;
-		NamespaceValidator.validateNamespaceFormat(namespace, numLine);
+		NamespaceValidator.validateNamespaceFormat(this.namespace, numLine);
 	}
 
 	public String getName() {

@@ -841,7 +841,7 @@ public class ChildDefinition {
 		this.namespace = StringUtils.lowerCase(namespace);
 		this.min = min;
 		this.max = max;
-		NamespaceValidator.validateNamespaceFormat(namespace, numLine);
+		NamespaceValidator.validateNamespaceFormat(this.namespace, numLine);
 	}
 
 	public String getName() {
@@ -1466,7 +1466,7 @@ public class TemplateParser {
 		String name = node.getName();
 		
 		// Miramos datos
-		ChildLine cl = ChildLineParser.parse(node.getValue(), node.getLine());
+		ChildLine cl = ChildLineParser.parse(node.getValue(), node.getLine() + offset);
 		
 		if (namespace.isEmpty()) namespace = schema.getNamespace(); // Es del template
 		else {
