@@ -40,6 +40,6 @@ public class ChildDefinition {
 	}
 
 	public String getQualifiedName() {
-		return namespace == null || namespace.isEmpty() ? normalizedName : namespace + ":" + normalizedName;
+		return namespace.isEmpty() ? normalizedName : namespace + ":" + normalizedName;
 	}
 }

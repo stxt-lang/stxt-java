@@ -46,7 +46,7 @@ public class Node {
 	}
 
 	public String getQualifiedName() {
-		return namespace == null || namespace.isEmpty() ? normalizedName : namespace + ":" + normalizedName;
+		return namespace.isEmpty() ? normalizedName : namespace + ":" + normalizedName;
 	}
 
 	public String getNamespace() {
