@@ -31,8 +31,8 @@ public class MetaTemplateSchemaProvider implements SchemaProvider {
 	
 	@Override
 	public Schema getSchema(String namespace) {
-	    if (!"@stxt.template".equals(namespace))
-	        throw new ResourceNotFoundException(Schema.SCHEMA_NAMESPACE, namespace);
+		if (!"@stxt.template".equals(namespace))
+			throw new ResourceNotFoundException("@stxt.template", namespace);
 
 	    if (meta == null)
 	        throw new SchemaException("META_SCHEMA_NOT_AVAILABLE", "Meta schema not available");

@@ -1543,6 +1543,11 @@ public class TemplateParser {
 		
 		// Buscamos nodo structure
 		Node structure = node.getChild("structure");
+		if (structure == null) {
+		    throw new ParseException(node.getLine(), "TEMPLATE_STRUCTURE_REQUIRED",
+		        "Template must define 'Structure >>'");
+		}
+		
 		String text = structure.getText();
 		int offset = structure.getLine();
 		
@@ -1649,8 +1654,8 @@ public class MetaTemplateSchemaProvider implements SchemaProvider {
 	
 	@Override
 	public Schema getSchema(String namespace) {
-	    if (!"@stxt.template".equals(namespace))
-	        throw new ResourceNotFoundException(Schema.SCHEMA_NAMESPACE, namespace);
+		if (!"@stxt.template".equals(namespace))
+			throw new ResourceNotFoundException("@stxt.template", namespace);
 
 	    if (meta == null)
 	        throw new SchemaException("META_SCHEMA_NOT_AVAILABLE", "Meta schema not available");

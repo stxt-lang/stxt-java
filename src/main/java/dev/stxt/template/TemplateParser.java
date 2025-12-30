@@ -19,6 +19,11 @@ public class TemplateParser {
 		
 		// Buscamos nodo structure
 		Node structure = node.getChild("structure");
+		if (structure == null) {
+		    throw new ParseException(node.getLine(), "TEMPLATE_STRUCTURE_REQUIRED",
+		        "Template must define 'Structure >>'");
+		}
+		
 		String text = structure.getText();
 		int offset = structure.getLine();
 		
