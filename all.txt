@@ -1017,6 +1017,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import dev.stxt.NamespaceValidator;
 import dev.stxt.exceptions.SchemaException;
 import dev.stxt.utils.StringUtils;
 
@@ -1024,7 +1025,12 @@ public class Schema {
 	public static final String SCHEMA_NAMESPACE = "@stxt.schema";
 
 	private Map<String, NodeDefinition> nodes = new LinkedHashMap<String, NodeDefinition>();
-	private String namespace;
+	private final String namespace;
+	
+	public Schema(String namespace, int line) {
+		this.namespace = StringUtils.lowerCase(namespace);
+		NamespaceValidator.validateNamespaceFormat(this.namespace, line);
+	}
 	
 	public Map<String, NodeDefinition> getNodes() {
 		return Collections.unmodifiableMap(nodes);
@@ -1043,9 +1049,6 @@ public class Schema {
 	public String getNamespace() {
 		return namespace;
 	}
-	public void setNamespace(String namespace) {
-		this.namespace = namespace;
-	}
 }
 
 ```
@@ -1055,7 +1058,6 @@ Fichero: dev/stxt/schema/SchemaParser.java
 package dev.stxt.schema;
 
 import java.util.HashSet;
-import java.util.Locale;
 import java.util.Set;
 
 import dev.stxt.NameNamespace;
@@ -1068,8 +1070,6 @@ import dev.stxt.exceptions.ValidationException;
 class SchemaParser {
 
 	public static Schema transformNodeToSchema(Node node) {
-		Schema schema = new Schema();
-
 		// Node name
 		String nodeName = node.getNormalizedName();
 		String namespaceSchema = node.getNamespace();
@@ -1079,8 +1079,7 @@ class SchemaParser {
 			throw new SchemaException("NOT_STXT_SCHEMA",
 					"Se espera schema(" + Schema.SCHEMA_NAMESPACE + ") y es " + nodeName + "(" + namespaceSchema + ")");
 		}
-		String namespace = node.getValue().trim().toLowerCase(Locale.ROOT);
-		schema.setNamespace(namespace);
+		Schema schema = new Schema(node.getValue(), node.getLine());
 
 		// Para validar
 		Set<String> allNames = new HashSet<String>(); // Para validar que existan los childs
@@ -1095,11 +1094,11 @@ class SchemaParser {
 		// Validamos que todos los nombres estén definidos
 		for (NodeDefinition schNode : schema.getNodes().values()) {
 			for (ChildDefinition schChild : schNode.getChildren().values()) {
-				if (schChild.getNamespace().equals(namespace)) // Sólo validamos del mismo namespace
+				if (schChild.getNamespace().equals(schema.getNamespace())) // Sólo validamos del mismo namespace
 				{
 					if (!allNames.contains(schChild.getNormalizedName()))
 						throw new ValidationException(0, "CHILD_NOT_DEFINED",
-								"Child " + schChild.getNormalizedName() + " not defined in " + namespace);
+								"Child " + schChild.getNormalizedName() + " not defined in " + schema.getNamespace());
 				}
 			}
 		}
@@ -1443,19 +1442,17 @@ import java.util.List;
 import dev.stxt.Node;
 import dev.stxt.Parser;
 import dev.stxt.exceptions.ParseException;
-import dev.stxt.schema.Schema;
 import dev.stxt.schema.ChildDefinition;
 import dev.stxt.schema.NodeDefinition;
+import dev.stxt.schema.Schema;
 import dev.stxt.utils.StringUtils;
 
 public class TemplateParser {
 	
 	public static Schema transformNodeToSchema(Node node) {
-		Schema result = new Schema();
 		
 		// Insertamos namespace
-		String namespace = node.getValue();
-		result.setNamespace(namespace);
+		Schema result = new Schema(node.getValue(), node.getLine());
 		
 		// Buscamos nodo structure
 		String text = node.getChild("structure").getText();
@@ -1731,10 +1728,6 @@ public class Parser {
 		// Cerrar todos los nodos pendientes al EOF
 		closeToLevel(state, 0);
 		
-		// Congelar documentos
-		for (Node n: state.getDocuments())
-			n.freeze();
-
 		// Retorno documentos
 		return state.getDocuments();
 	}
@@ -2131,7 +2124,7 @@ public class StringUtils {
 
 	public static String rightTrim(String s) {
 		if (s == null)
-			return null;
+			return "";
 		int i = s.length() - 1;
 		while (i >= 0 && Character.isWhitespace(s.charAt(i))) {
 			i--;
@@ -2150,7 +2143,7 @@ public class StringUtils {
 	
 	public static String compactSpaces(String s) {
 		if (s == null)
-			return null;
+			return "";
 		return s.trim().replaceAll("\\s+", " ");
 	}
 

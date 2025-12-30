@@ -5,19 +5,17 @@ import java.util.List;
 import dev.stxt.Node;
 import dev.stxt.Parser;
 import dev.stxt.exceptions.ParseException;
-import dev.stxt.schema.Schema;
 import dev.stxt.schema.ChildDefinition;
 import dev.stxt.schema.NodeDefinition;
+import dev.stxt.schema.Schema;
 import dev.stxt.utils.StringUtils;
 
 public class TemplateParser {
 	
 	public static Schema transformNodeToSchema(Node node) {
-		Schema result = new Schema();
 		
 		// Insertamos namespace
-		String namespace = node.getValue();
-		result.setNamespace(namespace);
+		Schema result = new Schema(node.getValue(), node.getLine());
 		
 		// Buscamos nodo structure
 		String text = node.getChild("structure").getText();

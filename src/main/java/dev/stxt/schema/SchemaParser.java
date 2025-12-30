@@ -1,7 +1,6 @@
 package dev.stxt.schema;
 
 import java.util.HashSet;
-import java.util.Locale;
 import java.util.Set;
 
 import dev.stxt.NameNamespace;
@@ -14,8 +13,6 @@ import dev.stxt.exceptions.ValidationException;
 class SchemaParser {
 
 	public static Schema transformNodeToSchema(Node node) {
-		Schema schema = new Schema();
-
 		// Node name
 		String nodeName = node.getNormalizedName();
 		String namespaceSchema = node.getNamespace();
@@ -25,8 +22,7 @@ class SchemaParser {
 			throw new SchemaException("NOT_STXT_SCHEMA",
 					"Se espera schema(" + Schema.SCHEMA_NAMESPACE + ") y es " + nodeName + "(" + namespaceSchema + ")");
 		}
-		String namespace = node.getValue().trim().toLowerCase(Locale.ROOT);
-		schema.setNamespace(namespace);
+		Schema schema = new Schema(node.getValue(), node.getLine());
 
 		// Para validar
 		Set<String> allNames = new HashSet<String>(); // Para validar que existan los childs
@@ -41,11 +37,11 @@ class SchemaParser {
 		// Validamos que todos los nombres estén definidos
 		for (NodeDefinition schNode : schema.getNodes().values()) {
 			for (ChildDefinition schChild : schNode.getChildren().values()) {
-				if (schChild.getNamespace().equals(namespace)) // Sólo validamos del mismo namespace
+				if (schChild.getNamespace().equals(schema.getNamespace())) // Sólo validamos del mismo namespace
 				{
 					if (!allNames.contains(schChild.getNormalizedName()))
 						throw new ValidationException(0, "CHILD_NOT_DEFINED",
-								"Child " + schChild.getNormalizedName() + " not defined in " + namespace);
+								"Child " + schChild.getNormalizedName() + " not defined in " + schema.getNamespace());
 				}
 			}
 		}

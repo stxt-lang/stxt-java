@@ -65,10 +65,6 @@ public class Parser {
 		// Cerrar todos los nodos pendientes al EOF
 		closeToLevel(state, 0);
 		
-		// Congelar documentos
-		for (Node n: state.getDocuments())
-			n.freeze();
-
 		// Retorno documentos
 		return state.getDocuments();
 	}

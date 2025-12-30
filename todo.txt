@@ -1,17 +1,5 @@
-* El transformer sólo vea el nodo justo después de crearlo, sin childs, etc... y lo transforma justo en ese momento, no al final. 
-	Entonces el freeze se hace antes de pasar por validators, etc.
-* Distinguir name de NormalizedName!! Ahora se pierde name, y debería ser sólo compact string. Quizá mejor un rawName, que sólo sea compact string, y así ya está
-
 dev.stxt
-* Poner getParent() en los childs
 * toString correcto con niveles y estructura estándar
-
-dev.stxt.schema
-* Processor para leer schema de nodo
-* Processor para validar schema
-* SchemaValidatorCount
-* SchemaValidatorType
-* quitar INSTANCE de type, hacer método mejor y que el nombre esté en el propio TypeValidator
 
 dev.stxt.resources
 Hacer ResourceLoaderMultiple y ResourceLoaderDirectorys (que ignore los no existentes)

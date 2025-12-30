@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import dev.stxt.NamespaceValidator;
 import dev.stxt.exceptions.SchemaException;
 import dev.stxt.utils.StringUtils;
 
@@ -11,7 +12,12 @@ public class Schema {
 	public static final String SCHEMA_NAMESPACE = "@stxt.schema";
 
 	private Map<String, NodeDefinition> nodes = new LinkedHashMap<String, NodeDefinition>();
-	private String namespace;
+	private final String namespace;
+	
+	public Schema(String namespace, int line) {
+		this.namespace = StringUtils.lowerCase(namespace);
+		NamespaceValidator.validateNamespaceFormat(this.namespace, line);
+	}
 	
 	public Map<String, NodeDefinition> getNodes() {
 		return Collections.unmodifiableMap(nodes);
@@ -29,8 +35,5 @@ public class Schema {
 	
 	public String getNamespace() {
 		return namespace;
-	}
-	public void setNamespace(String namespace) {
-		this.namespace = namespace;
 	}
 }

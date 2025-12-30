@@ -10,7 +10,7 @@ public class StringUtils {
 
 	public static String rightTrim(String s) {
 		if (s == null)
-			return null;
+			return "";
 		int i = s.length() - 1;
 		while (i >= 0 && Character.isWhitespace(s.charAt(i))) {
 			i--;
@@ -29,7 +29,7 @@ public class StringUtils {
 	
 	public static String compactSpaces(String s) {
 		if (s == null)
-			return null;
+			return "";
 		return s.trim().replaceAll("\\s+", " ");
 	}
 
