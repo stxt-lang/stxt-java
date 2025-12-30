@@ -50,6 +50,5 @@ public class StringUtils {
 	    // trim de '-'
 	    s = s.replaceAll("^-+|-+$", "");
 	    return s;
-	}
-	
+	}	
 }
