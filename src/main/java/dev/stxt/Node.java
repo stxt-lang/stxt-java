@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import dev.stxt.exceptions.ParseException;
 import dev.stxt.utils.StringUtils;
 
 public class Node {
@@ -31,6 +32,10 @@ public class Node {
 
 		if (!this.value.isEmpty() && this.isTextNode())
 			throw new IllegalArgumentException("Not empty value with textNode");
+		
+		if (this.normalizedName.isEmpty()) {
+		    throw new ParseException(line, "INVALID_NODE_NAME", "Node name not valid: " + name);
+		}
 	}
 
 	public void addTextLine(String line) {
