@@ -1,4 +1,4 @@
-package dev.stxt.all;
+package dev.stxt.runtime;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,7 +10,6 @@ import dev.stxt.Node;
 import dev.stxt.Parser;
 import dev.stxt.exceptions.ParseException;
 import dev.stxt.resources.ResourcesLoaderDirectory;
-import dev.stxt.runtime.STXT;
 import dev.stxt.utils.FileUtils;
 import test.FileTestLoction;
 import test.JSONFile;
@@ -43,6 +42,9 @@ public class ParserAllDocsTest {
 		List<Node> docs = parser.parseFile(file);
 		for (Node node : docs) {
 			JSONFile.checkContentWithJsonFile(node, "docs_json/", file.getName().substring(0, file.getName().length() - 5));
+			
+			System.out.println(node.toString());
+			System.out.println(NodeWriter.toSTXT(node));
 		}
 	}
 }

@@ -124,4 +124,21 @@ public class Node {
 
 		return result;
 	}
+	
+	@Override
+	public String toString() {
+	    StringBuilder sb = new StringBuilder();
+	    sb.append("Node{");
+	    sb.append("line=").append(line);
+	    sb.append(", level=").append(level);
+	    sb.append(", name='").append(name).append('\'');
+	    if (!namespace.isEmpty()) sb.append(", ns='").append(namespace).append('\'');
+	    sb.append(", text=").append(textNode);
+	    if (!textNode && !value.isEmpty()) sb.append(", value='").append(value).append('\'');
+	    if (textNode) sb.append(", lines=").append(textLines.size());
+	    sb.append(", children=").append(children.size());
+	    sb.append('}');
+	    return sb.toString();
+	}
+	
 }

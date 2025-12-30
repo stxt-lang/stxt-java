@@ -1,4 +1,4 @@
-package dev.stxt.all;
+package dev.stxt.runtime;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import dev.stxt.Parser;
 import dev.stxt.exceptions.ParseException;
 import dev.stxt.resources.ResourcesLoaderDirectory;
-import dev.stxt.runtime.STXT;
 import dev.stxt.utils.FileUtils;
 import test.FileTestLoction;
 import test.JSONFile;
