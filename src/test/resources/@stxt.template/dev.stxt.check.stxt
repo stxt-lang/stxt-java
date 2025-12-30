@@ -6,6 +6,6 @@ Template (@stxt.template): dev.stxt.check
 			integer: (+) INTEGER
 			number: (+) NUMBER
 			hexadecimal: (+) HEXADECIMAL
-			base64: (+) BASE64
-			boolean: (+) BOOLEAN
-			url: (+) URL
+			Base64: (+) BASE64
+			Boolean: (+) BOOLEAN
+			Url: (+) URL
