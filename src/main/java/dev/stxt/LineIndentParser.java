@@ -7,7 +7,7 @@ import static dev.stxt.utils.StringUtils.rightTrim;
 
 import dev.stxt.exceptions.ParseException;
 
-public class LineIndentParser {
+class LineIndentParser {
 	// -------------------------------------------------
 	// parseLine
 	// -------------------------------------------------
