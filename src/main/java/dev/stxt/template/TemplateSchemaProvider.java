@@ -10,7 +10,6 @@ import dev.stxt.schema.Schema;
 import dev.stxt.schema.SchemaProvider;
 
 public class TemplateSchemaProvider implements SchemaProvider {
-	private static final Parser PARSER = new Parser();
 	private final ResourcesLoader loader;
 	
 	public TemplateSchemaProvider(ResourcesLoader loader) {
@@ -20,8 +19,8 @@ public class TemplateSchemaProvider implements SchemaProvider {
 	@Override
 	public Schema getSchema(String namespace) {
 		String template = loader.retrieve("@stxt.template", namespace);
-		
-		List<Node> nodes = PARSER.parse(template);
+
+		List<Node> nodes = new Parser().parse(template);
 		if (nodes.size() != 1)
 			throw new SchemaException("INVALID_SCHEMA", "There are " + nodes.size() + ", and expected is 1");
 

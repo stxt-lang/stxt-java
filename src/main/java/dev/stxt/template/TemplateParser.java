@@ -18,12 +18,12 @@ public class TemplateParser {
 		Schema result = new Schema(node.getValue(), node.getLine());
 		
 		// Buscamos nodo structure
-		String text = node.getChild("structure").getText();
-		int offset = node.getLine();
+		Node structure = node.getChild("structure");
+		String text = structure.getText();
+		int offset = structure.getLine();
 		
 		// Parseamos para los nodos
-		Parser parser = new Parser();
-		List<Node> nodes = parser.parse(text);
+		List<Node> nodes = new Parser().parse(text);
 		
 		// Vamos iterando todos los nodos insertando
 		for (Node n: nodes)

@@ -1414,7 +1414,6 @@ import dev.stxt.schema.Schema;
 import dev.stxt.schema.SchemaProvider;
 
 public class TemplateSchemaProvider implements SchemaProvider {
-	private static final Parser PARSER = new Parser();
 	private final ResourcesLoader loader;
 	
 	public TemplateSchemaProvider(ResourcesLoader loader) {
@@ -1424,8 +1423,8 @@ public class TemplateSchemaProvider implements SchemaProvider {
 	@Override
 	public Schema getSchema(String namespace) {
 		String template = loader.retrieve("@stxt.template", namespace);
-		
-		List<Node> nodes = PARSER.parse(template);
+
+		List<Node> nodes = new Parser().parse(template);
 		if (nodes.size() != 1)
 			throw new SchemaException("INVALID_SCHEMA", "There are " + nodes.size() + ", and expected is 1");
 
@@ -1538,12 +1537,12 @@ public class TemplateParser {
 		Schema result = new Schema(node.getValue(), node.getLine());
 		
 		// Buscamos nodo structure
-		String text = node.getChild("structure").getText();
-		int offset = node.getLine();
+		Node structure = node.getChild("structure");
+		String text = structure.getText();
+		int offset = structure.getLine();
 		
 		// Parseamos para los nodos
-		Parser parser = new Parser();
-		List<Node> nodes = parser.parse(text);
+		List<Node> nodes = new Parser().parse(text);
 		
 		// Vamos iterando todos los nodos insertando
 		for (Node n: nodes)
