@@ -12,7 +12,7 @@ public class ChildDefinition {
 
 	public ChildDefinition(String name, String namespace, Integer min, Integer max, int numLine) {
 		this.name = StringUtils.compactSpaces(name);
-		this.normalizedName = StringUtils.normalizeFull(name);
+		this.normalizedName = StringUtils.normalize(name);
 		this.namespace = StringUtils.lowerCase(namespace);
 		this.min = min;
 		this.max = max;

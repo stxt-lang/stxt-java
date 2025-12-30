@@ -15,7 +15,7 @@ public class NodeDefinition {
 	
 	public NodeDefinition(String name, String type) {
 		this.name = StringUtils.compactSpaces(name);
-		this.normalizedName = StringUtils.normalizeFull(name);
+		this.normalizedName = StringUtils.normalize(name);
 		this.type = type;
 	}
 	public String getName() {

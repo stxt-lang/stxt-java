@@ -49,10 +49,11 @@ public class Node {
 		this.level = level;
 		this.line = line;
 		this.name = StringUtils.compactSpaces(name);
-		this.normalizedName = StringUtils.normalizeFull(name);
-		this.namespace = namespace;
+		this.normalizedName = StringUtils.normalize(name);
+		this.namespace = StringUtils.lowerCase(namespace);
 		this.value = (value == null ? "" : value.trim());
 		this.textNode = textNode;
+		NamespaceValidator.validateNamespaceFormat(namespace, line);
 
 		if (!this.value.isEmpty() && this.isTextNode())
 			throw new IllegalArgumentException("Not empty value with textNode");
@@ -130,7 +131,7 @@ public class Node {
 
 	// Fast access methods to children
 	public List<Node> getChildren(String cname) {
-		String key = StringUtils.normalizeFull(cname);
+		String key = StringUtils.normalize(cname);
 		List<Node> result = new ArrayList<Node>();
 
 		for (Node child : children) {
@@ -837,8 +838,8 @@ public class ChildDefinition {
 	private final Integer max;
 
 	public ChildDefinition(String name, String namespace, Integer min, Integer max, int numLine) {
-		this.name = StringUtils.normalizeSimple(name);
-		this.normalizedName = StringUtils.normalizeFull(name);
+		this.name = StringUtils.compactSpaces(name);
+		this.normalizedName = StringUtils.normalize(name);
 		this.namespace = StringUtils.lowerCase(namespace);
 		this.min = min;
 		this.max = max;
@@ -1023,7 +1024,7 @@ public class Schema {
 	}
 	
 	public NodeDefinition getNodeDefinition(String name) {
-		return nodes.get(StringUtils.normalizeFull(name));
+		return nodes.get(StringUtils.normalize(name));
 	}
 	
 	public void addNodeDefinition(NodeDefinition nodeDefinition) {
@@ -1236,8 +1237,8 @@ public class NodeDefinition {
 	private final Map<String, ChildDefinition> children = new HashMap<>();
 	
 	public NodeDefinition(String name, String type) {
-		this.name = StringUtils.normalizeSimple(name);
-		this.normalizedName = StringUtils.normalizeFull(name);
+		this.name = StringUtils.compactSpaces(name);
+		this.normalizedName = StringUtils.normalize(name);
 		this.type = type;
 	}
 	public String getName() {
@@ -1491,7 +1492,7 @@ public class TemplateParser {
 				throw new ParseException(node.getLine() + offset, "NODE_DEFINED_MULTIPLE_TIMES", "Multiple node reference must start with @: " + node.getName());				
 				
 			type = type.substring(1);
-			type = StringUtils.normalizeFull(type);
+			type = StringUtils.normalize(type);
 			
 			if (type.equals(node.getNormalizedName())) return; // OK Definition
 			throw new ParseException(node.getLine() + offset, "NODE_REFERENCE_NOT_VALID", "Reference must be '" + "@" + node.getName() + "', not '" + type + "'");
@@ -1962,57 +1963,65 @@ import java.util.regex.Pattern;
 
 import dev.stxt.exceptions.ParseException;
 
-import static dev.stxt.utils.StringUtils.lowerCase;
-
 public final class NameNamespaceParser {
 
-    // `name (namespace)` donde namespace es opcional
-    private static final Pattern NAME_PATTERN =
-            Pattern.compile("^\\s*([a-z0-9\\-_]+(?:\\s+[a-z0-9\\-_]+)*)(?:\\s*\\(\\s*(@?[a-z0-9]+(?:\\.[a-z0-9]+)*)\\s*\\))?\\s*$");
+    /**
+     * Acepta:
+     *   - "nombre"
+     *   - "nombre (namespace)"
+     *
+     * nombre:
+     *   - letras unicode (acentos incluidos), números, espacios, '_' y '-'
+     *   - no se permiten otros símbolos ni paréntesis
+     *
+     * namespace (opcional, al final):
+     *   - opcional '@' al inicio
+     *   - segmentos separados por '.'
+     *   - cada segmento: letras unicode, números, '_' y '-'
+     */
+    private static final String NAME_TOKEN = "[\\p{L}\\p{M}\\p{N}_-]+";
+    private static final String NAME_PART  = NAME_TOKEN + "(?:\\s+" + NAME_TOKEN + ")*";
+
+    private static final String NS_SEGMENT = "[\\p{L}\\p{M}\\p{N}_-]+";
+    private static final String NAMESPACE  = "@?" + NS_SEGMENT + "(?:\\." + NS_SEGMENT + ")*";
+
+    private static final Pattern LINE_PATTERN = Pattern.compile(
+            "^\\s*(" + NAME_PART + ")(?:\\s*\\(\\s*(" + NAMESPACE + ")\\s*\\))?\\s*$",
+            Pattern.UNICODE_CHARACTER_CLASS
+    );
 
     private NameNamespaceParser() {
         // utility
     }
 
-    /**
-     * Parsea el texto de nombre completo y devuelve name + namespace lógico.
-     *
-     * @param rawName       Texto bruto (antes de normalizar) que viene de la línea.
-     * @param inheritedNs   Namespace heredado del padre (puede ser vacío).
-     * @param lineNumber    Número de línea (para `ParseException`).
-     * @param fullLine      Línea completa para mensajes de error.
-     */
-    public static NameNamespace parse(
-            String rawName,
-            String inheritedNs,
-            int lineNumber,
-            String fullLine
-    ) {
+    public static NameNamespace parse(String rawName, String inheritedNs, int lineNumber, String fullLine) {
         if (rawName == null) {
             throw new ParseException(lineNumber, "INVALID_LINE", "Line not valid: " + fullLine);
         }
 
-        String normalized = lowerCase(rawName);
-        Matcher m = NAME_PATTERN.matcher(normalized);
+        // Si quieres preservar mayúsculas/minúsculas del nombre, NO lo normalices aquí.
+        // Si lo quieres todo en minúsculas como antes, mantenlo:
+        String normalized = rawName;
+
+        Matcher m = LINE_PATTERN.matcher(normalized);
         if (!m.matches()) {
             throw new ParseException(lineNumber, "INVALID_NAMESPACE_DEF", "Line not valid: " + fullLine);
         }
 
         String name = m.group(1);
-        if (name == null || name.isEmpty()) {
+        if (name == null || name.isBlank()) {
             throw new ParseException(lineNumber, "INVALID_LINE", "Line not valid: " + fullLine);
         }
 
-        String namespace = inheritedNs != null ? inheritedNs : Constants.EMPTY_NAMESPACE;
-        if (m.group(2) != null) {
-            namespace = m.group(2);
+        String namespace = (inheritedNs != null) ? inheritedNs : Constants.EMPTY_NAMESPACE;
+        String explicitNs = m.group(2);
+        if (explicitNs != null && !explicitNs.isBlank()) {
+            namespace = explicitNs;
         }
 
         return new NameNamespace(name, namespace);
     }
 }
-
-
 
 ```
 
@@ -2140,7 +2149,8 @@ public class StringUtils {
 	}
 
 	private static final Pattern DIACRITICS = Pattern.compile("\\p{Mn}+");
-	private static String normalizeCore(String input) {
+
+	public static String normalize(String input) {
 	    if (input == null) return "";
 	    String s = input.trim();
 	    if (s.isEmpty()) return "";
@@ -2148,17 +2158,8 @@ public class StringUtils {
 	    s = Normalizer.normalize(s, Normalizer.Form.NFKD);
 	    s = DIACRITICS.matcher(s).replaceAll("");
 	    s = s.toLowerCase(Locale.ROOT);
-	    return compactSpaces(s);
-	}
-
-	public static String normalizeSimple(String input) {
-	    return normalizeCore(input);
-	}
-
-	public static String normalizeFull(String input) {
-	    String s = normalizeCore(input);
-	    if (s.isEmpty()) return "";
-
+	    s = compactSpaces(s);
+	    
 	    // cualquier cosa que no sea [a-z0-9] => '-'
 	    s = s.replaceAll("[^a-z0-9]+", "-");
 	    // trim de '-'

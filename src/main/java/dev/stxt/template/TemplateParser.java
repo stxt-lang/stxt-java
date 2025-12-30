@@ -65,7 +65,7 @@ public class TemplateParser {
 				throw new ParseException(node.getLine() + offset, "NODE_DEFINED_MULTIPLE_TIMES", "Multiple node reference must start with @: " + node.getName());				
 				
 			type = type.substring(1);
-			type = StringUtils.normalizeFull(type);
+			type = StringUtils.normalize(type);
 			
 			if (type.equals(node.getNormalizedName())) return; // OK Definition
 			throw new ParseException(node.getLine() + offset, "NODE_REFERENCE_NOT_VALID", "Reference must be '" + "@" + node.getName() + "', not '" + type + "'");

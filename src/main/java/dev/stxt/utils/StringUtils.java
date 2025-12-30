@@ -34,7 +34,8 @@ public class StringUtils {
 	}
 
 	private static final Pattern DIACRITICS = Pattern.compile("\\p{Mn}+");
-	private static String normalizeCore(String input) {
+
+	public static String normalize(String input) {
 	    if (input == null) return "";
 	    String s = input.trim();
 	    if (s.isEmpty()) return "";
@@ -42,17 +43,8 @@ public class StringUtils {
 	    s = Normalizer.normalize(s, Normalizer.Form.NFKD);
 	    s = DIACRITICS.matcher(s).replaceAll("");
 	    s = s.toLowerCase(Locale.ROOT);
-	    return compactSpaces(s);
-	}
-
-	public static String normalizeSimple(String input) {
-	    return normalizeCore(input);
-	}
-
-	public static String normalizeFull(String input) {
-	    String s = normalizeCore(input);
-	    if (s.isEmpty()) return "";
-
+	    s = compactSpaces(s);
+	    
 	    // cualquier cosa que no sea [a-z0-9] => '-'
 	    s = s.replaceAll("[^a-z0-9]+", "-");
 	    // trim de '-'

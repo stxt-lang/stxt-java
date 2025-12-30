@@ -18,7 +18,7 @@ public class Schema {
 	}
 	
 	public NodeDefinition getNodeDefinition(String name) {
-		return nodes.get(StringUtils.normalizeFull(name));
+		return nodes.get(StringUtils.normalize(name));
 	}
 	
 	public void addNodeDefinition(NodeDefinition nodeDefinition) {
