@@ -8,9 +8,9 @@ import org.junit.jupiter.api.Test;
 
 import dev.stxt.Node;
 import dev.stxt.Parser;
-import dev.stxt.STXTParser;
 import dev.stxt.exceptions.ParseException;
 import dev.stxt.resources.ResourcesLoaderDirectory;
+import dev.stxt.runtime.STXT;
 import dev.stxt.utils.FileUtils;
 import test.FileTestLoction;
 import test.JSONFile;
@@ -25,7 +25,7 @@ public class ParserAllDocsTest {
 		System.out.println("Inici");
 
 		// Create parser
-		Parser parser = new STXTParser(new ResourcesLoaderDirectory(FileTestLoction.getFile("")));
+		Parser parser = STXT.parser(new ResourcesLoaderDirectory(FileTestLoction.getFile("")));
 		File docsDir = FileTestLoction.getFile("docs");
 
 		List<File> stxtFiles = FileUtils.getStxtFiles(docsDir);
