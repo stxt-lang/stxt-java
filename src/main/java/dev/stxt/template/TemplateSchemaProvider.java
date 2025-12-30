@@ -24,7 +24,14 @@ public class TemplateSchemaProvider implements SchemaProvider {
 		List<Node> nodes = PARSER.parse(template);
 		if (nodes.size() != 1)
 			throw new SchemaException("INVALID_SCHEMA", "There are " + nodes.size() + ", and expected is 1");
+
+		// Obtenemos schema
+		Schema sch = TemplateParser.transformNodeToSchema(nodes.get(0)); 
 		
-		return TemplateParser.transformNodeToSchema(nodes.get(0));
+		// Comprobar namespace esperado
+		if (!sch.getNamespace().equalsIgnoreCase(namespace))
+			throw new SchemaException("INVALID_SCHEMA", "Schema namespace is " + sch.getNamespace() + ", and expected is " + namespace);
+		
+		return sch;
 	}
 }
