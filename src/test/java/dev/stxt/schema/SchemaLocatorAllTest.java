@@ -16,7 +16,7 @@ public class SchemaLocatorAllTest {
 	void testReadSchema(){
 		// Validator
 		ResourcesLoader resourcesLoader = new ResourcesLoaderDirectory(FileTestLoction.getFile(""));
-		SchemaProviderCache schemaLocator = new SchemaProviderCache(resourcesLoader);
+		SchemaProvider schemaLocator = new SchemaProviderResources(resourcesLoader);
 
 		File f = FileTestLoction.getFile("@stxt.schema");
 		String[] namespaces = f.list();
@@ -25,7 +25,7 @@ public class SchemaLocatorAllTest {
 		}
 	}
 
-	private void checkSchema(String namespace, SchemaProviderCache schemaLocator) {
+	private void checkSchema(String namespace, SchemaProvider schemaLocator) {
 		Schema sch = schemaLocator.getSchema("com.example.docs");
 		assertNotNull(sch, "Debería resolver un schema");
 		System.out.println("SCH => " + JSON.toJsonPretty(sch));

@@ -20,7 +20,7 @@ public class StxtParserTest {
 		Parser parser = new Parser();
 		
 		ResourcesLoader resourcesLoader = new ResourcesLoaderDirectory(FileTestLoction.getFile(""));
-		SchemaProviderCache schemaLocator = new SchemaProviderCache(resourcesLoader);
+		SchemaProvider schemaLocator = new SchemaProviderResources(resourcesLoader);
 		SchemaValidator schemaValidator = new SchemaValidator(schemaLocator);
 		parser.registerValidator(schemaValidator);
 		

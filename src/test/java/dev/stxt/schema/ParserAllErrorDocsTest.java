@@ -57,7 +57,7 @@ public class ParserAllErrorDocsTest {
 		Parser result = new Parser();
 		// Path
 		ResourcesLoader resourcesLoader = new ResourcesLoaderDirectory(FileTestLoction.getFile(""));
-		SchemaValidator schemaValidator = new SchemaValidator(new SchemaProviderCache(resourcesLoader));
+		SchemaValidator schemaValidator = new SchemaValidator(new SchemaProviderResources(resourcesLoader));
 
 		result.registerValidator(schemaValidator);
 		

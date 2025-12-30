@@ -5,19 +5,15 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import dev.stxt.Node;
-import dev.stxt.Parser;
+import dev.stxt.exceptions.ResourceNotFoundException;
 import dev.stxt.exceptions.SchemaException;
-import dev.stxt.resources.ResourcesLoader;
 
 final class SchemaProviderCache implements SchemaProvider {
-	private final ResourcesLoader resourcesLoader;
 	private final Map<String, Schema> cache = new ConcurrentHashMap<>();
-	private final SchemaValidator schemaValidator;
-
-	public SchemaProviderCache(ResourcesLoader pathResolver) {
-		this.resourcesLoader = pathResolver;
-		this.schemaValidator = new SchemaValidator(new SchemaProviderMeta());
+	private final List<SchemaProvider> providers;
+	
+	public SchemaProviderCache(List<SchemaProvider> providers) {
+		this.providers = providers;
 	}
 
 	public Schema getSchema(String namespace) {
@@ -31,24 +27,19 @@ final class SchemaProviderCache implements SchemaProvider {
 			return cached;
 
 		// Cargamos schema
-		String textSchema = resourcesLoader.retrieve(Schema.SCHEMA_NAMESPACE, namespace);
-		Parser parser = new Parser();
-		parser.registerValidator(schemaValidator);
-		List<Node> nodes = parser.parse(textSchema);
-
-		if (nodes.size() != 1)
-			throw new SchemaException("INVALID_SCHEMA", "There are " + nodes.size() + ", and expected is 1");
-
-		// Convertimos a schema
-		Node root = nodes.get(0);
-		Schema sch = SchemaParser.transformNodeToSchema(root);
-
-		// Comprobar namespace esperado
-		if (!sch.getNamespace().equalsIgnoreCase(namespace))
-			throw new SchemaException("INVALID_SCHEMA", "Schema namespace is " + sch.getNamespace() + ", and expected is " + namespace);
-
+		Schema result = null;
+		
+		for (SchemaProvider provider: providers) {
+			try {
+				result = provider.getSchema(namespace);
+				if (result == null) break;
+			}
+			catch (ResourceNotFoundException e) {
+			}
+		}
+		
 		// Insertamos en cache
-		cache.put(namespace, sch);
-		return sch;
+		cache.put(namespace, result);
+		return result;
 	}
 }

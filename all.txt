@@ -209,7 +209,7 @@ import static dev.stxt.utils.StringUtils.rightTrim;
 
 import dev.stxt.exceptions.ParseException;
 
-public class LineIndentParser {
+class LineIndentParser {
 	// -------------------------------------------------
 	// parseLine
 	// -------------------------------------------------
@@ -741,19 +741,15 @@ import dev.stxt.exceptions.ValidationException;
 import dev.stxt.processors.Validator;
 
 class SchemaValidator implements Validator {
-	// ------------------
-	// Variables públicas
-	// ------------------
-
 	private final SchemaProvider schemaProvider;
-	private boolean recursive = false;
+	private boolean recursiveValidation = false;
 
 	public SchemaValidator(SchemaProvider schemaProvider) {
 		this.schemaProvider = schemaProvider;
 	}
 	public SchemaValidator(SchemaProvider schemaProvider, boolean recursive) {
 		this.schemaProvider = schemaProvider;
-		this.recursive = recursive;
+		this.recursiveValidation = recursive;
 	}
 
 	@Override
@@ -768,7 +764,7 @@ class SchemaValidator implements Validator {
 		validateAgainstSchema(node, sch);
 		
 		// Validamos children
-		if (recursive)
+		if (recursiveValidation)
 			for (Node n: node.getChildren())
 				validate(n);
 	}
@@ -820,7 +816,6 @@ class SchemaValidator implements Validator {
 			throw new ValidationException(node.getLine(), "INVALID_NUMBER",
 					num + " nodes of '" + chNode.getQualifiedName() + " and max is " + max);
 	}
-
 
 }
 
@@ -889,19 +884,15 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import dev.stxt.Node;
-import dev.stxt.Parser;
+import dev.stxt.exceptions.ResourceNotFoundException;
 import dev.stxt.exceptions.SchemaException;
-import dev.stxt.resources.ResourcesLoader;
 
 final class SchemaProviderCache implements SchemaProvider {
-	private final ResourcesLoader resourcesLoader;
 	private final Map<String, Schema> cache = new ConcurrentHashMap<>();
-	private final SchemaValidator schemaValidator;
-
-	public SchemaProviderCache(ResourcesLoader pathResolver) {
-		this.resourcesLoader = pathResolver;
-		this.schemaValidator = new SchemaValidator(new SchemaProviderMeta());
+	private final List<SchemaProvider> providers;
+	
+	public SchemaProviderCache(List<SchemaProvider> providers) {
+		this.providers = providers;
 	}
 
 	public Schema getSchema(String namespace) {
@@ -915,25 +906,20 @@ final class SchemaProviderCache implements SchemaProvider {
 			return cached;
 
 		// Cargamos schema
-		String textSchema = resourcesLoader.retrieve(Schema.SCHEMA_NAMESPACE, namespace);
-		Parser parser = new Parser();
-		parser.registerValidator(schemaValidator);
-		List<Node> nodes = parser.parse(textSchema);
-
-		if (nodes.size() != 1)
-			throw new SchemaException("INVALID_SCHEMA", "There are " + nodes.size() + ", and expected is 1");
-
-		// Convertimos a schema
-		Node root = nodes.get(0);
-		Schema sch = SchemaParser.transformNodeToSchema(root);
-
-		// Comprobar namespace esperado
-		if (!sch.getNamespace().equalsIgnoreCase(namespace))
-			throw new SchemaException("INVALID_SCHEMA", "Schema namespace is " + sch.getNamespace() + ", and expected is " + namespace);
-
+		Schema result = null;
+		
+		for (SchemaProvider provider: providers) {
+			try {
+				result = provider.getSchema(namespace);
+				if (result == null) break;
+			}
+			catch (ResourceNotFoundException e) {
+			}
+		}
+		
 		// Insertamos en cache
-		cache.put(namespace, sch);
-		return sch;
+		cache.put(namespace, result);
+		return result;
 	}
 }
 
@@ -1048,6 +1034,58 @@ public class Schema {
 	
 	public String getNamespace() {
 		return namespace;
+	}
+}
+
+```
+
+Fichero: dev/stxt/schema/SchemaProviderResources.java
+```
+package dev.stxt.schema;
+
+import java.util.List;
+import java.util.Locale;
+
+import dev.stxt.Node;
+import dev.stxt.Parser;
+import dev.stxt.exceptions.SchemaException;
+import dev.stxt.resources.ResourcesLoader;
+
+final class SchemaProviderResources implements SchemaProvider {
+	private final ResourcesLoader resourcesLoader;
+	private final SchemaValidator schemaValidator;
+
+	public SchemaProviderResources(ResourcesLoader pathResolver) {
+		this.resourcesLoader = pathResolver;
+		this.schemaValidator = new SchemaValidator(new SchemaProviderMeta());
+	}
+
+	public Schema getSchema(String namespace) {
+		// Retorno de cache
+		if (namespace == null || namespace.isEmpty())
+		    throw new SchemaException("NAMESPACE_REQUIRED", "Namespace is required to load schema");
+		
+		namespace = namespace.toLowerCase(Locale.ROOT);
+
+		// Cargamos schema
+		String textSchema = resourcesLoader.retrieve(Schema.SCHEMA_NAMESPACE, namespace);
+		Parser parser = new Parser();
+		parser.registerValidator(schemaValidator);
+		List<Node> nodes = parser.parse(textSchema);
+
+		if (nodes.size() != 1)
+			throw new SchemaException("INVALID_SCHEMA", "There are " + nodes.size() + ", and expected is 1");
+
+		// Convertimos a schema
+		Node root = nodes.get(0);
+		Schema sch = SchemaParser.transformNodeToSchema(root);
+
+		// Comprobar namespace esperado
+		if (!sch.getNamespace().equalsIgnoreCase(namespace))
+			throw new SchemaException("INVALID_SCHEMA", "Schema namespace is " + sch.getNamespace() + ", and expected is " + namespace);
+
+		// Insertamos en cache
+		return sch;
 	}
 }
 
@@ -1290,12 +1328,12 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 class Constants {
-	public static final char COMMENT_CHAR = '#';
-	public static final int TAB_SPACES = 4;
-	public static final char TAB = '\t';
-	public static final char SPACE = ' ';
-	public static final char SEP_NODE = ':';
-	public static final Charset ENCODING = StandardCharsets.UTF_8;
+	public static final char COMMENT_CHAR	= '#';
+	public static final int TAB_SPACES 		= 4;
+	public static final char TAB 			= '\t';
+	public static final char SPACE 			= ' ';
+	public static final char SEP_NODE 		= ':';
+	public static final Charset ENCODING	= StandardCharsets.UTF_8;
 	public static final String EMPTY_NAMESPACE = "";
 }
 
@@ -1357,6 +1395,48 @@ public class ChildLine {
 		return builder.toString();
 	}    
 }
+```
+
+Fichero: dev/stxt/template/TemplateSchemaProvider.java
+```
+package dev.stxt.template;
+
+import java.util.List;
+
+import dev.stxt.Node;
+import dev.stxt.Parser;
+import dev.stxt.exceptions.SchemaException;
+import dev.stxt.resources.ResourcesLoader;
+import dev.stxt.schema.Schema;
+import dev.stxt.schema.SchemaProvider;
+
+public class TemplateSchemaProvider implements SchemaProvider {
+	private static final Parser PARSER = new Parser();
+	private final ResourcesLoader loader;
+	
+	public TemplateSchemaProvider(ResourcesLoader loader) {
+		this.loader = loader;
+	}	
+	
+	@Override
+	public Schema getSchema(String namespace) {
+		String template = loader.retrieve("@stxt.template", namespace);
+		
+		List<Node> nodes = PARSER.parse(template);
+		if (nodes.size() != 1)
+			throw new SchemaException("INVALID_SCHEMA", "There are " + nodes.size() + ", and expected is 1");
+
+		// Obtenemos schema
+		Schema sch = TemplateParser.transformNodeToSchema(nodes.get(0)); 
+		
+		// Comprobar namespace esperado
+		if (!sch.getNamespace().equalsIgnoreCase(namespace))
+			throw new SchemaException("INVALID_SCHEMA", "Schema namespace is " + sch.getNamespace() + ", and expected is " + namespace);
+		
+		return sch;
+	}
+}
+
 ```
 
 Fichero: dev/stxt/template/ChildLineParser.java

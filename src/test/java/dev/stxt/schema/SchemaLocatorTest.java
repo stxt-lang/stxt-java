@@ -14,7 +14,7 @@ public class SchemaLocatorTest {
 	void testReadSchema() {
 		// Validator
 		ResourcesLoader resourcesLoader = new ResourcesLoaderDirectory(FileTestLoction.getFile(""));
-		SchemaProviderCache schemaLocator = new SchemaProviderCache(resourcesLoader);
+		SchemaProvider schemaLocator = new SchemaProviderResources(resourcesLoader);
 
 		Schema sch = schemaLocator.getSchema("com.example.docs");
 		assertNotNull(sch, "Debería resolver un schema");
