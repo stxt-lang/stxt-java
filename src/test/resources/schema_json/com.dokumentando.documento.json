@@ -151,7 +151,7 @@
             "children" : { }
         },
         "fecha-creacion" : {
-            "name" : "Fecha creación",
+            "name" : "Fecha Creación",
             "normalized_name" : "fecha-creacion",
             "type" : "DATE",
             "children" : { }
@@ -163,7 +163,7 @@
             "children" : { }
         },
         "email-contacto" : {
-            "name" : "Email contacto",
+            "name" : "Email Contacto",
             "normalized_name" : "email-contacto",
             "type" : "EMAIL",
             "children" : { }
@@ -181,7 +181,7 @@
             "children" : { }
         },
         "es-publico" : {
-            "name" : "Es público",
+            "name" : "Es Público",
             "normalized_name" : "es-publico",
             "type" : "BOOLEAN",
             "children" : { }
@@ -208,7 +208,7 @@
             }
         },
         "tipo-documento" : {
-            "name" : "Tipo documento",
+            "name" : "Tipo Documento",
             "normalized_name" : "tipo-documento",
             "type" : "VALUE_NODE",
             "children" : { }

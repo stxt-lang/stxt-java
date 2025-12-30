@@ -11,11 +11,11 @@ Schema (@stxt.schema): dev.stxt.check
 				Min: 1
 			Child: hexadecimal
 				Min: 1
-			Child: base64
+			Child: Base64
 				Min: 1
-			Child: boolean
+			Child: Boolean
 				Min: 1
-			Child: url
+			Child: Url
 				Min: 1
 	Node: text
 		Type: TEXT 

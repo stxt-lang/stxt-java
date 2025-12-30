@@ -23,7 +23,7 @@
                 },
                 "dev.stxt.check:base64" : {
                     "normalized_name" : "base64",
-                    "name" : "base64",
+                    "name" : "Base64",
                     "namespace" : "dev.stxt.check",
                     "min" : 1,
                     "max" : null,
@@ -47,7 +47,7 @@
                 },
                 "dev.stxt.check:boolean" : {
                     "normalized_name" : "boolean",
-                    "name" : "boolean",
+                    "name" : "Boolean",
                     "namespace" : "dev.stxt.check",
                     "min" : 1,
                     "max" : null,
@@ -55,7 +55,7 @@
                 },
                 "dev.stxt.check:url" : {
                     "normalized_name" : "url",
-                    "name" : "url",
+                    "name" : "Url",
                     "namespace" : "dev.stxt.check",
                     "min" : 1,
                     "max" : null,

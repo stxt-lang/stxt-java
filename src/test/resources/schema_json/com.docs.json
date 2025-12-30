@@ -1,0 +1,119 @@
+{
+    "nodes" : {
+        "email" : {
+            "name" : "Email",
+            "normalized_name" : "email",
+            "type" : "VALUE_NODE",
+            "children" : {
+                "com.docs:cc" : {
+                    "normalized_name" : "cc",
+                    "name" : "Cc",
+                    "namespace" : "com.docs",
+                    "min" : null,
+                    "max" : null,
+                    "qualified_name" : "com.docs:cc"
+                },
+                "com.docs:from" : {
+                    "normalized_name" : "from",
+                    "name" : "From",
+                    "namespace" : "com.docs",
+                    "min" : null,
+                    "max" : null,
+                    "qualified_name" : "com.docs:from"
+                },
+                "com.docs:bcc" : {
+                    "normalized_name" : "bcc",
+                    "name" : "Bcc",
+                    "namespace" : "com.docs",
+                    "min" : null,
+                    "max" : null,
+                    "qualified_name" : "com.docs:bcc"
+                },
+                "com.docs:body-content" : {
+                    "normalized_name" : "body-content",
+                    "name" : "Body Content",
+                    "namespace" : "com.docs",
+                    "min" : 1,
+                    "max" : 1,
+                    "qualified_name" : "com.docs:body-content"
+                },
+                "com.docs:title" : {
+                    "normalized_name" : "title",
+                    "name" : "Title",
+                    "namespace" : "com.docs",
+                    "min" : null,
+                    "max" : 1,
+                    "qualified_name" : "com.docs:title"
+                },
+                "com.docs:to" : {
+                    "normalized_name" : "to",
+                    "name" : "To",
+                    "namespace" : "com.docs",
+                    "min" : null,
+                    "max" : null,
+                    "qualified_name" : "com.docs:to"
+                },
+                "com.google:metadata" : {
+                    "normalized_name" : "metadata",
+                    "name" : "Metadata",
+                    "namespace" : "com.google",
+                    "min" : null,
+                    "max" : 1,
+                    "qualified_name" : "com.google:metadata"
+                }
+            }
+        },
+        "from" : {
+            "name" : "From",
+            "normalized_name" : "from",
+            "type" : "VALUE_NODE",
+            "children" : { }
+        },
+        "to" : {
+            "name" : "To",
+            "normalized_name" : "to",
+            "type" : "VALUE_NODE",
+            "children" : { }
+        },
+        "cc" : {
+            "name" : "Cc",
+            "normalized_name" : "cc",
+            "type" : "VALUE_NODE",
+            "children" : { }
+        },
+        "bcc" : {
+            "name" : "Bcc",
+            "normalized_name" : "bcc",
+            "type" : "VALUE_NODE",
+            "children" : { }
+        },
+        "title" : {
+            "name" : "Title",
+            "normalized_name" : "title",
+            "type" : "VALUE_NODE",
+            "children" : { }
+        },
+        "body-content" : {
+            "name" : "Body Content",
+            "normalized_name" : "body-content",
+            "type" : "TEXT",
+            "children" : { }
+        },
+        "demo" : {
+            "name" : "Demo",
+            "normalized_name" : "demo",
+            "type" : "VALUE_NODE",
+            "children" : {
+                "com.docs:body-content" : {
+                    "normalized_name" : "body-content",
+                    "name" : "Body Content",
+                    "namespace" : "com.docs",
+                    "min" : null,
+                    "max" : 1,
+                    "qualified_name" : "com.docs:body-content"
+                }
+            }
+        }
+    },
+    "namespace" : "com.docs"
+}

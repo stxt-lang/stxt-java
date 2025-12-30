@@ -48,17 +48,17 @@ Schema (@stxt.schema): com.dokumentando.documento
 	Node: Cuerpo 
 		Type: TEXT
 	Node: Autor
-	Node: Fecha creación
+	Node: Fecha Creación
 		Type: DATE
 	Node: Última modificación 
 		Type: TIMESTAMP
-	Node: Email contacto 
+	Node: Email Contacto 
 		Type: EMAIL
 	Node: Sitio Web 
 		Type: URL
 	Node: Código postal 
 		Type: NUMBER
-	Node: Es público 
+	Node: Es Público 
 		Type: BOOLEAN
 	Node: Color Tema 
 		Type: HEXADECIMAL
@@ -66,5 +66,5 @@ Schema (@stxt.schema): com.dokumentando.documento
 		Children:
 			Child: Sección
 				Min: 1
-	Node: Tipo documento
+	Node: Tipo Documento
 	
