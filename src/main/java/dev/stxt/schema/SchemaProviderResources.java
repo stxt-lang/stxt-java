@@ -8,7 +8,7 @@ import dev.stxt.Parser;
 import dev.stxt.exceptions.SchemaException;
 import dev.stxt.resources.ResourcesLoader;
 
-final class SchemaProviderResources implements SchemaProvider {
+public final class SchemaProviderResources implements SchemaProvider {
 	private final ResourcesLoader resourcesLoader;
 	private final SchemaValidator schemaValidator;
 

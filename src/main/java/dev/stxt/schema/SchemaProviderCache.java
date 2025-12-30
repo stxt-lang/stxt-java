@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import dev.stxt.exceptions.ResourceNotFoundException;
 import dev.stxt.exceptions.SchemaException;
 
-final class SchemaProviderCache implements SchemaProvider {
+public final class SchemaProviderCache implements SchemaProvider {
 	private final Map<String, Schema> cache = new ConcurrentHashMap<>();
 	private final List<SchemaProvider> providers;
 	

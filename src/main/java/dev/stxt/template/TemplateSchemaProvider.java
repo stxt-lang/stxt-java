@@ -8,6 +8,7 @@ import dev.stxt.exceptions.SchemaException;
 import dev.stxt.resources.ResourcesLoader;
 import dev.stxt.schema.Schema;
 import dev.stxt.schema.SchemaProvider;
+import dev.stxt.schema.SchemaValidator;
 
 public class TemplateSchemaProvider implements SchemaProvider {
 	private final ResourcesLoader loader;
@@ -20,7 +21,11 @@ public class TemplateSchemaProvider implements SchemaProvider {
 	public Schema getSchema(String namespace) {
 		String template = loader.retrieve("@stxt.template", namespace);
 
-		List<Node> nodes = new Parser().parse(template);
+		// Creamos parser
+		Parser parser = new Parser();
+		parser.registerValidator(new SchemaValidator(new MetaTemplateSchemaProvider()));
+		
+		List<Node> nodes = parser.parse(template);
 		if (nodes.size() != 1)
 			throw new SchemaException("INVALID_SCHEMA", "There are " + nodes.size() + ", and expected is 1");
 

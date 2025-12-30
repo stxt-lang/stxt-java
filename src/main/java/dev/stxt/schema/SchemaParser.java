@@ -10,7 +10,7 @@ import dev.stxt.exceptions.ParseException;
 import dev.stxt.exceptions.SchemaException;
 import dev.stxt.exceptions.ValidationException;
 
-class SchemaParser {
+public class SchemaParser {
 
 	public static Schema transformNodeToSchema(Node node) {
 		// Node name

@@ -7,7 +7,7 @@ import dev.stxt.Node;
 import dev.stxt.exceptions.ValidationException;
 import dev.stxt.processors.Validator;
 
-class SchemaValidator implements Validator {
+public class SchemaValidator implements Validator {
 	private final SchemaProvider schemaProvider;
 	private boolean recursiveValidation = false;
 

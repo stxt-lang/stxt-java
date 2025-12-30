@@ -740,7 +740,7 @@ import dev.stxt.Node;
 import dev.stxt.exceptions.ValidationException;
 import dev.stxt.processors.Validator;
 
-class SchemaValidator implements Validator {
+public class SchemaValidator implements Validator {
 	private final SchemaProvider schemaProvider;
 	private boolean recursiveValidation = false;
 
@@ -887,7 +887,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import dev.stxt.exceptions.ResourceNotFoundException;
 import dev.stxt.exceptions.SchemaException;
 
-final class SchemaProviderCache implements SchemaProvider {
+public final class SchemaProviderCache implements SchemaProvider {
 	private final Map<String, Schema> cache = new ConcurrentHashMap<>();
 	private final List<SchemaProvider> providers;
 	
@@ -939,7 +939,7 @@ import dev.stxt.Parser;
 import dev.stxt.exceptions.ResourceNotFoundException;
 import dev.stxt.exceptions.SchemaException;
 
-final class SchemaProviderMeta implements SchemaProvider {
+public final class SchemaProviderMeta implements SchemaProvider {
 	private static final String META_TEXT = "Schema (@stxt.schema): @stxt.schema\n"
 			+ "    Node: Schema\n"
 			+ "        Children:\n"
@@ -1054,7 +1054,7 @@ import dev.stxt.Parser;
 import dev.stxt.exceptions.SchemaException;
 import dev.stxt.resources.ResourcesLoader;
 
-final class SchemaProviderResources implements SchemaProvider {
+public final class SchemaProviderResources implements SchemaProvider {
 	private final ResourcesLoader resourcesLoader;
 	private final SchemaValidator schemaValidator;
 
@@ -1108,7 +1108,7 @@ import dev.stxt.exceptions.ParseException;
 import dev.stxt.exceptions.SchemaException;
 import dev.stxt.exceptions.ValidationException;
 
-class SchemaParser {
+public class SchemaParser {
 
 	public static Schema transformNodeToSchema(Node node) {
 		// Node name
@@ -1412,6 +1412,7 @@ import dev.stxt.exceptions.SchemaException;
 import dev.stxt.resources.ResourcesLoader;
 import dev.stxt.schema.Schema;
 import dev.stxt.schema.SchemaProvider;
+import dev.stxt.schema.SchemaValidator;
 
 public class TemplateSchemaProvider implements SchemaProvider {
 	private final ResourcesLoader loader;
@@ -1424,7 +1425,11 @@ public class TemplateSchemaProvider implements SchemaProvider {
 	public Schema getSchema(String namespace) {
 		String template = loader.retrieve("@stxt.template", namespace);
 
-		List<Node> nodes = new Parser().parse(template);
+		// Creamos parser
+		Parser parser = new Parser();
+		parser.registerValidator(new SchemaValidator(new MetaTemplateSchemaProvider()));
+		
+		List<Node> nodes = parser.parse(template);
 		if (nodes.size() != 1)
 			throw new SchemaException("INVALID_SCHEMA", "There are " + nodes.size() + ", and expected is 1");
 
