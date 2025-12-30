@@ -27,7 +27,7 @@ public class Node {
 		this.namespace = StringUtils.lowerCase(namespace);
 		this.value = (value == null ? "" : value.trim());
 		this.textNode = textNode;
-		NamespaceValidator.validateNamespaceFormat(namespace, line);
+		NamespaceValidator.validateNamespaceFormat(this.namespace, line);
 
 		if (!this.value.isEmpty() && this.isTextNode())
 			throw new IllegalArgumentException("Not empty value with textNode");

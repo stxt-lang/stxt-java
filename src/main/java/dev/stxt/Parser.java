@@ -6,7 +6,6 @@ import java.io.StringReader;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import dev.stxt.exceptions.ParseException;
 import dev.stxt.exceptions.STXTIOException;
@@ -172,10 +171,6 @@ public class Parser {
 		// Validamos nombre
 		if (name.isEmpty())
 			throw new ParseException(lineNumber, "INVALID_LINE", "Line not valid: " + line);
-
-		// check namespace
-		namespace = namespace.toLowerCase(Locale.ROOT);
-		NamespaceValidator.validateNamespaceFormat(namespace, lineNumber);
 
 		// Creamos nodo
 		return new Node(lineNumber, level, name, namespace, textNode, value);

@@ -1,5 +1,6 @@
 package dev.stxt;
 
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,23 +14,25 @@ public final class NameNamespaceParser {
      *   - "nombre (namespace)"
      *
      * nombre:
-     *   - letras unicode (acentos incluidos), números, espacios, '_' y '-'
+     *   - letras Unicode (acentos incluidos), números, espacios, '_' y '-'
      *   - no se permiten otros símbolos ni paréntesis
      *
      * namespace (opcional, al final):
      *   - opcional '@' al inicio
      *   - segmentos separados por '.'
-     *   - cada segmento: letras unicode, números, '_' y '-'
+     *   - cada segmento: [a-z0-9]+ (ASCII, minúsculas)
+     *
+     * Nota: el namespace se parsea case-insensitive pero se normaliza a minúsculas.
      */
     private static final String NAME_TOKEN = "[\\p{L}\\p{M}\\p{N}_-]+";
     private static final String NAME_PART  = NAME_TOKEN + "(?:\\s+" + NAME_TOKEN + ")*";
 
-    private static final String NS_SEGMENT = "[\\p{L}\\p{M}\\p{N}_-]+";
+    private static final String NS_SEGMENT = "[a-z0-9]+";
     private static final String NAMESPACE  = "@?" + NS_SEGMENT + "(?:\\." + NS_SEGMENT + ")*";
 
     private static final Pattern LINE_PATTERN = Pattern.compile(
-            "^\\s*(" + NAME_PART + ")(?:\\s*\\(\\s*(" + NAMESPACE + ")\\s*\\))?\\s*$",
-            Pattern.UNICODE_CHARACTER_CLASS
+            "^\\s*(?<name>" + NAME_PART + ")(?:\\s*\\(\\s*(?<ns>" + NAMESPACE + ")\\s*\\))?\\s*$",
+            Pattern.UNICODE_CHARACTER_CLASS | Pattern.CASE_INSENSITIVE
     );
 
     private NameNamespaceParser() {
@@ -41,24 +44,21 @@ public final class NameNamespaceParser {
             throw new ParseException(lineNumber, "INVALID_LINE", "Line not valid: " + fullLine);
         }
 
-        // Si quieres preservar mayúsculas/minúsculas del nombre, NO lo normalices aquí.
-        // Si lo quieres todo en minúsculas como antes, mantenlo:
-        String normalized = rawName;
-
-        Matcher m = LINE_PATTERN.matcher(normalized);
+        Matcher m = LINE_PATTERN.matcher(rawName);
         if (!m.matches()) {
             throw new ParseException(lineNumber, "INVALID_NAMESPACE_DEF", "Line not valid: " + fullLine);
         }
 
-        String name = m.group(1);
+        String name = m.group("name");
         if (name == null || name.isBlank()) {
             throw new ParseException(lineNumber, "INVALID_LINE", "Line not valid: " + fullLine);
         }
 
         String namespace = (inheritedNs != null) ? inheritedNs : Constants.EMPTY_NAMESPACE;
-        String explicitNs = m.group(2);
+
+        String explicitNs = m.group("ns");
         if (explicitNs != null && !explicitNs.isBlank()) {
-            namespace = explicitNs;
+            namespace = explicitNs.toLowerCase(Locale.ROOT);
         }
 
         return new NameNamespace(name, namespace);
