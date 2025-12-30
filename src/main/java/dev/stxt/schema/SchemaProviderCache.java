@@ -36,8 +36,6 @@ final class SchemaProviderCache implements SchemaProvider {
 			}
 			catch (ResourceNotFoundException e) {
 			}
-			catch (SchemaException e) {
-			}
 		}
 		
 		if (result == null)
