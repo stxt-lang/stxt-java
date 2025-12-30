@@ -41,16 +41,14 @@ class SchemaValidator implements Validator {
 	}
 	
 	public void validateAgainstSchema(Node node, Schema sch) {
-		// Obtenemos node
-		NodeDefinition schemaNode = sch.getNodeDefinition(node.getName());
-		if (schemaNode == null) {
-			String error = "NOT EXIST NODE " + node.getName() + " for namespace " + sch.getNamespace();
-			throw new ValidationException(node.getLine(), "NODE_NOT_EXIST_IN_SCHEMA", error);
-		}
+	    NodeDefinition schemaNode = sch.getNodeDefinition(node.getNormalizedName());
+	    if (schemaNode == null) {
+	        String error = "NOT EXIST NODE " + node.getNormalizedName() + " for namespace " + sch.getNamespace();
+	        throw new ValidationException(node.getLine(), "NODE_NOT_EXIST_IN_SCHEMA", error);
+	    }
 
-		// Validamos nodo
-		validateValue(schemaNode, node);
-		validateCount(schemaNode, node);
+	    validateValue(schemaNode, node);
+	    validateCount(schemaNode, node);
 	}
 
 	private static void validateValue(NodeDefinition nsNode, Node n) {

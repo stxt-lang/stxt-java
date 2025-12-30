@@ -74,7 +74,7 @@ class SchemaParser {
 		// Obtenemos name y namespace
 		NameNamespace ns = NameNamespaceParser.parse(child.getValue(), defNamespace, child.getLine(), child.getValue());
 		String name = ns.getName();
-		String namespace = ns.getNamespace() != null ? ns.getNamespace(): defNamespace;
+		String namespace = ns.getNamespace();
 		
 		ChildDefinition schemaChild = new ChildDefinition(name, namespace, getInteger(child, "min"), getInteger(child, "max"), child.getLine());
 		schemaNode.addChildDefinition(schemaChild);
