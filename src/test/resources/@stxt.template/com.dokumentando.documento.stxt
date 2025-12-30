@@ -6,13 +6,13 @@ Template (@stxt.template): com.dokumentando.documento
 			Autor: (1)
 			Fecha Creación: (1) DATE
 			Última modificación: (1) TIMESTAMP
-			Email Contacto: (1) EMAIL
+			Email contacto: (1) EMAIL
 			Sitio Web: (1) URL
 			Código postal: (*) NUMBER
-			Es Público: (1) BOOLEAN
+			Es público: (1) BOOLEAN
 			Color Tema: (?) HEXADECIMAL
 			Secciones: (1)
 				Sección: (+)
 					Título: (1) @Titulo
 					Contenido: (1) TEXT
-			Tipo Documento: (1)
+			Tipo documento: (1)
