@@ -32,11 +32,16 @@ final class SchemaProviderCache implements SchemaProvider {
 		for (SchemaProvider provider: providers) {
 			try {
 				result = provider.getSchema(namespace);
-				if (result == null) break;
+				if (result != null) break;
 			}
 			catch (ResourceNotFoundException e) {
 			}
+			catch (SchemaException e) {
+			}
 		}
+		
+		if (result == null)
+			throw new SchemaException("NOT_FOUND_SCHEMA", "Not found schema " + namespace);
 		
 		// Insertamos en cache
 		cache.put(namespace, result);
