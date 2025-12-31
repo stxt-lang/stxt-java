@@ -1,0 +1,18 @@
+Slots (@stxt.slots): com.example.docs
+	Node: Email
+		Render: txt
+			Template >>
+				Este es un email:
+					De: {{child[from]:text}}
+					Para: {{child[to]:text}}
+		Render: html
+			Template >>
+				<div type="email">
+					<p>Este es un email</p>
+					<p>De: {{child[from]:text}}</p>
+					<p>Para: {{child[from]:to}}</p>
+				</div>
+	Node: Body Content
+		Render: txt
+			Template >>
+				{{text}}

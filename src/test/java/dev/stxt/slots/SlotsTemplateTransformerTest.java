@@ -19,7 +19,7 @@ public class SlotsTemplateTransformerTest {
 		
 		List<Node> docs = parser.parseFile(email);
 		for (Node n: docs) {
-			String text = SlotsTemplateTransformer.transform(n, "Esto es una prueba de envío de {{{ child[from]:text }}} a otro envío {{{ child[to]:text }}}");
+			String text = SlotsTemplateTransformer.transform(n, "Esto es una prueba de envío de {{ child[from]:text }} a otro envío {{ child[to]:text }}");
 			System.out.println("Text = " + text);
 			assertNotNull(text);
 			assertEquals("Esto es una prueba de envío de John Smith a otro envío Mery Adams", text);

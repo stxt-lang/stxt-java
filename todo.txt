@@ -1,0 +1,6 @@
+* Recuperación de slots
+* Render
+* Gramática de slots y validación
+* Ejemplos de slots con transformaciones
+* Revisar indentación con slots
+* ...

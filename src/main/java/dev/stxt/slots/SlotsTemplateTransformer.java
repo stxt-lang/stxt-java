@@ -14,17 +14,17 @@ public class SlotsTemplateTransformer {
 		final String templateIni = template; 
 		StringBuilder result = new StringBuilder();
 		
-		int ini = template.indexOf("{{{");
+		int ini = template.indexOf("{{");
 		int end = -1;
 		while (ini != -1) {
 			result.append(template.substring(0, ini));
-			template = template.substring(ini+3);
-			end = template.indexOf("}}}");
+			template = template.substring(ini+2);
+			end = template.indexOf("}}");
 			if (end == -1) throw new STXTException("NOT_FOUND_END_STRING", templateIni);
 			String expresion = template.substring(0, end);
-			template = template.substring(end + 3);
+			template = template.substring(end + 2);
 			result.append(evaluate(expresion, node));
-			ini = template.indexOf("{{{");
+			ini = template.indexOf("{{");
 		}
 		result.append(template);
 		
