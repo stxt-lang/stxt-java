@@ -16,7 +16,7 @@ import dev.stxt.resources.ResourcesLoader;
 import dev.stxt.resources.ResourcesLoaderDirectory;
 import dev.stxt.utils.FileUtils;
 import test.FileTestLoction;
-import test.JSONFile;
+import test.FileChecks;
 
 public class ParserAllErrorDocsTest {
 	public static void main(String[] args) throws IOException {
@@ -46,7 +46,7 @@ public class ParserAllErrorDocsTest {
 				errorInfo.put("code", e.getCode());
 				System.out.println("Error: " + e.getMessage());
 
-				JSONFile.checkContentWithJsonFile(errorInfo, "error_schema_json", file.getName().substring(0, file.getName().length() - 5));
+				FileChecks.checkContentWithJsonFile(errorInfo, "error_schema_json", file.getName().substring(0, file.getName().length() - 5));
 			}
 		}
 

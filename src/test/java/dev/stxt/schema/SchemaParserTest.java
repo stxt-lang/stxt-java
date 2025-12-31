@@ -11,7 +11,7 @@ import dev.stxt.resources.ResourcesLoader;
 import dev.stxt.resources.ResourcesLoaderDirectory;
 import test.FileTestLoction;
 import test.JSON;
-import test.JSONFile;
+import test.FileChecks;
 
 public class SchemaParserTest {
 	@Test
@@ -27,7 +27,7 @@ public class SchemaParserTest {
 			System.out.println(JSON.toJson(node));
 			Schema sch = SchemaParser.transformNodeToSchema(node);
 			showSchema(sch);
-			JSONFile.checkContentWithJsonFile(sch, "schema_json", "com.example.docs");
+			FileChecks.checkContentWithJsonFile(sch, "schema_json", "com.example.docs");
 		}
 	}
 

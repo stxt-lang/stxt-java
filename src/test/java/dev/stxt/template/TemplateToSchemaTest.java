@@ -12,7 +12,7 @@ import dev.stxt.resources.ResourcesLoaderDirectory;
 import dev.stxt.schema.Schema;
 import test.FileTestLoction;
 import test.JSON;
-import test.JSONFile;
+import test.FileChecks;
 
 public class TemplateToSchemaTest {
 	@Test
@@ -28,7 +28,7 @@ public class TemplateToSchemaTest {
 			//System.out.println(JSON.toJsonPretty(node));
 			Schema sch = TemplateParser.transformNodeToSchema(node);
 			showSchema(sch);
-			JSONFile.checkContentWithJsonFile(sch, "schema_json", "com.example.docs");
+			FileChecks.checkContentWithJsonFile(sch, "schema_json", "com.example.docs");
 		}
 	}
 

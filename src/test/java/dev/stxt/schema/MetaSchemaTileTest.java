@@ -11,7 +11,7 @@ import dev.stxt.Parser;
 import dev.stxt.utils.FileUtils;
 import test.FileTestLoction;
 import test.JSON;
-import test.JSONFile;
+import test.FileChecks;
 
 public class MetaSchemaTileTest {
 	@Test
@@ -26,7 +26,7 @@ public class MetaSchemaTileTest {
 			System.out.println(JSON.toJson(node));
 			Schema sch = SchemaParser.transformNodeToSchema(node);
 			showSchema(sch);
-			JSONFile.checkContentWithJsonFile(sch, "schema_json", "@stxt.schema");
+			FileChecks.checkContentWithJsonFile(sch, "schema_json", "@stxt.schema");
 		}
 	}
 

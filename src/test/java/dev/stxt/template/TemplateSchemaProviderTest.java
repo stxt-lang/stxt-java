@@ -10,7 +10,7 @@ import dev.stxt.resources.ResourcesLoaderDirectory;
 import dev.stxt.schema.Schema;
 import dev.stxt.schema.SchemaProvider;
 import test.FileTestLoction;
-import test.JSONFile;
+import test.FileChecks;
 
 public class TemplateSchemaProviderTest {
 	@Test
@@ -31,7 +31,7 @@ public class TemplateSchemaProviderTest {
 		Schema sch = schemaProvider.getSchema(name);
 		assertNotNull(sch);
 		
-		JSONFile.checkContentWithJsonFile(sch, "schema_json", name);
+		FileChecks.checkContentWithJsonFile(sch, "schema_json", name);
 		System.out.println(sch);
 	}
 }

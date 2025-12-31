@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
 import dev.stxt.exceptions.ParseException;
 import test.FileTestLoction;
 import test.JSON;
-import test.JSONFile;
+import test.FileChecks;
 
 public class ParserAllErrorsTest {
 	public static void main(String[] args) throws IOException, ParseException {
@@ -62,7 +62,7 @@ public class ParserAllErrorsTest {
 			errorInfo.put("line", e.getLine());
 			errorInfo.put("code", e.getCode());
 
-			JSONFile.checkContentWithJsonFile(errorInfo, "error_docs_json", file.getName().substring(0, file.getName().length() - 5));
+			FileChecks.checkContentWithJsonFile(errorInfo, "error_docs_json", file.getName().substring(0, file.getName().length() - 5));
 		}
 	}
 

@@ -12,7 +12,7 @@ import dev.stxt.exceptions.ParseException;
 import dev.stxt.resources.ResourcesLoaderDirectory;
 import dev.stxt.utils.FileUtils;
 import test.FileTestLoction;
-import test.JSONFile;
+import test.FileChecks;
 
 public class ParserAllDocsTest {
 	public static void main(String[] args) throws IOException, ParseException {
@@ -41,7 +41,7 @@ public class ParserAllDocsTest {
 		System.out.println(file.getAbsolutePath());
 		List<Node> docs = parser.parseFile(file);
 		for (Node node : docs) {
-			JSONFile.checkContentWithJsonFile(node, "docs_json/", file.getName().substring(0, file.getName().length() - 5));
+			FileChecks.checkContentWithJsonFile(node, "docs_json/", file.getName().substring(0, file.getName().length() - 5));
 			
 			System.out.println(node.toString());
 			System.out.println(NodeWriter.toSTXT(node));

@@ -17,7 +17,7 @@ import dev.stxt.schema.Schema;
 import dev.stxt.utils.FileUtils;
 import test.FileTestLoction;
 import test.JSON;
-import test.JSONFile;
+import test.FileChecks;
 
 public class TemplateParserAllError {
 	public static void main(String[] args) throws IOException {
@@ -49,7 +49,7 @@ public class TemplateParserAllError {
 				errorInfo.put("code", e.getCode());
 				System.out.println("Error: " + e.getMessage());
 
-				JSONFile.checkContentWithJsonFile(errorInfo, "error_template_json", file.getName().substring(0, file.getName().length() - 5));
+				FileChecks.checkContentWithJsonFile(errorInfo, "error_template_json", file.getName().substring(0, file.getName().length() - 5));
 			}
 		}
 

@@ -11,7 +11,7 @@ import dev.stxt.resources.ResourcesLoader;
 import dev.stxt.resources.ResourcesLoaderDirectory;
 import test.FileTestLoction;
 import test.JSON;
-import test.JSONFile;
+import test.FileChecks;
 
 public class SchemaReaderTestAll {
 	@Test
@@ -39,7 +39,7 @@ public class SchemaReaderTestAll {
 			for (Node node : nodes) {
 				System.out.println(JSON.toJson(node));
 				Schema sch = SchemaParser.transformNodeToSchema(node);
-				JSONFile.checkContentWithJsonFile(sch, "schema_json", namespace);
+				FileChecks.checkContentWithJsonFile(sch, "schema_json", namespace);
 				
 				System.out.println("SCH => " + JSON.toJsonPretty(sch));
 			}
