@@ -8,6 +8,8 @@ public class SlotsTemplateTransformer {
 	}
 	
 	public static final String transform(Node node, String template) {
+		if (template == null) return "";
+		
 		final String templateIni = template; 
 		StringBuilder result = new StringBuilder();
 		
