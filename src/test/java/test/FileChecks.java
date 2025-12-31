@@ -34,7 +34,7 @@ public class FileChecks {
 		} else {
 			System.out.println("Checking text...");
 			String fileContent = FileUtils.readFileContent(textFile);
-			assertEquals(fileContent, JSON.toJsonTree(content));
+			assertEquals(fileContent, content);
 		}
 	}
 }

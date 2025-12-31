@@ -41,10 +41,11 @@ public class ParserAllDocsTest {
 		System.out.println(file.getAbsolutePath());
 		List<Node> docs = parser.parseFile(file);
 		for (Node node : docs) {
-			FileChecks.checkContentWithJsonFile(node, "docs_json/", file.getName().substring(0, file.getName().length() - 5));
-			
+			String fileName = file.getName().substring(0, file.getName().length() - 5);
+			FileChecks.checkContentWithJsonFile(node, "docs_json/", fileName);
 			System.out.println(node.toString());
-			System.out.println(NodeWriter.toSTXT(node));
+			String stxt = NodeWriter.toSTXT(node);
+			FileChecks.checkContentWithTextFile(stxt, "docs_txt/", fileName);
 		}
 	}
 }
