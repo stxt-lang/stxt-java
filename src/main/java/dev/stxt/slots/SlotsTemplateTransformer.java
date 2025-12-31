@@ -6,7 +6,8 @@ import dev.stxt.exceptions.STXTException;
 public class SlotsTemplateTransformer {
 	private SlotsTemplateTransformer() {
 	}
-	
+
+	// TODO Hacer split por salto de línea y mostrar error en línea correcta (node.getLine como offset + línea)
 	public static final String transform(Node node, String template) {
 		if (template == null) return "";
 		
@@ -31,6 +32,30 @@ public class SlotsTemplateTransformer {
 	}
 
 	private static Object evaluate(String expresion, Node node) {
-		return "@@@EVAL@@@";
+		Object result = node;
+		String[] operations = expresion.split(":");
+		for (String operation: operations) {
+			result = executeOperation(operation, result);
+		}		
+		if (!(result instanceof String))
+			throw new STXTException("OPERATION_RESULT_NOT_STRING", "The result of chain of operations must be String");
+		return result;
+	}
+
+	private static Object executeOperation(String operation, Object object) {
+		String param = null;
+		int i1 = operation.indexOf("[");
+		if (i1 != -1) {
+			param = operation.substring(i1+1).trim();
+			if (param.endsWith("]")) 	param = param.substring(0, param.length()-1);
+			else						throw new STXTException("OPERATION_PARAM_NOT_VALID", operation);
+			operation = operation.substring(0, i1);
+		}
+		
+		operation = operation.trim();
+		Operation op = OperationRegistry.get(operation);
+		if (op == null) throw new STXTException("OPERATION_NOT_FOUND", operation);
+		
+		return op.execute(object, param);
 	}
 }
