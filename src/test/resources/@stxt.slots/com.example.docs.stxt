@@ -10,7 +10,7 @@ Slots (@stxt.slots): com.example.docs
 				<div type="email">
 					<p>Este es un email</p>
 					<p>De: {{child[from]:text}}</p>
-					<p>Para: {{child[from]:to}}</p>
+					<p>Para: {{child[to]:text}}</p>
 				</div>
 	Node: Body Content
 		Render: txt
