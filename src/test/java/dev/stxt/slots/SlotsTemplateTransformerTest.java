@@ -22,7 +22,7 @@ public class SlotsTemplateTransformerTest {
 			String text = SlotsTemplateTransformer.transform(n, "Esto es una prueba de envío de {{{ child[from]:text }}} a otro envío {{{ child[to]:text }}}");
 			System.out.println("Text = " + text);
 			assertNotNull(text);
-			assertEquals(text, "Esto es una prueba de envío de John Smith a otro envío Mery Adams");
+			assertEquals("Esto es una prueba de envío de John Smith a otro envío Mery Adams", text);
 		}
 	}	
 }
