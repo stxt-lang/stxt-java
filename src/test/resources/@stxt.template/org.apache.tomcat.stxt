@@ -45,20 +45,3 @@ Template (@stxt.template): org.apache.tomcat
 						Prefix: (?)
 						Suffix: (?)
 						Pattern: (?)
-#	XML Structure>>
-#		Port: ATTR
-#		Shutdown command: ATTR
-#		Port: ATTR
-#		Protocol: ATTR
-#		Connection timeout: ATTR
-#		Redirect Port: ATTR
-#		Max Threads: ATTR
-#		SSL Enabled: ATTR
-	
-	
-	
-	
-	
-	
-	
-	

@@ -1,0 +1,49 @@
+Transformations (@stxt.t2): org.apache.tomcat
+	XML >>
+		Server: 
+			Port: Port [ATTR]
+			Shutdown command: ShutdownCommand [ATTR] 
+			Listener: Listener [ATTR]
+			Description: [TEXT]
+			
+			Global Naming Resources: GlobalNamingResources
+				Resource:
+					Name: Name [ATTR]
+					Auth: Auth [ATTR]
+					Type: Type [ATTR]
+					Description: Description [ATTR]
+					Factory class: FactoryClass [ATTR]
+					Path Name: PathName [ATTR]
+			Service:
+				Executor:
+					Name Prefix: NamePrefix [ATTR]
+					Max Threads: MaxThreads [ATTR]
+					Min Spare Threads: MinSpareThreads [ATTR]
+				Connector:
+					Port:
+					Protocol:
+					Connection timeout:
+					Redirect Port:
+					Max Threads:
+					SSL Enabled:
+					SSL Config:
+						Type: Type [ATTR]
+						Certificate Keystore File: CertificateKeystoreFile [ATTR]
+						Certificate Keystore Password: CertificateKeystorePassword [ATTR]
+			Engine: 
+				Default host:
+				JVM Route:
+				Realm:
+					Resource Name:
+				Host: 
+					App Base: AppBase
+					Unpack Wars: UnpackWars
+					Auto Deploy: AutoDeploy
+					Valve:
+						Class Name: Clas sName [ATTR]
+						Directory: Directory [ATTR]
+						Prefix: Prefix [ATTR]
+						Suffix: Suffix [ATTR]
+						Pattern: Pattern [ATTR]
+
+						
