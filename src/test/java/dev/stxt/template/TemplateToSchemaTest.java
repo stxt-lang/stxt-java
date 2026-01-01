@@ -18,8 +18,9 @@ public class TemplateToSchemaTest {
 	@Test
 	void testReadSchema() throws IOException {
 		// Validator
+		String ns = "com.example.docs";
 		ResourcesLoader resourcesLoader = new ResourcesLoaderDirectory(FileTestLoction.getFile(""));
-		String schema = resourcesLoader.retrieve("@stxt.template", "com.example.docs");
+		String schema = resourcesLoader.retrieve("@stxt.template", ns);
 		System.out.println("exists: " + schema);
 		System.out.println("==========================================================");
 		Parser parser = new Parser();
@@ -28,7 +29,7 @@ public class TemplateToSchemaTest {
 			//System.out.println(JSON.toJsonPretty(node));
 			Schema sch = TemplateParser.transformNodeToSchema(node);
 			showSchema(sch);
-			FileChecks.checkContentWithJsonFile(sch, "schema_json", "com.example.docs");
+			FileChecks.checkContentWithJsonFile(sch, "schema_json", ns);
 		}
 	}
 
