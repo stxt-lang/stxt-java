@@ -1,4 +1,12 @@
 * T2: Transformation To xxx
+	Directa a xml
+	Directa a yaml
+	Directa a html
+
+==============================
+Continuar slots o deprecated??
+==============================
+
 * Recuperación de slots
 * Render
 * Gramática de slots y validación
