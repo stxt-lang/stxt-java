@@ -1,3 +1,4 @@
+* T2: Transformation To xxx
 * Recuperación de slots
 * Render
 * Gramática de slots y validación
