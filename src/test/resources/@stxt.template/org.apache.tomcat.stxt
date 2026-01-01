@@ -1,0 +1,64 @@
+Template (@stxt.template): org.apache.tomcat
+	Structure >>
+		Server:
+			Port: (1) INTEGER
+			Shutdown command: (?) 
+			Listener: (*)
+			
+			Global Naming Resources:
+				Resource: (+)
+					Name: (?)
+					Auth: (?)
+					Type: (?)
+					Description: (?)
+					Factory class: (?)
+					Path Name: (?)
+
+			Service: (+)
+				Executor: (?)
+					Name Prefix: (?)
+					Max Threads: (?) NUMBER
+					Min Spare Threads: (?) NUMBER
+				Connector: (+)
+					Port: (1) @Port
+					Protocol: (1)
+					Connection timeout: (?) INTEGER
+					Redirect Port: (?) INTEGER
+					Max Threads: (?) @Max Threads
+					SSL Enabled: (?) BOOLEAN
+					SSL Config: (?)
+						Type: (?) @Type
+						Certificate Keystore File: (1)
+						Certificate Keystore Password: (1)
+			Engine: 
+				Default host: (?)
+				JVM Route: (?)
+				Realm:(?)
+					Resource Name: (?)
+				Host: 
+					App Base: (1)
+					Unpack Wars: (?) BOOLEAN
+					Auto Deploy: (?) BOOLEAN
+					Valve: (*)
+						Class Name: (1)
+						Directory: (?)
+						Prefix: (?)
+						Suffix: (?)
+						Pattern: (?)
+#	XML Structure>>
+#		Port: ATTR
+#		Shutdown command: ATTR
+#		Port: ATTR
+#		Protocol: ATTR
+#		Connection timeout: ATTR
+#		Redirect Port: ATTR
+#		Max Threads: ATTR
+#		SSL Enabled: ATTR
+	
+	
+	
+	
+	
+	
+	
+	

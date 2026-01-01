@@ -5,53 +5,53 @@
             "normalized_name" : "server",
             "type" : "VALUE_NODE",
             "children" : {
-                "dev.stxt.check:shutdown-command" : {
-                    "normalized_name" : "shutdown-command",
-                    "name" : "Shutdown command",
-                    "namespace" : "dev.stxt.check",
-                    "min" : null,
-                    "max" : 1,
-                    "qualified_name" : "dev.stxt.check:shutdown-command"
-                },
-                "dev.stxt.check:global-naming-resources" : {
-                    "normalized_name" : "global-naming-resources",
-                    "name" : "Global Naming Resources",
-                    "namespace" : "dev.stxt.check",
-                    "min" : null,
-                    "max" : null,
-                    "qualified_name" : "dev.stxt.check:global-naming-resources"
-                },
-                "dev.stxt.check:service" : {
-                    "normalized_name" : "service",
-                    "name" : "Service",
-                    "namespace" : "dev.stxt.check",
-                    "min" : 1,
-                    "max" : null,
-                    "qualified_name" : "dev.stxt.check:service"
-                },
-                "dev.stxt.check:listener" : {
-                    "normalized_name" : "listener",
-                    "name" : "Listener",
-                    "namespace" : "dev.stxt.check",
-                    "min" : null,
-                    "max" : null,
-                    "qualified_name" : "dev.stxt.check:listener"
-                },
-                "dev.stxt.check:port" : {
-                    "normalized_name" : "port",
-                    "name" : "Port",
-                    "namespace" : "dev.stxt.check",
-                    "min" : 1,
-                    "max" : 1,
-                    "qualified_name" : "dev.stxt.check:port"
-                },
-                "dev.stxt.check:engine" : {
+                "org.apache.tomcat:engine" : {
                     "normalized_name" : "engine",
                     "name" : "Engine",
-                    "namespace" : "dev.stxt.check",
+                    "namespace" : "org.apache.tomcat",
                     "min" : null,
                     "max" : null,
-                    "qualified_name" : "dev.stxt.check:engine"
+                    "qualified_name" : "org.apache.tomcat:engine"
+                },
+                "org.apache.tomcat:port" : {
+                    "normalized_name" : "port",
+                    "name" : "Port",
+                    "namespace" : "org.apache.tomcat",
+                    "min" : 1,
+                    "max" : 1,
+                    "qualified_name" : "org.apache.tomcat:port"
+                },
+                "org.apache.tomcat:listener" : {
+                    "normalized_name" : "listener",
+                    "name" : "Listener",
+                    "namespace" : "org.apache.tomcat",
+                    "min" : null,
+                    "max" : null,
+                    "qualified_name" : "org.apache.tomcat:listener"
+                },
+                "org.apache.tomcat:shutdown-command" : {
+                    "normalized_name" : "shutdown-command",
+                    "name" : "Shutdown command",
+                    "namespace" : "org.apache.tomcat",
+                    "min" : null,
+                    "max" : 1,
+                    "qualified_name" : "org.apache.tomcat:shutdown-command"
+                },
+                "org.apache.tomcat:service" : {
+                    "normalized_name" : "service",
+                    "name" : "Service",
+                    "namespace" : "org.apache.tomcat",
+                    "min" : 1,
+                    "max" : null,
+                    "qualified_name" : "org.apache.tomcat:service"
+                },
+                "org.apache.tomcat:global-naming-resources" : {
+                    "normalized_name" : "global-naming-resources",
+                    "name" : "Global Naming Resources",
+                    "namespace" : "org.apache.tomcat",
+                    "min" : null,
+                    "max" : null,
+                    "qualified_name" : "org.apache.tomcat:global-naming-resources"
                 }
             }
         },
@@ -78,13 +78,13 @@
             "normalized_name" : "global-naming-resources",
             "type" : "VALUE_NODE",
             "children" : {
-                "dev.stxt.check:resource" : {
+                "org.apache.tomcat:resource" : {
                     "normalized_name" : "resource",
                     "name" : "Resource",
-                    "namespace" : "dev.stxt.check",
+                    "namespace" : "org.apache.tomcat",
                     "min" : 1,
                     "max" : null,
-                    "qualified_name" : "dev.stxt.check:resource"
+                    "qualified_name" : "org.apache.tomcat:resource"
                 }
             }
         },
@@ -93,53 +93,53 @@
             "normalized_name" : "resource",
             "type" : "VALUE_NODE",
             "children" : {
-                "dev.stxt.check:type" : {
-                    "normalized_name" : "type",
-                    "name" : "Type",
-                    "namespace" : "dev.stxt.check",
-                    "min" : null,
-                    "max" : 1,
-                    "qualified_name" : "dev.stxt.check:type"
-                },
-                "dev.stxt.check:name" : {
-                    "normalized_name" : "name",
-                    "name" : "Name",
-                    "namespace" : "dev.stxt.check",
-                    "min" : null,
-                    "max" : 1,
-                    "qualified_name" : "dev.stxt.check:name"
-                },
-                "dev.stxt.check:path-name" : {
-                    "normalized_name" : "path-name",
-                    "name" : "Path Name",
-                    "namespace" : "dev.stxt.check",
-                    "min" : null,
-                    "max" : 1,
-                    "qualified_name" : "dev.stxt.check:path-name"
-                },
-                "dev.stxt.check:auth" : {
-                    "normalized_name" : "auth",
-                    "name" : "Auth",
-                    "namespace" : "dev.stxt.check",
-                    "min" : null,
-                    "max" : 1,
-                    "qualified_name" : "dev.stxt.check:auth"
-                },
-                "dev.stxt.check:factory-class" : {
+                "org.apache.tomcat:factory-class" : {
                     "normalized_name" : "factory-class",
                     "name" : "Factory class",
-                    "namespace" : "dev.stxt.check",
+                    "namespace" : "org.apache.tomcat",
                     "min" : null,
                     "max" : 1,
-                    "qualified_name" : "dev.stxt.check:factory-class"
+                    "qualified_name" : "org.apache.tomcat:factory-class"
                 },
-                "dev.stxt.check:description" : {
+                "org.apache.tomcat:type" : {
+                    "normalized_name" : "type",
+                    "name" : "Type",
+                    "namespace" : "org.apache.tomcat",
+                    "min" : null,
+                    "max" : 1,
+                    "qualified_name" : "org.apache.tomcat:type"
+                },
+                "org.apache.tomcat:auth" : {
+                    "normalized_name" : "auth",
+                    "name" : "Auth",
+                    "namespace" : "org.apache.tomcat",
+                    "min" : null,
+                    "max" : 1,
+                    "qualified_name" : "org.apache.tomcat:auth"
+                },
+                "org.apache.tomcat:name" : {
+                    "normalized_name" : "name",
+                    "name" : "Name",
+                    "namespace" : "org.apache.tomcat",
+                    "min" : null,
+                    "max" : 1,
+                    "qualified_name" : "org.apache.tomcat:name"
+                },
+                "org.apache.tomcat:description" : {
                     "normalized_name" : "description",
                     "name" : "Description",
-                    "namespace" : "dev.stxt.check",
+                    "namespace" : "org.apache.tomcat",
                     "min" : null,
                     "max" : 1,
-                    "qualified_name" : "dev.stxt.check:description"
+                    "qualified_name" : "org.apache.tomcat:description"
+                },
+                "org.apache.tomcat:path-name" : {
+                    "normalized_name" : "path-name",
+                    "name" : "Path Name",
+                    "namespace" : "org.apache.tomcat",
+                    "min" : null,
+                    "max" : 1,
+                    "qualified_name" : "org.apache.tomcat:path-name"
                 }
             }
         },
@@ -184,21 +184,21 @@
             "normalized_name" : "service",
             "type" : "VALUE_NODE",
             "children" : {
-                "dev.stxt.check:connector" : {
+                "org.apache.tomcat:connector" : {
                     "normalized_name" : "connector",
                     "name" : "Connector",
-                    "namespace" : "dev.stxt.check",
+                    "namespace" : "org.apache.tomcat",
                     "min" : 1,
                     "max" : null,
-                    "qualified_name" : "dev.stxt.check:connector"
+                    "qualified_name" : "org.apache.tomcat:connector"
                 },
-                "dev.stxt.check:executor" : {
+                "org.apache.tomcat:executor" : {
                     "normalized_name" : "executor",
                     "name" : "Executor",
-                    "namespace" : "dev.stxt.check",
+                    "namespace" : "org.apache.tomcat",
                     "min" : null,
                     "max" : 1,
-                    "qualified_name" : "dev.stxt.check:executor"
+                    "qualified_name" : "org.apache.tomcat:executor"
                 }
             }
         },
@@ -207,29 +207,29 @@
             "normalized_name" : "executor",
             "type" : "VALUE_NODE",
             "children" : {
-                "dev.stxt.check:max-threads" : {
-                    "normalized_name" : "max-threads",
-                    "name" : "Max Threads",
-                    "namespace" : "dev.stxt.check",
-                    "min" : null,
-                    "max" : 1,
-                    "qualified_name" : "dev.stxt.check:max-threads"
-                },
-                "dev.stxt.check:name-prefix" : {
-                    "normalized_name" : "name-prefix",
-                    "name" : "Name Prefix",
-                    "namespace" : "dev.stxt.check",
-                    "min" : null,
-                    "max" : 1,
-                    "qualified_name" : "dev.stxt.check:name-prefix"
-                },
-                "dev.stxt.check:min-spare-threads" : {
+                "org.apache.tomcat:min-spare-threads" : {
                     "normalized_name" : "min-spare-threads",
                     "name" : "Min Spare Threads",
-                    "namespace" : "dev.stxt.check",
+                    "namespace" : "org.apache.tomcat",
                     "min" : null,
                     "max" : 1,
-                    "qualified_name" : "dev.stxt.check:min-spare-threads"
+                    "qualified_name" : "org.apache.tomcat:min-spare-threads"
+                },
+                "org.apache.tomcat:max-threads" : {
+                    "normalized_name" : "max-threads",
+                    "name" : "Max Threads",
+                    "namespace" : "org.apache.tomcat",
+                    "min" : null,
+                    "max" : 1,
+                    "qualified_name" : "org.apache.tomcat:max-threads"
+                },
+                "org.apache.tomcat:name-prefix" : {
+                    "normalized_name" : "name-prefix",
+                    "name" : "Name Prefix",
+                    "namespace" : "org.apache.tomcat",
+                    "min" : null,
+                    "max" : 1,
+                    "qualified_name" : "org.apache.tomcat:name-prefix"
                 }
             }
         },
@@ -256,61 +256,61 @@
             "normalized_name" : "connector",
             "type" : "VALUE_NODE",
             "children" : {
-                "dev.stxt.check:max-threads" : {
-                    "normalized_name" : "max-threads",
-                    "name" : "Max Threads",
-                    "namespace" : "dev.stxt.check",
-                    "min" : null,
-                    "max" : 1,
-                    "qualified_name" : "dev.stxt.check:max-threads"
-                },
-                "dev.stxt.check:ssl-enabled" : {
-                    "normalized_name" : "ssl-enabled",
-                    "name" : "SSL Enabled",
-                    "namespace" : "dev.stxt.check",
-                    "min" : null,
-                    "max" : 1,
-                    "qualified_name" : "dev.stxt.check:ssl-enabled"
-                },
-                "dev.stxt.check:connection-timeout" : {
-                    "normalized_name" : "connection-timeout",
-                    "name" : "Connection timeout",
-                    "namespace" : "dev.stxt.check",
-                    "min" : null,
-                    "max" : 1,
-                    "qualified_name" : "dev.stxt.check:connection-timeout"
-                },
-                "dev.stxt.check:protocol" : {
-                    "normalized_name" : "protocol",
-                    "name" : "Protocol",
-                    "namespace" : "dev.stxt.check",
-                    "min" : 1,
-                    "max" : 1,
-                    "qualified_name" : "dev.stxt.check:protocol"
-                },
-                "dev.stxt.check:ssl-config" : {
-                    "normalized_name" : "ssl-config",
-                    "name" : "SSL Config",
-                    "namespace" : "dev.stxt.check",
-                    "min" : null,
-                    "max" : 1,
-                    "qualified_name" : "dev.stxt.check:ssl-config"
-                },
-                "dev.stxt.check:port" : {
-                    "normalized_name" : "port",
-                    "name" : "Port",
-                    "namespace" : "dev.stxt.check",
-                    "min" : 1,
-                    "max" : 1,
-                    "qualified_name" : "dev.stxt.check:port"
-                },
-                "dev.stxt.check:redirect-port" : {
+                "org.apache.tomcat:redirect-port" : {
                     "normalized_name" : "redirect-port",
                     "name" : "Redirect Port",
-                    "namespace" : "dev.stxt.check",
+                    "namespace" : "org.apache.tomcat",
                     "min" : null,
                     "max" : 1,
-                    "qualified_name" : "dev.stxt.check:redirect-port"
+                    "qualified_name" : "org.apache.tomcat:redirect-port"
+                },
+                "org.apache.tomcat:port" : {
+                    "normalized_name" : "port",
+                    "name" : "Port",
+                    "namespace" : "org.apache.tomcat",
+                    "min" : 1,
+                    "max" : 1,
+                    "qualified_name" : "org.apache.tomcat:port"
+                },
+                "org.apache.tomcat:ssl-config" : {
+                    "normalized_name" : "ssl-config",
+                    "name" : "SSL Config",
+                    "namespace" : "org.apache.tomcat",
+                    "min" : null,
+                    "max" : 1,
+                    "qualified_name" : "org.apache.tomcat:ssl-config"
+                },
+                "org.apache.tomcat:protocol" : {
+                    "normalized_name" : "protocol",
+                    "name" : "Protocol",
+                    "namespace" : "org.apache.tomcat",
+                    "min" : 1,
+                    "max" : 1,
+                    "qualified_name" : "org.apache.tomcat:protocol"
+                },
+                "org.apache.tomcat:max-threads" : {
+                    "normalized_name" : "max-threads",
+                    "name" : "Max Threads",
+                    "namespace" : "org.apache.tomcat",
+                    "min" : null,
+                    "max" : 1,
+                    "qualified_name" : "org.apache.tomcat:max-threads"
+                },
+                "org.apache.tomcat:ssl-enabled" : {
+                    "normalized_name" : "ssl-enabled",
+                    "name" : "SSL Enabled",
+                    "namespace" : "org.apache.tomcat",
+                    "min" : null,
+                    "max" : 1,
+                    "qualified_name" : "org.apache.tomcat:ssl-enabled"
+                },
+                "org.apache.tomcat:connection-timeout" : {
+                    "normalized_name" : "connection-timeout",
+                    "name" : "Connection timeout",
+                    "namespace" : "org.apache.tomcat",
+                    "min" : null,
+                    "max" : 1,
+                    "qualified_name" : "org.apache.tomcat:connection-timeout"
                 }
             }
         },
@@ -343,29 +343,29 @@
             "normalized_name" : "ssl-config",
             "type" : "VALUE_NODE",
             "children" : {
-                "dev.stxt.check:certificate-keystore-password" : {
-                    "normalized_name" : "certificate-keystore-password",
-                    "name" : "Certificate Keystore Password",
-                    "namespace" : "dev.stxt.check",
-                    "min" : 1,
-                    "max" : 1,
-                    "qualified_name" : "dev.stxt.check:certificate-keystore-password"
-                },
-                "dev.stxt.check:certificate-keystore-file" : {
-                    "normalized_name" : "certificate-keystore-file",
-                    "name" : "Certificate Keystore File",
-                    "namespace" : "dev.stxt.check",
-                    "min" : 1,
-                    "max" : 1,
-                    "qualified_name" : "dev.stxt.check:certificate-keystore-file"
-                },
-                "dev.stxt.check:type" : {
+                "org.apache.tomcat:type" : {
                     "normalized_name" : "type",
                     "name" : "Type",
-                    "namespace" : "dev.stxt.check",
+                    "namespace" : "org.apache.tomcat",
                     "min" : null,
                     "max" : 1,
-                    "qualified_name" : "dev.stxt.check:type"
+                    "qualified_name" : "org.apache.tomcat:type"
+                },
+                "org.apache.tomcat:certificate-keystore-file" : {
+                    "normalized_name" : "certificate-keystore-file",
+                    "name" : "Certificate Keystore File",
+                    "namespace" : "org.apache.tomcat",
+                    "min" : 1,
+                    "max" : 1,
+                    "qualified_name" : "org.apache.tomcat:certificate-keystore-file"
+                },
+                "org.apache.tomcat:certificate-keystore-password" : {
+                    "normalized_name" : "certificate-keystore-password",
+                    "name" : "Certificate Keystore Password",
+                    "namespace" : "org.apache.tomcat",
+                    "min" : 1,
+                    "max" : 1,
+                    "qualified_name" : "org.apache.tomcat:certificate-keystore-password"
                 }
             }
         },
@@ -386,37 +386,37 @@
             "normalized_name" : "engine",
             "type" : "VALUE_NODE",
             "children" : {
-                "dev.stxt.check:jvm-route" : {
+                "org.apache.tomcat:jvm-route" : {
                     "normalized_name" : "jvm-route",
                     "name" : "JVM Route",
-                    "namespace" : "dev.stxt.check",
+                    "namespace" : "org.apache.tomcat",
                     "min" : null,
                     "max" : 1,
-                    "qualified_name" : "dev.stxt.check:jvm-route"
+                    "qualified_name" : "org.apache.tomcat:jvm-route"
                 },
-                "dev.stxt.check:realm" : {
+                "org.apache.tomcat:realm" : {
                     "normalized_name" : "realm",
                     "name" : "Realm",
-                    "namespace" : "dev.stxt.check",
+                    "namespace" : "org.apache.tomcat",
                     "min" : null,
                     "max" : 1,
-                    "qualified_name" : "dev.stxt.check:realm"
+                    "qualified_name" : "org.apache.tomcat:realm"
                 },
-                "dev.stxt.check:default-host" : {
-                    "normalized_name" : "default-host",
-                    "name" : "Default host",
-                    "namespace" : "dev.stxt.check",
-                    "min" : null,
-                    "max" : 1,
-                    "qualified_name" : "dev.stxt.check:default-host"
-                },
-                "dev.stxt.check:host" : {
+                "org.apache.tomcat:host" : {
                     "normalized_name" : "host",
                     "name" : "Host",
-                    "namespace" : "dev.stxt.check",
+                    "namespace" : "org.apache.tomcat",
                     "min" : null,
                     "max" : null,
-                    "qualified_name" : "dev.stxt.check:host"
+                    "qualified_name" : "org.apache.tomcat:host"
+                },
+                "org.apache.tomcat:default-host" : {
+                    "normalized_name" : "default-host",
+                    "name" : "Default host",
+                    "namespace" : "org.apache.tomcat",
+                    "min" : null,
+                    "max" : 1,
+                    "qualified_name" : "org.apache.tomcat:default-host"
                 }
             }
         },
@@ -437,13 +437,13 @@
             "normalized_name" : "realm",
             "type" : "VALUE_NODE",
             "children" : {
-                "dev.stxt.check:resource-name" : {
+                "org.apache.tomcat:resource-name" : {
                     "normalized_name" : "resource-name",
                     "name" : "Resource Name",
-                    "namespace" : "dev.stxt.check",
+                    "namespace" : "org.apache.tomcat",
                     "min" : null,
                     "max" : 1,
-                    "qualified_name" : "dev.stxt.check:resource-name"
+                    "qualified_name" : "org.apache.tomcat:resource-name"
                 }
             }
         },
@@ -458,37 +458,37 @@
             "normalized_name" : "host",
             "type" : "VALUE_NODE",
             "children" : {
-                "dev.stxt.check:valve" : {
+                "org.apache.tomcat:valve" : {
                     "normalized_name" : "valve",
                     "name" : "Valve",
-                    "namespace" : "dev.stxt.check",
+                    "namespace" : "org.apache.tomcat",
                     "min" : null,
                     "max" : null,
-                    "qualified_name" : "dev.stxt.check:valve"
+                    "qualified_name" : "org.apache.tomcat:valve"
                 },
-                "dev.stxt.check:app-base" : {
+                "org.apache.tomcat:app-base" : {
                     "normalized_name" : "app-base",
                     "name" : "App Base",
-                    "namespace" : "dev.stxt.check",
+                    "namespace" : "org.apache.tomcat",
                     "min" : 1,
                     "max" : 1,
-                    "qualified_name" : "dev.stxt.check:app-base"
+                    "qualified_name" : "org.apache.tomcat:app-base"
                 },
-                "dev.stxt.check:auto-deploy" : {
-                    "normalized_name" : "auto-deploy",
-                    "name" : "Auto Deploy",
-                    "namespace" : "dev.stxt.check",
-                    "min" : null,
-                    "max" : 1,
-                    "qualified_name" : "dev.stxt.check:auto-deploy"
-                },
-                "dev.stxt.check:unpack-wars" : {
+                "org.apache.tomcat:unpack-wars" : {
                     "normalized_name" : "unpack-wars",
                     "name" : "Unpack Wars",
-                    "namespace" : "dev.stxt.check",
+                    "namespace" : "org.apache.tomcat",
                     "min" : null,
                     "max" : 1,
-                    "qualified_name" : "dev.stxt.check:unpack-wars"
+                    "qualified_name" : "org.apache.tomcat:unpack-wars"
+                },
+                "org.apache.tomcat:auto-deploy" : {
+                    "normalized_name" : "auto-deploy",
+                    "name" : "Auto Deploy",
+                    "namespace" : "org.apache.tomcat",
+                    "min" : null,
+                    "max" : 1,
+                    "qualified_name" : "org.apache.tomcat:auto-deploy"
                 }
             }
         },
@@ -515,45 +515,45 @@
             "normalized_name" : "valve",
             "type" : "VALUE_NODE",
             "children" : {
-                "dev.stxt.check:prefix" : {
-                    "normalized_name" : "prefix",
-                    "name" : "Prefix",
-                    "namespace" : "dev.stxt.check",
-                    "min" : null,
-                    "max" : 1,
-                    "qualified_name" : "dev.stxt.check:prefix"
-                },
-                "dev.stxt.check:pattern" : {
-                    "normalized_name" : "pattern",
-                    "name" : "Pattern",
-                    "namespace" : "dev.stxt.check",
-                    "min" : null,
-                    "max" : 1,
-                    "qualified_name" : "dev.stxt.check:pattern"
-                },
-                "dev.stxt.check:class-name" : {
+                "org.apache.tomcat:class-name" : {
                     "normalized_name" : "class-name",
                     "name" : "Class Name",
-                    "namespace" : "dev.stxt.check",
+                    "namespace" : "org.apache.tomcat",
                     "min" : 1,
                     "max" : 1,
-                    "qualified_name" : "dev.stxt.check:class-name"
+                    "qualified_name" : "org.apache.tomcat:class-name"
                 },
-                "dev.stxt.check:directory" : {
-                    "normalized_name" : "directory",
-                    "name" : "Directory",
-                    "namespace" : "dev.stxt.check",
+                "org.apache.tomcat:prefix" : {
+                    "normalized_name" : "prefix",
+                    "name" : "Prefix",
+                    "namespace" : "org.apache.tomcat",
                     "min" : null,
                     "max" : 1,
-                    "qualified_name" : "dev.stxt.check:directory"
+                    "qualified_name" : "org.apache.tomcat:prefix"
                 },
-                "dev.stxt.check:suffix" : {
+                "org.apache.tomcat:suffix" : {
                     "normalized_name" : "suffix",
                     "name" : "Suffix",
-                    "namespace" : "dev.stxt.check",
+                    "namespace" : "org.apache.tomcat",
                     "min" : null,
                     "max" : 1,
-                    "qualified_name" : "dev.stxt.check:suffix"
+                    "qualified_name" : "org.apache.tomcat:suffix"
+                },
+                "org.apache.tomcat:directory" : {
+                    "normalized_name" : "directory",
+                    "name" : "Directory",
+                    "namespace" : "org.apache.tomcat",
+                    "min" : null,
+                    "max" : 1,
+                    "qualified_name" : "org.apache.tomcat:directory"
+                },
+                "org.apache.tomcat:pattern" : {
+                    "normalized_name" : "pattern",
+                    "name" : "Pattern",
+                    "namespace" : "org.apache.tomcat",
+                    "min" : null,
+                    "max" : 1,
+                    "qualified_name" : "org.apache.tomcat:pattern"
                 }
             }
         },
@@ -588,5 +588,5 @@
             "children" : { }
         }
     },
-    "namespace" : "dev.stxt.check"
+    "namespace" : "org.apache.tomcat"
 }
