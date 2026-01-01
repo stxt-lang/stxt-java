@@ -1,0 +1,36 @@
+Template (@stxt.template): org.apache.tomcat
+	Structure >>
+		Server:
+			Port: (1) INTEGER
+			Shutdown command: (?) 
+			Listener: (*)
+			
+			Global Naming Resources:
+				Resource: (+)
+					Name: (?)
+					Auth: (?)
+					Type: (?)
+					Description: (?)
+					Factory class: (?)
+					Path Name: (?)
+
+	XML Mappings:
+		Elements >>
+			Server: Server
+			Shutdown Command: Shutdown
+			...
+		Attributes >>
+			Name: name
+			Auth: auth
+			...
+	YAML Mappings:
+		Keys >>
+			Server: server
+			Shutdown command: shutdown
+			...
+		Lists >>
+			Resource: resource
+			...
+		
+			
+		
