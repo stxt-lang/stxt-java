@@ -1,5 +1,5 @@
 Transformations (@stxt.t2): org.apache.tomcat
-	XML >>
+	STXT2XML >>
 		Server: 
 			Port: Port [ATTR]
 			Shutdown command: ShutdownCommand [ATTR] 
@@ -45,5 +45,37 @@ Transformations (@stxt.t2): org.apache.tomcat
 						Prefix: Prefix [ATTR]
 						Suffix: Suffix [ATTR]
 						Pattern: Pattern [ATTR]
+						
+    STXT2YAML >>
+        Server: server
+            Port: port
+            Shutdown command: shutdown
 
+            Global Naming Resources: globalNamingResources
+                Resource: resources [LIST]
+                    Name: name
+                    Auth: auth
+                    Type: type
+                    Factory class: factoryClass
+                    Path Name: pathName
+
+            Service: service
+                Name: name
+                Connector: connectors [LIST]
+                    Port: port
+                    Protocol: protocol
+                    Connection timeout: connectionTimeout
+                    Redirect Port: redirectPort
+                    SSLEnabled: sslEnabled
+
+            Engine: engine
+                Default host: defaultHost
+                JVM Route: jvmRoute
+                Host: hosts [LIST]
+                    Name: name
+                    App Base: appBase
+                    Unpack Wars: unpackWars
+                    Auto Deploy: autoDeploy
+
+						
 						
