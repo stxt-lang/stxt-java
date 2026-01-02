@@ -10,7 +10,7 @@ import dev.stxt.Node;
 import dev.stxt.Parser;
 import dev.stxt.exceptions.ParseException;
 import dev.stxt.resources.ResourcesLoaderDirectory;
-import dev.stxt.utils.FileUtils;
+import test.FileUtils;
 import test.FileTestLoction;
 import test.FileChecks;
 

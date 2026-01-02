@@ -9,8 +9,6 @@ import java.nio.file.Paths;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import dev.stxt.utils.FileUtils;
-
 public class AllForAI {
 	public static void main(String[] args) {
 		try {

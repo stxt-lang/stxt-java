@@ -7,8 +7,6 @@ import java.io.IOException;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-import dev.stxt.utils.FileUtils;
-
 public class FileChecks {
 
 	public static void checkContentWithJsonFile(Object node, String directory, String name) throws IOException {
