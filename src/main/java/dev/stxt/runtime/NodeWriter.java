@@ -72,13 +72,12 @@ public final class NodeWriter {
     private static void indent(StringBuilder out, int depth, IndentStyle style) {
         if (depth <= 0) return;
 
-        switch (style) {
-            case TABS:
-                for (int i = 0; i < depth; i++) out.append('\t');
-                return;
-            case SPACES_4:
-            default:
-                for (int i = 0; i < depth; i++) out.append("    ");
+        if (style == IndentStyle.SPACES_4) {
+            for (int i = 0; i < depth; i++) 
+            	out.append("    ");
+        } else {
+            for (int i = 0; i < depth; i++) 
+            	out.append('\t');
         }
     }
 
