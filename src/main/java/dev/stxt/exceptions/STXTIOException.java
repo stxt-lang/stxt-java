@@ -1,7 +1,6 @@
 package dev.stxt.exceptions;
 
 public class STXTIOException extends STXTException {
-
 	private static final long serialVersionUID = 1L;
 
     public STXTIOException(java.io.IOException cause) {

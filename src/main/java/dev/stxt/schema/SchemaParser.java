@@ -89,6 +89,4 @@ public class SchemaParser {
 			throw new ParseException(node.getLine(), "INVALID_INTEGER", "Integer not valid: " + n.getValue());
 		}
 	}
-
-
 }

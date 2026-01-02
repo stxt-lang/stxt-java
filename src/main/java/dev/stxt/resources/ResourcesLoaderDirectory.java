@@ -36,7 +36,6 @@ public class ResourcesLoaderDirectory implements ResourcesLoader {
 		}
 		catch (java.io.IOException e) {
 			throw new STXTIOException(e);
-		}
-		
+		}		
 	}
 }
