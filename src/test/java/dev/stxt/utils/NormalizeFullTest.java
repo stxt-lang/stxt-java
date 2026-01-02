@@ -12,6 +12,7 @@ public class NormalizeFullTest {
 		checkEquals("   Hola_ Mundo ", "hola-mundo");
 		checkEquals("   Hola_Mundo ", "hola-mundo");
 		checkEquals("   Hólä_Mundo ", "hola-mundo");
+		checkEquals("   Hólä__$$Mundo ", "hola-mundo");
 	}
 
 	private void checkEquals(String normal, String normalized) {

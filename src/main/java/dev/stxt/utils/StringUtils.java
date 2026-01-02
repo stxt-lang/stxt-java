@@ -8,6 +8,7 @@ public class StringUtils {
 	private StringUtils() {
 	}
 
+	// Usado para nodos name>>
 	public static String rightTrim(String s) {
 		if (s == null)
 			return "";
@@ -18,15 +19,18 @@ public class StringUtils {
 		return s.substring(0, i + 1);
 	}
 
+	// Usado para nodos tipo Base64 y Hex
 	public static String cleanSpaces(String input) {
 		return input.replaceAll("\\s+", "");
 	}
 	
+	// Usado para normalizar namespace
 	public static String lowerCase(String input) {
 		if (input == null) return "";
 		return input.toLowerCase(Locale.ROOT);
 	}
 	
+	// Usados para name de los nodos
 	public static String compactSpaces(String s) {
 		if (s == null)
 			return "";
@@ -35,6 +39,7 @@ public class StringUtils {
 
 	private static final Pattern DIACRITICS = Pattern.compile("\\p{Mn}+");
 
+	// Usados para name normalizado de nodos
 	public static String normalize(String input) {
 	    if (input == null) return "";
 	    String s = input.trim();
@@ -47,6 +52,7 @@ public class StringUtils {
 	    
 	    // cualquier cosa que no sea [a-z0-9] => '-'
 	    s = s.replaceAll("[^a-z0-9]+", "-");
+	    
 	    // trim de '-'
 	    s = s.replaceAll("^-+|-+$", "");
 	    return s;
