@@ -140,25 +140,17 @@ public class Parser {
 		int nodeIndex = line.indexOf(':');
 		int textIndex = line.indexOf(">>");
 		
-		// Nodo tipo valor, 
-		if (nodeIndex != -1 && textIndex != -1 && nodeIndex < textIndex) {
-			// No pasa nada
-		}
-		else if ((nodeIndex != -1 && textIndex != -1) || (nodeIndex == -1 && textIndex == -1)) {
-			throw new ParseException(lineNumber, "INVALID_LINE", "Line not valid: " + line);
-		}
+		if (nodeIndex == -1 && textIndex == -1)			throw new ParseException(lineNumber, "INVALID_LINE", "Line not valid: " + line);
+		else if (nodeIndex == -1 && textIndex != -1) 	textNode = true;
+		else if (nodeIndex != -1 && textIndex == -1) 	textNode = false;
+		else if (nodeIndex < textIndex)					textNode = false;
+		else if (nodeIndex >= textIndex)				throw new ParseException(lineNumber, "INVALID_LINE", "Line not valid: " + line);
 
-		// Value
-		if (nodeIndex != -1) {
-			name = line.substring(0, nodeIndex);
-			value = line.substring(nodeIndex + 1).trim();
-		} else if (textIndex != -1) {
-			name = line.substring(0, textIndex);
-			value = line.substring(textIndex + 2).trim();
-			if (!value.isEmpty())
+		name = textNode ? line.substring(0, textIndex) : line.substring(0, nodeIndex);
+		value = textNode ? line.substring(textIndex + 2): line.substring(nodeIndex + 1);
+
+		if (textNode &&  !value.isEmpty())
 				throw new ParseException(lineNumber, "INLINE_VALUE_NOT_VALID", "Line not valid: " + line);
-			textNode = true;
-		}
 
 		// Namespace por defecto: heredado del padre
 		NameNamespace nn = NameNamespaceParser.parse(name, parent != null ? parent.getNamespace(): null, lineNumber, line);
