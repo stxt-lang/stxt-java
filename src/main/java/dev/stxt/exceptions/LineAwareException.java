@@ -6,7 +6,7 @@ public abstract class LineAwareException extends STXTException {
 	private final int line;
     
     protected LineAwareException(int line, String code, String message) {
-        super(code, message);
+        super(code, "Error at line: " + line + ", " + message);
         this.line = line;
     }
     

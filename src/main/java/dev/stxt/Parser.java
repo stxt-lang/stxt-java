@@ -139,8 +139,12 @@ public class Parser {
 
 		int nodeIndex = line.indexOf(':');
 		int textIndex = line.indexOf(">>");
-
-		if ((nodeIndex != -1 && textIndex != -1) || (nodeIndex == -1 && textIndex == -1)) {
+		
+		// Nodo tipo valor, 
+		if (nodeIndex != -1 && textIndex != -1 && nodeIndex < textIndex) {
+			// No pasa nada
+		}
+		else if ((nodeIndex != -1 && textIndex != -1) || (nodeIndex == -1 && textIndex == -1)) {
 			throw new ParseException(lineNumber, "INVALID_LINE", "Line not valid: " + line);
 		}
 
@@ -148,10 +152,7 @@ public class Parser {
 		if (nodeIndex != -1) {
 			name = line.substring(0, nodeIndex);
 			value = line.substring(nodeIndex + 1).trim();
-		}
-
-		// Text
-		if (textIndex != -1) {
+		} else if (textIndex != -1) {
 			name = line.substring(0, textIndex);
 			value = line.substring(textIndex + 2).trim();
 			if (!value.isEmpty())

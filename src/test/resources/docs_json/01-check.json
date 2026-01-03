@@ -1,0 +1,82 @@
+{
+    "name" : "Email",
+    "normalized_name" : "email",
+    "namespace" : "com.example.docs",
+    "text_node" : false,
+    "value" : "",
+    "text_lines" : [ ],
+    "line" : 1,
+    "level" : 0,
+    "children" : [
+        {
+            "name" : "From",
+            "normalized_name" : "from",
+            "namespace" : "com.example.docs",
+            "text_node" : false,
+            "value" : "John Smith with >> en el texto",
+            "text_lines" : [ ],
+            "line" : 2,
+            "level" : 1,
+            "children" : [ ],
+            "text" : "John Smith with >> en el texto",
+            "qualified_name" : "com.example.docs:from"
+        },
+        {
+            "name" : "To",
+            "normalized_name" : "to",
+            "namespace" : "com.example.docs",
+            "text_node" : false,
+            "value" : "Mery Adams",
+            "text_lines" : [ ],
+            "line" : 3,
+            "level" : 1,
+            "children" : [ ],
+            "text" : "Mery Adams",
+            "qualified_name" : "com.example.docs:to"
+        },
+        {
+            "name" : "Cc",
+            "normalized_name" : "cc",
+            "namespace" : "com.example.docs",
+            "text_node" : false,
+            "value" : "Keyla Brown",
+            "text_lines" : [ ],
+            "line" : 4,
+            "level" : 1,
+            "children" : [ ],
+            "text" : "Keyla Brown",
+            "qualified_name" : "com.example.docs:cc"
+        },
+        {
+            "name" : "Title",
+            "normalized_name" : "title",
+            "namespace" : "com.example.docs",
+            "text_node" : false,
+            "value" : "Project report",
+            "text_lines" : [ ],
+            "line" : 5,
+            "level" : 1,
+            "children" : [ ],
+            "text" : "Project report",
+            "qualified_name" : "com.example.docs:title"
+        },
+        {
+            "name" : "Body Content",
+            "normalized_name" : "body-content",
+            "namespace" : "com.example.docs",
+            "text_node" : true,
+            "value" : "",
+            "text_lines" : [
+                "Hello Mery!!",
+                "The book is finished!!"
+            ],
+            "line" : 6,
+            "level" : 1,
+            "children" : [ ],
+            "text" : "Hello Mery!!\nThe book is finished!!",
+            "qualified_name" : "com.example.docs:body-content"
+        }
+    ],
+    "text" : "",
+    "qualified_name" : "com.example.docs:email"
+}
