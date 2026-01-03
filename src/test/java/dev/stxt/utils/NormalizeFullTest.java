@@ -17,7 +17,7 @@ public class NormalizeFullTest {
 
 	private void checkEquals(String normal, String normalized) {
 		System.out.println(normal + " => " + StringUtils.normalize(normal));
-		Assertions.assertEquals(StringUtils.normalize(normal), normalized);
+		Assertions.assertEquals(normalized, StringUtils.normalize(normal));
 		
 	}
 }
