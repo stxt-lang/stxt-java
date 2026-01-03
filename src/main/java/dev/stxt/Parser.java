@@ -146,10 +146,16 @@ public class Parser {
 		else if (nodeIndex < textIndex)					textNode = false;
 		else if (nodeIndex >= textIndex)				throw new ParseException(lineNumber, "INVALID_LINE", "Line not valid: " + line);
 
-		name = textNode ? line.substring(0, textIndex) : line.substring(0, nodeIndex);
-		value = textNode ? line.substring(textIndex + 2): line.substring(nodeIndex + 1);
+		if (textNode) {
+			name  = line.substring(0, textIndex);
+			value = line.substring(textIndex + 2);
+		}
+		else {
+			name  = line.substring(0, nodeIndex);
+			value = line.substring(nodeIndex + 1);
+		}
 
-		if (textNode &&  !value.isEmpty())
+		if (textNode &&  !value.trim().isEmpty())
 				throw new ParseException(lineNumber, "INLINE_VALUE_NOT_VALID", "Line not valid: " + line);
 
 		// Namespace por defecto: heredado del padre
