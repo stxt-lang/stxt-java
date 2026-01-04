@@ -8,7 +8,7 @@ import dev.stxt.schema.type.Base64;
 import dev.stxt.schema.type.Boolean;
 import dev.stxt.schema.type.Date;
 import dev.stxt.schema.type.Email;
-import dev.stxt.schema.type.Empty;
+import dev.stxt.schema.type.StructuralNode;
 import dev.stxt.schema.type.Hexadecimal;
 import dev.stxt.schema.type.ValueNode;
 import dev.stxt.schema.type.Integer;
@@ -39,7 +39,7 @@ class TypeRegistry {
 		register(Email.INSTANCE);
 		register(Hexadecimal.INSTANCE);
 		register(Base64.INSTANCE);
-		register(Empty.INSTANCE);
+		register(StructuralNode.INSTANCE);
 	}
 
 	public static Type get(String nodeType) {

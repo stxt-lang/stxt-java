@@ -4,10 +4,10 @@ import dev.stxt.Node;
 import dev.stxt.exceptions.ValidationException;
 import dev.stxt.schema.Type;
 
-public final class Empty implements Type {
-	public static final Empty INSTANCE = new Empty();
+public final class StructuralNode implements Type {
+	public static final StructuralNode INSTANCE = new StructuralNode();
 
-	private Empty() {
+	private StructuralNode() {
 	}
 
 	@Override
@@ -19,6 +19,6 @@ public final class Empty implements Type {
 
 	@Override
 	public String getName() {
-		return "EMPTY";
+		return "STRUCTURAL_NODE";
 	}
 }
