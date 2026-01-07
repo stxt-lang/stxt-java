@@ -18,8 +18,8 @@
             "line" : 6,
             "level" : 1,
             "children" : [ ],
-            "qualified_name" : "com.kocinando.receta:nombre-receta",
-            "text" : "Una receta"
+            "text" : "Una receta",
+            "qualified_name" : "com.kocinando.receta:nombre-receta"
         },
         {
             "name" : "Descripción",
@@ -31,8 +31,8 @@
             "line" : 7,
             "level" : 1,
             "children" : [ ],
-            "qualified_name" : "com.kocinando.receta:descripcion",
-            "text" : "Esta es una receta de ejemplo"
+            "text" : "Esta es una receta de ejemplo",
+            "qualified_name" : "com.kocinando.receta:descripcion"
         },
         {
             "name" : "Pasos",
@@ -54,8 +54,8 @@
                     "line" : 9,
                     "level" : 2,
                     "children" : [ ],
-                    "qualified_name" : "com.kocinando.receta:paso",
-                    "text" : "1"
+                    "text" : "1",
+                    "qualified_name" : "com.kocinando.receta:paso"
                 },
                 {
                     "name" : "Descripción",
@@ -70,12 +70,12 @@
                     "line" : 10,
                     "level" : 2,
                     "children" : [ ],
-                    "qualified_name" : "com.kocinando.receta:descripcion",
-                    "text" : "Esta receta te guiará a través de los pasos necesarios para preparar una deliciosa pizza de jamón en casa.\nSigue las instrucciones cuidadosamente para obtener los mejores resultados."
+                    "text" : "Esta receta te guiará a través de los pasos necesarios para preparar una deliciosa pizza de jamón en casa.\nSigue las instrucciones cuidadosamente para obtener los mejores resultados.",
+                    "qualified_name" : "com.kocinando.receta:descripcion"
                 }
             ],
-            "qualified_name" : "com.kocinando.receta:pasos",
-            "text" : ""
+            "text" : "",
+            "qualified_name" : "com.kocinando.receta:pasos"
         },
         {
             "name" : "Dificultad",
@@ -87,8 +87,8 @@
             "line" : 13,
             "level" : 1,
             "children" : [ ],
-            "qualified_name" : "com.kocinando.receta:dificultad",
-            "text" : "media"
+            "text" : "media",
+            "qualified_name" : "com.kocinando.receta:dificultad"
         },
         {
             "name" : "Ingredientes",
@@ -120,8 +120,8 @@
                             "line" : 16,
                             "level" : 3,
                             "children" : [ ],
-                            "qualified_name" : "com.kocinando.receta:cantidad",
-                            "text" : "1"
+                            "text" : "1",
+                            "qualified_name" : "com.kocinando.receta:cantidad"
                         },
                         {
                             "name" : "Unidades",
@@ -133,8 +133,8 @@
                             "line" : 17,
                             "level" : 3,
                             "children" : [ ],
-                            "qualified_name" : "com.kocinando.receta:unidades",
-                            "text" : "dl"
+                            "text" : "dl",
+                            "qualified_name" : "com.kocinando.receta:unidades"
                         },
                         {
                             "name" : "Nombre",
@@ -146,16 +146,16 @@
                             "line" : 18,
                             "level" : 3,
                             "children" : [ ],
-                            "qualified_name" : "com.kocinando.receta:nombre",
-                            "text" : "Agua"
+                            "text" : "Agua",
+                            "qualified_name" : "com.kocinando.receta:nombre"
                         }
                     ],
-                    "qualified_name" : "com.kocinando.receta:ingrediente",
-                    "text" : ""
+                    "text" : "",
+                    "qualified_name" : "com.kocinando.receta:ingrediente"
                 }
             ],
-            "qualified_name" : "com.kocinando.receta:ingredientes",
-            "text" : ""
+            "text" : "",
+            "qualified_name" : "com.kocinando.receta:ingredientes"
         },
         {
             "name" : "Documento",
@@ -177,8 +177,8 @@
                     "line" : 20,
                     "level" : 2,
                     "children" : [ ],
-                    "qualified_name" : "com.dokumentando.doc:titulo",
-                    "text" : "Primer documento simple"
+                    "text" : "Primer documento simple",
+                    "qualified_name" : "com.dokumentando.doc:titulo"
                 },
                 {
                     "name" : "Description",
@@ -194,8 +194,8 @@
                     "line" : 21,
                     "level" : 2,
                     "children" : [ ],
-                    "qualified_name" : "com.dokumentando.doc:description",
-                    "text" : "Este es el\nprimer documento\nsimple. Tiene varias líneas"
+                    "text" : "Este es el\nprimer documento\nsimple. Tiene varias líneas",
+                    "qualified_name" : "com.dokumentando.doc:description"
                 },
                 {
                     "name" : "Tipo Documento",
@@ -207,14 +207,14 @@
                     "line" : 25,
                     "level" : 2,
                     "children" : [ ],
-                    "qualified_name" : "com.dokumentando.doc:tipo-documento",
-                    "text" : "informe"
+                    "text" : "informe",
+                    "qualified_name" : "com.dokumentando.doc:tipo-documento"
                 }
             ],
-            "qualified_name" : "com.dokumentando.doc:documento",
-            "text" : ""
+            "text" : "",
+            "qualified_name" : "com.dokumentando.doc:documento"
         }
     ],
-    "qualified_name" : "com.kocinando.receta:receta",
-    "text" : ""
+    "text" : "",
+    "qualified_name" : "com.kocinando.receta:receta"
 }

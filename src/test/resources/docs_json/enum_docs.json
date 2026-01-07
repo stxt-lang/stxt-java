@@ -18,8 +18,21 @@
             "line" : 2,
             "level" : 1,
             "children" : [ ],
-            "qualified_name" : "enum.test:title",
-            "text" : "Project report"
+            "text" : "Project report",
+            "qualified_name" : "enum.test:title"
+        },
+        {
+            "name" : "Priority",
+            "normalized_name" : "priority",
+            "namespace" : "enum.test",
+            "text_node" : false,
+            "value" : "high",
+            "text_lines" : [ ],
+            "line" : 3,
+            "level" : 1,
+            "children" : [ ],
+            "text" : "high",
+            "qualified_name" : "enum.test:priority"
         },
         {
             "name" : "Content",
@@ -28,16 +41,16 @@
             "text_node" : true,
             "value" : "",
             "text_lines" : [
-                "This is a content line.",
-                "Another a content line."
+                "This is a content line!!",
+                "Another a content line!!"
             ],
-            "line" : 3,
+            "line" : 4,
             "level" : 1,
             "children" : [ ],
-            "qualified_name" : "enum.test:content",
-            "text" : "This is a content line.\nAnother a content line."
+            "text" : "This is a content line!!\nAnother a content line!!",
+            "qualified_name" : "enum.test:content"
         }
     ],
-    "qualified_name" : "enum.test:document",
-    "text" : ""
+    "text" : "",
+    "qualified_name" : "enum.test:document"
 }

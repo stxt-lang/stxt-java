@@ -18,8 +18,8 @@
             "line" : 2,
             "level" : 1,
             "children" : [ ],
-            "qualified_name" : "dev.stxt.check:text",
-            "text" : "Esto es un texto normal"
+            "text" : "Esto es un texto normal",
+            "qualified_name" : "dev.stxt.check:text"
         },
         {
             "name" : "text",
@@ -46,8 +46,8 @@
             "line" : 3,
             "level" : 1,
             "children" : [ ],
-            "qualified_name" : "dev.stxt.check:text",
-            "text" : "Esto es un texto\nque pasa varias lineas.\n\nNo hay problema.\n\n\n# Hola\n\nEsto es otra linea\nY esto otra....\n\t* Hola 1\n\t* Hola 2\n\n"
+            "text" : "Esto es un texto\nque pasa varias lineas.\n\nNo hay problema.\n\n\n# Hola\n\nEsto es otra linea\nY esto otra....\n\t* Hola 1\n\t* Hola 2\n\n",
+            "qualified_name" : "dev.stxt.check:text"
         },
         {
             "name" : "natural",
@@ -59,8 +59,8 @@
             "line" : 19,
             "level" : 1,
             "children" : [ ],
-            "qualified_name" : "dev.stxt.check:natural",
-            "text" : "134242342"
+            "text" : "134242342",
+            "qualified_name" : "dev.stxt.check:natural"
         },
         {
             "name" : "integer",
@@ -72,8 +72,8 @@
             "line" : 21,
             "level" : 1,
             "children" : [ ],
-            "qualified_name" : "dev.stxt.check:integer",
-            "text" : "442424242234234"
+            "text" : "442424242234234",
+            "qualified_name" : "dev.stxt.check:integer"
         },
         {
             "name" : "integer",
@@ -85,8 +85,8 @@
             "line" : 22,
             "level" : 1,
             "children" : [ ],
-            "qualified_name" : "dev.stxt.check:integer",
-            "text" : "+43242423424242"
+            "text" : "+43242423424242",
+            "qualified_name" : "dev.stxt.check:integer"
         },
         {
             "name" : "integer",
@@ -98,8 +98,8 @@
             "line" : 23,
             "level" : 1,
             "children" : [ ],
-            "qualified_name" : "dev.stxt.check:integer",
-            "text" : "-5432424242"
+            "text" : "-5432424242",
+            "qualified_name" : "dev.stxt.check:integer"
         },
         {
             "name" : "number",
@@ -111,8 +111,8 @@
             "line" : 25,
             "level" : 1,
             "children" : [ ],
-            "qualified_name" : "dev.stxt.check:number",
-            "text" : "+52352.53252"
+            "text" : "+52352.53252",
+            "qualified_name" : "dev.stxt.check:number"
         },
         {
             "name" : "number",
@@ -124,8 +124,8 @@
             "line" : 26,
             "level" : 1,
             "children" : [ ],
-            "qualified_name" : "dev.stxt.check:number",
-            "text" : "-523523.52325"
+            "text" : "-523523.52325",
+            "qualified_name" : "dev.stxt.check:number"
         },
         {
             "name" : "number",
@@ -137,8 +137,8 @@
             "line" : 27,
             "level" : 1,
             "children" : [ ],
-            "qualified_name" : "dev.stxt.check:number",
-            "text" : "+52345.532e-10"
+            "text" : "+52345.532e-10",
+            "qualified_name" : "dev.stxt.check:number"
         },
         {
             "name" : "number",
@@ -150,8 +150,8 @@
             "line" : 28,
             "level" : 1,
             "children" : [ ],
-            "qualified_name" : "dev.stxt.check:number",
-            "text" : "-523423.5432e10"
+            "text" : "-523423.5432e10",
+            "qualified_name" : "dev.stxt.check:number"
         },
         {
             "name" : "hexadecimal",
@@ -168,8 +168,8 @@
             "line" : 30,
             "level" : 1,
             "children" : [ ],
-            "qualified_name" : "dev.stxt.check:hexadecimal",
-            "text" : "f52360Abcdef000\nf52360Abcdef000\nf52360Abcdef000\nf52360Abcdef000"
+            "text" : "f52360Abcdef000\nf52360Abcdef000\nf52360Abcdef000\nf52360Abcdef000",
+            "qualified_name" : "dev.stxt.check:hexadecimal"
         },
         {
             "name" : "base64",
@@ -186,8 +186,8 @@
             "line" : 36,
             "level" : 1,
             "children" : [ ],
-            "qualified_name" : "dev.stxt.check:base64",
-            "text" : "SGVsbG8gV29ybGQhISEhISEKSG9sYSBNdW5kbyEhISEhIUhvbGEgTXVuZG8hISEhISFIb2xhIE11\nbmRvISEhISEhSG9sYSBNdW5kbyEhISEhIUhvbGEgTXVuZG8hISEhISFIb2xhIE11bmRvISEhISEh\nSG9sYSBNdW5kbyEhISEhIUhvbGEgTXVuZG8hISEhISFIb2xhIE11bmRvISEhISEhSG9sYSBNdW5k\nbyEhISEhIQ=="
+            "text" : "SGVsbG8gV29ybGQhISEhISEKSG9sYSBNdW5kbyEhISEhIUhvbGEgTXVuZG8hISEhISFIb2xhIE11\nbmRvISEhISEhSG9sYSBNdW5kbyEhISEhIUhvbGEgTXVuZG8hISEhISFIb2xhIE11bmRvISEhISEh\nSG9sYSBNdW5kbyEhISEhIUhvbGEgTXVuZG8hISEhISFIb2xhIE11bmRvISEhISEhSG9sYSBNdW5k\nbyEhISEhIQ==",
+            "qualified_name" : "dev.stxt.check:base64"
         },
         {
             "name" : "boolean",
@@ -199,8 +199,8 @@
             "line" : 42,
             "level" : 1,
             "children" : [ ],
-            "qualified_name" : "dev.stxt.check:boolean",
-            "text" : "true"
+            "text" : "true",
+            "qualified_name" : "dev.stxt.check:boolean"
         },
         {
             "name" : "boolean",
@@ -212,8 +212,8 @@
             "line" : 43,
             "level" : 1,
             "children" : [ ],
-            "qualified_name" : "dev.stxt.check:boolean",
-            "text" : "false"
+            "text" : "false",
+            "qualified_name" : "dev.stxt.check:boolean"
         },
         {
             "name" : "boolean",
@@ -225,8 +225,8 @@
             "line" : 44,
             "level" : 1,
             "children" : [ ],
-            "qualified_name" : "dev.stxt.check:boolean",
-            "text" : "false"
+            "text" : "false",
+            "qualified_name" : "dev.stxt.check:boolean"
         },
         {
             "name" : "url",
@@ -238,10 +238,10 @@
             "line" : 46,
             "level" : 1,
             "children" : [ ],
-            "qualified_name" : "dev.stxt.check:url",
-            "text" : "http://www.google.com"
+            "text" : "http://www.google.com",
+            "qualified_name" : "dev.stxt.check:url"
         }
     ],
-    "qualified_name" : "dev.stxt.check:type-list",
-    "text" : ""
+    "text" : "",
+    "qualified_name" : "dev.stxt.check:type-list"
 }
