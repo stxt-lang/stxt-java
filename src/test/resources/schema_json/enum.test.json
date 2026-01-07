@@ -3,7 +3,7 @@
         "document" : {
             "name" : "Document",
             "normalized_name" : "document",
-            "type" : "VALUE_NODE",
+            "type" : "INLINE",
             "children" : {
                 "enum.test:priority" : {
                     "normalized_name" : "priority",
@@ -46,7 +46,7 @@
         "title" : {
             "name" : "Title",
             "normalized_name" : "title",
-            "type" : "VALUE_NODE",
+            "type" : "INLINE",
             "children" : { },
             "values" : [ ]
         },

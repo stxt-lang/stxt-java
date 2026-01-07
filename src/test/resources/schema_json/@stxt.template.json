@@ -3,7 +3,7 @@
         "template" : {
             "name" : "Template",
             "normalized_name" : "template",
-            "type" : "VALUE_NODE",
+            "type" : "INLINE",
             "children" : {
                 "@stxt.template:structure" : {
                     "normalized_name" : "structure",

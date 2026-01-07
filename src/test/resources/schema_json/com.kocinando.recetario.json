@@ -3,7 +3,7 @@
         "recetario" : {
             "name" : "Recetario",
             "normalized_name" : "recetario",
-            "type" : "VALUE_NODE",
+            "type" : "INLINE",
             "children" : {
                 "com.kocinando.receta:receta" : {
                     "normalized_name" : "receta",

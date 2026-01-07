@@ -3,7 +3,7 @@
         "seccion" : {
             "name" : "Sección",
             "normalized_name" : "seccion",
-            "type" : "VALUE_NODE",
+            "type" : "INLINE",
             "children" : {
                 "com.dokumentando.documento:titulo" : {
                     "normalized_name" : "titulo",
@@ -27,7 +27,7 @@
         "documento" : {
             "name" : "Documento",
             "normalized_name" : "documento",
-            "type" : "VALUE_NODE",
+            "type" : "INLINE",
             "children" : {
                 "com.dokumentando.documento:titulo" : {
                     "normalized_name" : "titulo",
@@ -131,7 +131,7 @@
         "titulo" : {
             "name" : "Título",
             "normalized_name" : "titulo",
-            "type" : "VALUE_NODE",
+            "type" : "INLINE",
             "children" : { },
             "values" : [ ]
         },
@@ -152,7 +152,7 @@
         "autor" : {
             "name" : "Autor",
             "normalized_name" : "autor",
-            "type" : "VALUE_NODE",
+            "type" : "INLINE",
             "children" : { },
             "values" : [ ]
         },
@@ -208,7 +208,7 @@
         "secciones" : {
             "name" : "Secciones",
             "normalized_name" : "secciones",
-            "type" : "VALUE_NODE",
+            "type" : "INLINE",
             "children" : {
                 "com.dokumentando.documento:seccion" : {
                     "normalized_name" : "seccion",
@@ -224,7 +224,7 @@
         "tipo-documento" : {
             "name" : "Tipo Documento",
             "normalized_name" : "tipo-documento",
-            "type" : "VALUE_NODE",
+            "type" : "INLINE",
             "children" : { },
             "values" : [ ]
         }

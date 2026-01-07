@@ -3,7 +3,7 @@
         "type-list" : {
             "name" : "Type List",
             "normalized_name" : "type-list",
-            "type" : "VALUE_NODE",
+            "type" : "INLINE",
             "children" : {
                 "dev.stxt.check:number" : {
                     "normalized_name" : "number",

@@ -3,7 +3,7 @@
         "receta" : {
             "name" : "Receta",
             "normalized_name" : "receta",
-            "type" : "VALUE_NODE",
+            "type" : "INLINE",
             "children" : {
                 "com.kocinando.receta1:ingredientes" : {
                     "normalized_name" : "ingredientes",
@@ -43,7 +43,7 @@
         "titulo" : {
             "name" : "Título",
             "normalized_name" : "titulo",
-            "type" : "VALUE_NODE",
+            "type" : "INLINE",
             "children" : { },
             "values" : [ ]
         },

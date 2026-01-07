@@ -3,7 +3,7 @@
         "email" : {
             "name" : "Email",
             "normalized_name" : "email",
-            "type" : "VALUE_NODE",
+            "type" : "INLINE",
             "children" : {
                 "com.example.docs:cc" : {
                     "normalized_name" : "cc",
@@ -67,35 +67,35 @@
         "from" : {
             "name" : "From",
             "normalized_name" : "from",
-            "type" : "VALUE_NODE",
+            "type" : "INLINE",
             "children" : { },
             "values" : [ ]
         },
         "to" : {
             "name" : "To",
             "normalized_name" : "to",
-            "type" : "VALUE_NODE",
+            "type" : "INLINE",
             "children" : { },
             "values" : [ ]
         },
         "cc" : {
             "name" : "Cc",
             "normalized_name" : "cc",
-            "type" : "VALUE_NODE",
+            "type" : "INLINE",
             "children" : { },
             "values" : [ ]
         },
         "bcc" : {
             "name" : "Bcc",
             "normalized_name" : "bcc",
-            "type" : "VALUE_NODE",
+            "type" : "INLINE",
             "children" : { },
             "values" : [ ]
         },
         "title" : {
             "name" : "Title",
             "normalized_name" : "title",
-            "type" : "VALUE_NODE",
+            "type" : "INLINE",
             "children" : { },
             "values" : [ ]
         },

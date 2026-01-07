@@ -3,7 +3,7 @@
         "documento" : {
             "name" : "Documento",
             "normalized_name" : "documento",
-            "type" : "VALUE_NODE",
+            "type" : "INLINE",
             "children" : {
                 "com.dokumentando.doc:tipo-documento" : {
                     "normalized_name" : "tipo-documento",
@@ -43,7 +43,7 @@
         "secciones" : {
             "name" : "Secciones",
             "normalized_name" : "secciones",
-            "type" : "VALUE_NODE",
+            "type" : "INLINE",
             "children" : {
                 "com.dokumentando.doc:seccion" : {
                     "normalized_name" : "seccion",
@@ -59,7 +59,7 @@
         "titulo" : {
             "name" : "Título",
             "normalized_name" : "titulo",
-            "type" : "VALUE_NODE",
+            "type" : "INLINE",
             "children" : { },
             "values" : [ ]
         },
@@ -80,7 +80,7 @@
         "tipo-documento" : {
             "name" : "Tipo Documento",
             "normalized_name" : "tipo-documento",
-            "type" : "VALUE_NODE",
+            "type" : "INLINE",
             "children" : { },
             "values" : [ ]
         }

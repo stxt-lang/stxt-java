@@ -5,10 +5,10 @@ import dev.stxt.exceptions.ValidationException;
 import dev.stxt.schema.NodeDefinition;
 import dev.stxt.schema.Type;
 
-public final class ValueNode implements Type {
-	public static final ValueNode INSTANCE = new ValueNode();
+public final class Inline implements Type {
+	public static final Inline INSTANCE = new Inline();
 
-	private ValueNode() {
+	private Inline() {
 	}
 
 	@Override
@@ -21,6 +21,6 @@ public final class ValueNode implements Type {
 
 	@Override
 	public String getName() {
-		return "VALUE_NODE";
+		return "INLINE";
 	}
 }

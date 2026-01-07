@@ -53,7 +53,7 @@ public class SchemaParser {
 
 	private static NodeDefinition createFrom(Node n, String namespace) {
 		String name = n.getValue();
-		String type = "VALUE_NODE";
+		String type = "INLINE";
 		Node typeNode = n.getChild("type");
 		if (typeNode != null) type = typeNode.getValue();
 

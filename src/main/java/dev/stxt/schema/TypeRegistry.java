@@ -11,7 +11,7 @@ import dev.stxt.schema.type.Email;
 import dev.stxt.schema.type.Enum;
 import dev.stxt.schema.type.StructuralNode;
 import dev.stxt.schema.type.Hexadecimal;
-import dev.stxt.schema.type.ValueNode;
+import dev.stxt.schema.type.Inline;
 import dev.stxt.schema.type.Integer;
 import dev.stxt.schema.type.Block;
 import dev.stxt.schema.type.Natural;
@@ -25,7 +25,7 @@ class TypeRegistry {
 
 	static {
 		// Tipos principales
-		register(ValueNode.INSTANCE);
+		register(Inline.INSTANCE);
 		register(Block.INSTANCE);
 		
 		// Subtipos

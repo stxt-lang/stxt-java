@@ -3,7 +3,7 @@
         "receta" : {
             "name" : "Receta",
             "normalized_name" : "receta",
-            "type" : "VALUE_NODE",
+            "type" : "INLINE",
             "children" : {
                 "com.kocinando.receta:ingredientes" : {
                     "normalized_name" : "ingredientes",
@@ -75,7 +75,7 @@
         "nombre-receta" : {
             "name" : "Nombre Receta",
             "normalized_name" : "nombre-receta",
-            "type" : "VALUE_NODE",
+            "type" : "INLINE",
             "children" : { },
             "values" : [ ]
         },
@@ -89,7 +89,7 @@
         "ingredientes" : {
             "name" : "Ingredientes",
             "normalized_name" : "ingredientes",
-            "type" : "VALUE_NODE",
+            "type" : "INLINE",
             "children" : {
                 "com.kocinando.receta:ingrediente" : {
                     "normalized_name" : "ingrediente",
@@ -105,7 +105,7 @@
         "ingrediente" : {
             "name" : "Ingrediente",
             "normalized_name" : "ingrediente",
-            "type" : "VALUE_NODE",
+            "type" : "INLINE",
             "children" : {
                 "com.kocinando.receta:unidades" : {
                     "normalized_name" : "unidades",
@@ -144,21 +144,21 @@
         "unidades" : {
             "name" : "Unidades",
             "normalized_name" : "unidades",
-            "type" : "VALUE_NODE",
+            "type" : "INLINE",
             "children" : { },
             "values" : [ ]
         },
         "nombre" : {
             "name" : "Nombre",
             "normalized_name" : "nombre",
-            "type" : "VALUE_NODE",
+            "type" : "INLINE",
             "children" : { },
             "values" : [ ]
         },
         "pasos" : {
             "name" : "Pasos",
             "normalized_name" : "pasos",
-            "type" : "VALUE_NODE",
+            "type" : "INLINE",
             "children" : {
                 "com.kocinando.receta:descripcion" : {
                     "normalized_name" : "descripcion",
@@ -189,7 +189,7 @@
         "dificultad" : {
             "name" : "Dificultad",
             "normalized_name" : "dificultad",
-            "type" : "VALUE_NODE",
+            "type" : "INLINE",
             "children" : { },
             "values" : [ ]
         },

@@ -59,7 +59,7 @@ public class TemplateParser {
 		// Miramos si es nuevo y añadimos en listado
 		NodeDefinition schemaNode = schema.getNodeDefinition(name);
 		if (schemaNode == null) {	// Nuevo
-			String type = cl.getType() == null? "VALUE_NODE": cl.getType();
+			String type = cl.getType() == null? "INLINE": cl.getType();
 			schemaNode = new NodeDefinition(node.getName(), type, node.getLine() + offset);
 			schema.addNodeDefinition(schemaNode);
             String[] values = cl.getValues();
