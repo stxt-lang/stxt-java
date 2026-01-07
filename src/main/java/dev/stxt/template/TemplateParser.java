@@ -62,6 +62,10 @@ public class TemplateParser {
 			String type = cl.getType() == null? "VALUE_NODE": cl.getType();
 			schemaNode = new NodeDefinition(node.getName(), type, node.getLine() + offset);
 			schema.addNodeDefinition(schemaNode);
+            String[] values = cl.getValues();
+            if (values != null)
+                for (String value: values)
+                    schemaNode.addValue(value);
 		} else {
 			String type = cl.getType();
 			if (!type.startsWith("@"))

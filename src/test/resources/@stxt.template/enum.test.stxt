@@ -1,0 +1,6 @@
+Template (@stxt.template): enum.test
+	Structure >>
+		Document:
+			Priority: (?) ENUM [high, medium, low]
+			Title: (1)
+			Content: (1) TEXT
