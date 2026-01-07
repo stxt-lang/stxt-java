@@ -2,7 +2,9 @@ package dev.stxt.schema;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import dev.stxt.exceptions.ParseException;
 import dev.stxt.exceptions.SchemaException;
@@ -13,6 +15,7 @@ public class NodeDefinition {
 	private final String normalizedName;
 	private final String type;
 	private final Map<String, ChildDefinition> children = new HashMap<>();
+	private final Set<String> values = new HashSet<String>();
 	
 	public NodeDefinition(String name, String type, int line) {
 		this.name = StringUtils.compactSpaces(name);
@@ -39,4 +42,14 @@ public class NodeDefinition {
 		if (children.containsKey(qname)) throw new SchemaException("CHILD_DEF_ALREADY_DEFINED", "Exists a previous node definition with: " + qname);
 		children.put(qname, childDefinition);
 	}
+	public void addValue(String value) {
+	    this.values.add(value);
+	}
+    public boolean isAllowedValue(String value) {
+        if (this.values.size()==0) return true;
+        return this.values.contains(value);
+    }
+    public Set<String> getValues() {
+        return Collections.unmodifiableSet(this.values);
+    }
 }

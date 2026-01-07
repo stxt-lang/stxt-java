@@ -21,7 +21,8 @@
                     "max" : null,
                     "qualified_name" : "@stxt.schema:node"
                 }
-            }
+            },
+            "values" : [ ]
         },
         "node" : {
             "name" : "Node",
@@ -52,7 +53,8 @@
                     "max" : 1,
                     "qualified_name" : "@stxt.schema:children"
                 }
-            }
+            },
+            "values" : [ ]
         },
         "children" : {
             "name" : "Children",
@@ -67,13 +69,15 @@
                     "max" : null,
                     "qualified_name" : "@stxt.schema:child"
                 }
-            }
+            },
+            "values" : [ ]
         },
         "description" : {
             "name" : "Description",
             "normalized_name" : "description",
             "type" : "TEXT",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "child" : {
             "name" : "Child",
@@ -96,25 +100,29 @@
                     "max" : 1,
                     "qualified_name" : "@stxt.schema:max"
                 }
-            }
+            },
+            "values" : [ ]
         },
         "min" : {
             "name" : "Min",
             "normalized_name" : "min",
             "type" : "NATURAL",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "max" : {
             "name" : "Max",
             "normalized_name" : "max",
             "type" : "NATURAL",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "type" : {
             "name" : "Type",
             "normalized_name" : "type",
             "type" : "VALUE_NODE",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         }
     },
     "namespace" : "@stxt.schema"

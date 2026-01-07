@@ -37,7 +37,8 @@
                     "max" : null,
                     "qualified_name" : "com.dokumentando.doc:secciones"
                 }
-            }
+            },
+            "values" : [ ]
         },
         "secciones" : {
             "name" : "Secciones",
@@ -52,31 +53,36 @@
                     "max" : null,
                     "qualified_name" : "com.dokumentando.doc:seccion"
                 }
-            }
+            },
+            "values" : [ ]
         },
         "titulo" : {
             "name" : "Título",
             "normalized_name" : "titulo",
             "type" : "VALUE_NODE",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "seccion" : {
             "name" : "Sección",
             "normalized_name" : "seccion",
             "type" : "TEXT",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "description" : {
             "name" : "Description",
             "normalized_name" : "description",
             "type" : "TEXT",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "tipo-documento" : {
             "name" : "Tipo Documento",
             "normalized_name" : "tipo-documento",
             "type" : "VALUE_NODE",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         }
     },
     "namespace" : "com.dokumentando.doc"

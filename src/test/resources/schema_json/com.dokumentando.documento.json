@@ -21,7 +21,8 @@
                     "max" : 1,
                     "qualified_name" : "com.dokumentando.documento:contenido"
                 }
-            }
+            },
+            "values" : [ ]
         },
         "documento" : {
             "name" : "Documento",
@@ -124,73 +125,85 @@
                     "max" : 1,
                     "qualified_name" : "com.dokumentando.documento:color-tema"
                 }
-            }
+            },
+            "values" : [ ]
         },
         "titulo" : {
             "name" : "Título",
             "normalized_name" : "titulo",
             "type" : "VALUE_NODE",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "contenido" : {
             "name" : "Contenido",
             "normalized_name" : "contenido",
             "type" : "TEXT",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "cuerpo" : {
             "name" : "Cuerpo",
             "normalized_name" : "cuerpo",
             "type" : "TEXT",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "autor" : {
             "name" : "Autor",
             "normalized_name" : "autor",
             "type" : "VALUE_NODE",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "fecha-creacion" : {
             "name" : "Fecha Creación",
             "normalized_name" : "fecha-creacion",
             "type" : "DATE",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "ultima-modificacion" : {
             "name" : "Última modificación",
             "normalized_name" : "ultima-modificacion",
             "type" : "TIMESTAMP",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "email-contacto" : {
             "name" : "Email Contacto",
             "normalized_name" : "email-contacto",
             "type" : "EMAIL",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "sitio-web" : {
             "name" : "Sitio Web",
             "normalized_name" : "sitio-web",
             "type" : "URL",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "codigo-postal" : {
             "name" : "Código postal",
             "normalized_name" : "codigo-postal",
             "type" : "NUMBER",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "es-publico" : {
             "name" : "Es Público",
             "normalized_name" : "es-publico",
             "type" : "BOOLEAN",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "color-tema" : {
             "name" : "Color Tema",
             "normalized_name" : "color-tema",
             "type" : "HEXADECIMAL",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "secciones" : {
             "name" : "Secciones",
@@ -205,13 +218,15 @@
                     "max" : null,
                     "qualified_name" : "com.dokumentando.documento:seccion"
                 }
-            }
+            },
+            "values" : [ ]
         },
         "tipo-documento" : {
             "name" : "Tipo Documento",
             "normalized_name" : "tipo-documento",
             "type" : "VALUE_NODE",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         }
     },
     "namespace" : "com.dokumentando.documento"

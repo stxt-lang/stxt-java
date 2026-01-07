@@ -21,7 +21,8 @@
                     "max" : 1,
                     "qualified_name" : "com.gym.docs:datos-personales"
                 }
-            }
+            },
+            "values" : [ ]
         },
         "datos-personales" : {
             "name" : "Datos Personales",
@@ -76,7 +77,8 @@
                     "max" : null,
                     "qualified_name" : "com.gym.docs:foto"
                 }
-            }
+            },
+            "values" : [ ]
         },
         "datos-bancarios" : {
             "name" : "Datos Bancarios",
@@ -99,55 +101,64 @@
                     "max" : 1,
                     "qualified_name" : "com.gym.docs:titular-cuenta"
                 }
-            }
+            },
+            "values" : [ ]
         },
         "nombre" : {
             "name" : "Nombre",
             "normalized_name" : "nombre",
             "type" : "VALUE_NODE",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "primer-apellido" : {
             "name" : "Primer apellido",
             "normalized_name" : "primer-apellido",
             "type" : "VALUE_NODE",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "segundo-apellido" : {
             "name" : "Segundo apellido",
             "normalized_name" : "segundo-apellido",
             "type" : "VALUE_NODE",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "edad" : {
             "name" : "Edad",
             "normalized_name" : "edad",
             "type" : "NUMBER",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "cliente-vip" : {
             "name" : "Cliente vip",
             "normalized_name" : "cliente-vip",
             "type" : "BOOLEAN",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "foto" : {
             "name" : "Foto",
             "normalized_name" : "foto",
             "type" : "BASE64",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "titular-cuenta" : {
             "name" : "Titular cuenta",
             "normalized_name" : "titular-cuenta",
             "type" : "VALUE_NODE",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "numero-cuenta" : {
             "name" : "Número cuenta",
             "normalized_name" : "numero-cuenta",
             "type" : "VALUE_NODE",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         }
     },
     "namespace" : "com.gym.docs"

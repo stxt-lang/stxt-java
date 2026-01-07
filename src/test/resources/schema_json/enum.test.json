@@ -29,25 +29,29 @@
                     "max" : 1,
                     "qualified_name" : "enum.test:content"
                 }
-            }
+            },
+            "values" : [ ]
         },
         "priority" : {
             "name" : "Priority",
             "normalized_name" : "priority",
             "type" : "VALUE_NODE",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "title" : {
             "name" : "Title",
             "normalized_name" : "title",
             "type" : "VALUE_NODE",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "content" : {
             "name" : "Content",
             "normalized_name" : "content",
             "type" : "TEXT",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         }
     },
     "namespace" : "enum.test"

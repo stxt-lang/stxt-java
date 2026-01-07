@@ -69,55 +69,64 @@
                     "max" : null,
                     "qualified_name" : "dev.stxt.check:hexadecimal"
                 }
-            }
+            },
+            "values" : [ ]
         },
         "text" : {
             "name" : "text",
             "normalized_name" : "text",
             "type" : "TEXT",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "natural" : {
             "name" : "natural",
             "normalized_name" : "natural",
             "type" : "NATURAL",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "integer" : {
             "name" : "integer",
             "normalized_name" : "integer",
             "type" : "INTEGER",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "number" : {
             "name" : "number",
             "normalized_name" : "number",
             "type" : "NUMBER",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "hexadecimal" : {
             "name" : "hexadecimal",
             "normalized_name" : "hexadecimal",
             "type" : "HEXADECIMAL",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "base64" : {
             "name" : "Base64",
             "normalized_name" : "base64",
             "type" : "BASE64",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "boolean" : {
             "name" : "Boolean",
             "normalized_name" : "boolean",
             "type" : "BOOLEAN",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "url" : {
             "name" : "Url",
             "normalized_name" : "url",
             "type" : "URL",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         }
     },
     "namespace" : "dev.stxt.check"

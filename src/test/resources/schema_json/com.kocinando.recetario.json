@@ -13,7 +13,8 @@
                     "max" : null,
                     "qualified_name" : "com.kocinando.receta:receta"
                 }
-            }
+            },
+            "values" : [ ]
         }
     },
     "namespace" : "com.kocinando.recetario"

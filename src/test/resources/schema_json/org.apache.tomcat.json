@@ -53,25 +53,29 @@
                     "max" : null,
                     "qualified_name" : "org.apache.tomcat:global-naming-resources"
                 }
-            }
+            },
+            "values" : [ ]
         },
         "port" : {
             "name" : "Port",
             "normalized_name" : "port",
             "type" : "INTEGER",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "shutdown-command" : {
             "name" : "Shutdown command",
             "normalized_name" : "shutdown-command",
             "type" : "VALUE_NODE",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "listener" : {
             "name" : "Listener",
             "normalized_name" : "listener",
             "type" : "VALUE_NODE",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "global-naming-resources" : {
             "name" : "Global Naming Resources",
@@ -86,7 +90,8 @@
                     "max" : null,
                     "qualified_name" : "org.apache.tomcat:resource"
                 }
-            }
+            },
+            "values" : [ ]
         },
         "resource" : {
             "name" : "Resource",
@@ -141,43 +146,50 @@
                     "max" : 1,
                     "qualified_name" : "org.apache.tomcat:path-name"
                 }
-            }
+            },
+            "values" : [ ]
         },
         "name" : {
             "name" : "Name",
             "normalized_name" : "name",
             "type" : "VALUE_NODE",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "auth" : {
             "name" : "Auth",
             "normalized_name" : "auth",
             "type" : "VALUE_NODE",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "type" : {
             "name" : "Type",
             "normalized_name" : "type",
             "type" : "VALUE_NODE",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "description" : {
             "name" : "Description",
             "normalized_name" : "description",
             "type" : "VALUE_NODE",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "factory-class" : {
             "name" : "Factory class",
             "normalized_name" : "factory-class",
             "type" : "VALUE_NODE",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "path-name" : {
             "name" : "Path Name",
             "normalized_name" : "path-name",
             "type" : "VALUE_NODE",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "service" : {
             "name" : "Service",
@@ -200,7 +212,8 @@
                     "max" : 1,
                     "qualified_name" : "org.apache.tomcat:executor"
                 }
-            }
+            },
+            "values" : [ ]
         },
         "executor" : {
             "name" : "Executor",
@@ -231,25 +244,29 @@
                     "max" : 1,
                     "qualified_name" : "org.apache.tomcat:name-prefix"
                 }
-            }
+            },
+            "values" : [ ]
         },
         "name-prefix" : {
             "name" : "Name Prefix",
             "normalized_name" : "name-prefix",
             "type" : "VALUE_NODE",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "max-threads" : {
             "name" : "Max Threads",
             "normalized_name" : "max-threads",
             "type" : "NUMBER",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "min-spare-threads" : {
             "name" : "Min Spare Threads",
             "normalized_name" : "min-spare-threads",
             "type" : "NUMBER",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "connector" : {
             "name" : "Connector",
@@ -312,31 +329,36 @@
                     "max" : 1,
                     "qualified_name" : "org.apache.tomcat:connection-timeout"
                 }
-            }
+            },
+            "values" : [ ]
         },
         "protocol" : {
             "name" : "Protocol",
             "normalized_name" : "protocol",
             "type" : "VALUE_NODE",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "connection-timeout" : {
             "name" : "Connection timeout",
             "normalized_name" : "connection-timeout",
             "type" : "INTEGER",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "redirect-port" : {
             "name" : "Redirect Port",
             "normalized_name" : "redirect-port",
             "type" : "INTEGER",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "ssl-enabled" : {
             "name" : "SSL Enabled",
             "normalized_name" : "ssl-enabled",
             "type" : "BOOLEAN",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "ssl-config" : {
             "name" : "SSL Config",
@@ -367,19 +389,22 @@
                     "max" : 1,
                     "qualified_name" : "org.apache.tomcat:certificate-keystore-password"
                 }
-            }
+            },
+            "values" : [ ]
         },
         "certificate-keystore-file" : {
             "name" : "Certificate Keystore File",
             "normalized_name" : "certificate-keystore-file",
             "type" : "VALUE_NODE",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "certificate-keystore-password" : {
             "name" : "Certificate Keystore Password",
             "normalized_name" : "certificate-keystore-password",
             "type" : "VALUE_NODE",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "engine" : {
             "name" : "Engine",
@@ -418,19 +443,22 @@
                     "max" : 1,
                     "qualified_name" : "org.apache.tomcat:default-host"
                 }
-            }
+            },
+            "values" : [ ]
         },
         "default-host" : {
             "name" : "Default host",
             "normalized_name" : "default-host",
             "type" : "VALUE_NODE",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "jvm-route" : {
             "name" : "JVM Route",
             "normalized_name" : "jvm-route",
             "type" : "VALUE_NODE",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "realm" : {
             "name" : "Realm",
@@ -445,13 +473,15 @@
                     "max" : 1,
                     "qualified_name" : "org.apache.tomcat:resource-name"
                 }
-            }
+            },
+            "values" : [ ]
         },
         "resource-name" : {
             "name" : "Resource Name",
             "normalized_name" : "resource-name",
             "type" : "VALUE_NODE",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "host" : {
             "name" : "Host",
@@ -490,25 +520,29 @@
                     "max" : 1,
                     "qualified_name" : "org.apache.tomcat:auto-deploy"
                 }
-            }
+            },
+            "values" : [ ]
         },
         "app-base" : {
             "name" : "App Base",
             "normalized_name" : "app-base",
             "type" : "VALUE_NODE",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "unpack-wars" : {
             "name" : "Unpack Wars",
             "normalized_name" : "unpack-wars",
             "type" : "BOOLEAN",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "auto-deploy" : {
             "name" : "Auto Deploy",
             "normalized_name" : "auto-deploy",
             "type" : "BOOLEAN",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "valve" : {
             "name" : "Valve",
@@ -555,37 +589,43 @@
                     "max" : 1,
                     "qualified_name" : "org.apache.tomcat:pattern"
                 }
-            }
+            },
+            "values" : [ ]
         },
         "class-name" : {
             "name" : "Class Name",
             "normalized_name" : "class-name",
             "type" : "VALUE_NODE",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "directory" : {
             "name" : "Directory",
             "normalized_name" : "directory",
             "type" : "VALUE_NODE",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "prefix" : {
             "name" : "Prefix",
             "normalized_name" : "prefix",
             "type" : "VALUE_NODE",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "suffix" : {
             "name" : "Suffix",
             "normalized_name" : "suffix",
             "type" : "VALUE_NODE",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "pattern" : {
             "name" : "Pattern",
             "normalized_name" : "pattern",
             "type" : "VALUE_NODE",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         }
     },
     "namespace" : "org.apache.tomcat"

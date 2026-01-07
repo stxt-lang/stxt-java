@@ -61,43 +61,50 @@
                     "max" : 1,
                     "qualified_name" : "com.example.docs:body-content"
                 }
-            }
+            },
+            "values" : [ ]
         },
         "from" : {
             "name" : "From",
             "normalized_name" : "from",
             "type" : "VALUE_NODE",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "to" : {
             "name" : "To",
             "normalized_name" : "to",
             "type" : "VALUE_NODE",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "cc" : {
             "name" : "Cc",
             "normalized_name" : "cc",
             "type" : "VALUE_NODE",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "bcc" : {
             "name" : "Bcc",
             "normalized_name" : "bcc",
             "type" : "VALUE_NODE",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "title" : {
             "name" : "Title",
             "normalized_name" : "title",
             "type" : "VALUE_NODE",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "body-content" : {
             "name" : "Body Content",
             "normalized_name" : "body-content",
             "type" : "TEXT",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         }
     },
     "namespace" : "com.example.docs"

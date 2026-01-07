@@ -37,31 +37,36 @@
                     "max" : 1,
                     "qualified_name" : "com.kocinando.receta1:preparacion"
                 }
-            }
+            },
+            "values" : [ ]
         },
         "titulo" : {
             "name" : "Título",
             "normalized_name" : "titulo",
             "type" : "VALUE_NODE",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "descripcion" : {
             "name" : "Descripción",
             "normalized_name" : "descripcion",
             "type" : "TEXT",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "ingredientes" : {
             "name" : "Ingredientes",
             "normalized_name" : "ingredientes",
             "type" : "TEXT",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         },
         "preparacion" : {
             "name" : "Preparación",
             "normalized_name" : "preparacion",
             "type" : "TEXT",
-            "children" : { }
+            "children" : { },
+            "values" : [ ]
         }
     },
     "namespace" : "com.kocinando.receta1"
