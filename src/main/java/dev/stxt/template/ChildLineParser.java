@@ -1,5 +1,7 @@
 package dev.stxt.template;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -10,7 +12,8 @@ public final class ChildLineParser {
     private static final Pattern CHILD_LINE_PATTERN = Pattern.compile(
             "^\\s*" +
             "(?:\\(\\s*(?<count>[^()\\s][^)]*?)\\s*\\)\\s*)?" +
-            "(?<type>[^()]*)" +                                
+            "(?<type>[^\\[\\]()]*)?" +
+            "(?:\\[\\s*(?<values>[^]]*?)\\s*\\]\\s*)?" +
             "\\s*$"
         );
     
@@ -19,7 +22,7 @@ public final class ChildLineParser {
 
     public static ChildLine parse(String rawLine, int lineNumber) {
     	if (rawLine.trim().isEmpty())
-    		return new ChildLine(null, null, null);
+    		return new ChildLine(null, null, null, null);
     	
         Matcher m = CHILD_LINE_PATTERN.matcher(rawLine);
         if (!m.matches()) {
@@ -27,8 +30,8 @@ public final class ChildLineParser {
         }
 
         String type = m.group("type");
-        type = type.trim();
-        if (type.isEmpty()) type = null;
+        if (type != null) type = type.trim();
+        if (type == null || type.isEmpty()) type = null;
 
         String count = m.group("count");
         Integer min = null;
@@ -60,10 +63,27 @@ public final class ChildLineParser {
                 throw new ParseException(lineNumber, "INVALID_CHILD_COUNT", "Invalid count " + count + " in line: " + rawLine);
             }
 		}
-        
-        return new ChildLine(type, min, max);
+ 
+        String[] values = null;
+        String valuesStr = m.group("values");
+        if (valuesStr != null) {
+            String[] parts = valuesStr.split(",");
+            List<String> list = new ArrayList<>();
+            for (String part: parts) {
+                part = part.trim();
+                if (!part.isEmpty()) {
+                    if (list.contains(part)) 
+                        throw new ParseException(lineNumber, "VALUE_DUPLICATED", "The values " + part + " is duplicated");
+                    list.add(part);
+                }
+            }
+            if (list.size()>0) {
+                values = new String[list.size()];
+                for (int i = 0; i<list.size(); i++)
+                    values[i] = list.get(i);
+            }            
+        }
+		
+        return new ChildLine(type, min, max, values);
     }
 }
-
-
-
