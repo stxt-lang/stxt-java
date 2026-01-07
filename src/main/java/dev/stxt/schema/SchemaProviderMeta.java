@@ -26,6 +26,7 @@ public final class SchemaProviderMeta implements SchemaProvider {
 	        + "            Child: Values\n"
 	        + "                Max: 1\n"
 	        + "    Node: Children\n"
+	        + "        Type: GROUP\n"
 	        + "        Children:\n"
 	        + "            Child: Child\n"
 	        + "                Min: 1\n"

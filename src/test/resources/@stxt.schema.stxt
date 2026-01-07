@@ -16,6 +16,7 @@ Schema (@stxt.schema): @stxt.schema
             Child: Values
                 Max: 1
     Node: Children
+       	Type: GROUP
         Children:
             Child: Child
                 Min: 1

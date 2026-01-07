@@ -1195,6 +1195,10 @@ public class SchemaParser {
 		        result.addValue(value.getValue());
 		}
 		
+		// Miramos enum
+		if (type.equals("ENUM") && (values == null || values.size()==0))
+		    throw new ParseException(n.getLine(), "VALUES_EMPTY_FOR_ENUM", "ENUM Type must include values");
+		
 		return result;
 	}
 
@@ -1308,6 +1312,7 @@ public final class SchemaProviderMeta implements SchemaProvider {
 	        + "                Min: 1\n"
 	        + "    Node: Node\n"
 	        + "        Children:\n"
+	        + "            Type: GROUP\n"
 	        + "            Child: Type\n"
 	        + "                Max: 1\n"
 	        + "            Child: Children\n"
@@ -1508,7 +1513,7 @@ public class SchemaValidator implements Validator {
 
 ```
 
-Fichero: dev/stxt/schema/type/Base64.java
+Fichero: dev/stxt/schema/type/BASE64.java
 ```
 package dev.stxt.schema.type;
 
@@ -1518,12 +1523,17 @@ import dev.stxt.schema.NodeDefinition;
 import dev.stxt.schema.Type;
 import dev.stxt.utils.StringUtils;
 
-public final class Base64 implements Type {
-	public static final Base64 INSTANCE = new Base64();
+public final class BASE64 implements Type {
+	public static final BASE64 INSTANCE = new BASE64();
 
-	private Base64() {
+	private BASE64() {
 	}
 
+    @Override
+    public String getName() {
+        return INSTANCE.getClass().getSimpleName();
+    }
+    
 	@Override
 	public void validate(NodeDefinition ndef, Node n) {
 		try {
@@ -1532,16 +1542,11 @@ public final class Base64 implements Type {
 			throw new ValidationException(n.getLine(), "INVALID_VALUE", "Node '" + n.getName() + "' Invalid Base64");
 		}
 	}
-
-	@Override
-	public String getName() {
-		return "BASE64";
-	}
 }
 
 ```
 
-Fichero: dev/stxt/schema/type/Block.java
+Fichero: dev/stxt/schema/type/BLOCK.java
 ```
 package dev.stxt.schema.type;
 
@@ -1550,17 +1555,17 @@ import dev.stxt.exceptions.ValidationException;
 import dev.stxt.schema.NodeDefinition;
 import dev.stxt.schema.Type;
 
-public final class Block implements Type {
-	public static final Block INSTANCE = new Block();
+public final class BLOCK implements Type {
+	public static final BLOCK INSTANCE = new BLOCK();
 
-	private Block() {
+	private BLOCK() {
 	}
 
-	@Override
-	public String getName() {
-		return "BLOCK";
-	}
-	
+    @Override
+    public String getName() {
+        return INSTANCE.getClass().getSimpleName();
+    }
+    
 	@Override
     public void validate(NodeDefinition ndef, Node n) {
 		if (!n.getValue().isEmpty()) {
@@ -1573,75 +1578,75 @@ public final class Block implements Type {
 
 ```
 
-Fichero: dev/stxt/schema/type/Boolean.java
+Fichero: dev/stxt/schema/type/BOOLEAN.java
 ```
 package dev.stxt.schema.type;
 
 import java.util.regex.Pattern;
 
-public final class Boolean extends RegexValue {
+public final class BOOLEAN extends RegexValue {
 	private static final Pattern P_BOOLEAN = Pattern.compile("^(true|false)$");
-	public static final Boolean INSTANCE = new Boolean();
+	public static final BOOLEAN INSTANCE = new BOOLEAN();
 
-	private Boolean() {
+	private BOOLEAN() {
 		super(P_BOOLEAN, "Invalid boolean");
 	}
-
-	@Override
-	public String getName() {
-		return "BOOLEAN";
-	}
+	
+    @Override
+    public String getName() {
+        return INSTANCE.getClass().getSimpleName();
+    }    
 }
 
 ```
 
-Fichero: dev/stxt/schema/type/Date.java
+Fichero: dev/stxt/schema/type/DATE.java
 ```
 package dev.stxt.schema.type;
 
 import java.util.regex.Pattern;
 
-public final class Date extends RegexValue {
+public final class DATE extends RegexValue {
 	private static final Pattern P_DATE = Pattern.compile("^\\d{4}-\\d{2}-\\d{2}$");
-	public static final Date INSTANCE = new Date();
+	public static final DATE INSTANCE = new DATE();
 
-	private Date() {
+	private DATE() {
 		super(P_DATE, "Invalid date");
 	}
 
 	@Override
-	public String getName() {
-		return "DATE";
-	}
+    public String getName() {
+        return INSTANCE.getClass().getSimpleName();
+    }    
 }
 
 ```
 
-Fichero: dev/stxt/schema/type/Email.java
+Fichero: dev/stxt/schema/type/EMAIL.java
 ```
 package dev.stxt.schema.type;
 
 import java.util.regex.Pattern;
 
-public final class Email extends RegexValue {
+public final class EMAIL extends RegexValue {
 	private static final String EMAIL_PATTERN = "^(?=.{1,256})(?=.{1,64}@.{1,255}$)(?=.{1,64}@.{1,63}\\..{1,63}$)[A-Za-z0-9!#$%&'*+/=?^_`{|}~.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
 	private static final Pattern P_EMAIL = Pattern.compile(EMAIL_PATTERN);
 
-	public static final Email INSTANCE = new Email();
+	public static final EMAIL INSTANCE = new EMAIL();
 
-	private Email() {
+	private EMAIL() {
 		super(P_EMAIL, "Invalid email");
 	}
-
-	@Override
-	public String getName() {
-		return "EMAIL";
-	}
+	
+    @Override
+    public String getName() {
+        return INSTANCE.getClass().getSimpleName();
+    }
 }
 
 ```
 
-Fichero: dev/stxt/schema/type/Enum.java
+Fichero: dev/stxt/schema/type/ENUM.java
 ```
 package dev.stxt.schema.type;
 
@@ -1650,12 +1655,17 @@ import dev.stxt.exceptions.ValidationException;
 import dev.stxt.schema.NodeDefinition;
 import dev.stxt.schema.Type;
 
-public final class Enum implements Type {
-	public static final Enum INSTANCE = new Enum();
+public final class ENUM implements Type {
+	public static final ENUM INSTANCE = new ENUM();
 
-	private Enum() {
+	private ENUM() {
 	}
 
+    @Override
+    public String getName() {
+        return INSTANCE.getClass().getSimpleName();
+    }
+    
 	@Override
     public void validate(NodeDefinition ndef, Node n) {
 		if (n.getTextLines().size() > 0) {
@@ -1666,16 +1676,11 @@ public final class Enum implements Type {
 		if (!ndef.getValues().contains(n.getValue()))
 		    throw new ValidationException(n.getLine(), "INVALID_VALUE", "The value '" + n.getValue() + "' not allowed. Only: " + ndef.getValues());
 	}
-
-	@Override
-	public String getName() {
-		return "ENUM";
-	}
 }
 
 ```
 
-Fichero: dev/stxt/schema/type/Group.java
+Fichero: dev/stxt/schema/type/GROUP.java
 ```
 package dev.stxt.schema.type;
 
@@ -1684,28 +1689,28 @@ import dev.stxt.exceptions.ValidationException;
 import dev.stxt.schema.NodeDefinition;
 import dev.stxt.schema.Type;
 
-public final class Group implements Type {
-	public static final Group INSTANCE = new Group();
+public final class GROUP implements Type {
+	public static final GROUP INSTANCE = new GROUP();
 
-	private Group() {
+	private GROUP() {
 	}
 
+    @Override
+    public String getName() {
+        return INSTANCE.getClass().getSimpleName();
+    }
+    
 	@Override
     public void validate(NodeDefinition ndef, Node n) {
 		if (!n.getValue().isEmpty() || n.getTextLines().size() > 0) {
 			throw new ValidationException(n.getLine(), "INVALID_VALUE", "Node '" + n.getName() + "' has to be empty");
 		}
 	}
-
-	@Override
-	public String getName() {
-		return "GROUP";
-	}
 }
 
 ```
 
-Fichero: dev/stxt/schema/type/Hexadecimal.java
+Fichero: dev/stxt/schema/type/HEXADECIMAL.java
 ```
 package dev.stxt.schema.type;
 
@@ -1715,12 +1720,17 @@ import dev.stxt.schema.NodeDefinition;
 import dev.stxt.schema.Type;
 import dev.stxt.utils.StringUtils;
 
-public final class Hexadecimal implements Type {
-	public static final Hexadecimal INSTANCE = new Hexadecimal();
+public final class HEXADECIMAL implements Type {
+	public static final HEXADECIMAL INSTANCE = new HEXADECIMAL();
 
-	private Hexadecimal() {
+	private HEXADECIMAL() {
 	}
 
+    @Override
+    public String getName() {
+        return INSTANCE.getClass().getSimpleName();
+    }
+    
 	@Override
     public void validate(NodeDefinition ndef, Node n) {
 		// Elimina espacios, tabs y saltos de línea
@@ -1760,16 +1770,11 @@ public final class Hexadecimal implements Type {
 				n.getName() + ": " + msg
 		);
 	}
-
-	@Override
-	public String getName() {
-		return "HEXADECIMAL";
-	}
 }
 
 ```
 
-Fichero: dev/stxt/schema/type/Inline.java
+Fichero: dev/stxt/schema/type/INLINE.java
 ```
 package dev.stxt.schema.type;
 
@@ -1778,79 +1783,79 @@ import dev.stxt.exceptions.ValidationException;
 import dev.stxt.schema.NodeDefinition;
 import dev.stxt.schema.Type;
 
-public final class Inline implements Type {
-	public static final Inline INSTANCE = new Inline();
+public final class INLINE implements Type {
+	public static final INLINE INSTANCE = new INLINE();
 
-	private Inline() {
+	private INLINE() {
 	}
 
-	@Override
+    @Override
+    public String getName() {
+        return INSTANCE.getClass().getSimpleName();
+    }   
+
+    @Override
     public void validate(NodeDefinition ndef, Node n) {
 		if (n.getTextLines().size() > 0) {
 			throw new ValidationException(n.getLine(), "NOT_ALLOWED_TEXT",
 					"Not allowed text in node " + n.getQualifiedName());
 		}
 	}
-
-	@Override
-	public String getName() {
-		return "INLINE";
-	}
 }
 
 ```
 
-Fichero: dev/stxt/schema/type/Integer.java
+Fichero: dev/stxt/schema/type/INTEGER.java
 ```
 package dev.stxt.schema.type;
 
 import java.util.regex.Pattern;
 
-public final class Integer extends RegexValue {
+public final class INTEGER extends RegexValue {
 	private static final Pattern P_INTEGER = Pattern.compile("^(\\-|\\+)?\\d+$");
-	public static final Integer INSTANCE = new Integer();
+	public static final INTEGER INSTANCE = new INTEGER();
 
-	private Integer() {
+	private INTEGER() {
 		super(P_INTEGER, "Invalid integer");
 	}
-
-	@Override
-	public String getName() {
-		return "INTEGER";
-	}
+	
+    @Override
+    public String getName() {
+        return INSTANCE.getClass().getSimpleName();
+    }   
 }
 
 ```
 
-Fichero: dev/stxt/schema/type/Natural.java
+Fichero: dev/stxt/schema/type/NATURAL.java
 ```
 package dev.stxt.schema.type;
 
 import java.util.regex.Pattern;
 
-public final class Natural extends RegexValue {
+public final class NATURAL extends RegexValue {
 	private static final Pattern P_NATURAL = Pattern.compile("^\\d+$");
-	public static final Natural INSTANCE = new Natural();
+	public static final NATURAL INSTANCE = new NATURAL();
 
-	private Natural() {
+	private NATURAL() {
 		super(P_NATURAL, "Invalid natural");
 	}
 
-	@Override
-	public String getName() {
-		return "NATURAL";
-	}
+    @Override
+    public String getName() {
+        return INSTANCE.getClass().getSimpleName();
+    }   
 }
 
 ```
 
-Fichero: dev/stxt/schema/type/Number.java
+Fichero: dev/stxt/schema/type/NUMBER.java
 ```
 package dev.stxt.schema.type;
 
 import java.util.regex.Pattern;
 
-public final class Number extends RegexValue {
+public final class NUMBER extends RegexValue {
     // Acepta:
     //  - 12, -12, +12
     //  - 12.34, 12., .34
@@ -1859,16 +1864,16 @@ public final class Number extends RegexValue {
             "^[+-]?(?:\\d+(?:\\.\\d*)?|\\.\\d+)(?:[eE][+-]?\\d+)?$"
     );
 
-    public static final Number INSTANCE = new Number();
+    public static final NUMBER INSTANCE = new NUMBER();
 
-    private Number() {
+    private NUMBER() {
         super(P_NUMBER, "Invalid number");
     }
 
-	@Override
-	public String getName() {
-		return "NUMBER";
-	}
+    @Override
+    public String getName() {
+        return INSTANCE.getClass().getSimpleName();
+    }   
 }
 
 ```
@@ -1909,7 +1914,7 @@ abstract class RegexValue implements Type {
 
 ```
 
-Fichero: dev/stxt/schema/type/Text.java
+Fichero: dev/stxt/schema/type/TEXT.java
 ```
 package dev.stxt.schema.type;
 
@@ -1918,12 +1923,17 @@ import dev.stxt.exceptions.ValidationException;
 import dev.stxt.schema.NodeDefinition;
 import dev.stxt.schema.Type;
 
-public final class Text implements Type {
-	public static final Text INSTANCE = new Text();
+public final class TEXT implements Type {
+	public static final TEXT INSTANCE = new TEXT();
 
-	private Text() {
+	private TEXT() {
 	}
 
+    @Override
+    public String getName() {
+        return INSTANCE.getClass().getSimpleName();
+    }   
+    
 	@Override
     public void validate(NodeDefinition ndef, Node n) {
 		if (n.getChildren().size() > 0) {
@@ -1931,41 +1941,36 @@ public final class Text implements Type {
 					"Not allowed children nodes in node " + n.getQualifiedName());
 		}
 	}
-
-	@Override
-	public String getName() {
-		return "TEXT";
-	}
 }
 
 ```
 
-Fichero: dev/stxt/schema/type/Timestamp.java
+Fichero: dev/stxt/schema/type/TIMESTAMP.java
 ```
 package dev.stxt.schema.type;
 
 import java.util.regex.Pattern;
 
-public final class Timestamp extends RegexValue {
+public final class TIMESTAMP extends RegexValue {
 	private static final String ISO_8601_PATTERN = "^\\d{4}-\\d{2}-\\d{2}" + "T" + "\\d{2}:\\d{2}(:\\d{2}(\\.\\d{3})?)?"
 			+ "(Z|[+-]\\d{2}:\\d{2})?$";
 	private static final Pattern P_TIMESTAMP = Pattern.compile(ISO_8601_PATTERN);
 
-	public static final Timestamp INSTANCE = new Timestamp();
+	public static final TIMESTAMP INSTANCE = new TIMESTAMP();
 
-	private Timestamp() {
+	private TIMESTAMP() {
 		super(P_TIMESTAMP, "Invalid timestamp");
 	}
 
-	@Override
-	public String getName() {
-		return "TIMESTAMP";
-	}
+    @Override
+    public String getName() {
+        return INSTANCE.getClass().getSimpleName();
+    }   
 }
 
 ```
 
-Fichero: dev/stxt/schema/type/Url.java
+Fichero: dev/stxt/schema/type/URL.java
 ```
 package dev.stxt.schema.type;
 
@@ -1977,12 +1982,17 @@ import dev.stxt.exceptions.ValidationException;
 import dev.stxt.schema.NodeDefinition;
 import dev.stxt.schema.Type;
 
-public final class Url implements Type {
-	public static final Url INSTANCE = new Url();
+public final class URL implements Type {
+	public static final URL INSTANCE = new URL();
 
-	private Url() {
+	private URL() {
 	}
 
+    @Override
+    public String getName() {
+        return INSTANCE.getClass().getSimpleName();
+    }
+    
 	@Override
     public void validate(NodeDefinition ndef, Node n) {
 		String url = n.getValue();
@@ -1994,11 +2004,6 @@ public final class Url implements Type {
 		} catch (URISyntaxException | IllegalArgumentException e) {
 			throw new ValidationException(n.getLine(), "INVALID_VALUE", "Invalid URL: " + url);
 		}
-	}
-
-	@Override
-	public String getName() {
-		return "URL";
 	}
 }
 
@@ -2025,44 +2030,44 @@ import java.util.HashMap;
 import java.util.Map;
 
 import dev.stxt.exceptions.STXTException;
-import dev.stxt.schema.type.Base64;
-import dev.stxt.schema.type.Block;
-import dev.stxt.schema.type.Boolean;
-import dev.stxt.schema.type.Date;
-import dev.stxt.schema.type.Email;
-import dev.stxt.schema.type.Enum;
-import dev.stxt.schema.type.Group;
-import dev.stxt.schema.type.Hexadecimal;
-import dev.stxt.schema.type.Inline;
-import dev.stxt.schema.type.Integer;
-import dev.stxt.schema.type.Natural;
-import dev.stxt.schema.type.Number;
-import dev.stxt.schema.type.Text;
-import dev.stxt.schema.type.Timestamp;
-import dev.stxt.schema.type.Url;
+import dev.stxt.schema.type.BASE64;
+import dev.stxt.schema.type.BLOCK;
+import dev.stxt.schema.type.BOOLEAN;
+import dev.stxt.schema.type.DATE;
+import dev.stxt.schema.type.EMAIL;
+import dev.stxt.schema.type.ENUM;
+import dev.stxt.schema.type.GROUP;
+import dev.stxt.schema.type.HEXADECIMAL;
+import dev.stxt.schema.type.INLINE;
+import dev.stxt.schema.type.INTEGER;
+import dev.stxt.schema.type.NATURAL;
+import dev.stxt.schema.type.NUMBER;
+import dev.stxt.schema.type.TEXT;
+import dev.stxt.schema.type.TIMESTAMP;
+import dev.stxt.schema.type.URL;
 
 class TypeRegistry {
 	private static final Map<String, Type> REGISTRY = new HashMap<>();
 
 	static {
 		// Tipos principales
-		register(Inline.INSTANCE);
-		register(Block.INSTANCE);
+		register(INLINE.INSTANCE);
+		register(BLOCK.INSTANCE);
 		
 		// Subtipos
-		register(Text.INSTANCE);
-		register(Boolean.INSTANCE);
-		register(Url.INSTANCE);
-		register(Integer.INSTANCE);
-		register(Natural.INSTANCE);
-		register(Number.INSTANCE);
-		register(Date.INSTANCE);
-		register(Timestamp.INSTANCE);
-		register(Email.INSTANCE);
-		register(Hexadecimal.INSTANCE);
-		register(Base64.INSTANCE);
-		register(Group.INSTANCE);
-		register(Enum.INSTANCE);
+		register(TEXT.INSTANCE);
+		register(BOOLEAN.INSTANCE);
+		register(URL.INSTANCE);
+		register(INTEGER.INSTANCE);
+		register(NATURAL.INSTANCE);
+		register(NUMBER.INSTANCE);
+		register(DATE.INSTANCE);
+		register(TIMESTAMP.INSTANCE);
+		register(EMAIL.INSTANCE);
+		register(HEXADECIMAL.INSTANCE);
+		register(BASE64.INSTANCE);
+		register(GROUP.INSTANCE);
+		register(ENUM.INSTANCE);
 	}
 
 	public static Type get(String nodeType) {

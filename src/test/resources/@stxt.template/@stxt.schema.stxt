@@ -7,7 +7,7 @@ Template (@stxt.template): @stxt.schema
 	        	Description: (?) @Description
 	        	Values: (?)
 	        		Value: (+)
-	        	Children: (?)
+	        	Children: (?) GROUP
 	        		Child: (+)
 	        			Min: (?) NATURAL
 	        			Max: (?) NATURAL
