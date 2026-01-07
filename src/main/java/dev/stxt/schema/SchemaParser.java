@@ -80,6 +80,10 @@ public class SchemaParser {
 		        result.addValue(value.getValue());
 		}
 		
+		// Miramos enum
+		if (type.equals("ENUM") && (values == null || values.size()==0))
+		    throw new ParseException(n.getLine(), "VALUES_EMPTY_FOR_ENUM", "ENUM Type must include values");
+		
 		return result;
 	}
 
