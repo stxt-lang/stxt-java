@@ -1,0 +1,54 @@
+{
+    "nodes" : {
+        "document" : {
+            "name" : "Document",
+            "normalized_name" : "document",
+            "type" : "VALUE_NODE",
+            "children" : {
+                "enum.test:priority" : {
+                    "normalized_name" : "priority",
+                    "name" : "Priority",
+                    "namespace" : "enum.test",
+                    "min" : null,
+                    "max" : 1,
+                    "qualified_name" : "enum.test:priority"
+                },
+                "enum.test:title" : {
+                    "normalized_name" : "title",
+                    "name" : "Title",
+                    "namespace" : "enum.test",
+                    "min" : 1,
+                    "max" : 1,
+                    "qualified_name" : "enum.test:title"
+                },
+                "enum.test:content" : {
+                    "normalized_name" : "content",
+                    "name" : "Content",
+                    "namespace" : "enum.test",
+                    "min" : 1,
+                    "max" : 1,
+                    "qualified_name" : "enum.test:content"
+                }
+            }
+        },
+        "priority" : {
+            "name" : "Priority",
+            "normalized_name" : "priority",
+            "type" : "VALUE_NODE",
+            "children" : { }
+        },
+        "title" : {
+            "name" : "Title",
+            "normalized_name" : "title",
+            "type" : "VALUE_NODE",
+            "children" : { }
+        },
+        "content" : {
+            "name" : "Content",
+            "normalized_name" : "content",
+            "type" : "TEXT",
+            "children" : { }
+        }
+    },
+    "namespace" : "enum.test"
+}

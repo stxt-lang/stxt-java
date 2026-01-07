@@ -1,0 +1,20 @@
+Schema (@stxt.schema): enum.test
+	Node: Document
+		Children:
+			Child: Priority
+				Max: 1
+			Child: Title
+				Min: 1
+				Max: 1
+			Child: Content
+				Min: 1
+				Max: 1
+	Node: Priority
+#		Type: ENUM
+#		Values:
+#			Value: high
+#			Value: medium
+#			Value: low
+	Node: Title
+	Node: Content
+		Type: TEXT

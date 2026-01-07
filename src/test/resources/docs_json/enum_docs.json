@@ -1,0 +1,43 @@
+{
+    "name" : "Document",
+    "normalized_name" : "document",
+    "namespace" : "enum.test",
+    "text_node" : false,
+    "value" : "",
+    "text_lines" : [ ],
+    "line" : 1,
+    "level" : 0,
+    "children" : [
+        {
+            "name" : "Title",
+            "normalized_name" : "title",
+            "namespace" : "enum.test",
+            "text_node" : false,
+            "value" : "Project report",
+            "text_lines" : [ ],
+            "line" : 2,
+            "level" : 1,
+            "children" : [ ],
+            "text" : "Project report",
+            "qualified_name" : "enum.test:title"
+        },
+        {
+            "name" : "Content",
+            "normalized_name" : "content",
+            "namespace" : "enum.test",
+            "text_node" : true,
+            "value" : "",
+            "text_lines" : [
+                "This is a content line.",
+                "Another a content line."
+            ],
+            "line" : 3,
+            "level" : 1,
+            "children" : [ ],
+            "text" : "This is a content line.\nAnother a content line.",
+            "qualified_name" : "enum.test:content"
+        }
+    ],
+    "text" : "",
+    "qualified_name" : "enum.test:document"
+}
