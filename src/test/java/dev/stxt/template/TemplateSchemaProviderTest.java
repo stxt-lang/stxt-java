@@ -19,7 +19,9 @@ public class TemplateSchemaProviderTest {
 		SchemaProvider schemaProvider = new TemplateSchemaProvider(new ResourcesLoaderDirectory(mainDir));
 		
 		for (File f: new File(mainDir, "@stxt.template").listFiles()) {
+		    System.out.println("Checking template: " + f.getName());
 			checkTemplate(schemaProvider, f.getName());
+            System.out.println("OK: " + f.getName());
 		}
 	}
 

@@ -5,15 +5,15 @@ import dev.stxt.exceptions.ValidationException;
 import dev.stxt.schema.NodeDefinition;
 import dev.stxt.schema.Type;
 
-public final class TextNode implements Type {
-	public static final TextNode INSTANCE = new TextNode();
+public final class Block implements Type {
+	public static final Block INSTANCE = new Block();
 
-	private TextNode() {
+	private Block() {
 	}
 
 	@Override
 	public String getName() {
-		return "TEXT_NODE";
+		return "BLOCK";
 	}
 	
 	@Override

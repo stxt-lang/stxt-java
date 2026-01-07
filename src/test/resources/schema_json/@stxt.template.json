@@ -19,7 +19,7 @@
         "structure" : {
             "name" : "Structure",
             "normalized_name" : "structure",
-            "type" : "TEXT_NODE",
+            "type" : "BLOCK",
             "children" : { },
             "values" : [ ]
         }

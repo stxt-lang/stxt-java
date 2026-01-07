@@ -13,7 +13,7 @@ import dev.stxt.schema.type.StructuralNode;
 import dev.stxt.schema.type.Hexadecimal;
 import dev.stxt.schema.type.ValueNode;
 import dev.stxt.schema.type.Integer;
-import dev.stxt.schema.type.TextNode;
+import dev.stxt.schema.type.Block;
 import dev.stxt.schema.type.Natural;
 import dev.stxt.schema.type.Number;
 import dev.stxt.schema.type.Text;
@@ -26,7 +26,7 @@ class TypeRegistry {
 	static {
 		// Tipos principales
 		register(ValueNode.INSTANCE);
-		register(TextNode.INSTANCE);
+		register(Block.INSTANCE);
 		
 		// Subtipos
 		register(Text.INSTANCE);
