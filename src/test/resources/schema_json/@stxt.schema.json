@@ -67,7 +67,7 @@
         "children" : {
             "name" : "Children",
             "normalized_name" : "children",
-            "type" : "INLINE",
+            "type" : "GROUP",
             "children" : {
                 "@stxt.schema:child" : {
                     "normalized_name" : "child",
