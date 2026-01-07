@@ -8,6 +8,7 @@ import dev.stxt.schema.type.Base64;
 import dev.stxt.schema.type.Boolean;
 import dev.stxt.schema.type.Date;
 import dev.stxt.schema.type.Email;
+import dev.stxt.schema.type.Enum;
 import dev.stxt.schema.type.StructuralNode;
 import dev.stxt.schema.type.Hexadecimal;
 import dev.stxt.schema.type.ValueNode;
@@ -40,6 +41,7 @@ class TypeRegistry {
 		register(Hexadecimal.INSTANCE);
 		register(Base64.INSTANCE);
 		register(StructuralNode.INSTANCE);
+		register(Enum.INSTANCE);
 	}
 
 	public static Type get(String nodeType) {

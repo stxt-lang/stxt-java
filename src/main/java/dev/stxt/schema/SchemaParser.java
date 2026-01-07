@@ -1,6 +1,7 @@
 package dev.stxt.schema;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import dev.stxt.NameNamespace;
@@ -61,6 +62,12 @@ public class SchemaParser {
 		if (children != null) {
 			for (Node child: children.getChildren("child"))
 				putChildToSchemaNode(result, child, namespace);
+		}
+		
+		// Miramos values
+		List<Node> values = n.getChildren("values");
+		if (values != null && values.size()>0) {
+		    if (!type.equals("ENUM")) throw new ParseException(n.getLine(), "VALUES_ONLY_SUPPORTED_BY_ENUM", "Values only supported for type ENUM, not for type " + type);
 		}
 		
 		return result;
