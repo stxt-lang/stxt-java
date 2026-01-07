@@ -5,6 +5,8 @@ Template (@stxt.template): @stxt.schema
 	        Node: (+)
 	        	Type: (?)
 	        	Description: (?) @Description
+	        	Values: (?)
+	        		Value: (+)
 	        	Children: (?)
 	        		Child: (+)
 	        			Min: (?) NATURAL

@@ -13,6 +13,8 @@ Schema (@stxt.schema): @stxt.schema
                 Max: 1
             Child: Description
                 Max: 1
+            Child: Values
+                Max: 1
     Node: Children
         Children:
             Child: Child
@@ -30,3 +32,8 @@ Schema (@stxt.schema): @stxt.schema
     Node: Max
         Type: NATURAL
     Node: Type
+    Node: Values
+    	Children:
+    		Child: Value
+    			Min: 1
+    Node: Value
