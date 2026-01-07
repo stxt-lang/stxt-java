@@ -8,6 +8,7 @@ import dev.stxt.NameNamespace;
 import dev.stxt.NameNamespaceParser;
 import dev.stxt.Node;
 import dev.stxt.exceptions.ParseException;
+import dev.stxt.exceptions.STXTException;
 import dev.stxt.exceptions.SchemaException;
 import dev.stxt.exceptions.ValidationException;
 
@@ -67,7 +68,16 @@ public class SchemaParser {
 		// Miramos values
 		List<Node> values = n.getChildren("values");
 		if (values != null && values.size()>0) {
-		    if (!type.equals("ENUM")) throw new ParseException(n.getLine(), "VALUES_ONLY_SUPPORTED_BY_ENUM", "Values only supported for type ENUM, not for type " + type);
+		    if (!type.equals("ENUM")) 
+		        throw new ParseException(n.getLine(), "VALUES_ONLY_SUPPORTED_BY_ENUM", "Values only supported for type ENUM, not for type " + type);
+		    
+		    if (values.size()>1)
+		        throw new STXTException("INVALID_SIZE_VALUES", "Unexpected number of values: " + values.size());
+		    
+		    Node valuesNode = values.get(0);
+		    values = valuesNode.getChildren("value");
+		    for (Node value: values)
+		        result.addValue(value.getValue());
 		}
 		
 		return result;
