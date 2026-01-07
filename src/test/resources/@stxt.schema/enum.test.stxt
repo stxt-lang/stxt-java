@@ -10,11 +10,11 @@ Schema (@stxt.schema): enum.test
 				Min: 1
 				Max: 1
 	Node: Priority
-#		Type: ENUM
-#		Values:
-#			Value: high
-#			Value: medium
-#			Value: low
+		Type: ENUM
+		Values:
+			Value: high
+			Value: medium
+			Value: low
 	Node: Title
 	Node: Content
 		Type: TEXT

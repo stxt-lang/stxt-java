@@ -35,9 +35,13 @@
         "priority" : {
             "name" : "Priority",
             "normalized_name" : "priority",
-            "type" : "VALUE_NODE",
+            "type" : "ENUM",
             "children" : { },
-            "values" : [ ]
+            "values" : [
+                "high",
+                "low",
+                "medium"
+            ]
         },
         "title" : {
             "name" : "Title",
