@@ -12,6 +12,7 @@ public class TemplateChildParserTest {
 		checkLine("(+) @Ingrediente", 1, null, "@Ingrediente",0);
 		checkLine("(?) @Ingrediente", null, 1, "@Ingrediente",0);
 		checkLine("(?) ENUM [high, medium, low]",null,1,"ENUM",3);
+		checkLine("(2,3) TEXT", 2, 3, "TEXT", 0);
 	}
 
 	private void checkLine(String string, Integer min, Integer max, String type, int valuesSize) {

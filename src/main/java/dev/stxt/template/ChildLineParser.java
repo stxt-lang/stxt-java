@@ -54,6 +54,15 @@ public final class ChildLineParser {
 			int expectedNum = Integer.parseInt(count.substring(0, count.length() - 1));
 			min = null;
 			max = expectedNum;
+		} else if (count.contains(",")) {
+		    try {
+	            String[] minMax = count.split(",");
+	            min = Integer.parseInt(minMax[0].trim());
+                max = Integer.parseInt(minMax[1].trim());
+		    }
+		    catch (Exception e) {
+                throw new ParseException(lineNumber, "INVALID_CHILD_COUNT", "Invalid count " + count + " in line: " + rawLine);
+		    }
 		} else {
             try {
                 int expectedNum = Integer.parseInt(count);
