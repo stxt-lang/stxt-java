@@ -1,0 +1,6 @@
+Document (enum.test):
+	Title: Project report
+	Priority: alta
+	Content >>
+		This is a content line!!
+		Another a content line!!
