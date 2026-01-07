@@ -5,6 +5,7 @@ import java.util.regex.Pattern;
 
 import dev.stxt.Node;
 import dev.stxt.exceptions.ValidationException;
+import dev.stxt.schema.NodeDefinition;
 import dev.stxt.schema.Type;
 
 /**
@@ -20,7 +21,7 @@ abstract class RegexValue implements Type {
 	}
 
 	@Override
-	public void validate(Node n) {
+    public void validate(NodeDefinition ndef, Node n) {
 		String value = n.getText();
 		Matcher m = pattern.matcher(value);
 		if (!m.matches()) {

@@ -5,6 +5,7 @@ import java.net.URISyntaxException;
 
 import dev.stxt.Node;
 import dev.stxt.exceptions.ValidationException;
+import dev.stxt.schema.NodeDefinition;
 import dev.stxt.schema.Type;
 
 public final class Url implements Type {
@@ -14,7 +15,7 @@ public final class Url implements Type {
 	}
 
 	@Override
-	public void validate(Node n) {
+    public void validate(NodeDefinition ndef, Node n) {
 		String url = n.getValue();
 		try {
 			URI uri = new URI(url);

@@ -54,7 +54,7 @@ public class SchemaValidator implements Validator {
 		if (validator == null)
 			throw new ValidationException(n.getLine(), "TYPE_NOT_SUPPORTED", "Node type not supported: " + nodeType);
 
-		validator.validate(n);
+		validator.validate(nsNode, n);
 	}
 
 	private static void validateCount(NodeDefinition nsNode, Node node) {

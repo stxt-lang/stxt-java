@@ -2,6 +2,7 @@ package dev.stxt.schema.type;
 
 import dev.stxt.Node;
 import dev.stxt.exceptions.ValidationException;
+import dev.stxt.schema.NodeDefinition;
 import dev.stxt.schema.Type;
 import dev.stxt.utils.StringUtils;
 
@@ -12,7 +13,7 @@ public final class Base64 implements Type {
 	}
 
 	@Override
-	public void validate(Node n) {
+	public void validate(NodeDefinition ndef, Node n) {
 		try {
 			java.util.Base64.getDecoder().decode(StringUtils.cleanSpaces(n.getText()));
 		} catch (Exception e) {

@@ -3,6 +3,6 @@ package dev.stxt.schema;
 import dev.stxt.Node;
 
 public interface Type {
-	void validate(Node node);
+	void validate(NodeDefinition nsNode, Node node);
 	String getName();
 }
