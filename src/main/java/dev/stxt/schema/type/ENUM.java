@@ -11,6 +11,11 @@ public final class ENUM implements Type {
 	private ENUM() {
 	}
 
+    @Override
+    public String getName() {
+        return INSTANCE.getClass().getSimpleName();
+    }
+    
 	@Override
     public void validate(NodeDefinition ndef, Node n) {
 		if (n.getTextLines().size() > 0) {
@@ -20,10 +25,5 @@ public final class ENUM implements Type {
 		
 		if (!ndef.getValues().contains(n.getValue()))
 		    throw new ValidationException(n.getLine(), "INVALID_VALUE", "The value '" + n.getValue() + "' not allowed. Only: " + ndef.getValues());
-	}
-
-	@Override
-	public String getName() {
-		return "ENUM";
 	}
 }

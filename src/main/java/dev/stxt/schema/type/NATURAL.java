@@ -10,8 +10,8 @@ public final class NATURAL extends RegexValue {
 		super(P_NATURAL, "Invalid natural");
 	}
 
-	@Override
-	public String getName() {
-		return "NATURAL";
-	}
+    @Override
+    public String getName() {
+        return INSTANCE.getClass().getSimpleName();
+    }   
 }

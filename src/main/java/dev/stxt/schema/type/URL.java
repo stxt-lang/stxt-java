@@ -14,6 +14,11 @@ public final class URL implements Type {
 	private URL() {
 	}
 
+    @Override
+    public String getName() {
+        return INSTANCE.getClass().getSimpleName();
+    }
+    
 	@Override
     public void validate(NodeDefinition ndef, Node n) {
 		String url = n.getValue();
@@ -25,10 +30,5 @@ public final class URL implements Type {
 		} catch (URISyntaxException | IllegalArgumentException e) {
 			throw new ValidationException(n.getLine(), "INVALID_VALUE", "Invalid URL: " + url);
 		}
-	}
-
-	@Override
-	public String getName() {
-		return "URL";
 	}
 }

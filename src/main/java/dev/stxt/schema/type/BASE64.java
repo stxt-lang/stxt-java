@@ -12,6 +12,11 @@ public final class BASE64 implements Type {
 	private BASE64() {
 	}
 
+    @Override
+    public String getName() {
+        return INSTANCE.getClass().getSimpleName();
+    }
+    
 	@Override
 	public void validate(NodeDefinition ndef, Node n) {
 		try {
@@ -19,10 +24,5 @@ public final class BASE64 implements Type {
 		} catch (Exception e) {
 			throw new ValidationException(n.getLine(), "INVALID_VALUE", "Node '" + n.getName() + "' Invalid Base64");
 		}
-	}
-
-	@Override
-	public String getName() {
-		return "BASE64";
 	}
 }

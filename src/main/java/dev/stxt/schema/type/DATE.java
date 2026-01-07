@@ -11,7 +11,7 @@ public final class DATE extends RegexValue {
 	}
 
 	@Override
-	public String getName() {
-		return "DATE";
-	}
+    public String getName() {
+        return INSTANCE.getClass().getSimpleName();
+    }    
 }

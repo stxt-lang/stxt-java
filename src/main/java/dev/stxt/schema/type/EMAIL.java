@@ -11,9 +11,9 @@ public final class EMAIL extends RegexValue {
 	private EMAIL() {
 		super(P_EMAIL, "Invalid email");
 	}
-
-	@Override
-	public String getName() {
-		return "EMAIL";
-	}
+	
+    @Override
+    public String getName() {
+        return INSTANCE.getClass().getSimpleName();
+    }
 }

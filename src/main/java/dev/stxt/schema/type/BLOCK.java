@@ -11,11 +11,11 @@ public final class BLOCK implements Type {
 	private BLOCK() {
 	}
 
-	@Override
-	public String getName() {
-		return "BLOCK";
-	}
-	
+    @Override
+    public String getName() {
+        return INSTANCE.getClass().getSimpleName();
+    }
+    
 	@Override
     public void validate(NodeDefinition ndef, Node n) {
 		if (!n.getValue().isEmpty()) {

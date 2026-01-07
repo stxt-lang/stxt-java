@@ -9,9 +9,9 @@ public final class BOOLEAN extends RegexValue {
 	private BOOLEAN() {
 		super(P_BOOLEAN, "Invalid boolean");
 	}
-
-	@Override
-	public String getName() {
-		return "BOOLEAN";
-	}
+	
+    @Override
+    public String getName() {
+        return INSTANCE.getClass().getSimpleName();
+    }    
 }

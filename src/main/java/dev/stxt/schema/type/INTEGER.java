@@ -9,9 +9,9 @@ public final class INTEGER extends RegexValue {
 	private INTEGER() {
 		super(P_INTEGER, "Invalid integer");
 	}
-
-	@Override
-	public String getName() {
-		return "INTEGER";
-	}
+	
+    @Override
+    public String getName() {
+        return INSTANCE.getClass().getSimpleName();
+    }   
 }

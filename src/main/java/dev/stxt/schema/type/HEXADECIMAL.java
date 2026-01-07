@@ -12,6 +12,11 @@ public final class HEXADECIMAL implements Type {
 	private HEXADECIMAL() {
 	}
 
+    @Override
+    public String getName() {
+        return INSTANCE.getClass().getSimpleName();
+    }
+    
 	@Override
     public void validate(NodeDefinition ndef, Node n) {
 		// Elimina espacios, tabs y saltos de línea
@@ -50,10 +55,5 @@ public final class HEXADECIMAL implements Type {
 				"INVALID_VALUE",
 				n.getName() + ": " + msg
 		);
-	}
-
-	@Override
-	public String getName() {
-		return "HEXADECIMAL";
 	}
 }

@@ -17,8 +17,8 @@ public final class NUMBER extends RegexValue {
         super(P_NUMBER, "Invalid number");
     }
 
-	@Override
-	public String getName() {
-		return "NUMBER";
-	}
+    @Override
+    public String getName() {
+        return INSTANCE.getClass().getSimpleName();
+    }   
 }

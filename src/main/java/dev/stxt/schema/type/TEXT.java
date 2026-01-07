@@ -14,7 +14,7 @@ public final class TEXT implements Type {
     @Override
     public String getName() {
         return INSTANCE.getClass().getSimpleName();
-    }
+    }   
     
 	@Override
     public void validate(NodeDefinition ndef, Node n) {

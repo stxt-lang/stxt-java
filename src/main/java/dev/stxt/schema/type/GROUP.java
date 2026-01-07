@@ -11,15 +11,15 @@ public final class GROUP implements Type {
 	private GROUP() {
 	}
 
+    @Override
+    public String getName() {
+        return INSTANCE.getClass().getSimpleName();
+    }
+    
 	@Override
     public void validate(NodeDefinition ndef, Node n) {
 		if (!n.getValue().isEmpty() || n.getTextLines().size() > 0) {
 			throw new ValidationException(n.getLine(), "INVALID_VALUE", "Node '" + n.getName() + "' has to be empty");
 		}
-	}
-
-	@Override
-	public String getName() {
-		return "GROUP";
 	}
 }

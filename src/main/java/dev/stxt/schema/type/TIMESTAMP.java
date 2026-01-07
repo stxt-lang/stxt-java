@@ -13,8 +13,8 @@ public final class TIMESTAMP extends RegexValue {
 		super(P_TIMESTAMP, "Invalid timestamp");
 	}
 
-	@Override
-	public String getName() {
-		return "TIMESTAMP";
-	}
+    @Override
+    public String getName() {
+        return INSTANCE.getClass().getSimpleName();
+    }   
 }
