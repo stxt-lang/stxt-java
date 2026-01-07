@@ -5,10 +5,10 @@ import dev.stxt.exceptions.ValidationException;
 import dev.stxt.schema.NodeDefinition;
 import dev.stxt.schema.Type;
 
-public final class Block implements Type {
-	public static final Block INSTANCE = new Block();
+public final class BLOCK implements Type {
+	public static final BLOCK INSTANCE = new BLOCK();
 
-	private Block() {
+	private BLOCK() {
 	}
 
 	@Override

@@ -6,10 +6,10 @@ import dev.stxt.schema.NodeDefinition;
 import dev.stxt.schema.Type;
 import dev.stxt.utils.StringUtils;
 
-public final class Base64 implements Type {
-	public static final Base64 INSTANCE = new Base64();
+public final class BASE64 implements Type {
+	public static final BASE64 INSTANCE = new BASE64();
 
-	private Base64() {
+	private BASE64() {
 	}
 
 	@Override

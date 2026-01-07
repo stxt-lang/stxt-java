@@ -6,10 +6,10 @@ import dev.stxt.schema.NodeDefinition;
 import dev.stxt.schema.Type;
 import dev.stxt.utils.StringUtils;
 
-public final class Hexadecimal implements Type {
-	public static final Hexadecimal INSTANCE = new Hexadecimal();
+public final class HEXADECIMAL implements Type {
+	public static final HEXADECIMAL INSTANCE = new HEXADECIMAL();
 
-	private Hexadecimal() {
+	private HEXADECIMAL() {
 	}
 
 	@Override

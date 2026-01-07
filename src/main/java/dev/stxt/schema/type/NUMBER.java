@@ -2,7 +2,7 @@ package dev.stxt.schema.type;
 
 import java.util.regex.Pattern;
 
-public final class Number extends RegexValue {
+public final class NUMBER extends RegexValue {
     // Acepta:
     //  - 12, -12, +12
     //  - 12.34, 12., .34
@@ -11,9 +11,9 @@ public final class Number extends RegexValue {
             "^[+-]?(?:\\d+(?:\\.\\d*)?|\\.\\d+)(?:[eE][+-]?\\d+)?$"
     );
 
-    public static final Number INSTANCE = new Number();
+    public static final NUMBER INSTANCE = new NUMBER();
 
-    private Number() {
+    private NUMBER() {
         super(P_NUMBER, "Invalid number");
     }
 

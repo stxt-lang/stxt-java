@@ -8,10 +8,10 @@ import dev.stxt.exceptions.ValidationException;
 import dev.stxt.schema.NodeDefinition;
 import dev.stxt.schema.Type;
 
-public final class Url implements Type {
-	public static final Url INSTANCE = new Url();
+public final class URL implements Type {
+	public static final URL INSTANCE = new URL();
 
-	private Url() {
+	private URL() {
 	}
 
 	@Override

@@ -5,10 +5,10 @@ import dev.stxt.exceptions.ValidationException;
 import dev.stxt.schema.NodeDefinition;
 import dev.stxt.schema.Type;
 
-public final class Group implements Type {
-	public static final Group INSTANCE = new Group();
+public final class GROUP implements Type {
+	public static final GROUP INSTANCE = new GROUP();
 
-	private Group() {
+	private GROUP() {
 	}
 
 	@Override

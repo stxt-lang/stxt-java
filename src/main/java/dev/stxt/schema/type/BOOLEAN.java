@@ -2,11 +2,11 @@ package dev.stxt.schema.type;
 
 import java.util.regex.Pattern;
 
-public final class Boolean extends RegexValue {
+public final class BOOLEAN extends RegexValue {
 	private static final Pattern P_BOOLEAN = Pattern.compile("^(true|false)$");
-	public static final Boolean INSTANCE = new Boolean();
+	public static final BOOLEAN INSTANCE = new BOOLEAN();
 
-	private Boolean() {
+	private BOOLEAN() {
 		super(P_BOOLEAN, "Invalid boolean");
 	}
 

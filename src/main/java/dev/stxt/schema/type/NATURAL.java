@@ -2,11 +2,11 @@ package dev.stxt.schema.type;
 
 import java.util.regex.Pattern;
 
-public final class Natural extends RegexValue {
+public final class NATURAL extends RegexValue {
 	private static final Pattern P_NATURAL = Pattern.compile("^\\d+$");
-	public static final Natural INSTANCE = new Natural();
+	public static final NATURAL INSTANCE = new NATURAL();
 
-	private Natural() {
+	private NATURAL() {
 		super(P_NATURAL, "Invalid natural");
 	}
 
