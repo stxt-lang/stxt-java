@@ -5,10 +5,10 @@ import dev.stxt.exceptions.ValidationException;
 import dev.stxt.schema.NodeDefinition;
 import dev.stxt.schema.Type;
 
-public final class StructuralNode implements Type {
-	public static final StructuralNode INSTANCE = new StructuralNode();
+public final class Group implements Type {
+	public static final Group INSTANCE = new Group();
 
-	private StructuralNode() {
+	private Group() {
 	}
 
 	@Override
@@ -20,6 +20,6 @@ public final class StructuralNode implements Type {
 
 	@Override
 	public String getName() {
-		return "STRUCTURAL_NODE";
+		return "GROUP";
 	}
 }

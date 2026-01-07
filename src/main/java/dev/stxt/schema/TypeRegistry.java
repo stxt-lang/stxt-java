@@ -5,15 +5,15 @@ import java.util.Map;
 
 import dev.stxt.exceptions.STXTException;
 import dev.stxt.schema.type.Base64;
+import dev.stxt.schema.type.Block;
 import dev.stxt.schema.type.Boolean;
 import dev.stxt.schema.type.Date;
 import dev.stxt.schema.type.Email;
 import dev.stxt.schema.type.Enum;
-import dev.stxt.schema.type.StructuralNode;
+import dev.stxt.schema.type.Group;
 import dev.stxt.schema.type.Hexadecimal;
 import dev.stxt.schema.type.Inline;
 import dev.stxt.schema.type.Integer;
-import dev.stxt.schema.type.Block;
 import dev.stxt.schema.type.Natural;
 import dev.stxt.schema.type.Number;
 import dev.stxt.schema.type.Text;
@@ -40,7 +40,7 @@ class TypeRegistry {
 		register(Email.INSTANCE);
 		register(Hexadecimal.INSTANCE);
 		register(Base64.INSTANCE);
-		register(StructuralNode.INSTANCE);
+		register(Group.INSTANCE);
 		register(Enum.INSTANCE);
 	}
 

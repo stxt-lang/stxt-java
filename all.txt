@@ -1541,6 +1541,38 @@ public final class Base64 implements Type {
 
 ```
 
+Fichero: dev/stxt/schema/type/Block.java
+```
+package dev.stxt.schema.type;
+
+import dev.stxt.Node;
+import dev.stxt.exceptions.ValidationException;
+import dev.stxt.schema.NodeDefinition;
+import dev.stxt.schema.Type;
+
+public final class Block implements Type {
+	public static final Block INSTANCE = new Block();
+
+	private Block() {
+	}
+
+	@Override
+	public String getName() {
+		return "BLOCK";
+	}
+	
+	@Override
+    public void validate(NodeDefinition ndef, Node n) {
+		if (!n.getValue().isEmpty()) {
+			throw new ValidationException(n.getLine(), "NOT_ALLOWED_VALUE",
+					"Not allowed inline text in node " + n.getQualifiedName());
+		}
+	}
+
+}
+
+```
+
 Fichero: dev/stxt/schema/type/Boolean.java
 ```
 package dev.stxt.schema.type;
@@ -1643,6 +1675,36 @@ public final class Enum implements Type {
 
 ```
 
+Fichero: dev/stxt/schema/type/Group.java
+```
+package dev.stxt.schema.type;
+
+import dev.stxt.Node;
+import dev.stxt.exceptions.ValidationException;
+import dev.stxt.schema.NodeDefinition;
+import dev.stxt.schema.Type;
+
+public final class Group implements Type {
+	public static final Group INSTANCE = new Group();
+
+	private Group() {
+	}
+
+	@Override
+    public void validate(NodeDefinition ndef, Node n) {
+		if (!n.getValue().isEmpty() || n.getTextLines().size() > 0) {
+			throw new ValidationException(n.getLine(), "INVALID_VALUE", "Node '" + n.getName() + "' has to be empty");
+		}
+	}
+
+	@Override
+	public String getName() {
+		return "GROUP";
+	}
+}
+
+```
+
 Fichero: dev/stxt/schema/type/Hexadecimal.java
 ```
 package dev.stxt.schema.type;
@@ -1702,6 +1764,37 @@ public final class Hexadecimal implements Type {
 	@Override
 	public String getName() {
 		return "HEXADECIMAL";
+	}
+}
+
+```
+
+Fichero: dev/stxt/schema/type/Inline.java
+```
+package dev.stxt.schema.type;
+
+import dev.stxt.Node;
+import dev.stxt.exceptions.ValidationException;
+import dev.stxt.schema.NodeDefinition;
+import dev.stxt.schema.Type;
+
+public final class Inline implements Type {
+	public static final Inline INSTANCE = new Inline();
+
+	private Inline() {
+	}
+
+	@Override
+    public void validate(NodeDefinition ndef, Node n) {
+		if (n.getTextLines().size() > 0) {
+			throw new ValidationException(n.getLine(), "NOT_ALLOWED_TEXT",
+					"Not allowed text in node " + n.getQualifiedName());
+		}
+	}
+
+	@Override
+	public String getName() {
+		return "INLINE";
 	}
 }
 
@@ -1816,36 +1909,6 @@ abstract class RegexValue implements Type {
 
 ```
 
-Fichero: dev/stxt/schema/type/StructuralNode.java
-```
-package dev.stxt.schema.type;
-
-import dev.stxt.Node;
-import dev.stxt.exceptions.ValidationException;
-import dev.stxt.schema.NodeDefinition;
-import dev.stxt.schema.Type;
-
-public final class StructuralNode implements Type {
-	public static final StructuralNode INSTANCE = new StructuralNode();
-
-	private StructuralNode() {
-	}
-
-	@Override
-    public void validate(NodeDefinition ndef, Node n) {
-		if (!n.getValue().isEmpty() || n.getTextLines().size() > 0) {
-			throw new ValidationException(n.getLine(), "INVALID_VALUE", "Node '" + n.getName() + "' has to be empty");
-		}
-	}
-
-	@Override
-	public String getName() {
-		return "STRUCTURAL_NODE";
-	}
-}
-
-```
-
 Fichero: dev/stxt/schema/type/Text.java
 ```
 package dev.stxt.schema.type;
@@ -1873,38 +1936,6 @@ public final class Text implements Type {
 	public String getName() {
 		return "TEXT";
 	}
-}
-
-```
-
-Fichero: dev/stxt/schema/type/TextNode.java
-```
-package dev.stxt.schema.type;
-
-import dev.stxt.Node;
-import dev.stxt.exceptions.ValidationException;
-import dev.stxt.schema.NodeDefinition;
-import dev.stxt.schema.Type;
-
-public final class TextNode implements Type {
-	public static final TextNode INSTANCE = new TextNode();
-
-	private TextNode() {
-	}
-
-	@Override
-	public String getName() {
-		return "BLOCK";
-	}
-	
-	@Override
-    public void validate(NodeDefinition ndef, Node n) {
-		if (!n.getValue().isEmpty()) {
-			throw new ValidationException(n.getLine(), "NOT_ALLOWED_VALUE",
-					"Not allowed inline text in node " + n.getQualifiedName());
-		}
-	}
-
 }
 
 ```
@@ -1973,37 +2004,6 @@ public final class Url implements Type {
 
 ```
 
-Fichero: dev/stxt/schema/type/ValueNode.java
-```
-package dev.stxt.schema.type;
-
-import dev.stxt.Node;
-import dev.stxt.exceptions.ValidationException;
-import dev.stxt.schema.NodeDefinition;
-import dev.stxt.schema.Type;
-
-public final class ValueNode implements Type {
-	public static final ValueNode INSTANCE = new ValueNode();
-
-	private ValueNode() {
-	}
-
-	@Override
-    public void validate(NodeDefinition ndef, Node n) {
-		if (n.getTextLines().size() > 0) {
-			throw new ValidationException(n.getLine(), "NOT_ALLOWED_TEXT",
-					"Not allowed text in node " + n.getQualifiedName());
-		}
-	}
-
-	@Override
-	public String getName() {
-		return "INLINE";
-	}
-}
-
-```
-
 Fichero: dev/stxt/schema/Type.java
 ```
 package dev.stxt.schema;
@@ -2026,15 +2026,15 @@ import java.util.Map;
 
 import dev.stxt.exceptions.STXTException;
 import dev.stxt.schema.type.Base64;
+import dev.stxt.schema.type.Block;
 import dev.stxt.schema.type.Boolean;
 import dev.stxt.schema.type.Date;
 import dev.stxt.schema.type.Email;
 import dev.stxt.schema.type.Enum;
-import dev.stxt.schema.type.StructuralNode;
+import dev.stxt.schema.type.Group;
 import dev.stxt.schema.type.Hexadecimal;
-import dev.stxt.schema.type.ValueNode;
+import dev.stxt.schema.type.Inline;
 import dev.stxt.schema.type.Integer;
-import dev.stxt.schema.type.TextNode;
 import dev.stxt.schema.type.Natural;
 import dev.stxt.schema.type.Number;
 import dev.stxt.schema.type.Text;
@@ -2046,8 +2046,8 @@ class TypeRegistry {
 
 	static {
 		// Tipos principales
-		register(ValueNode.INSTANCE);
-		register(TextNode.INSTANCE);
+		register(Inline.INSTANCE);
+		register(Block.INSTANCE);
 		
 		// Subtipos
 		register(Text.INSTANCE);
@@ -2061,7 +2061,7 @@ class TypeRegistry {
 		register(Email.INSTANCE);
 		register(Hexadecimal.INSTANCE);
 		register(Base64.INSTANCE);
-		register(StructuralNode.INSTANCE);
+		register(Group.INSTANCE);
 		register(Enum.INSTANCE);
 	}
 
