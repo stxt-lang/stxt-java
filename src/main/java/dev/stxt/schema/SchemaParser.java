@@ -101,12 +101,9 @@ public class SchemaParser {
 		Node n = node.getChild(name);
 		if (n == null) return null;
 		
-		try
-		{
+		try	{
 			return Integer.parseInt(n.getValue());
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			throw new ParseException(node.getLine(), "INVALID_INTEGER", "Integer not valid: " + n.getValue());
 		}
 	}
