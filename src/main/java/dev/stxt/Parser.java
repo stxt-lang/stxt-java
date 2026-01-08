@@ -87,12 +87,6 @@ public class Parser {
 			return;
 		}
 
-		// 2) No se permite saltar niveles de indentación por encima de la profundidad actual
-		if (currentLevel > stack.size()) {
-			throw new ParseException(lineNumber, "INDENTATION_LEVEL_NOT_VALID",
-					"Level of indent incorrect: " + currentLevel);
-		}
-
 		// 3) Cerramos nodos hasta el nivel actual (esto "finaliza" y adjunta al padre/documentos)
 		closeToLevel(state, currentLevel);
 
