@@ -6,6 +6,8 @@ import static dev.stxt.Constants.TAB_SPACES;
 import static dev.stxt.Constants.COMMENT_CHAR;
 import static dev.stxt.utils.StringUtils.rightTrim;
 
+import java.util.Deque;
+
 import dev.stxt.exceptions.ParseException;
 
 class LineIndentParser {
@@ -14,8 +16,8 @@ class LineIndentParser {
     }
     
 	public static LineIndent parseLine(String line, int numLine, ParseState parseState) {
-		int stackSize = parseState.getStack().size();
-		boolean lastNodeBlock = stackSize > 0 && parseState.getStack().peek().isTextNode();
+		Node lastNode = parseState.getStack().peek();
+		boolean lastNodeBlock = lastNode != null && lastNode.isTextNode();
 		
         // Recorremos
         int level = 0;
@@ -44,7 +46,7 @@ class LineIndentParser {
             pointer++;
 
             // Dentro del bloque de texto
-            if (lastNodeBlock && level >= stackSize) 
+            if (lastNodeBlock && level > lastNode.getLevel()) 
                 return new LineIndent(level, rightTrim(line.substring(pointer)));
         }        
         
@@ -52,7 +54,7 @@ class LineIndentParser {
         
         // Empty
         if (pointer == line.length()) {
-            if (lastNodeBlock)  return new LineIndent(stackSize, "");
+            if (lastNodeBlock)  return new LineIndent(lastNode.getLevel()+1, "");
             else                return null;
         }
 
