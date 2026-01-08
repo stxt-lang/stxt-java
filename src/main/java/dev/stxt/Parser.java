@@ -23,13 +23,13 @@ public class Parser {
 
 	public void registerValidator(Validator v) {
         if (validators == null) {
-            validators = new ArrayList<Validator>();
+            validators = new ArrayList<>();
         }
         validators.add(v);
 	}
 	public void registerObserver(Observer o) {
         if (observers == null) {
-            observers = new ArrayList<Observer>();
+            observers = new ArrayList<>();
         }
         observers.add(o);
 	}
@@ -49,28 +49,29 @@ public class Parser {
 	public List<Node> parse(String content) {
 		content = FileUtils.removeUTF8BOM(content);
 
-		ParseState state = new ParseState();
+		ArrayDeque<Node> stack = new ArrayDeque<>();
+		List<Node> documents = new ArrayList<>();
+		
 		int lineNumber = 0;
 
 		try (BufferedReader in = new BufferedReader(new StringReader(content))) {
 			String line;
 			while ((line = in.readLine()) != null) {
 				lineNumber++;
-				processLine(line, lineNumber, state);
+				processLine(line, lineNumber, stack, documents);
 			}
 		} catch (java.io.IOException e) {
 			throw new STXTIOException(e);
 		}
 
 		// Cerrar todos los nodos pendientes al EOF
-		closeToLevel(state, 0);
+		closeToLevel(stack, documents, 0);
 		
 		// Retorno documentos
-		return state.getDocuments();
+		return documents;
 	}
 
-	private void processLine(String line, int lineNumber, ParseState state) {
-        ArrayDeque<Node> stack = state.getStack();
+	private void processLine(String line, int lineNumber, ArrayDeque<Node> stack, List<Node> documents) {
         Node lastNode = !stack.isEmpty() ? stack.peek() : null;
         boolean lastNodeText    = lastNode != null && lastNode.isTextNode();
         int lastLevel           = lastNode != null ? lastNode.getLevel(): 0; 
@@ -89,7 +90,7 @@ public class Parser {
 		}
 
 		// 3) Cerramos nodos hasta el nivel actual (esto "finaliza" y adjunta al padre/documentos)
-		closeToLevel(state, currentLevel);
+		closeToLevel(stack, documents, currentLevel);
 
 		// 4) Creamos el nuevo nodo y lo dejamos "abierto" en la pila (NO lo adjuntamos aún)
 		Node parent = stack.isEmpty() ? null : stack.peek();
@@ -106,14 +107,12 @@ public class Parser {
 	 * Cierra nodos hasta que stack.size() == targetLevel.
 	 * Cada nodo cerrado pasa por: transform -> filter -> validate -> attach.
 	 */
-	private void closeToLevel(ParseState state, int targetLevel) {
-		ArrayDeque<Node> stack = state.getStack();
-
+	private void closeToLevel(ArrayDeque<Node> stack, List<Node> documents, int targetLevel) {
 		while (stack.size() > targetLevel) {
 			Node completed = stack.pop();
 			finishNode(completed);
 
-			if (stack.isEmpty())	state.addDocument(completed);
+			if (stack.isEmpty())	documents.add(completed);
 			else					stack.peek().addChild(completed);
 		}
 	}
