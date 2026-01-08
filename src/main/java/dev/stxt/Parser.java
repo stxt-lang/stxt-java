@@ -75,7 +75,7 @@ public class Parser {
         boolean lastNodeText    = lastNode != null && lastNode.isTextNode();
         int lastLevel           = lastNode != null ? lastNode.getLevel(): 0; 
 	    
-		LineIndent lineIndent = LineIndentParser.parseLine(line, lineNumber, lastNodeText, lastLevel);
+		LineIndent lineIndent = LineIndentParser.parseLine(line, lastNodeText, lastLevel, lineNumber);
 		if (lineIndent == null)
 			return;
 

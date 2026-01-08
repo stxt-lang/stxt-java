@@ -13,7 +13,7 @@ class LineIndentParser {
     private LineIndentParser() {
     }
     
-	public static LineIndent parseLine(String line, int numLine, boolean lastNodeBlock, int lastLevel) {
+	public static LineIndent parseLine(String line, boolean lastNodeBlock, int lastLevel, int numLine) {
         // Recorremos
         int level = 0;
         int spaces = 0;
