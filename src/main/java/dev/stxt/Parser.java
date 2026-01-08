@@ -70,15 +70,17 @@ public class Parser {
 	}
 
 	private void processLine(String line, int lineNumber, ParseState state) {
+        ArrayDeque<Node> stack = state.getStack();
+        Node lastNode = !stack.isEmpty() ? stack.peek() : null;
+        boolean lastNodeText    = lastNode != null && lastNode.isTextNode();
+        int lastLevel           = lastNode != null ? lastNode.getLevel(): 0; 
+	    
 		LineIndent lineIndent = LineIndentParser.parseLine(line, lineNumber, state);
 		if (lineIndent == null)
 			return;
 
 		int currentLevel = lineIndent.indentLevel;
 
-		ArrayDeque<Node> stack = state.getStack();
-		Node lastNode = !stack.isEmpty() ? stack.peek() : null;
-		boolean lastNodeText = lastNode != null && lastNode.isTextNode();
 
 		// 1) Si estamos dentro de un nodo texto, y el nivel indica que sigue siendo texto,
 		// añadimos línea de texto y no creamos nodo.
