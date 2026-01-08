@@ -75,12 +75,11 @@ public class Parser {
         boolean lastNodeText    = lastNode != null && lastNode.isTextNode();
         int lastLevel           = lastNode != null ? lastNode.getLevel(): 0; 
 	    
-		LineIndent lineIndent = LineIndentParser.parseLine(line, lineNumber, state);
+		LineIndent lineIndent = LineIndentParser.parseLine(line, lineNumber, lastNodeText, lastLevel);
 		if (lineIndent == null)
 			return;
 
 		int currentLevel = lineIndent.indentLevel;
-
 
 		// 1) Si estamos dentro de un nodo texto, y el nivel indica que sigue siendo texto,
 		// añadimos línea de texto y no creamos nodo.

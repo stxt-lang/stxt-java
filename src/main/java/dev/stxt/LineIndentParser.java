@@ -13,11 +13,7 @@ class LineIndentParser {
     private LineIndentParser() {
     }
     
-	public static LineIndent parseLine(String line, int numLine, ParseState parseState) {
-		Node lastNode         = parseState.getStack().peek();
-		boolean lastNodeBlock = lastNode != null && lastNode.isTextNode();
-		int lastLevel         = lastNode != null ? lastNode.getLevel(): 0;
-		
+	public static LineIndent parseLine(String line, int numLine, boolean lastNodeBlock, int lastLevel) {
         // Recorremos
         int level = 0;
         int spaces = 0;
