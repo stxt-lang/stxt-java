@@ -72,27 +72,28 @@ public class Parser {
 	}
 
 	private void processLine(String line, int lineNumber, ArrayDeque<Node> stack, List<Node> documents) {
-        Node lastNode = !stack.isEmpty() ? stack.peek() : null;
-        boolean lastNodeText    = lastNode != null && lastNode.isTextNode();
+        Node lastNode            = stack.isEmpty() ? null : stack.peek();
         int lastLevel           = lastNode != null ? lastNode.getLevel(): 0; 
+        boolean lastNodeText    = lastNode != null && lastNode.isTextNode();
 	    
+        // Parseamos línea
 		LineIndent lineIndent = LineIndentParser.parseLine(line, lastNodeText, lastLevel, lineNumber);
 		if (lineIndent == null)
 			return;
 
 		int currentLevel = lineIndent.indentLevel;
 
-		// 1) Si estamos dentro de un nodo texto, y el nivel indica que sigue siendo texto,
+		// Si estamos dentro de un nodo texto, y el nivel indica que sigue siendo texto,
 		// añadimos línea de texto y no creamos nodo.
 		if (lastNodeText && currentLevel > lastLevel) {
 			lastNode.addTextLine(lineIndent.lineWithoutIndent);
 			return;
 		}
 
-		// 3) Cerramos nodos hasta el nivel actual (esto "finaliza" y adjunta al padre/documentos)
+		// Cerramos nodos hasta el nivel actual (esto "finaliza" y adjunta al padre/documentos)
 		closeToLevel(stack, documents, currentLevel);
 
-		// 4) Creamos el nuevo nodo y lo dejamos "abierto" en la pila (NO lo adjuntamos aún)
+		// Creamos el nuevo nodo y lo dejamos "abierto" en la pila (NO lo adjuntamos aún)
 		Node parent = stack.isEmpty() ? null : stack.peek();
 		Node node = createNode(lineIndent, lineNumber, currentLevel, parent);
 		
