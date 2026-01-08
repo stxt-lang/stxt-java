@@ -84,7 +84,7 @@ public class Parser {
 
 		// 1) Si estamos dentro de un nodo texto, y el nivel indica que sigue siendo texto,
 		// añadimos línea de texto y no creamos nodo.
-		if (lastNodeText && currentLevel >= stack.size()) {
+		if (lastNodeText && currentLevel > lastLevel) {
 			lastNode.addTextLine(lineIndent.lineWithoutIndent);
 			return;
 		}
@@ -103,10 +103,6 @@ public class Parser {
 		stack.push(node);
 	}
 
-	/**
-	 * Cierra nodos hasta que stack.size() == targetLevel.
-	 * Cada nodo cerrado pasa por: transform -> filter -> validate -> attach.
-	 */
 	private void closeToLevel(ArrayDeque<Node> stack, List<Node> documents, int targetLevel) {
 		while (stack.size() > targetLevel) {
 			Node completed = stack.pop();
@@ -117,14 +113,6 @@ public class Parser {
 		}
 	}
 
-	/**
-	 * 
-	 * @param lineIndent
-	 * @param lineNumber
-	 * @param level
-	 * @param parent
-	 * @return
-	 */
 	private Node createNode(LineIndent lineIndent, int lineNumber, int level, Node parent) {
 		final String line = lineIndent.lineWithoutIndent;
 		String name = null;
