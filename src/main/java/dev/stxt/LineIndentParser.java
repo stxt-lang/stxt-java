@@ -14,8 +14,9 @@ class LineIndentParser {
     }
     
 	public static LineIndent parseLine(String line, int numLine, ParseState parseState) {
-		Node lastNode = parseState.getStack().peek();
+		Node lastNode         = parseState.getStack().peek();
 		boolean lastNodeBlock = lastNode != null && lastNode.isTextNode();
+		int lastLevel         = lastNode != null ? lastNode.getLevel(): 0;
 		
         // Recorremos
         int level = 0;
@@ -44,7 +45,7 @@ class LineIndentParser {
             pointer++;
 
             // Dentro del bloque de texto
-            if (lastNodeBlock && level > lastNode.getLevel()) 
+            if (lastNodeBlock && level > lastLevel) 
                 return new LineIndent(level, rightTrim(line.substring(pointer)));
         }        
         
@@ -52,13 +53,18 @@ class LineIndentParser {
         
         // Empty
         if (pointer == line.length()) {
-            if (lastNodeBlock)  return new LineIndent(lastNode.getLevel()+1, "");
+            if (lastNodeBlock)  return new LineIndent(lastLevel + 1, "");
             else                return null;
         }
 
         // Indentación no és múltiplo de 4 con espacios
         if (spaces > 0)
             throw new ParseException(numLine, "INVALID_NUMBER_SPACES", "There are " + spaces + " spaces before node");
+        
+        // Validamos level
+        if (level > (lastLevel + 1))
+            throw new ParseException(numLine, "INDENTATION_LEVEL_NOT_VALID",
+                    "Level of indent incorrect: " + level);            
 
         // 4) Caso general: devolver la línea sin la indentación consumida
         return new LineIndent(level, line.substring(pointer).trim());
