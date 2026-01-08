@@ -6,8 +6,6 @@ import static dev.stxt.Constants.TAB_SPACES;
 import static dev.stxt.Constants.COMMENT_CHAR;
 import static dev.stxt.utils.StringUtils.rightTrim;
 
-import java.util.Deque;
-
 import dev.stxt.exceptions.ParseException;
 
 class LineIndentParser {
