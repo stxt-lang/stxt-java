@@ -15,7 +15,7 @@ public class NamespaceValidator {
 	 *   etiqueta := [a-z0-9]+
 	 * ejemplos válidos: "xxx", "xxx.ddd", "zzz.ttt.ooo", "@xxx", "@xxx.ddd".
 	 */
-	private static final Pattern NAMESPACE_FORMAT = Pattern.compile("^@?[a-z0-9]+(\\.[a-z0-9]+)*$");
+	private static final Pattern NAMESPACE_FORMAT = Pattern.compile("^@?[a-z0-9]+(\\.[a-z0-9]+)+$");
 	public static void validateNamespaceFormat(String namespace, int lineNumber) {
 		if (namespace == null || namespace.isEmpty())
 			return;
