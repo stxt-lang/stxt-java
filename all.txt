@@ -174,71 +174,67 @@ package dev.stxt;
 import static dev.stxt.Constants.SPACE;
 import static dev.stxt.Constants.TAB;
 import static dev.stxt.Constants.TAB_SPACES;
+import static dev.stxt.Constants.COMMENT_CHAR;
 import static dev.stxt.utils.StringUtils.rightTrim;
 
 import dev.stxt.exceptions.ParseException;
 
 class LineIndentParser {
-	// -------------------------------------------------
-	// parseLine
-	// -------------------------------------------------
 
-	public static LineIndent parseLine(String line, int numLine, ParseState parseState) {
-		int stackSize = parseState.getStack().size();
-		boolean lastNodeText = stackSize > 0 && parseState.getStack().peek().isTextNode();
+    private LineIndentParser() {
+    }
+    
+	public static LineIndent parseLine(String line, boolean lastNodeBlock, int lastLevel, int numLine) {
+        // Recorremos
+        int level = 0;
+        int spaces = 0;
+        int pointer = 0;
 
-		// Empty line
-		if (line.trim().isEmpty()) {
-			if (lastNodeText)
-				return new LineIndent(stackSize, "");
-			else
-				return null;
-		}
+        while (pointer < line.length()) {
+            char c = line.charAt(pointer);
 
-		// Recorremos
-		int level = 0;
-		int spaces = 0;
-		int pointer = 0;
+            if (c == SPACE) {
+                spaces++;
+                if (spaces == TAB_SPACES) {
+                    level++;
+                    spaces = 0;
+                }
+            } else if (c == TAB) {
+                level++;
+                spaces = 0;
+            } else if (c == COMMENT_CHAR) {
+                return null;
+            } else {
+                // Primer carácter no espacio/tab/comentario => fin de indentación
+                break;
+            }
 
-		while (pointer < line.length()) {
-			char c = line.charAt(pointer);
+            pointer++;
 
-			if (c == SPACE) {
-				spaces++;
-				if (spaces == TAB_SPACES) {
-					level++;
-					spaces = 0;
-				}
-			} else if (c == TAB) {
-				level++;
-				spaces = 0;
-			} else {
-				// Primer carácter no espacio/tab → fin de indentación
-				break;
-			}
+            // Dentro del bloque de texto
+            if (lastNodeBlock && level > lastLevel) 
+                return new LineIndent(level, rightTrim(line.substring(pointer)));
+        }        
+        
+        // En este punto ya estamos fuera de bloque de texto (si existía)
+        
+        // Empty
+        if (pointer == line.length()) {
+            if (lastNodeBlock)  return new LineIndent(lastLevel + 1, "");
+            else                return null;
+        }
 
-			pointer++;
+        // Indentación no és múltiplo de 4 con espacios
+        if (spaces > 0)
+            throw new ParseException(numLine, "INVALID_NUMBER_SPACES", "There are " + spaces + " spaces before node");
+        
+        // Validamos level
+        if (level > (lastLevel + 1))
+            throw new ParseException(numLine, "INDENTATION_LEVEL_NOT_VALID",
+                    "Level of indent incorrect: " + level);            
 
-			// Dentro de multilínea: no consumir más niveles de los del nodo
-			if (lastNodeText && level >= stackSize) {
-				return new LineIndent(level, rightTrim(line.substring(pointer)));
-			}
-		}
-
-		// Comment
-		if (isCommentLine(line))
-			return null;
-
-		// Strange indentation
-		if (spaces > 0)
-			throw new ParseException(numLine, "INVALID_NUMBER_SPACES", "There are " + spaces + " spaces before node");
-
-		// 4) Caso general: devolver la línea sin la indentación consumida
-		return new LineIndent(level, line.substring(pointer).trim());
-	}
-
-	private static boolean isCommentLine(String line) {
-		return line.trim().startsWith("#");
+        // 4) Caso general: devolver la línea sin la indentación consumida
+        return new LineIndent(level, line.substring(pointer).trim());
 	}
 }
 
@@ -592,27 +588,22 @@ public class Parser {
 	}
 
 	private void processLine(String line, int lineNumber, ParseState state) {
-		LineIndent lineIndent = LineIndentParser.parseLine(line, lineNumber, state);
+        ArrayDeque<Node> stack = state.getStack();
+        Node lastNode = !stack.isEmpty() ? stack.peek() : null;
+        boolean lastNodeText    = lastNode != null && lastNode.isTextNode();
+        int lastLevel           = lastNode != null ? lastNode.getLevel(): 0; 
+	    
+		LineIndent lineIndent = LineIndentParser.parseLine(line, lastNodeText, lastLevel, lineNumber);
 		if (lineIndent == null)
 			return;
 
 		int currentLevel = lineIndent.indentLevel;
-
-		ArrayDeque<Node> stack = state.getStack();
-		Node lastNode = !stack.isEmpty() ? stack.peek() : null;
-		boolean lastNodeText = lastNode != null && lastNode.isTextNode();
 
 		// 1) Si estamos dentro de un nodo texto, y el nivel indica que sigue siendo texto,
 		// añadimos línea de texto y no creamos nodo.
 		if (lastNodeText && currentLevel >= stack.size()) {
 			lastNode.addTextLine(lineIndent.lineWithoutIndent);
 			return;
-		}
-
-		// 2) No se permite saltar niveles de indentación por encima de la profundidad actual
-		if (currentLevel > stack.size()) {
-			throw new ParseException(lineNumber, "INDENTATION_LEVEL_NOT_VALID",
-					"Level of indent incorrect: " + currentLevel);
 		}
 
 		// 3) Cerramos nodos hasta el nivel actual (esto "finaliza" y adjunta al padre/documentos)
@@ -1312,7 +1303,6 @@ public final class SchemaProviderMeta implements SchemaProvider {
 	        + "                Min: 1\n"
 	        + "    Node: Node\n"
 	        + "        Children:\n"
-	        + "            Type: GROUP\n"
 	        + "            Child: Type\n"
 	        + "                Max: 1\n"
 	        + "            Child: Children\n"
@@ -1322,6 +1312,7 @@ public final class SchemaProviderMeta implements SchemaProvider {
 	        + "            Child: Values\n"
 	        + "                Max: 1\n"
 	        + "    Node: Children\n"
+	        + "        Type: GROUP\n"
 	        + "        Children:\n"
 	        + "            Child: Child\n"
 	        + "                Min: 1\n"
@@ -2194,6 +2185,15 @@ public final class ChildLineParser {
 			int expectedNum = Integer.parseInt(count.substring(0, count.length() - 1));
 			min = null;
 			max = expectedNum;
+		} else if (count.contains(",")) {
+		    try {
+	            String[] minMax = count.split(",");
+	            min = Integer.parseInt(minMax[0].trim());
+                max = Integer.parseInt(minMax[1].trim());
+		    }
+		    catch (Exception e) {
+                throw new ParseException(lineNumber, "INVALID_CHILD_COUNT", "Invalid count " + count + " in line: " + rawLine);
+		    }
 		} else {
             try {
                 int expectedNum = Integer.parseInt(count);
