@@ -1,10 +1,9 @@
 package dev.stxt;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 import org.junit.jupiter.api.Test;
-
-import dev.stxt.exceptions.ParseException;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class NameNamespaceParserTest
 {
@@ -18,8 +17,10 @@ class NameNamespaceParserTest
     }
 
     private void checkValid(String nameNamespace, String name, String namespace) {
+    	System.out.println("Checking: " + nameNamespace);
     	NameNamespace nn = NameNamespaceParser.parse(nameNamespace, "", 0, "full line");
 		assertEquals(name, nn.getName());
 		assertEquals(namespace, nn.getNamespace());
+		System.out.println("OK");
 	}
 }
