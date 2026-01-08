@@ -1,0 +1,26 @@
+# -----------------
+# Receta macarrones
+# -----------------
+
+Receta (com.kocinando.receta):
+	Nombre Receta: Una receta
+	Descripción: Esta es una receta de ejemplo
+	Pasos:
+			Paso: 1
+		Descripción >>
+			Esta receta te guiará a través de los pasos necesarios para preparar una deliciosa pizza de jamón en casa.
+			Sigue las instrucciones cuidadosamente para obtener los mejores resultados.
+    Dificultad: media
+    Ingredientes:
+		Ingrediente:
+			Cantidad: 1
+			Unidades: dl
+			Nombre: Agua
+	Documento (com.dokumentando.doc):
+		Título: Primer documento simple
+		Description >>
+			Este es el
+			primer documento
+			simple. Tiene varias líneas
+		Tipo Documento: informe
+	
