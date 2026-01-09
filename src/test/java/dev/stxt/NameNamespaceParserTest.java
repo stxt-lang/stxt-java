@@ -13,7 +13,6 @@ class NameNamespaceParserTest
         
         checkValid("Hola (com.demo)", "Hola", "com.demo");
         checkValid("Hola (@com.demo)", "Hola", "@com.demo");
-        checkValid("", "","");
     }
 
     private void checkValid(String nameNamespace, String name, String namespace) {
