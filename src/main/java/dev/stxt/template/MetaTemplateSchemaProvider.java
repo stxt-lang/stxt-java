@@ -11,11 +11,13 @@ import dev.stxt.schema.SchemaProvider;
 
 public class MetaTemplateSchemaProvider implements SchemaProvider {
 
-	private static final String META_TEXT = "Template (@stxt.template): @stxt.template\n"
-			+ "	Structure >>\n"
-			+ "		Template:\n"
-			+ "			Structure: (1) BLOCK";
-	
+	private static final String META_TEXT = """
+			Template (@stxt.template): @stxt.template
+				Structure >>
+					Template:
+						Structure: (1) BLOCK
+			""";
+			
 	private final Schema meta;
 	
 	public MetaTemplateSchemaProvider() {
@@ -39,4 +41,8 @@ public class MetaTemplateSchemaProvider implements SchemaProvider {
 
 	    return meta;
 	}	
+	
+	public static void main(String[] args) {
+		System.out.println(META_TEXT);
+	}
 }
