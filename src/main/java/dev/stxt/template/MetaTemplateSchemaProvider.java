@@ -12,11 +12,11 @@ import dev.stxt.schema.SchemaProvider;
 public class MetaTemplateSchemaProvider implements SchemaProvider {
 
 	private static final String META_TEXT = """
-			Template (@stxt.template): @stxt.template
-				Structure >>
-					Template:
-						Structure: (1) BLOCK
-			""";
+Template (@stxt.template): @stxt.template
+	Structure >>
+		Template:
+			Structure: (1) BLOCK
+""";
 			
 	private final Schema meta;
 	
@@ -40,9 +40,5 @@ public class MetaTemplateSchemaProvider implements SchemaProvider {
 	        throw new SchemaException("META_SCHEMA_NOT_AVAILABLE", "Meta schema not available");
 
 	    return meta;
-	}	
-	
-	public static void main(String[] args) {
-		System.out.println(META_TEXT);
 	}
 }
