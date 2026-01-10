@@ -8,46 +8,48 @@ import dev.stxt.exceptions.ResourceNotFoundException;
 import dev.stxt.exceptions.SchemaException;
 
 public final class SchemaProviderMeta implements SchemaProvider {
-	private static final String META_TEXT = "Schema (@stxt.schema): @stxt.schema\n"
-	        + "    Node: Schema\n"
-	        + "        Children:\n"
-	        + "            Child: Description\n"
-	        + "                Max: 1\n"
-	        + "            Child: Node\n"
-	        + "                Min: 1\n"
-	        + "    Node: Node\n"
-	        + "        Children:\n"
-	        + "            Child: Type\n"
-	        + "                Max: 1\n"
-	        + "            Child: Children\n"
-	        + "                Max: 1\n"
-	        + "            Child: Description\n"
-	        + "                Max: 1\n"
-	        + "            Child: Values\n"
-	        + "                Max: 1\n"
-	        + "    Node: Children\n"
-	        + "        Type: GROUP\n"
-	        + "        Children:\n"
-	        + "            Child: Child\n"
-	        + "                Min: 1\n"
-	        + "    Node: Description\n"
-	        + "        Type: TEXT\n"
-	        + "    Node: Child\n"
-	        + "        Children:\n"
-	        + "            Child: Min\n"
-	        + "                Max: 1\n"
-	        + "            Child: Max\n"
-	        + "                Max: 1\n"
-	        + "    Node: Min\n"
-	        + "        Type: NATURAL\n"
-	        + "    Node: Max\n"
-	        + "        Type: NATURAL\n"
-	        + "    Node: Type\n"
-	        + "    Node: Values\n"
-	        + "        Children:\n"
-	        + "            Child: Value\n"
-	        + "                Min: 1\n"
-	        + "    Node: Value";
+	private static final String META_TEXT = """
+			Schema (@stxt.schema): @stxt.schema
+			    Node: Schema
+			        Children:
+			            Child: Description
+			                Max: 1
+			            Child: Node
+			                Min: 1
+			    Node: Node
+			        Children:
+			            Child: Type
+			                Max: 1
+			            Child: Children
+			                Max: 1
+			            Child: Description
+			                Max: 1
+			            Child: Values
+			                Max: 1
+			    Node: Children
+			       	Type: GROUP
+			        Children:
+			            Child: Child
+			                Min: 1
+			    Node: Description
+			        Type: TEXT
+			    Node: Child
+			        Children:
+			            Child: Min
+			                Max: 1
+			            Child: Max
+			                Max: 1
+			    Node: Min
+			        Type: NATURAL
+			    Node: Max
+			        Type: NATURAL
+			    Node: Type
+			    Node: Values
+			    	Children:
+			    		Child: Value
+			    			Min: 1
+			    Node: Value			
+			""";
 	
 	private final Schema meta;
 
