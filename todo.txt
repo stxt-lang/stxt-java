@@ -1,7 +1,4 @@
-* STXT,JSON,etc. en tipos básicos permitidos
-* STXT como tipo para Structure
 * ENUM Para tipos
-
 * T2: Transformation To xxx
 	Directa a xml
 	Directa a yaml
