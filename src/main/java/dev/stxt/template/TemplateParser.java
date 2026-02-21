@@ -46,6 +46,9 @@ public class TemplateParser {
 		// Miramos datos
 		ChildLine cl = ChildLineParser.parse(node.getValue(), node.getLine() + offset);
 		
+		if (namespace.isEmpty())
+			throw new ParseException(node.getLine() + offset, "EMPTY_NAMESPACE", "Not allowed empty namespaces");
+		
 		if (!namespace.equals(schema.getNamespace())) { 
 			// Validamos type vacío
 			String type = cl.getType();
