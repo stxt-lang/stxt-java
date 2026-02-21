@@ -1,4 +1,4 @@
-package dev.stxt;
+package dev.stxt.core;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,10 +13,12 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import dev.stxt.Node;
+import dev.stxt.Parser;
 import dev.stxt.exceptions.ParseException;
+import test.FileChecks;
 import test.FileTestLoction;
 import test.JSON;
-import test.FileChecks;
 
 public class ParserAllErrorsTest {
 	public static void main(String[] args) throws IOException, ParseException {
