@@ -1,6 +1,6 @@
 Template (@stxt.template): dev.stxt.check
 	Structure >>
-		Type List:
+		Type List (dev.stxt.check):
 			text: (+) TEXT
 			natural: (+) NATURAL
 			integer: (+) INTEGER

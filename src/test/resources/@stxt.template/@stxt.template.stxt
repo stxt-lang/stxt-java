@@ -1,4 +1,4 @@
 Template (@stxt.template): @stxt.template
 	Structure >>
-		Template:
+		Template (@stxt.template):
 			Structure: (1) BLOCK

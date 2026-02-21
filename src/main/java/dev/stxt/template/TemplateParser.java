@@ -46,8 +46,7 @@ public class TemplateParser {
 		// Miramos datos
 		ChildLine cl = ChildLineParser.parse(node.getValue(), node.getLine() + offset);
 		
-		if (namespace.isEmpty()) namespace = schema.getNamespace(); // Es del template
-		else {
+		if (!namespace.equals(schema.getNamespace())) { 
 			// Validamos type vacío
 			String type = cl.getType();
 			if (type != null && !type.trim().isEmpty()) 
@@ -87,7 +86,6 @@ public class TemplateParser {
 			
 			String childName = child.getName();
 			String childNamespace = child.getNamespace();
-			if (childNamespace.isEmpty()) childNamespace = schema.getNamespace();
 			
 			ChildDefinition schChild = new ChildDefinition(childName, childNamespace, cl.getMin(), cl.getMax(), child.getLine() + offset);
 			schemaNode.addChildDefinition(schChild);
