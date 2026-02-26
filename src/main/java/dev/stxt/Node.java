@@ -62,7 +62,7 @@ public class Node {
 		return Collections.unmodifiableList(children);
 	}
 	
-	void addChild(Node node) {
+	public void addChild(Node node) {
 		children.add(node);
 	}
 
