@@ -1,7 +1,9 @@
-package dev.stxt;
+package dev.stxt.core;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import dev.stxt.NameNamespace;
+import dev.stxt.NameNamespaceParser;
 
 import org.junit.jupiter.api.Test;
 

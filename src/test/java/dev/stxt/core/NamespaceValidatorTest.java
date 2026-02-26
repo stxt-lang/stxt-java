@@ -1,10 +1,12 @@
-package dev.stxt;
+package dev.stxt.core;
+
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import org.junit.jupiter.api.Test;
 
+import dev.stxt.NamespaceValidator;
 import dev.stxt.exceptions.ParseException;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class NamespaceValidatorTest
 {

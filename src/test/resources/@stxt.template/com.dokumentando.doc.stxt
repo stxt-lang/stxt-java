@@ -1,6 +1,6 @@
 Template (@stxt.template): com.dokumentando.doc
 	Structure >>
-		Documento:
+		Documento (com.dokumentando.doc):
 			Título: (1)
 			Secciones: (*)
 				Sección: (+) TEXT

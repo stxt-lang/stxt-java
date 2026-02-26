@@ -1,6 +1,6 @@
 Template (@stxt.template): @stxt.schema
 	Structure >>
-	    Schema:
+	    Schema (@stxt.schema):
 	    	Description: (?) TEXT
 	        Node: (+)
 	        	Type: (?)

@@ -1,6 +1,6 @@
 Template (@stxt.template): com.docs
 	Structure >>
-		Email:
+		Email (com.docs):
 			From:
 			To:
 			Cc:
@@ -8,5 +8,5 @@ Template (@stxt.template): com.docs
 			Title: (?)
 			Body    Content: (1) TEXT
 			Metadata (com.google): (?)
-		Demo:
+		Demo (com.docs):
 			Body Content: (?) @Body content

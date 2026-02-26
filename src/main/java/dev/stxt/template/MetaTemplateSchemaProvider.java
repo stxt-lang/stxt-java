@@ -14,7 +14,8 @@ public class MetaTemplateSchemaProvider implements SchemaProvider {
 	private static final String META_TEXT = """
 Template (@stxt.template): @stxt.template
 	Structure >>
-		Template:
+		Template (@stxt.template):
+			Description: (?) TEXT
 			Structure: (1) BLOCK
 """;
 			

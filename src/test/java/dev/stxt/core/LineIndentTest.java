@@ -1,4 +1,4 @@
-package dev.stxt;
+package dev.stxt.core;
 
 import static org.junit.jupiter.api.Assertions.assertNull;
 

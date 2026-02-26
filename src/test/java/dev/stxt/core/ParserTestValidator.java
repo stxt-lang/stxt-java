@@ -1,4 +1,4 @@
-package dev.stxt;
+package dev.stxt.core;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -8,6 +8,8 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import dev.stxt.Node;
+import dev.stxt.Parser;
 import dev.stxt.exceptions.ParseException;
 import test.FileTestLoction;
 import test.JSON;

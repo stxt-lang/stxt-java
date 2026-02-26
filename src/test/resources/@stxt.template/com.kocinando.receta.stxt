@@ -1,6 +1,6 @@
 Template (@stxt.template): com.kocinando.receta
 	Structure >>
-		Receta:
+		Receta (com.kocinando.receta):
 			Nombre Receta: (1)
 			Descripción: (?) TEXT
 			Ingredientes: (1)
