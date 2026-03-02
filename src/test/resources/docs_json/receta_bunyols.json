@@ -18,8 +18,8 @@
             "line" : 3,
             "level" : 1,
             "children" : [ ],
-            "text" : "Buñuelos de Girona",
-            "qualified_name" : "com.kocinando.receta1:titulo"
+            "qualified_name" : "com.kocinando.receta1:titulo",
+            "text" : "Buñuelos de Girona"
         },
         {
             "name" : "Descripción",
@@ -37,8 +37,8 @@
             "line" : 5,
             "level" : 1,
             "children" : [ ],
-            "text" : "Esta es una receta para hacer buñuelos en la época de Cuaresma. Son conocidos\ntambién como Buñuelos del Empordà. Normalmente son servidos\ncomo postre, y hay cantidad suficiente hasta para 12 personas. Es una receta\nfácil de hacer.\n",
-            "qualified_name" : "com.kocinando.receta1:descripcion"
+            "qualified_name" : "com.kocinando.receta1:descripcion",
+            "text" : "Esta es una receta para hacer buñuelos en la época de Cuaresma. Son conocidos\ntambién como Buñuelos del Empordà. Normalmente son servidos\ncomo postre, y hay cantidad suficiente hasta para 12 personas. Es una receta\nfácil de hacer.\n"
         },
         {
             "name" : "Ingredientes",
@@ -63,8 +63,8 @@
             "line" : 11,
             "level" : 1,
             "children" : [ ],
-            "text" : "1Kg harina\n8 huevos\nla ralladura de 1-2 limones\n150 gramos de azúcar\n100 gramos mantequilla\n1/4 litro de leche\n1 vaso de grassolis (mezcla de moscatel, anís, cointreau)\n75 gramos de levadura (de panadería)\nmatalauva (anís)\nuna pizca de sal\nun poquito de canela molida\n",
-            "qualified_name" : "com.kocinando.receta1:ingredientes"
+            "qualified_name" : "com.kocinando.receta1:ingredientes",
+            "text" : "1Kg harina\n8 huevos\nla ralladura de 1-2 limones\n150 gramos de azúcar\n100 gramos mantequilla\n1/4 litro de leche\n1 vaso de grassolis (mezcla de moscatel, anís, cointreau)\n75 gramos de levadura (de panadería)\nmatalauva (anís)\nuna pizca de sal\nun poquito de canela molida\n"
         },
         {
             "name" : "Preparación",
@@ -86,10 +86,10 @@
             "line" : 24,
             "level" : 1,
             "children" : [ ],
-            "text" : "En un recipiente pondremos la harina y el resto de ingredientes.\nLa mantequilla se funde con un poco de leche, al igual que la levadura.\nLa leche para deshacer la levadura sólo tiene que estar ligeramente templada,\nya que de lo contrario perdería seguramente su efecto.\nSe mezcla todo muy bien, y se deja reposar tapado por espacio de 3-5 horas\n(hasta que sube la masa).\nCon una cuchara o cucharadita según se quieran de tamaño, se fríen en abundante\naceite hasta coger color. Conforme se van sacando se espolvorean con un poco\nde la mezcla del grassolis, y se pasan por azúcar.",
-            "qualified_name" : "com.kocinando.receta1:preparacion"
+            "qualified_name" : "com.kocinando.receta1:preparacion",
+            "text" : "En un recipiente pondremos la harina y el resto de ingredientes.\nLa mantequilla se funde con un poco de leche, al igual que la levadura.\nLa leche para deshacer la levadura sólo tiene que estar ligeramente templada,\nya que de lo contrario perdería seguramente su efecto.\nSe mezcla todo muy bien, y se deja reposar tapado por espacio de 3-5 horas\n(hasta que sube la masa).\nCon una cuchara o cucharadita según se quieran de tamaño, se fríen en abundante\naceite hasta coger color. Conforme se van sacando se espolvorean con un poco\nde la mezcla del grassolis, y se pasan por azúcar."
         }
     ],
-    "text" : "",
-    "qualified_name" : "com.kocinando.receta1:receta"
+    "qualified_name" : "com.kocinando.receta1:receta",
+    "text" : ""
 }

@@ -42,12 +42,14 @@ public class TemplateParser {
 		// Obtenemos nombre qualificado
 		String namespace = node.getNamespace();
 		String name = node.getName();
-		
+
+		// Si está vacío será el del schema
+        if (namespace.isEmpty()) {
+            namespace = schema.getNamespace();
+        }           
+        
 		// Miramos datos
 		ChildLine cl = ChildLineParser.parse(node.getValue(), node.getLine() + offset);
-		
-		if (namespace.isEmpty())
-			throw new ParseException(node.getLine() + offset, "EMPTY_NAMESPACE", "Not allowed empty namespaces");
 		
 		if (!namespace.equals(schema.getNamespace())) { 
 			// Validamos type vacío

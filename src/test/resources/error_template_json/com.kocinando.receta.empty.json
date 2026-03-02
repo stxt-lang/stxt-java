@@ -1,4 +1,4 @@
 {
-    "code" : "EMPTY_NAMESPACE",
-    "line" : 3
+    "code" : "NODE_DEFINED_MULTIPLE_TIMES",
+    "line" : 13
 }
