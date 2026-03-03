@@ -91,6 +91,9 @@ public class TemplateParser {
 			
 			String childName = child.getName();
 			String childNamespace = child.getNamespace();
+	        if (childNamespace.isEmpty()) {
+	            childNamespace = schema.getNamespace();
+	        }           
 			
 			ChildDefinition schChild = new ChildDefinition(childName, childNamespace, cl.getMin(), cl.getMax(), child.getLine() + offset);
 			schemaNode.addChildDefinition(schChild);
