@@ -159,8 +159,6 @@ public class Parser {
 	}
 	
 	private void finishNode(Node node) {
-		node.freeze();
-		
 	    if (observers != null)
 	        for (Observer o : observers)
 	            o.onFinish(node);
