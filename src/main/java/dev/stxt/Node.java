@@ -18,8 +18,15 @@ public class Node {
 	private final int line;
 	private final int level;
 	private List<Node> children = new ArrayList<>();
-	private boolean isFrozen = false;
 
+    public Node(String name, boolean textNode, String value) {
+        this(-1,-1,name,null,textNode,value);
+    }
+    
+	public Node(String name, String namespace, boolean textNode, String value) {
+	    this(-1,-1,name,namespace,textNode,value);
+	}
+	
 	public Node(int line, int level, String name, String namespace, boolean textNode, String value) {
 		this.level = level;
 		this.line = line;
@@ -93,16 +100,6 @@ public class Node {
 			return value;
 	}
 
-	public void freeze()
-	{
-		if (isFrozen) return;
-		for (Node n: children) n.freeze();
-		this.children = Collections.unmodifiableList(this.children);
-		this.textLines = Collections.unmodifiableList(this.textLines);		
-		
-		isFrozen = true;
-	}
-	
 	public Node getChild(String cname) {
 		List<Node> result = getChildren(cname);
 		if (result.size() > 1)

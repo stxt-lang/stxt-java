@@ -14,10 +14,6 @@ import dev.stxt.processors.Validator;
 import dev.stxt.utils.FileUtils;
 
 public class Parser {
-	/** 
-	 *  Configuración de procesadores
-	 */
-	
 	private List<Validator> validators;
 	private List<Observer> observers;
 
@@ -34,10 +30,6 @@ public class Parser {
         observers.add(o);
 	}
 
-	/** 
-	 *  Parseo principal del texto
-	 */
-	
 	public List<Node> parseFile(File srcFile) {
 		try {
 			return parse(FileUtils.readFileContent(srcFile));
@@ -167,8 +159,6 @@ public class Parser {
 	}
 	
 	private void finishNode(Node node) {
-		node.freeze();
-		
 	    if (observers != null)
 	        for (Observer o : observers)
 	            o.onFinish(node);
