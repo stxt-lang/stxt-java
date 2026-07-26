@@ -7,14 +7,21 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 Parser de referencia en Java del lenguaje **STXT (Semantic Text)**: un formato textual jerárquico
 y semántico, "Human-First", trivial de parsear y diseñado con la seguridad del parseo como prioridad
 (inmune a expansión de entidades, ejecución de código, inyección en bloques literales, ataques
-homográficos). La especificación normativa vive en [spec/](spec/), escrita en el propio STXT:
+homográficos).
 
-- [spec/stxt-core-ref.stxt](spec/stxt-core-ref.stxt) — sintaxis base del lenguaje (la fuente de verdad).
-- [spec/stxt-schema-ref.stxt](spec/stxt-schema-ref.stxt) — capa de validación semántica vía `@stxt.schema`.
-- [spec/stxt-template-ref.stxt](spec/stxt-template-ref.stxt) — `@stxt.template`, azúcar sintáctico equivalente a un schema.
+La especificación normativa **no vive en este repositorio**: está en el proyecto hermano
+`stxt-web` (`../stxt-web` respecto a este directorio), escrita en el propio STXT. La versión
+canónica es la española en `es/`, con espejo en inglés en `en/`:
+
+- `../stxt-web/es/stxt-core-ref.stxt` — sintaxis base del lenguaje (la fuente de verdad).
+- `../stxt-web/es/stxt-schema-ref.stxt` — capa de validación semántica vía `@stxt.schema`.
+- `../stxt-web/es/stxt-template-ref.stxt` — `@stxt.template`, azúcar sintáctico equivalente a un schema.
 
 Al tocar comportamiento del parser o de la validación, **contrasta siempre con la spec**: usa
 palabras clave RFC 2119 (DEBE / NO DEBE / DEBERÍA / PUEDE) y casos normativos numerados por sección.
+Trata `../stxt-web` como **solo lectura** desde este proyecto: se puede consultar libremente, pero
+los cambios en la spec se hacen en aquel repositorio, no aquí. Si el parser y la spec discrepan,
+la spec manda; ajusta el parser (o pregunta) antes de cambiar la spec.
 
 ## Comandos
 
@@ -116,6 +123,10 @@ Los fixtures en `src/test/resources/` siguen una convención por carpetas; los t
 - `docs/` — documentos STXT válidos; `docs_json/` el árbol esperado en JSON; `docs_txt/` el render texto esperado.
 - `error_docs/`, `error_schema/`, `error_template/` — entradas que **deben** fallar (con su contraparte `*_json/`).
 - `@stxt.schema/<ns>.stxt` y `@stxt.template/<ns>.stxt` — schemas/templates indexados por namespace.
+- `schema_json/<ns>.json` — el `Schema` resultante esperado, tanto si viene de un schema como de un
+  template (por eso `TemplateToSchema*Test` y `SchemaReaderTestAll` comparten esta carpeta).
+- `docs_raw/` — **reservada, aún sin tests**: documentos sin namespace (parseo puro, sin validación de
+  schema). No borrarla; es el sitio donde añadir esa cobertura cuando toque.
 
 Al añadir un caso, respeta el emparejamiento documento ↔ JSON/TXT esperado y la carpeta `error_*` si la entrada debe rechazarse.
 
