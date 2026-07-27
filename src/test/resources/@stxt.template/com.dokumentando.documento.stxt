@@ -13,7 +13,7 @@ Template (@stxt.template): com.dokumentando.documento
 			Color Tema: (?) HEXADECIMAL
 			Secciones: (1)
 				Sección: (+)
-					Título: (1) @Titulo
+					Título: (1) @Título
 					Contenido: (1) TEXT
 			Tipo Documento: (1)
 	

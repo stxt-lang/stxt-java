@@ -258,7 +258,7 @@
                 },
                 {
                     "name" : "Descripción",
-                    "normalized_name" : "descripcion",
+                    "normalized_name" : "descripción",
                     "namespace" : "com.kocinando.receta",
                     "text_node" : true,
                     "value" : "",
@@ -271,7 +271,7 @@
                     "line" : 36,
                     "level" : 2,
                     "children" : [ ],
-                    "qualified_name" : "com.kocinando.receta:descripcion",
+                    "qualified_name" : "com.kocinando.receta:descripción",
                     "text" : "Hay que vigilar este paso, ya que\nno se puede garantizar su buen funcionamiento.\nEn caso de error consultar realizar una llamada\nal servicio único"
                 }
             ],

@@ -10,7 +10,7 @@
     "children" : [
         {
             "name" : "Título",
-            "normalized_name" : "titulo",
+            "normalized_name" : "título",
             "namespace" : "com.kocinando.receta1",
             "text_node" : false,
             "value" : "Buñuelos de Girona",
@@ -18,12 +18,12 @@
             "line" : 3,
             "level" : 1,
             "children" : [ ],
-            "qualified_name" : "com.kocinando.receta1:titulo",
+            "qualified_name" : "com.kocinando.receta1:título",
             "text" : "Buñuelos de Girona"
         },
         {
             "name" : "Descripción",
-            "normalized_name" : "descripcion",
+            "normalized_name" : "descripción",
             "namespace" : "com.kocinando.receta1",
             "text_node" : true,
             "value" : "",
@@ -37,7 +37,7 @@
             "line" : 5,
             "level" : 1,
             "children" : [ ],
-            "qualified_name" : "com.kocinando.receta1:descripcion",
+            "qualified_name" : "com.kocinando.receta1:descripción",
             "text" : "Esta es una receta para hacer buñuelos en la época de Cuaresma. Son conocidos\ntambién como Buñuelos del Empordà. Normalmente son servidos\ncomo postre, y hay cantidad suficiente hasta para 12 personas. Es una receta\nfácil de hacer.\n"
         },
         {
@@ -68,7 +68,7 @@
         },
         {
             "name" : "Preparación",
-            "normalized_name" : "preparacion",
+            "normalized_name" : "preparación",
             "namespace" : "com.kocinando.receta1",
             "text_node" : true,
             "value" : "",
@@ -86,7 +86,7 @@
             "line" : 24,
             "level" : 1,
             "children" : [ ],
-            "qualified_name" : "com.kocinando.receta1:preparacion",
+            "qualified_name" : "com.kocinando.receta1:preparación",
             "text" : "En un recipiente pondremos la harina y el resto de ingredientes.\nLa mantequilla se funde con un poco de leche, al igual que la levadura.\nLa leche para deshacer la levadura sólo tiene que estar ligeramente templada,\nya que de lo contrario perdería seguramente su efecto.\nSe mezcla todo muy bien, y se deja reposar tapado por espacio de 3-5 horas\n(hasta que sube la masa).\nCon una cuchara o cucharadita según se quieran de tamaño, se fríen en abundante\naceite hasta coger color. Conforme se van sacando se espolvorean con un poco\nde la mezcla del grassolis, y se pasan por azúcar."
         }
     ],

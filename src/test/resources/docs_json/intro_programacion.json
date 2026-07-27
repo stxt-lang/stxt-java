@@ -10,7 +10,7 @@
     "children" : [
         {
             "name" : "Título",
-            "normalized_name" : "titulo",
+            "normalized_name" : "título",
             "namespace" : "com.dokumentando.documento",
             "text_node" : false,
             "value" : "Introducción a la Programación",
@@ -18,7 +18,7 @@
             "line" : 3,
             "level" : 1,
             "children" : [ ],
-            "qualified_name" : "com.dokumentando.documento:titulo",
+            "qualified_name" : "com.dokumentando.documento:título",
             "text" : "Introducción a la Programación"
         },
         {
@@ -52,7 +52,7 @@
         },
         {
             "name" : "Fecha Creación",
-            "normalized_name" : "fecha-creacion",
+            "normalized_name" : "fecha-creación",
             "namespace" : "com.dokumentando.documento",
             "text_node" : false,
             "value" : "2024-06-08",
@@ -60,12 +60,12 @@
             "line" : 8,
             "level" : 1,
             "children" : [ ],
-            "qualified_name" : "com.dokumentando.documento:fecha-creacion",
+            "qualified_name" : "com.dokumentando.documento:fecha-creación",
             "text" : "2024-06-08"
         },
         {
             "name" : "Última modificación",
-            "normalized_name" : "ultima-modificacion",
+            "normalized_name" : "última-modificación",
             "namespace" : "com.dokumentando.documento",
             "text_node" : false,
             "value" : "2024-06-08T14:30:00Z",
@@ -73,7 +73,7 @@
             "line" : 9,
             "level" : 1,
             "children" : [ ],
-            "qualified_name" : "com.dokumentando.documento:ultima-modificacion",
+            "qualified_name" : "com.dokumentando.documento:última-modificación",
             "text" : "2024-06-08T14:30:00Z"
         },
         {
@@ -104,7 +104,7 @@
         },
         {
             "name" : "Código Postal",
-            "normalized_name" : "codigo-postal",
+            "normalized_name" : "código-postal",
             "namespace" : "com.dokumentando.documento",
             "text_node" : false,
             "value" : "12345",
@@ -112,12 +112,12 @@
             "line" : 12,
             "level" : 1,
             "children" : [ ],
-            "qualified_name" : "com.dokumentando.documento:codigo-postal",
+            "qualified_name" : "com.dokumentando.documento:código-postal",
             "text" : "12345"
         },
         {
             "name" : "Es Público",
-            "normalized_name" : "es-publico",
+            "normalized_name" : "es-público",
             "namespace" : "com.dokumentando.documento",
             "text_node" : false,
             "value" : "true",
@@ -125,7 +125,7 @@
             "line" : 13,
             "level" : 1,
             "children" : [ ],
-            "qualified_name" : "com.dokumentando.documento:es-publico",
+            "qualified_name" : "com.dokumentando.documento:es-público",
             "text" : "true"
         },
         {
@@ -166,7 +166,7 @@
             "children" : [
                 {
                     "name" : "Sección",
-                    "normalized_name" : "seccion",
+                    "normalized_name" : "sección",
                     "namespace" : "com.dokumentando.documento",
                     "text_node" : false,
                     "value" : "",
@@ -176,7 +176,7 @@
                     "children" : [
                         {
                             "name" : "Título",
-                            "normalized_name" : "titulo",
+                            "normalized_name" : "título",
                             "namespace" : "com.dokumentando.documento",
                             "text_node" : false,
                             "value" : "Fundamentos de Programación",
@@ -184,7 +184,7 @@
                             "line" : 18,
                             "level" : 3,
                             "children" : [ ],
-                            "qualified_name" : "com.dokumentando.documento:titulo",
+                            "qualified_name" : "com.dokumentando.documento:título",
                             "text" : "Fundamentos de Programación"
                         },
                         {
@@ -204,12 +204,12 @@
                             "text" : "La programación implica el uso de lenguajes de programación para crear soluciones a problemas.\nExisten diversos paradigmas de programación, incluyendo programación estructurada, orientada a objetos, y funcional."
                         }
                     ],
-                    "qualified_name" : "com.dokumentando.documento:seccion",
+                    "qualified_name" : "com.dokumentando.documento:sección",
                     "text" : ""
                 },
                 {
                     "name" : "Sección",
-                    "normalized_name" : "seccion",
+                    "normalized_name" : "sección",
                     "namespace" : "com.dokumentando.documento",
                     "text_node" : false,
                     "value" : "",
@@ -219,7 +219,7 @@
                     "children" : [
                         {
                             "name" : "Título",
-                            "normalized_name" : "titulo",
+                            "normalized_name" : "título",
                             "namespace" : "com.dokumentando.documento",
                             "text_node" : false,
                             "value" : "Lenguajes de Programación",
@@ -227,7 +227,7 @@
                             "line" : 23,
                             "level" : 3,
                             "children" : [ ],
-                            "qualified_name" : "com.dokumentando.documento:titulo",
+                            "qualified_name" : "com.dokumentando.documento:título",
                             "text" : "Lenguajes de Programación"
                         },
                         {
@@ -247,12 +247,12 @@
                             "text" : "Los lenguajes de programación son herramientas que permiten a los programadores comunicarse con las computadoras.\nEjemplos de lenguajes populares incluyen Python, Java, C++, y JavaScript."
                         }
                     ],
-                    "qualified_name" : "com.dokumentando.documento:seccion",
+                    "qualified_name" : "com.dokumentando.documento:sección",
                     "text" : ""
                 },
                 {
                     "name" : "Sección",
-                    "normalized_name" : "seccion",
+                    "normalized_name" : "sección",
                     "namespace" : "com.dokumentando.documento",
                     "text_node" : false,
                     "value" : "",
@@ -262,7 +262,7 @@
                     "children" : [
                         {
                             "name" : "Título",
-                            "normalized_name" : "titulo",
+                            "normalized_name" : "título",
                             "namespace" : "com.dokumentando.documento",
                             "text_node" : false,
                             "value" : "Buenas Prácticas",
@@ -270,7 +270,7 @@
                             "line" : 28,
                             "level" : 3,
                             "children" : [ ],
-                            "qualified_name" : "com.dokumentando.documento:titulo",
+                            "qualified_name" : "com.dokumentando.documento:título",
                             "text" : "Buenas Prácticas"
                         },
                         {
@@ -290,7 +290,7 @@
                             "text" : "Es importante seguir buenas prácticas de programación, como la escritura de código limpio y comentado.\nAdemás, se recomienda el uso de control de versiones y pruebas de software para asegurar la calidad del código."
                         }
                     ],
-                    "qualified_name" : "com.dokumentando.documento:seccion",
+                    "qualified_name" : "com.dokumentando.documento:sección",
                     "text" : ""
                 }
             ],

@@ -23,7 +23,7 @@
         },
         {
             "name" : "Descripción",
-            "normalized_name" : "descripcion",
+            "normalized_name" : "descripción",
             "namespace" : "com.kocinando.receta",
             "text_node" : false,
             "value" : "Esta es una receta de ejemplo",
@@ -31,7 +31,7 @@
             "line" : 7,
             "level" : 1,
             "children" : [ ],
-            "qualified_name" : "com.kocinando.receta:descripcion",
+            "qualified_name" : "com.kocinando.receta:descripción",
             "text" : "Esta es una receta de ejemplo"
         },
         {
@@ -59,7 +59,7 @@
                 },
                 {
                     "name" : "Descripción",
-                    "normalized_name" : "descripcion",
+                    "normalized_name" : "descripción",
                     "namespace" : "com.kocinando.receta",
                     "text_node" : true,
                     "value" : "",
@@ -70,7 +70,7 @@
                     "line" : 10,
                     "level" : 2,
                     "children" : [ ],
-                    "qualified_name" : "com.kocinando.receta:descripcion",
+                    "qualified_name" : "com.kocinando.receta:descripción",
                     "text" : "Esta receta te guiará a través de los pasos necesarios para preparar una deliciosa pizza de jamón en casa.\nSigue las instrucciones cuidadosamente para obtener los mejores resultados."
                 }
             ],
@@ -169,7 +169,7 @@
             "children" : [
                 {
                     "name" : "Título",
-                    "normalized_name" : "titulo",
+                    "normalized_name" : "título",
                     "namespace" : "com.dokumentando.doc",
                     "text_node" : false,
                     "value" : "Primer documento simple",
@@ -177,7 +177,7 @@
                     "line" : 20,
                     "level" : 2,
                     "children" : [ ],
-                    "qualified_name" : "com.dokumentando.doc:titulo",
+                    "qualified_name" : "com.dokumentando.doc:título",
                     "text" : "Primer documento simple"
                 },
                 {

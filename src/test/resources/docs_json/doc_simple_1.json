@@ -10,7 +10,7 @@
     "children" : [
         {
             "name" : "Título",
-            "normalized_name" : "titulo",
+            "normalized_name" : "título",
             "namespace" : "com.dokumentando.doc",
             "text_node" : false,
             "value" : "Primer documento simple",
@@ -18,7 +18,7 @@
             "line" : 2,
             "level" : 1,
             "children" : [ ],
-            "qualified_name" : "com.dokumentando.doc:titulo",
+            "qualified_name" : "com.dokumentando.doc:título",
             "text" : "Primer documento simple"
         },
         {

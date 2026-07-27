@@ -33,7 +33,7 @@
                 },
                 {
                     "name" : "Descripción",
-                    "normalized_name" : "descripcion",
+                    "normalized_name" : "descripción",
                     "namespace" : "com.kocinando.receta",
                     "text_node" : false,
                     "value" : "Esta es una receta de ejemplo",
@@ -41,7 +41,7 @@
                     "line" : 9,
                     "level" : 2,
                     "children" : [ ],
-                    "qualified_name" : "com.kocinando.receta:descripcion",
+                    "qualified_name" : "com.kocinando.receta:descripción",
                     "text" : "Esta es una receta de ejemplo"
                 },
                 {
@@ -281,7 +281,7 @@
                         },
                         {
                             "name" : "Descripción",
-                            "normalized_name" : "descripcion",
+                            "normalized_name" : "descripción",
                             "namespace" : "com.kocinando.receta",
                             "text_node" : true,
                             "value" : "",
@@ -300,7 +300,7 @@
                             "line" : 29,
                             "level" : 3,
                             "children" : [ ],
-                            "qualified_name" : "com.kocinando.receta:descripcion",
+                            "qualified_name" : "com.kocinando.receta:descripción",
                             "text" : "Hay que vigilar este Paso, ya que\nno se puede garantizar su buen funcionamiento.\nEn caso de error consultar realizar una llamada\nal servicio único.\n\nEsta es otra linea\n# Hola\nMundo\n\n"
                         }
                     ],
@@ -336,7 +336,7 @@
                 },
                 {
                     "name" : "Descripción",
-                    "normalized_name" : "descripcion",
+                    "normalized_name" : "descripción",
                     "namespace" : "com.kocinando.receta",
                     "text_node" : false,
                     "value" : "Esta es una receta de ejemplo",
@@ -344,7 +344,7 @@
                     "line" : 43,
                     "level" : 2,
                     "children" : [ ],
-                    "qualified_name" : "com.kocinando.receta:descripcion",
+                    "qualified_name" : "com.kocinando.receta:descripción",
                     "text" : "Esta es una receta de ejemplo"
                 },
                 {
@@ -584,7 +584,7 @@
                         },
                         {
                             "name" : "Descripción",
-                            "normalized_name" : "descripcion",
+                            "normalized_name" : "descripción",
                             "namespace" : "com.kocinando.receta",
                             "text_node" : true,
                             "value" : "",
@@ -597,7 +597,7 @@
                             "line" : 62,
                             "level" : 3,
                             "children" : [ ],
-                            "qualified_name" : "com.kocinando.receta:descripcion",
+                            "qualified_name" : "com.kocinando.receta:descripción",
                             "text" : "Hay que vigilar este Paso, ya que\nno se puede garantizar su buen funcionamiento.\nEn caso de error consultar realizar una llamada\nal servicio único"
                         },
                         {

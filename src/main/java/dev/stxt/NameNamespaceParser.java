@@ -29,7 +29,8 @@ public final class NameNamespaceParser {
         		throw new ParseException(lineNumber, "INVALID_NAMESPACE", "Line not valid: " + fullLine);
         	
         	name = rawName.substring(0, indexInicio).trim();
-        	namespace = rawName.substring(indexInicio+1, indexFin).trim();
+        	// Sin trim: la gramática (STXT-SPEC 7/16) no admite espacios dentro de '( )'
+        	namespace = rawName.substring(indexInicio+1, indexFin);
         	
         	if (namespace.isEmpty())
         		throw new ParseException(lineNumber, "INVALID_NAMESPACE", "Line not valid: " + fullLine);

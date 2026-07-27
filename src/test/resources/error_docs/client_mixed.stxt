@@ -1,0 +1,14 @@
+# -------------------------------------------
+# Datos de cliente: mezcla de TAB y espacios
+# en la indentación de una misma línea (8.3)
+# -------------------------------------------
+
+Cliente:
+
+	# La línea siguiente indenta con 1 TAB + 2 espacios
+
+	  Datos Personales:
+
+		Nombre: Shila
+		Primer apellido: Kween
+		Edad: 28

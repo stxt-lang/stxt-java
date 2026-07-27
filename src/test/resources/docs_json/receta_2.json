@@ -10,7 +10,7 @@
     "children" : [
         {
             "name" : "Título",
-            "normalized_name" : "titulo",
+            "normalized_name" : "título",
             "namespace" : "com.dokumentando.documento",
             "text_node" : false,
             "value" : "Receta de Pizza de Jamón",
@@ -18,7 +18,7 @@
             "line" : 6,
             "level" : 1,
             "children" : [ ],
-            "qualified_name" : "com.dokumentando.documento:titulo",
+            "qualified_name" : "com.dokumentando.documento:título",
             "text" : "Receta de Pizza de Jamón"
         },
         {
@@ -52,7 +52,7 @@
         },
         {
             "name" : "Fecha Creación",
-            "normalized_name" : "fecha-creacion",
+            "normalized_name" : "fecha-creación",
             "namespace" : "com.dokumentando.documento",
             "text_node" : false,
             "value" : "2024-06-08",
@@ -60,12 +60,12 @@
             "line" : 11,
             "level" : 1,
             "children" : [ ],
-            "qualified_name" : "com.dokumentando.documento:fecha-creacion",
+            "qualified_name" : "com.dokumentando.documento:fecha-creación",
             "text" : "2024-06-08"
         },
         {
             "name" : "Última modificación",
-            "normalized_name" : "ultima-modificacion",
+            "normalized_name" : "última-modificación",
             "namespace" : "com.dokumentando.documento",
             "text_node" : false,
             "value" : "2024-06-08T14:30:00Z",
@@ -73,7 +73,7 @@
             "line" : 12,
             "level" : 1,
             "children" : [ ],
-            "qualified_name" : "com.dokumentando.documento:ultima-modificacion",
+            "qualified_name" : "com.dokumentando.documento:última-modificación",
             "text" : "2024-06-08T14:30:00Z"
         },
         {
@@ -104,7 +104,7 @@
         },
         {
             "name" : "Código Postal",
-            "normalized_name" : "codigo-postal",
+            "normalized_name" : "código-postal",
             "namespace" : "com.dokumentando.documento",
             "text_node" : false,
             "value" : "54321",
@@ -112,12 +112,12 @@
             "line" : 15,
             "level" : 1,
             "children" : [ ],
-            "qualified_name" : "com.dokumentando.documento:codigo-postal",
+            "qualified_name" : "com.dokumentando.documento:código-postal",
             "text" : "54321"
         },
         {
             "name" : "Es Público",
-            "normalized_name" : "es-publico",
+            "normalized_name" : "es-público",
             "namespace" : "com.dokumentando.documento",
             "text_node" : false,
             "value" : "true",
@@ -125,7 +125,7 @@
             "line" : 16,
             "level" : 1,
             "children" : [ ],
-            "qualified_name" : "com.dokumentando.documento:es-publico",
+            "qualified_name" : "com.dokumentando.documento:es-público",
             "text" : "true"
         },
         {
@@ -166,7 +166,7 @@
             "children" : [
                 {
                     "name" : "Sección",
-                    "normalized_name" : "seccion",
+                    "normalized_name" : "sección",
                     "namespace" : "com.dokumentando.documento",
                     "text_node" : false,
                     "value" : "",
@@ -176,7 +176,7 @@
                     "children" : [
                         {
                             "name" : "Título",
-                            "normalized_name" : "titulo",
+                            "normalized_name" : "título",
                             "namespace" : "com.dokumentando.documento",
                             "text_node" : false,
                             "value" : "Ingredientes",
@@ -184,7 +184,7 @@
                             "line" : 21,
                             "level" : 3,
                             "children" : [ ],
-                            "qualified_name" : "com.dokumentando.documento:titulo",
+                            "qualified_name" : "com.dokumentando.documento:título",
                             "text" : "Ingredientes"
                         },
                         {
@@ -211,12 +211,12 @@
                             "text" : "- 250g de harina de trigo\n- 150ml de agua\n- 10g de levadura fresca\n- 1 cucharadita de sal\n- 2 cucharadas de aceite de oliva\n- 200g de salsa de tomate\n- 200g de queso mozzarella\n- 150g de jamón en lonchas\n- Orégano al gusto"
                         }
                     ],
-                    "qualified_name" : "com.dokumentando.documento:seccion",
+                    "qualified_name" : "com.dokumentando.documento:sección",
                     "text" : ""
                 },
                 {
                     "name" : "Sección",
-                    "normalized_name" : "seccion",
+                    "normalized_name" : "sección",
                     "namespace" : "com.dokumentando.documento",
                     "text_node" : false,
                     "value" : "",
@@ -226,7 +226,7 @@
                     "children" : [
                         {
                             "name" : "Título",
-                            "normalized_name" : "titulo",
+                            "normalized_name" : "título",
                             "namespace" : "com.dokumentando.documento",
                             "text_node" : false,
                             "value" : "Instrucciones",
@@ -234,7 +234,7 @@
                             "line" : 33,
                             "level" : 3,
                             "children" : [ ],
-                            "qualified_name" : "com.dokumentando.documento:titulo",
+                            "qualified_name" : "com.dokumentando.documento:título",
                             "text" : "Instrucciones"
                         },
                         {
@@ -262,12 +262,12 @@
                             "text" : "1. En un bol grande, mezcla la harina con la sal.\n2. Disuelve la levadura en el agua tibia y añádela a la mezcla de harina.\n3. Agrega el aceite de oliva y amasa hasta obtener una masa homogénea.\n4. Cubre la masa con un paño y deja reposar durante 1 hora en un lugar cálido.\n5. Precalienta el horno a 220°C.\n6. Estira la masa en una superficie enharinada hasta obtener el tamaño deseado.\n7. Coloca la masa en una bandeja para horno y unta la salsa de tomate por encima.\n8. Espolvorea el queso mozzarella y distribuye las lonchas de jamón.\n9. Hornea la pizza durante 15-20 minutos o hasta que los bordes estén dorados.\n10. Retira la pizza del horno, espolvorea orégano al gusto y sirve caliente."
                         }
                     ],
-                    "qualified_name" : "com.dokumentando.documento:seccion",
+                    "qualified_name" : "com.dokumentando.documento:sección",
                     "text" : ""
                 },
                 {
                     "name" : "Sección",
-                    "normalized_name" : "seccion",
+                    "normalized_name" : "sección",
                     "namespace" : "com.dokumentando.documento",
                     "text_node" : false,
                     "value" : "",
@@ -277,7 +277,7 @@
                     "children" : [
                         {
                             "name" : "Título",
-                            "normalized_name" : "titulo",
+                            "normalized_name" : "título",
                             "namespace" : "com.dokumentando.documento",
                             "text_node" : false,
                             "value" : "Información Nutricional",
@@ -285,7 +285,7 @@
                             "line" : 46,
                             "level" : 3,
                             "children" : [ ],
-                            "qualified_name" : "com.dokumentando.documento:titulo",
+                            "qualified_name" : "com.dokumentando.documento:título",
                             "text" : "Información Nutricional"
                         },
                         {
@@ -307,7 +307,7 @@
                             "text" : "Calorías por porción: 350 kcal\nProteínas: 18g\nGrasas: 12g\nCarbohidratos: 45g"
                         }
                     ],
-                    "qualified_name" : "com.dokumentando.documento:seccion",
+                    "qualified_name" : "com.dokumentando.documento:sección",
                     "text" : ""
                 }
             ],

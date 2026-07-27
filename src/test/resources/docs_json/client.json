@@ -180,7 +180,7 @@
                 },
                 {
                     "name" : "Número cuenta",
-                    "normalized_name" : "numero-cuenta",
+                    "normalized_name" : "número-cuenta",
                     "namespace" : "com.gym.docs",
                     "text_node" : false,
                     "value" : "0000-0000-00-000000000",
@@ -188,7 +188,7 @@
                     "line" : 92,
                     "level" : 2,
                     "children" : [ ],
-                    "qualified_name" : "com.gym.docs:numero-cuenta",
+                    "qualified_name" : "com.gym.docs:número-cuenta",
                     "text" : "0000-0000-00-000000000"
                 }
             ],

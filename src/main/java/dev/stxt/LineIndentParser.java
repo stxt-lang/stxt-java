@@ -18,17 +18,21 @@ class LineIndentParser {
         int level = 0;
         int spaces = 0;
         int pointer = 0;
+        boolean sawSpace = false;
+        boolean sawTab = false;
 
         while (pointer < line.length()) {
             char c = line.charAt(pointer);
 
             if (c == SPACE) {
+                sawSpace = true;
                 spaces++;
                 if (spaces == TAB_SPACES) {
                     level++;
                     spaces = 0;
                 }
             } else if (c == TAB) {
+                sawTab = true;
                 level++;
                 spaces = 0;
             } else if (c == COMMENT_CHAR) {
@@ -41,17 +45,27 @@ class LineIndentParser {
             pointer++;
 
             // Dentro del bloque de texto
-            if (lastNodeBlock && level > lastLevel) 
-                return new LineIndent(level, rightTrim(line.substring(pointer)));
-        }        
-        
+            if (lastNodeBlock && level > lastLevel) {
+                String text = rightTrim(line.substring(pointer));
+                // El prefijo que cubre el nivel de bloque debe ser homogéneo (spec 10.2, regla 2);
+                // las líneas vacías se preservan siempre y quedan exentas (spec 10.3)
+                if (sawSpace && sawTab && !text.isEmpty())
+                    throw new ParseException(numLine, "MIXED_INDENTATION", "Mixed tabs and spaces in indentation");
+                return new LineIndent(level, text);
+            }
+        }
+
         // En este punto ya estamos fuera de bloque de texto (si existía)
-        
+
         // Empty
         if (pointer == line.length()) {
             if (lastNodeBlock)  return new LineIndent(lastLevel + 1, "");
             else                return null;
         }
+
+        // Mezcla de espacios y tabuladores en la indentación (spec 8.1 y 8.3)
+        if (sawSpace && sawTab)
+            throw new ParseException(numLine, "MIXED_INDENTATION", "Mixed tabs and spaces in indentation");
 
         // Indentación no és múltiplo de 4 con espacios
         if (spaces > 0)

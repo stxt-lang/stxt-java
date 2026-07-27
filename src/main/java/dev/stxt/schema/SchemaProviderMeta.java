@@ -27,7 +27,7 @@ Schema (@stxt.schema): @stxt.schema
             Child: Values
                 Max: 1
     Node: Children
-       	Type: GROUP
+        Type: GROUP
         Children:
             Child: Child
                 Min: 1
@@ -45,9 +45,9 @@ Schema (@stxt.schema): @stxt.schema
         Type: NATURAL
     Node: Type
     Node: Values
-    	Children:
-    		Child: Value
-    			Min: 1
+        Children:
+            Child: Value
+                Min: 1
     Node: Value
 """;
 	

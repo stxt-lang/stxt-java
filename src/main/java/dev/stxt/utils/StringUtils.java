@@ -2,7 +2,6 @@ package dev.stxt.utils;
 
 import java.text.Normalizer;
 import java.util.Locale;
-import java.util.regex.Pattern;
 
 public class StringUtils {
 	private StringUtils() {
@@ -37,24 +36,21 @@ public class StringUtils {
 		return s.trim().replaceAll("\\s+", " ");
 	}
 
-	private static final Pattern DIACRITICS = Pattern.compile("\\p{Mn}+");
-
-	// Usados para name normalizado de nodos
+	// Usados para name normalizado de nodos (STXT-SPEC 4.3): NFC + minúsculas,
+	// conservando diacríticos y alfabetos no latinos (modelo IDN)
 	public static String normalize(String input) {
 	    if (input == null) return "";
 	    String s = input.trim();
 	    if (s.isEmpty()) return "";
 
-	    s = Normalizer.normalize(s, Normalizer.Form.NFKD);
-	    s = DIACRITICS.matcher(s).replaceAll("");
+	    s = Normalizer.normalize(s, Normalizer.Form.NFC);
 	    s = s.toLowerCase(Locale.ROOT);
-	    s = compactSpaces(s);
-	    
-	    // cualquier cosa que no sea [a-z0-9] => '-'
-	    s = s.replaceAll("[^a-z0-9]+", "-");
-	    
+
+	    // toda secuencia de separadores ('-', '_', espacios) => un solo '-'
+	    s = s.replaceAll("[-_\\s]+", "-");
+
 	    // trim de '-'
 	    s = s.replaceAll("^-+|-+$", "");
 	    return s;
-	}	
+	}
 }

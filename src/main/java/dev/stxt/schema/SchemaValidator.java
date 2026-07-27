@@ -44,7 +44,18 @@ public class SchemaValidator implements Validator {
 	    }
 
 	    validateValue(schemaNode, node);
+	    validateChildrenDeclared(schemaNode, node);
 	    validateCount(schemaNode, node);
+	}
+
+	// Modelo de contenido cerrado (STXT-SCHEMA-SPEC, sección 6): solo se permiten
+	// los hijos directos declarados en la definición del padre; sin Children, cierre total
+	private static void validateChildrenDeclared(NodeDefinition nsNode, Node node) {
+		for (Node child : node.getChildren()) {
+			if (!nsNode.getChildren().containsKey(child.getQualifiedName()))
+				throw new ValidationException(child.getLine(), "CHILD_NOT_DECLARED",
+						"Child '" + child.getQualifiedName() + "' not declared in node '" + node.getQualifiedName() + "'");
+		}
 	}
 
 	private static void validateValue(NodeDefinition nsNode, Node n) {

@@ -3,11 +3,15 @@ package dev.stxt;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import dev.stxt.exceptions.ParseException;
 import dev.stxt.utils.StringUtils;
 
 public class Node {
+	// STXT-SPEC 4.2: letras y dígitos Unicode (categorías L y Nd) más '-', '_' y espacio
+	private static final Pattern VALID_NAME = Pattern.compile("^[\\p{L}\\p{Nd}\\-_ ]+$");
+
 	private final String name;
 	private final String normalizedName;
 	private final String namespace;
@@ -39,7 +43,11 @@ public class Node {
 
 		if (!this.value.isEmpty() && this.isTextNode())
 			throw new IllegalArgumentException("Not empty value with textNode");
-		
+
+		if (name == null || !VALID_NAME.matcher(name).matches()) {
+		    throw new ParseException(line, "INVALID_NODE_NAME", "Node name contains invalid characters: " + name);
+		}
+
 		if (this.normalizedName.isEmpty()) {
 		    throw new ParseException(line, "INVALID_NODE_NAME", "Node name not valid: " + name);
 		}

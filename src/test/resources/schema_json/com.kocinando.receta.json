@@ -29,21 +29,21 @@
                     "max" : 1,
                     "qualified_name" : "com.kocinando.receta:nombre-receta"
                 },
-                "com.kocinando.receta:descripcion" : {
-                    "normalized_name" : "descripcion",
+                "com.kocinando.receta:descripción" : {
+                    "normalized_name" : "descripción",
                     "name" : "Descripción",
                     "namespace" : "com.kocinando.receta",
                     "min" : null,
                     "max" : 1,
-                    "qualified_name" : "com.kocinando.receta:descripcion"
+                    "qualified_name" : "com.kocinando.receta:descripción"
                 },
-                "com.kocinando.receta:calorias" : {
-                    "normalized_name" : "calorias",
+                "com.kocinando.receta:calorías" : {
+                    "normalized_name" : "calorías",
                     "name" : "Calorías",
                     "namespace" : "com.kocinando.receta",
                     "min" : null,
                     "max" : 1,
-                    "qualified_name" : "com.kocinando.receta:calorias"
+                    "qualified_name" : "com.kocinando.receta:calorías"
                 },
                 "com.kocinando.receta:pasos" : {
                     "normalized_name" : "pasos",
@@ -79,9 +79,9 @@
             "children" : { },
             "values" : [ ]
         },
-        "descripcion" : {
+        "descripción" : {
             "name" : "Descripción",
-            "normalized_name" : "descripcion",
+            "normalized_name" : "descripción",
             "type" : "TEXT",
             "children" : { },
             "values" : [ ]
@@ -160,13 +160,13 @@
             "normalized_name" : "pasos",
             "type" : "INLINE",
             "children" : {
-                "com.kocinando.receta:descripcion" : {
-                    "normalized_name" : "descripcion",
+                "com.kocinando.receta:descripción" : {
+                    "normalized_name" : "descripción",
                     "name" : "Descripción",
                     "namespace" : "com.kocinando.receta",
                     "min" : null,
                     "max" : null,
-                    "qualified_name" : "com.kocinando.receta:descripcion"
+                    "qualified_name" : "com.kocinando.receta:descripción"
                 },
                 "com.kocinando.receta:paso" : {
                     "normalized_name" : "paso",
@@ -193,9 +193,9 @@
             "children" : { },
             "values" : [ ]
         },
-        "calorias" : {
+        "calorías" : {
             "name" : "Calorías",
-            "normalized_name" : "calorias",
+            "normalized_name" : "calorías",
             "type" : "NUMBER",
             "children" : { },
             "values" : [ ]
