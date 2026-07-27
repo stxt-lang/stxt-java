@@ -128,14 +128,34 @@
         "type" : {
             "name" : "Type",
             "normalized_name" : "type",
-            "type" : "INLINE",
+            "type" : "ENUM",
             "children" : { },
-            "values" : [ ]
+            "values" : [
+                "ENUM",
+                "NUMBER",
+                "HEXADECIMAL",
+                "BLOCK",
+                "BINARY",
+                "TEXT",
+                "TIME",
+                "EMAIL",
+                "BOOLEAN",
+                "URL",
+                "GROUP",
+                "NATURAL",
+                "DATE",
+                "MARKDOWN",
+                "BASE64",
+                "TIMESTAMP",
+                "INLINE",
+                "UUID",
+                "INTEGER"
+            ]
         },
         "values" : {
             "name" : "Values",
             "normalized_name" : "values",
-            "type" : "INLINE",
+            "type" : "GROUP",
             "children" : {
                 "@stxt.schema:value" : {
                     "normalized_name" : "value",

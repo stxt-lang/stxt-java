@@ -61,6 +61,10 @@ public class SchemaParser {
 		
 		Node children = n.getChild("children");
 		if (children != null) {
+			// STXT-SCHEMA-SPEC 7.1/9.1/13.5: sólo INLINE y GROUP admiten hijos
+			if (!TypeRegistry.admitsChildren(type))
+				throw new ValidationException(children.getLine(), "CHILDREN_NOT_ALLOWED_FOR_TYPE",
+						"Type " + type + " does not allow children (node " + name + ")");
 			for (Node child: children.getChildren("child"))
 				putChildToSchemaNode(result, child, namespace);
 		}
@@ -93,7 +97,14 @@ public class SchemaParser {
 		String name = ns.getName();
 		String namespace = ns.getNamespace();
 		
-		ChildDefinition schemaChild = new ChildDefinition(name, namespace, getInteger(child, "min"), getInteger(child, "max"), child.getLine());
+		Integer min = getInteger(child, "min");
+		Integer max = getInteger(child, "max");
+		// STXT-SCHEMA-SPEC 10/13.7: la cardinalidad es inválida si Min > Max
+		if (min != null && max != null && min > max)
+			throw new ValidationException(child.getLine(), "MIN_GREATER_THAN_MAX",
+					"Min " + min + " greater than Max " + max);
+
+		ChildDefinition schemaChild = new ChildDefinition(name, namespace, min, max, child.getLine());
 		schemaNode.addChildDefinition(schemaChild);
 	}
 

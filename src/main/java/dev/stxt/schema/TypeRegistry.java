@@ -56,6 +56,11 @@ class TypeRegistry {
 		return REGISTRY.get(nodeType);
 	}
 
+	// STXT-SCHEMA-SPEC 9 / STXT-TEMPLATE-SPEC 15: sólo INLINE y GROUP admiten hijos
+	public static boolean admitsChildren(String nodeType) {
+		return "INLINE".equals(nodeType) || "GROUP".equals(nodeType);
+	}
+
 	private static void register(Type instance) {
 		if (REGISTRY.containsKey(instance.getName()))
 			throw new STXTException("DUPLICATED_TYPE", "Type already defined: " + instance.getName());

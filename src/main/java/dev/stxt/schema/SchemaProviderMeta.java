@@ -44,7 +44,29 @@ Schema (@stxt.schema): @stxt.schema
     Node: Max
         Type: NATURAL
     Node: Type
+        Type: ENUM
+        Values:
+            Value: INLINE
+            Value: BLOCK
+            Value: TEXT
+            Value: GROUP
+            Value: BOOLEAN
+            Value: NUMBER
+            Value: ENUM
+            Value: INTEGER
+            Value: NATURAL
+            Value: DATE
+            Value: TIME
+            Value: TIMESTAMP
+            Value: UUID
+            Value: URL
+            Value: EMAIL
+            Value: HEXADECIMAL
+            Value: BINARY
+            Value: BASE64
+            Value: MARKDOWN
     Node: Values
+        Type: GROUP
         Children:
             Child: Value
                 Min: 1

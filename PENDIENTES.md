@@ -23,23 +23,9 @@ sobre líneas trimmeadas, y formas de valor `NOT_ALLOWED_TEXT`/`BLOCK_FORM_REQUI
 
 ## Validación de schema (`dev.stxt.schema`)
 
-10. **`Children` en tipos hoja** (STXT-SCHEMA-SPEC 13.5; vscode 0.4.4) —
-    `SchemaParser` acepta `Children` en nodos de cualquier tipo. Debe fallar la
-    carga con `CHILDREN_NOT_ALLOWED_FOR_TYPE` para todo tipo salvo `INLINE` y
-    `GROUP`. Equivalente en templates: STXT-TEMPLATE-SPEC 14.9.
-
-11. **`Min` > `Max`** (STXT-SCHEMA-SPEC 10; vscode 0.4.2) — no se valida al cargar
-    el schema. Debe rechazarse con `MIN_GREATER_THAN_MAX`.
-
-12. **Meta-schema desactualizado** (`SchemaProviderMeta`; vscode 0.4.1/0.4.4) —
-    - `Node: Values` no declara `Type: GROUP` → `Values: texto` pasa la
-      meta-validación (STXT-SCHEMA-SPEC 15.2).
-    - `Node: Type` no está declarado como `ENUM` con la lista de tipos válidos →
-      un schema con tipo desconocido **carga sin error** y solo revienta al validar
-      documentos (`TYPE_NOT_SUPPORTED`). Debe fallar al cargar.
-    - Actualizar también `MetaTemplateSchemaProvider` y añadir a la lista de tipos
-      válidos los tipos ya soportados por `TypeRegistry` que aún faltan en el
-      meta-schema (`TIME`, `UUID`, `BINARY`, `MARKDOWN`).
+(sin pendientes; los puntos 10 a 12 —`Children` en tipos hoja`, `Min` > `Max`
+y meta-schema desactualizado (`Values` sin `Type: GROUP`, `Type` sin `ENUM`)—
+se resolvieron el 2026-07-27.)
 
 ## Templates (`dev.stxt.template`)
 

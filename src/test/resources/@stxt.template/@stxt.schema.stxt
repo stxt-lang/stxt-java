@@ -3,9 +3,9 @@ Template (@stxt.template): @stxt.schema
 		Schema (@stxt.schema):
 			Description: (?) TEXT
 			Node: (+)
-				Type: (?)
+				Type: (?) ENUM [INLINE, BLOCK, TEXT, GROUP, BOOLEAN, NUMBER, ENUM, INTEGER, NATURAL, DATE, TIME, TIMESTAMP, UUID, URL, EMAIL, HEXADECIMAL, BINARY, BASE64, MARKDOWN]
 				Description: (?) @Description
-				Values: (?)
+				Values: (?) GROUP
 					Value: (+)
 				Children: (?) GROUP
 					Child: (+)
