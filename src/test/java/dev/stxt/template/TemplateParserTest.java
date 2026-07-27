@@ -192,4 +192,79 @@ Template (@stxt.template): test.ref.children
 		ParseException ex = assertThrows(ParseException.class, () -> TemplateParser.transformNodeToSchema(root));
 		assertEquals("CHILDREN_NOT_ALLOWED_IN_REFERENCE", ex.getCode());
 	}
+
+	@Test
+	void testUnknownTypeRejected() {
+		// STXT-TEMPLATE-SPEC 14.6: el tipo debe ser uno de los soportados. En schemas ya lo
+		// cubría el meta-schema (Type es ENUM), pero el Structure de un template es un bloque
+		// de texto y la meta-validación no lo alcanza.
+		String text = """
+Template (@stxt.template): test.type.unknown
+    Structure >>
+        Foo: (1) FOOBAR
+""";
+		Node root = new Parser().parse(text).get(0);
+		ParseException ex = assertThrows(ParseException.class, () -> TemplateParser.transformNodeToSchema(root));
+		assertEquals("TYPE_NOT_VALID", ex.getCode());
+	}
+
+	@Test
+	void testReferenceNotFoundRejected() {
+		// STXT-TEMPLATE-SPEC 14.11: una referencia debe apuntar a una definición previa o a un
+		// ancestro abierto; si no, antes se creaba un nodo cuyo tipo era literalmente '@Otro'
+		String text = """
+Template (@stxt.template): test.ref.notfound
+    Structure >>
+        Foo: (1) @Otro
+""";
+		Node root = new Parser().parse(text).get(0);
+		ParseException ex = assertThrows(ParseException.class, () -> TemplateParser.transformNodeToSchema(root));
+		assertEquals("REFERENCE_NOT_FOUND", ex.getCode());
+	}
+
+	@Test
+	void testReferenceWithTypeRejected() {
+		// STXT-TEMPLATE-SPEC 14.13: referencia y tipo explícito en la misma línea. Antes se
+		// reportaba como NODE_REFERENCE_NOT_VALID, cuyo mensaje culpaba al nombre.
+		String text = """
+Template (@stxt.template): test.ref.withtype
+    Structure >>
+        Foo: (1) TEXT
+        Foo: (2) @Foo TEXT
+""";
+		Node root = new Parser().parse(text).get(0);
+		ParseException ex = assertThrows(ParseException.class, () -> TemplateParser.transformNodeToSchema(root));
+		assertEquals("REFERENCE_WITH_TYPE_NOT_ALLOWED", ex.getCode());
+	}
+
+	@Test
+	void testReferenceToOpenAncestorAllowed() {
+		// La recursión por ancestro abierto sigue resolviendo: al recorrer los hijos, el
+		// ancestro ya está en el schema
+		String text = """
+Template (@stxt.template): test.ref.recursive
+    Structure >>
+        Seccion: (1)
+            Titulo: (1) TEXT
+            Seccion: (*) @Seccion
+""";
+		Node root = new Parser().parse(text).get(0);
+		Schema sch = TemplateParser.transformNodeToSchema(root);
+		assertEquals("INLINE", sch.getNodeDefinition("Seccion").getType());
+	}
+
+	@Test
+	void testReferenceWithSpacesInNameIsNotAType() {
+		// Los nombres de nodo admiten espacios: '@Max Threads' es una referencia simple, no
+		// una referencia con tipo (el último token no es un tipo conocido)
+		String text = """
+Template (@stxt.template): test.ref.spaces
+    Structure >>
+        Max Threads: (1) NATURAL
+        Max Threads: (?) @Max Threads
+""";
+		Node root = new Parser().parse(text).get(0);
+		Schema sch = TemplateParser.transformNodeToSchema(root);
+		assertEquals("NATURAL", sch.getNodeDefinition("Max Threads").getType());
+	}
 }

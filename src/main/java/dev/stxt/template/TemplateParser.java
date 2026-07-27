@@ -81,6 +81,17 @@ public class TemplateParser {
 		NodeDefinition schemaNode = schema.getNodeDefinition(name);
 		if (schemaNode == null) {	// Nuevo
 			String type = cl.getType() == null? "INLINE": cl.getType();
+
+			// En este punto el schema ya contiene tanto las definiciones previas ya cerradas
+			// como los ancestros abiertos, así que una referencia que no resuelve aquí no
+			// resuelve a nada (STXT-TEMPLATE-SPEC 6.4 y 14.11)
+			if (type.startsWith("@"))
+				throw new ParseException(node.getLine() + offset, "REFERENCE_NOT_FOUND", "Reference '" + type + "' does not point to a previous definition or an open ancestor");
+
+			// STXT-TEMPLATE-SPEC 14.6: el tipo debe ser uno de los soportados
+			if (TypeRegistry.get(type) == null)
+				throw new ParseException(node.getLine() + offset, "TYPE_NOT_VALID", "Type not valid: " + type);
+
 			schemaNode = new NodeDefinition(node.getName(), type, node.getLine() + offset);
 			schema.addNodeDefinition(schemaNode);
             String[] values = cl.getValues();
@@ -102,10 +113,15 @@ public class TemplateParser {
 			if (type == null || !type.startsWith("@"))
 				throw new ParseException(node.getLine() + offset, "NODE_DEFINED_MULTIPLE_TIMES", "Multiple node reference must start with @: " + node.getName());				
 				
-			String refName = StringUtils.normalize(type.substring(1));
-			
-			if (!refName.equals(node.getNormalizedName()))
-				throw new ParseException(node.getLine() + offset, "NODE_REFERENCE_NOT_VALID", "Reference must be '" + "@" + node.getName() + "', not '" + type.substring(1) + "'");
+			String reference = type.substring(1).trim();
+
+			// STXT-TEMPLATE-SPEC 14.13: no se puede declarar referencia y tipo explícito a la vez
+			String explicitType = referenceType(reference, node.getNormalizedName());
+			if (explicitType != null)
+				throw new ParseException(node.getLine() + offset, "REFERENCE_WITH_TYPE_NOT_ALLOWED", "Reference '@" + node.getName() + "' can not declare a type: " + explicitType);
+
+			if (!StringUtils.normalize(reference).equals(node.getNormalizedName()))
+				throw new ParseException(node.getLine() + offset, "NODE_REFERENCE_NOT_VALID", "Reference must be '" + "@" + node.getName() + "', not '" + reference + "'");
 			
 			// STXT-TEMPLATE-SPEC 6.4: una referencia @Nombre Nodo NO DEBE redefinir valores ENUM ni hijos
 			if (cl.getValues() != null)
@@ -139,6 +155,27 @@ public class TemplateParser {
 			
 			addToSchema(schema, child, offset);
 		}
+	}
+
+	/**
+	 * Distingue `@Nombre Nodo TIPO` (referencia + tipo, error 14.13) de `@Otro Nombre`
+	 * (referencia con nombre distinto, error 14.12). Como los nombres de nodo admiten
+	 * espacios, la única lectura fiable es: si el último token es un tipo conocido y lo
+	 * que queda delante es el nombre del propio nodo, la línea declara ambas cosas.
+	 * Devuelve el tipo declarado, o null si la referencia no lleva tipo.
+	 */
+	private static String referenceType(String reference, String normalizedName) {
+		int cut = reference.lastIndexOf(' ');
+		if (cut < 0)
+			return null;
+
+		String candidate = reference.substring(cut + 1).trim();
+		String rest = reference.substring(0, cut);
+
+		if (TypeRegistry.get(candidate) != null && StringUtils.normalize(rest).equals(normalizedName))
+			return candidate;
+
+		return null;
 	}
 
 	private static void addDescriptions(Schema schema, List<Node> nodes, int offset) {

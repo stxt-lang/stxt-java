@@ -41,11 +41,12 @@ subcarpeta `stxt/` de ese repo). Contiene dos cosas en `src/` (todo TypeScript):
 
 **Importante:** esa implementación TypeScript está hoy **más alineada con la spec que este parser
 Java** — pasó un repaso de conformidad contra las specs (2026-07) cuyos ajustes se aplicaron allí
-(versiones 0.4.3/0.4.4) pero aún no se han portado aquí: **normalizar stxt-java respecto a la spec
-es trabajo pendiente**, y el `PENDIENTES.md` de este repositorio es la lista viva de esos
-desajustes (consultarla antes de trabajar en conformidad y mantenerla al día). El `PENDIENTES.md`
-de stxt-vscode lista los desajustes spec ↔ implementación que le
-quedan, y su `CLAUDE.md` documenta su arquitectura en detalle. Ante una ambigüedad de
+(versiones 0.4.3 a 0.5.0) y sólo en parte se han portado aquí: **normalizar stxt-java respecto a la
+spec es trabajo pendiente**, y el `PENDIENTES.md` de este repositorio es la lista viva de esos
+desajustes (consultarla antes de trabajar en conformidad y mantenerla al día). stxt-vscode ya no
+tiene `PENDIENTES.md` propio: lo borró al cerrar los suyos en 0.5.0, así que la referencia de lo
+que le queda es su `CHANGELOG.md`; su `CLAUDE.md` documenta su arquitectura en detalle. Ante una
+ambigüedad de
 comportamiento, el orden de autoridad es: **spec (`../stxt-web`) → parser TypeScript
 (`../stxt-vscode/stxt`) → este parser Java**.
 
