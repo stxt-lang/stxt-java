@@ -5,6 +5,7 @@ import java.util.Map;
 
 import dev.stxt.exceptions.STXTException;
 import dev.stxt.schema.type.BASE64;
+import dev.stxt.schema.type.BINARY;
 import dev.stxt.schema.type.BLOCK;
 import dev.stxt.schema.type.BOOLEAN;
 import dev.stxt.schema.type.DATE;
@@ -14,11 +15,14 @@ import dev.stxt.schema.type.GROUP;
 import dev.stxt.schema.type.HEXADECIMAL;
 import dev.stxt.schema.type.INLINE;
 import dev.stxt.schema.type.INTEGER;
+import dev.stxt.schema.type.MARKDOWN;
 import dev.stxt.schema.type.NATURAL;
 import dev.stxt.schema.type.NUMBER;
 import dev.stxt.schema.type.TEXT;
+import dev.stxt.schema.type.TIME;
 import dev.stxt.schema.type.TIMESTAMP;
 import dev.stxt.schema.type.URL;
+import dev.stxt.schema.type.UUID;
 
 class TypeRegistry {
 	private static final Map<String, Type> REGISTRY = new HashMap<>();
@@ -36,12 +40,16 @@ class TypeRegistry {
 		register(NATURAL.INSTANCE);
 		register(NUMBER.INSTANCE);
 		register(DATE.INSTANCE);
+		register(TIME.INSTANCE);
 		register(TIMESTAMP.INSTANCE);
+		register(UUID.INSTANCE);
 		register(EMAIL.INSTANCE);
 		register(HEXADECIMAL.INSTANCE);
+		register(BINARY.INSTANCE);
 		register(BASE64.INSTANCE);
 		register(GROUP.INSTANCE);
 		register(ENUM.INSTANCE);
+		register(MARKDOWN.INSTANCE);
 	}
 
 	public static Type get(String nodeType) {

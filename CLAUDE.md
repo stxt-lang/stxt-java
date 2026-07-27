@@ -125,8 +125,8 @@ El parser no valida por sí mismo. Expone dos puntos de extensión que se regist
 - [TypeRegistry.java](src/main/java/dev/stxt/schema/TypeRegistry.java) — registro estático de tipos de
   valor. Cada tipo vive en `dev.stxt.schema.type` como singleton `INSTANCE` que implementa `Type`
   (`getName()` + `validate(NodeDefinition, Node)`): TEXT, BLOCK, INLINE, BOOLEAN, URL, INTEGER, NATURAL,
-  NUMBER, DATE, TIMESTAMP, EMAIL, HEXADECIMAL, BASE64, GROUP, ENUM. **Añadir un tipo nuevo = nueva clase
-  `Type` + `register(...)` en `TypeRegistry`.**
+  NUMBER, DATE, TIME, TIMESTAMP, UUID, EMAIL, HEXADECIMAL, BINARY, BASE64, GROUP, ENUM, MARKDOWN.
+  **Añadir un tipo nuevo = nueva clase `Type` + `register(...)` en `TypeRegistry`.**
 
 ### Fachada de uso (`dev.stxt.runtime.STXT`)
 

@@ -14,32 +14,12 @@ junto con el punto 9, modelo de contenido cerrado)
 
 ## Tipos (`dev.stxt.schema.type`)
 
-5. **Tipos que faltan**: `TIME`, `UUID`, `BINARY` (STXT-SCHEMA-SPEC 9.4/9.5;
-   vscode 0.4.1) y `MARKDOWN` (9.7; vscode 0.3.4). Añadir clase + registro en
-   `TypeRegistry` + meta-schema (ver punto 12).
-
-6. **HEXADECIMAL** (STXT-SCHEMA-SPEC 9.5; vscode 0.4.4) — Java admite prefijo `#`,
-   exige longitud par y borra whitespace interno. La spec: cualquier cadena
-   `[0-9A-Fa-f]+`, sin prefijo ni paridad. Nota: al portarlo, corregir en
-   `../stxt-web/docs/` los dos documentos con `Color Tema: #...`
-   (`intro_programacion.stxt` y `receta_2.stxt`) o decidir cambiar la spec 9.5
-   (pendiente 10 de stxt-vscode; ese repo ya es escribible desde aquí).
-
-7. **Validación en bloque de los tipos binarios** (`HEXADECIMAL`, `BASE64`, y el
-   futuro `BINARY`) (STXT-SCHEMA-SPEC 9.5; vscode 0.4.4) — `cleanSpaces` elimina
-   todo el whitespace, también el interior de una línea. Debe validarse la
-   concatenación de líneas **trimmeadas**; el whitespace dentro de una línea no se
-   elimina en silencio.
-
-8. **Formas de valor por tipo** (STXT-SCHEMA-SPEC 9.2–9.4; vscode 0.4.4) —
-   - Los tipos inline-only con regex (`NUMBER`, `DATE`, `BOOLEAN`, `URL`, `EMAIL`,
-     `INTEGER`, `NATURAL`, `TIMESTAMP`) no rechazan explícitamente la forma `>>`
-     (validan `getText()` contra la regex); deben fallar con `NOT_ALLOWED_TEXT`
-     como ya hacen `INLINE` y `ENUM`.
-   - `BLOCK` solo rechaza valor inline no vacío; un `Nombre:` vacío pasa. Debe
-     exigir la forma `>>` con `BLOCK_FORM_REQUIRED`.
-   - `GROUP` no rechaza la forma `>>` vacía; debe rechazar tanto valor inline como
-     forma de bloque.
+(sin pendientes; los puntos 5 a 8 —tipos `TIME`/`UUID`/`BINARY`/`MARKDOWN`,
+`HEXADECIMAL` sin prefijo `#` ni paridad, validación en bloque de tipos binarios
+sobre líneas trimmeadas, y formas de valor `NOT_ALLOWED_TEXT`/`BLOCK_FORM_REQUIRED`/
+`GROUP` vacío— se resolvieron el 2026-07-27. De paso se corrigieron en
+`../stxt-web/docs/` los dos documentos con `Color Tema: #...`
+(`intro_programacion.stxt` y `receta_2.stxt`), quitando el prefijo `#`.)
 
 ## Validación de schema (`dev.stxt.schema`)
 
@@ -57,8 +37,9 @@ junto con el punto 9, modelo de contenido cerrado)
     - `Node: Type` no está declarado como `ENUM` con la lista de tipos válidos →
       un schema con tipo desconocido **carga sin error** y solo revienta al validar
       documentos (`TYPE_NOT_SUPPORTED`). Debe fallar al cargar.
-    - Actualizar también `MetaTemplateSchemaProvider` y añadir los tipos nuevos del
-      punto 5 a ambos.
+    - Actualizar también `MetaTemplateSchemaProvider` y añadir a la lista de tipos
+      válidos los tipos ya soportados por `TypeRegistry` que aún faltan en el
+      meta-schema (`TIME`, `UUID`, `BINARY`, `MARKDOWN`).
 
 ## Templates (`dev.stxt.template`)
 

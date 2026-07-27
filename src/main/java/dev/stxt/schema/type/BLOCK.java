@@ -18,9 +18,10 @@ public final class BLOCK implements Type {
     
 	@Override
     public void validate(NodeDefinition ndef, Node n) {
-		if (!n.getValue().isEmpty()) {
-			throw new ValidationException(n.getLine(), "NOT_ALLOWED_VALUE",
-					"Not allowed inline text in node " + n.getQualifiedName());
+		// Forma del valor BLOCK (STXT-SCHEMA-SPEC 9.2): sólo bloque '>>', no forma inline
+		if (!n.isTextNode()) {
+			throw new ValidationException(n.getLine(), "BLOCK_FORM_REQUIRED",
+					"Node " + n.getQualifiedName() + " requires block form '>>'");
 		}
 	}
 

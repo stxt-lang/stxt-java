@@ -11,7 +11,7 @@ Documento(com.dokumentando.documento): 123456-179
     Sitio Web: https://www.programacionbasica.com
     Código Postal: 12345
     Es Público: true
-    Color Tema: #FF5733
+    Color Tema: FF5733
     Tipo Documento: artículo
     Secciones:
         Sección:

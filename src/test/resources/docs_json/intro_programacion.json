@@ -133,13 +133,13 @@
             "normalized_name" : "color-tema",
             "namespace" : "com.dokumentando.documento",
             "text_node" : false,
-            "value" : "#FF5733",
+            "value" : "FF5733",
             "text_lines" : [ ],
             "line" : 14,
             "level" : 1,
             "children" : [ ],
             "qualified_name" : "com.dokumentando.documento:color-tema",
-            "text" : "#FF5733"
+            "text" : "FF5733"
         },
         {
             "name" : "Tipo Documento",

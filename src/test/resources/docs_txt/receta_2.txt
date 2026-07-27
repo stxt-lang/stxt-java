@@ -10,7 +10,7 @@ Documento (com.dokumentando.documento):
 	Sitio Web: https://www.recetasdeliciosas.com/pizza-jamon
 	Código Postal: 54321
 	Es Público: true
-	Color Tema: #FF6347
+	Color Tema: FF6347
 	Tipo Documento: artículo
 	Secciones:
 		Sección:

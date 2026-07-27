@@ -22,6 +22,12 @@ abstract class RegexValue implements Type {
 
 	@Override
     public void validate(NodeDefinition ndef, Node n) {
+		// Forma del valor INLINE (STXT-SCHEMA-SPEC 9.3/9.4): no admite bloque '>>'
+		if (n.isTextNode()) {
+			throw new ValidationException(n.getLine(), "NOT_ALLOWED_TEXT",
+					"Not allowed text in node " + n.getQualifiedName());
+		}
+
 		String value = n.getText();
 		Matcher m = pattern.matcher(value);
 		if (!m.matches()) {

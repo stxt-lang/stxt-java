@@ -18,7 +18,8 @@ public final class GROUP implements Type {
     
 	@Override
     public void validate(NodeDefinition ndef, Node n) {
-		if (!n.getValue().isEmpty() || n.getTextLines().size() > 0) {
+		// Forma del valor NONE (STXT-SCHEMA-SPEC 9.2): ni valor inline ni bloque '>>'
+		if (!n.getValue().isEmpty() || n.isTextNode()) {
 			throw new ValidationException(n.getLine(), "INVALID_VALUE", "Node '" + n.getName() + "' has to be empty");
 		}
 	}

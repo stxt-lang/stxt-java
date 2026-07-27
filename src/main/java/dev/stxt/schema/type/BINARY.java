@@ -7,26 +7,26 @@ import dev.stxt.exceptions.ValidationException;
 import dev.stxt.schema.NodeDefinition;
 import dev.stxt.schema.Type;
 
-public final class HEXADECIMAL implements Type {
-	// STXT-SCHEMA-SPEC 9.5: cadena [0-9A-Fa-f]+, sin prefijo '#' ni exigencia de longitud par
-	private static final Pattern P_HEX = Pattern.compile("^[0-9A-Fa-f]+$");
+public final class BINARY implements Type {
+	// STXT-SCHEMA-SPEC 9.5: cadena [01]+
+	private static final Pattern P_BINARY = Pattern.compile("^[01]+$");
 
-	public static final HEXADECIMAL INSTANCE = new HEXADECIMAL();
+	public static final BINARY INSTANCE = new BINARY();
 
-	private HEXADECIMAL() {
+	private BINARY() {
 	}
 
     @Override
     public String getName() {
         return INSTANCE.getClass().getSimpleName();
     }
-    
+
 	@Override
     public void validate(NodeDefinition ndef, Node n) {
 		String value = BinaryValue.get(n);
-		if (!P_HEX.matcher(value).matches()) {
+		if (!P_BINARY.matcher(value).matches()) {
 			throw new ValidationException(n.getLine(), "INVALID_VALUE",
-					n.getName() + ": Invalid hexadecimal (" + value + ")");
+					n.getName() + ": Invalid binary (" + value + ")");
 		}
 	}
 }

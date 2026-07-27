@@ -21,6 +21,12 @@ public final class URL implements Type {
     
 	@Override
     public void validate(NodeDefinition ndef, Node n) {
+		// Forma del valor INLINE (STXT-SCHEMA-SPEC 9.4): no admite bloque '>>'
+		if (n.isTextNode()) {
+			throw new ValidationException(n.getLine(), "NOT_ALLOWED_TEXT",
+					"Not allowed text in node " + n.getQualifiedName());
+		}
+
 		String url = n.getValue();
 		try {
 			URI uri = new URI(url);
