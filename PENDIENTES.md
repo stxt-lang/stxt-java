@@ -89,12 +89,20 @@ crudo—. Compilado, lint limpio y sus 224 tests pasando, con entrada en su CHAN
 
 ## Cobertura de tests
 
-22. **No hay tests contra el corpus real de `stxt-web`** — stxt-vscode corre 224 tests que
-    cargan todos los schemas y templates de `../stxt-web/.stxt` y validan contra ellos todos
-    los documentos de `docs/`, `es/` y `en/`, más un test de que el schema y el template de
-    un mismo namespace validan idéntico, y otro de round-trip del writer en los dos estilos
-    de indentación. Aquí seguimos con 60 tests sobre fixtures propios. Es lo que hace que
-    los desajustes con la spec se descubran tarde.
+El punto 22 se resolvió el 2026-07-27: `src/test/java/dev/stxt/corpus/` corre 222 tests
+dinámicos contra el corpus real de `../stxt-web` (25 schemas/templates de `.stxt/**`, 44
+documentos de `docs/`, `es/` y `en/`). El corpus **no se copia** aquí a propósito: stxt-web es la
+fuente normativa y los tests deben fallar cuando la implementación se separa de los documentos
+reales, no de una copia congelada. Si el proyecto hermano no está, las suites se saltan
+(`Assumptions.assumeTrue`) en vez de fallar; se puede forzar la ruta con `STXT_WEB=/ruta`.
+
+El puente es `test.Corpus.CorpusLoader`, un `ResourcesLoader` en memoria que indexa por el
+namespace que declara cada fichero, porque el layout de stxt-web (`schemas/`, `templates/`,
+`website/`, …) no es el `<ns>/<resource>.stxt` que espera `ResourcesLoaderDirectory`.
+
+Dos diferencias con el equivalente de stxt-vscode, ambas derivadas del punto 18: donde el TS
+compara listas de errores, aquí la comprobación es "no lanza excepción", y la equivalencia
+schema ↔ template compara el código del primer error (o `OK`).
 
 23. **`docs_raw/` sigue reservada y vacía** — cobertura de parseo puro (documentos sin
     namespace, sin validación de schema) todavía sin escribir.

@@ -146,6 +146,16 @@ y templates con caché. `STXT.rawParser()` da un parser sin validación (solo si
 JUnit 5, organizados por capa bajo `src/test/java/dev/stxt/{core,schema,template,...}` y helpers en
 `src/test/java/test/`. Las suites `ParserAll*Test` recorren directorios de fixtures completos.
 
+Aparte de los fixtures propios, `src/test/java/dev/stxt/corpus/` valida contra el **corpus real de
+`../stxt-web`** (`@TestFactory` con un test dinámico por fichero): que carguen todos los schemas y
+templates de `.stxt/**`, que parseen y validen todos los documentos de `docs/`, `es/` y `en/`, que
+el schema y el template de un mismo namespace validen igual, y que la salida de `NodeWriter` vuelva
+a parsear al mismo árbol en los dos estilos de indentación. El corpus **no se copia** a este
+repositorio: es la fuente normativa y los tests deben fallar cuando el parser se separa de los
+documentos reales. Si `../stxt-web` no está, esas suites se saltan (`Assumptions.assumeTrue`) en vez
+de fallar; `STXT_WEB=/ruta` fuerza la localización. El puente es `test.Corpus.CorpusLoader`, un
+`ResourcesLoader` en memoria que indexa por el namespace que declara cada fichero.
+
 Los fixtures en `src/test/resources/` siguen una convención por carpetas; los tests cargan rutas vía
 `test.FileTestLoction.getFile(dir)`:
 
