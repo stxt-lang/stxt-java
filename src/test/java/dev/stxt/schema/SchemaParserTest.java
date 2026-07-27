@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import dev.stxt.Node;
 import dev.stxt.Parser;
+import dev.stxt.exceptions.ParseException;
 import dev.stxt.exceptions.ValidationException;
 import dev.stxt.resources.ResourcesLoader;
 import dev.stxt.resources.ResourcesLoaderDirectory;
@@ -49,6 +50,40 @@ Schema (@stxt.schema): test.leaf.children
 		Node root = new Parser().parse(text).get(0);
 		ValidationException ex = assertThrows(ValidationException.class, () -> SchemaParser.transformNodeToSchema(root));
 		assertEquals("CHILDREN_NOT_ALLOWED_FOR_TYPE", ex.getCode());
+	}
+
+	@Test
+	void testDuplicatedValueRejected() {
+		// STXT-SCHEMA-SPEC 13.9: 'Value' duplicado tras la normalización por trim. La vía de
+		// template ya lo rechazaba en ChildLineParser; la de schema se lo tragaba en silencio
+		// porque los valores se guardan en un Set.
+		String text = """
+Schema (@stxt.schema): test.value.dup
+    Node: Estado
+        Type: ENUM
+        Values:
+            Value: alta
+            Value: alta
+""";
+		Node root = new Parser().parse(text).get(0);
+		ParseException ex = assertThrows(ParseException.class, () -> SchemaParser.transformNodeToSchema(root));
+		assertEquals("VALUE_DUPLICATED", ex.getCode());
+	}
+
+	@Test
+	void testDuplicatedValueAfterTrimRejected() {
+		// La regla es "tras la normalización por trim": 'alta' y '  alta  ' son el mismo valor
+		String text = """
+Schema (@stxt.schema): test.value.dup.trim
+    Node: Estado
+        Type: ENUM
+        Values:
+            Value: alta
+            Value:   alta
+""";
+		Node root = new Parser().parse(text).get(0);
+		ParseException ex = assertThrows(ParseException.class, () -> SchemaParser.transformNodeToSchema(root));
+		assertEquals("VALUE_DUPLICATED", ex.getCode());
 	}
 
 	@Test

@@ -86,7 +86,7 @@ public class SchemaParser {
 		    Node valuesNode = values.get(0);
 		    values = valuesNode.getChildren("value");
 		    for (Node value: values)
-		        result.addValue(value.getValue());
+		        result.addValue(value.getValue(), value.getLine());
 		}
 		
 		// Miramos enum

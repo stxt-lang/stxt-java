@@ -209,6 +209,20 @@ Template (@stxt.template): test.ref.children
 	}
 
 	@Test
+	void testDuplicatedValueRejected() {
+		// STXT-TEMPLATE-SPEC 14.14: mismo código que por la vía de schema (VALUE_DUPLICATED),
+		// para que la condición no cambie de nombre según la puerta de entrada
+		String text = """
+Template (@stxt.template): test.value.dup
+    Structure >>
+        Estado: (1) ENUM [alta, alta]
+""";
+		Node root = new Parser().parse(text).get(0);
+		ParseException ex = assertThrows(ParseException.class, () -> TemplateParser.transformNodeToSchema(root));
+		assertEquals("VALUE_DUPLICATED", ex.getCode());
+	}
+
+	@Test
 	void testUnknownTypeRejected() {
 		// STXT-TEMPLATE-SPEC 14.6: el tipo debe ser uno de los soportados. En schemas ya lo
 		// cubría el meta-schema (Type es ENUM), pero el Structure de un template es un bloque

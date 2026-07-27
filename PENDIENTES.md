@@ -55,20 +55,27 @@ partió en `VALUES_NOT_ALLOWED_IN_EXTERNAL_NAMESPACE` y `VALUES_NOT_ALLOWED_IN_R
 alineando de paso los mensajes. Los `CHILDREN_*` y `TYPE_DEFINITION_NOT_ALLOWED` ya
 coincidían.
 
-25. **`VALUES_NOT_IN_ENUM` de TS: alinear al revés (arreglar stxt-vscode)** — la tercera
-    divergencia detectada **no se adoptó a propósito**. Para la misma condición (`[values]`
-    con un tipo distinto de `ENUM`), TS usa `VALUES_ONLY_SUPPORTED_BY_ENUM` en
-    `SchemaParser.ts:88` pero `VALUES_NOT_IN_ENUM` en `TemplateParser.ts:131`; Java usa
-    `VALUES_ONLY_SUPPORTED_BY_ENUM` en los dos sitios. Como un template es azúcar
-    equivalente a un schema (STXT-TEMPLATE-SPEC 13/14), el mismo error no debería cambiar de
-    código según la puerta de entrada: la inconsistencia parece un descuido del port, no una
-    decisión. Pendiente cambiar `TemplateParser.ts:131` a `VALUES_ONLY_SUPPORTED_BY_ENUM`
-    (una línea, en `../stxt-vscode`).
+Los puntos 25 y 26 se resolvieron el 2026-07-27, los dos alrededor del mismo principio: **una
+condición de error no debe cambiar de código según la puerta de entrada** (schema o template),
+porque un template es azúcar equivalente a un schema (STXT-TEMPLATE-SPEC 13).
 
-26. **Falta `DUPLICATE_ENUM_VALUE` (STXT-TEMPLATE-SPEC 14.14)** — detectado al inventariar
-    códigos. `NodeDefinition.addValue` guarda en un `Set` y se traga los duplicados en
-    silencio; TS los rechaza (`NodeDefinition.ts:57`). Afecta tanto a schemas como a
-    templates. Es del mismo tipo que las validaciones que faltaban en el punto 19.
+- **25** — la tercera divergencia de códigos **no se adoptó de TS**, se arregló al revés. Para
+  `[values]` con un tipo distinto de `ENUM`, TS usaba `VALUES_ONLY_SUPPORTED_BY_ENUM` en
+  `SchemaParser.ts` pero `VALUES_NOT_IN_ENUM` en `TemplateParser.ts`, mientras Java ya usaba el
+  primero en las dos vías. Se cambió `TemplateParser.ts` en `../stxt-vscode` (con entrada en su
+  CHANGELOG, sección Unreleased); sus 224 tests siguen pasando.
+- **26** — duplicados de valores (STXT-SCHEMA-SPEC 13.9 / STXT-TEMPLATE-SPEC 14.14). Resultó ser
+  más estrecho de lo anotado: `ChildLineParser` ya los rechazaba, así que el hueco era sólo la vía
+  de schema, donde `NodeDefinition.addValue` los guardaba en un `Set` y los perdía en silencio. El
+  check está ahora en `addValue`, que es el punto por el que pasan las dos vías, con el código que
+  Java ya usaba (`VALUE_DUPLICATED`) y trim explícito. **No** se adoptó el `DUPLICATE_ENUM_VALUE`
+  de TS: ese repo tiene aquí el mismo split-brain que el punto 25 (`VALUE_DUPLICATED` en
+  `ChildLineParser.ts:78`, `DUPLICATE_ENUM_VALUE` en `NodeDefinition.ts:61`), y copiarlo lo habría
+  importado. Queda pendiente el arreglo simétrico en `../stxt-vscode` → punto 29.
+
+29. **`DUPLICATE_ENUM_VALUE` de TS: unificar con `VALUE_DUPLICATED`** — mismo caso que el punto 25,
+    detectado al hacer el 26 y no aplicado para no ampliar el alcance sobre el otro repo sin
+    acordarlo. Es una línea en `NodeDefinition.ts:61`, más su entrada de CHANGELOG.
 
 27. **`cl.getValues() != null` vs lista vacía** — Java rechaza por `!= null`; TS exige
     además `length > 0`. Afecta al caso límite `[]`, que en Java entra por la rama de

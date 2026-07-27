@@ -49,8 +49,13 @@ public class NodeDefinition {
 		if (children.containsKey(qname)) throw new SchemaException("CHILD_DEF_ALREADY_DEFINED", "Exists a previous node definition with: " + qname);
 		children.put(qname, childDefinition);
 	}
-	public void addValue(String value) {
-	    this.values.add(value);
+	// STXT-SCHEMA-SPEC 13.9 / STXT-TEMPLATE-SPEC 14.14: no puede haber valores duplicados
+	// tras la normalización por trim. Va aquí, y no en cada parser, porque es el punto por el
+	// que pasan las dos vías (schema y template) y así el código de error es el mismo.
+	public void addValue(String value, int line) {
+	    String trimmed = value == null? "": value.trim();
+	    if (!this.values.add(trimmed))
+	        throw new ParseException(line, "VALUE_DUPLICATED", "The values " + trimmed + " is duplicated");
 	}
     public boolean isAllowedValue(String value) {
         if (this.values.size()==0) return true;

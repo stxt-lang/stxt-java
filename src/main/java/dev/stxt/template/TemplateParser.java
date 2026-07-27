@@ -102,7 +102,7 @@ public class TemplateParser {
             
             if (values != null)
                 for (String value: values)
-                    schemaNode.addValue(value);
+                    schemaNode.addValue(value, node.getLine() + offset);
             
             if (type.equals("ENUM") && (values == null || values.length == 0))
                 throw new ParseException(node.getLine() + offset, "VALUES_EMPTY_FOR_ENUM", "ENUM Type must include values");
