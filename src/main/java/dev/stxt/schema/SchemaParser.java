@@ -59,6 +59,11 @@ public class SchemaParser {
 
 		NodeDefinition result = new NodeDefinition(name, type, n.getLine());
 		
+		// STXT-SCHEMA-SPEC 7.1: descripción opcional del nodo
+		Node descriptionNode = n.getChild("description");
+		if (descriptionNode != null)
+			result.setDescription(descriptionNode.getText());
+		
 		Node children = n.getChild("children");
 		if (children != null) {
 			// STXT-SCHEMA-SPEC 7.1/9.1/13.5: sólo INLINE y GROUP admiten hijos

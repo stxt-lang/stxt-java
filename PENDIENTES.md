@@ -29,36 +29,26 @@ se resolvieron el 2026-07-27.)
 
 ## Templates (`dev.stxt.template`)
 
-13. **Cardinalidades malformadas** (STXT-TEMPLATE-SPEC 7.1; vscode 0.4.2) —
-    `ChildLineParser`:
-    - `(-2)` se acepta como min=max=-2; los números deben ser enteros no negativos.
-    - `(1,2,3)` descarta el tercer valor en silencio; debe ser `INVALID_CHILD_COUNT`.
-    - `(x+)` / `(x-)` lanzan `NumberFormatException` pelada en vez de
-      `INVALID_CHILD_COUNT`.
-    - Falta `MIN_GREATER_THAN_MAX` en `(min,max)`.
-
-14. **`[values]` solo para ENUM y ENUM sin valores** (STXT-TEMPLATE-SPEC 9, 13.7;
-    vscode 0.3.0/0.4.1) — `TemplateParser` acepta lista de valores en cualquier
-    tipo y no exige lista no vacía cuando el tipo es `ENUM`
-    (`VALUES_EMPTY_FOR_ENUM`). El lado schema sí lo hace (`SchemaParser`).
-
-15. **`Description` del template ignorada** (STXT-TEMPLATE-SPEC 12; vscode
-    0.3.0/0.4.2) — `TemplateParser` no parsea el nodo `Description` (ni
-    `SchemaParser` la de los schemas): las descripciones no llegan a
-    `NodeDefinition` y no se detectan entradas duplicadas
-    (`DESCRIPTION_ALREADY_DEFINED`).
-
-16. **Cross-namespace y referencias ignoran cosas en silencio** (STXT-TEMPLATE-SPEC
-    14.13/14.15) — mismo pendiente que stxt-vscode (su PENDIENTES.md, punto 7): en
-    líneas cross-namespace los `[a, b]` y los hijos se ignoran sin error; los hijos
-    de una referencia `@Nodo` también. Además, en Java `type.startsWith("@")`
-    (`TemplateParser`, rama de nodo repetido) lanza NPE si el nodo repetido no
-    lleva tipo. Coordinar la solución con stxt-vscode.
+(sin pendientes; los puntos 13 a 16 —cardinalidades malformadas en
+`ChildLineParser`, `[values]` restringido a `ENUM`/`ENUM` sin valores,
+`Description` de template y schema ignorada, y cross-namespace/referencias que
+ignoraban `[values]`/hijos en silencio (más el NPE de `type.startsWith("@")`)—
+se resolvieron el 2026-07-27. De paso se cerró el hueco de conformidad que
+quedó abierto al marcar resuelto el punto 10: `TemplateParser` ahora también
+rechaza `Children` en nodos de tipo hoja (`CHILDREN_NOT_ALLOWED_FOR_TYPE`,
+STXT-TEMPLATE-SPEC 8.2/14.9), para lo que `TypeRegistry.admitsChildren` pasó a
+ser público. Los nuevos códigos de error introducidos son
+`VALUES_DEFINITION_NOT_ALLOWED`, `CHILDREN_NOT_ALLOWED_IN_EXTERNAL_NAMESPACE`,
+`CHILDREN_NOT_ALLOWED_IN_REFERENCE`, `EXTERNAL_DESCRIPTION_NOT_ALLOWED`,
+`CHILDREN_DESCRIPTION_NOT_ALLOWED`, `NODE_NOT_FOUND` y
+`DESCRIPTION_ALREADY_DEFINED`. Pendiente coordinar con `../stxt-vscode` (su
+PENDIENTES.md, punto 7), que aún no tiene el fix de cross-namespace/referencias.)
 
 ## Decisiones de diseño (no estrictamente spec)
 
-17. **Modelo de errores fail-fast vs multi-error** — el `Validator` Java lanza la
+18. **Modelo de errores fail-fast vs multi-error** — el `Validator` Java lanza la
     primera excepción; el TS devuelve `ValidationException[]` y `parseResult()`
     acumula errores sin abortar. Para una librería de parseo el fail-fast puede
     ser aceptable; decidir si se porta el modelo multi-error (útil para
     herramientas construidas encima).
+

@@ -6,6 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import dev.stxt.exceptions.ParseException;
+import dev.stxt.exceptions.ValidationException;
 
 public final class ChildLineParser {
 
@@ -47,30 +48,30 @@ public final class ChildLineParser {
 			min = 1;
 			max = null;
 		} else if (count.endsWith("+")) {
-			int expectedNum = Integer.parseInt(count.substring(0, count.length() - 1));
-			min = expectedNum;
+			min = parseCount(count.substring(0, count.length() - 1), count, rawLine, lineNumber);
 			max = null;
 		} else if (count.endsWith("-")) {
-			int expectedNum = Integer.parseInt(count.substring(0, count.length() - 1));
 			min = null;
-			max = expectedNum;
+			max = parseCount(count.substring(0, count.length() - 1), count, rawLine, lineNumber);
 		} else if (count.contains(",")) {
-		    try {
-	            String[] minMax = count.split(",");
-	            min = Integer.parseInt(minMax[0].trim());
-                max = Integer.parseInt(minMax[1].trim());
-		    }
-		    catch (Exception e) {
+            String[] minMax = count.split(",", -1);
+            if (minMax.length != 2)
                 throw new ParseException(lineNumber, "INVALID_CHILD_COUNT", "Invalid count " + count + " in line: " + rawLine);
-		    }
+
+            int minValue = parseCount(minMax[0].trim(), count, rawLine, lineNumber);
+            int maxValue = parseCount(minMax[1].trim(), count, rawLine, lineNumber);
+
+            // STXT-TEMPLATE-SPEC 7.1: en (min,max) debe cumplirse min <= max
+            if (minValue > maxValue)
+                throw new ValidationException(lineNumber, "MIN_GREATER_THAN_MAX",
+                        "Min " + minValue + " greater than Max " + maxValue + " in line: " + rawLine);
+
+            min = minValue;
+            max = maxValue;
 		} else {
-            try {
-                int expectedNum = Integer.parseInt(count);
-    			min = expectedNum;
-    			max = expectedNum;
-            } catch (NumberFormatException ex) {
-                throw new ParseException(lineNumber, "INVALID_CHILD_COUNT", "Invalid count " + count + " in line: " + rawLine);
-            }
+            int expectedNum = parseCount(count, count, rawLine, lineNumber);
+			min = expectedNum;
+			max = expectedNum;
 		}
  
         String[] values = null;
@@ -94,5 +95,14 @@ public final class ChildLineParser {
         }
 		
         return new ChildLine(type, min, max, values);
+    }
+
+    // STXT-TEMPLATE-SPEC 7.1: num, min y max deben ser enteros no negativos (sin signo, sin
+    // texto sobrante); lanza INVALID_CHILD_COUNT si no lo son, en vez de propagar
+    // NumberFormatException sin envolver
+    private static int parseCount(String num, String count, String rawLine, int lineNumber) {
+        if (!num.matches("\\d+"))
+            throw new ParseException(lineNumber, "INVALID_CHILD_COUNT", "Invalid count " + count + " in line: " + rawLine);
+        return Integer.parseInt(num);
     }
 }

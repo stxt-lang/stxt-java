@@ -24,7 +24,7 @@ import dev.stxt.schema.type.TIMESTAMP;
 import dev.stxt.schema.type.URL;
 import dev.stxt.schema.type.UUID;
 
-class TypeRegistry {
+public final class TypeRegistry {
 	private static final Map<String, Type> REGISTRY = new HashMap<>();
 
 	static {

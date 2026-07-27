@@ -2,6 +2,7 @@ package test;
 
 import java.io.IOException;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.util.DefaultIndenter;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
@@ -10,10 +11,22 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
+import dev.stxt.schema.NodeDefinition;
+
 public final class JSON {
 	private static final String IDENTER_STRING = "    "; // También podría ser "\t"
+
+	// Mixin: 'description' es un campo nuevo y opcional en NodeDefinition; se omite cuando es
+	// null para no romper los fixtures existentes, que no lo declaran. El resto de campos (p.
+	// ej. min/max en ChildDefinition) siguen serializando null explícitamente como hasta ahora.
+	private abstract static class NodeDefinitionMixin {
+		@JsonInclude(JsonInclude.Include.NON_NULL)
+		abstract String getDescription();
+	}
+
 	private static final ObjectMapper MAPPER = new ObjectMapper()
-			.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
+			.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
+			.addMixIn(NodeDefinition.class, NodeDefinitionMixin.class);
 
 	// Shared pretty-print configuration (tab indentation)
 	private static final DefaultIndenter INDENTER = new DefaultIndenter(IDENTER_STRING, DefaultIndenter.SYS_LF);
@@ -24,6 +37,7 @@ public final class JSON {
 
 	private static ObjectMapper createPrettyMapper() {
 		ObjectMapper mapper = new ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
+				.addMixIn(NodeDefinition.class, NodeDefinitionMixin.class)
 				.enable(SerializationFeature.INDENT_OUTPUT);
 
 		// Use shared pretty printer

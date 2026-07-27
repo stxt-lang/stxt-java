@@ -14,6 +14,7 @@ public class NodeDefinition {
 	private final String name;
 	private final String normalizedName;
 	private final String type;
+	private String description;
 	private final Map<String, ChildDefinition> children = new HashMap<>();
 	private final Set<String> values = new HashSet<String>();
 	
@@ -33,6 +34,12 @@ public class NodeDefinition {
 	}
 	public String getType() {
 		return type;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	public Map<String, ChildDefinition> getChildren() {
 		return Collections.unmodifiableMap(children);
