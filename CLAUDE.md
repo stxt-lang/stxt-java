@@ -46,8 +46,7 @@ spec es trabajo pendiente**, y el `PENDIENTES.md` de este repositorio es la list
 desajustes (consultarla antes de trabajar en conformidad y mantenerla al día). stxt-vscode ya no
 tiene `PENDIENTES.md` propio: lo borró al cerrar los suyos en 0.5.0, así que la referencia de lo
 que le queda es su `CHANGELOG.md`; su `CLAUDE.md` documenta su arquitectura en detalle. Ante una
-ambigüedad de
-comportamiento, el orden de autoridad es: **spec (`../stxt-web`) → parser TypeScript
+ambigüedad de comportamiento, el orden de autoridad es: **spec (`../stxt-web`) → parser TypeScript
 (`../stxt-vscode/stxt`) → este parser Java**.
 
 Existe también `../stxt-cms` (el CMS que convierte `stxt-web` en un portal HTML); **no es

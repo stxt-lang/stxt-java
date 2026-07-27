@@ -48,24 +48,36 @@ literalmente `@Nombre`) y referencia con tipo explícito
 (`@Max Threads`): sólo hay tipo si el último token es un tipo conocido **y** lo que
 queda delante es el nombre del propio nodo.
 
-20. **Códigos de error divergentes con stxt-vscode** — al cerrar el punto 16 en las dos
-    implementaciones por separado, los códigos no coinciden. La spec no los normativiza,
-    pero conviene unificar; los de TS separan mejor los casos y son los que se propone
-    adoptar:
+El punto 20 (códigos de error divergentes con stxt-vscode, consecuencia de haber cerrado
+el punto 16 por separado en cada implementación) se resolvió el 2026-07-27 adoptando los
+códigos de TS, que separan casos que Java compartía: `VALUES_DEFINITION_NOT_ALLOWED` se
+partió en `VALUES_NOT_ALLOWED_IN_EXTERNAL_NAMESPACE` y `VALUES_NOT_ALLOWED_IN_REFERENCE`,
+alineando de paso los mensajes. Los `CHILDREN_*` y `TYPE_DEFINITION_NOT_ALLOWED` ya
+coincidían.
 
-    | Caso | Java (actual) | TS 0.5.0 |
-    |---|---|---|
-    | `[values]` en cross-namespace | `VALUES_DEFINITION_NOT_ALLOWED` | `VALUES_NOT_ALLOWED_IN_EXTERNAL_NAMESPACE` |
-    | `[values]` en referencia `@Nodo` | `VALUES_DEFINITION_NOT_ALLOWED` (mismo código) | `VALUES_NOT_ALLOWED_IN_REFERENCE` |
-    | `[values]` con tipo ≠ `ENUM` | `VALUES_ONLY_SUPPORTED_BY_ENUM` | `VALUES_NOT_IN_ENUM` |
+25. **`VALUES_NOT_IN_ENUM` de TS: alinear al revés (arreglar stxt-vscode)** — la tercera
+    divergencia detectada **no se adoptó a propósito**. Para la misma condición (`[values]`
+    con un tipo distinto de `ENUM`), TS usa `VALUES_ONLY_SUPPORTED_BY_ENUM` en
+    `SchemaParser.ts:88` pero `VALUES_NOT_IN_ENUM` en `TemplateParser.ts:131`; Java usa
+    `VALUES_ONLY_SUPPORTED_BY_ENUM` en los dos sitios. Como un template es azúcar
+    equivalente a un schema (STXT-TEMPLATE-SPEC 13/14), el mismo error no debería cambiar de
+    código según la puerta de entrada: la inconsistencia parece un descuido del port, no una
+    decisión. Pendiente cambiar `TemplateParser.ts:131` a `VALUES_ONLY_SUPPORTED_BY_ENUM`
+    (una línea, en `../stxt-vscode`).
 
-    Los códigos `CHILDREN_*` y `TYPE_DEFINITION_NOT_ALLOWED` sí coinciden. Al tocarlo hay
-    que actualizar `TemplateParserTest`, que afirma los códigos actuales.
+26. **Falta `DUPLICATE_ENUM_VALUE` (STXT-TEMPLATE-SPEC 14.14)** — detectado al inventariar
+    códigos. `NodeDefinition.addValue` guarda en un `Set` y se traga los duplicados en
+    silencio; TS los rechaza (`NodeDefinition.ts:57`). Afecta tanto a schemas como a
+    templates. Es del mismo tipo que las validaciones que faltaban en el punto 19.
 
-21. **`cl.getValues() != null` vs lista vacía** — Java rechaza por `!= null`; TS exige
+27. **`cl.getValues() != null` vs lista vacía** — Java rechaza por `!= null`; TS exige
     además `length > 0`. Afecta al caso límite `[]`, que en Java entra por la rama de
     error de cross-namespace/referencia y en TS no. Decidir cuál es el criterio correcto
     (probablemente el de Java: una lista vacía explícita también es una redefinición).
+
+28. **`Node.getChild` con nombre ambiguo** — TS lanza `AMBIGUOUS_CHILD` cuando hay más de un
+    hijo con el mismo nombre (`Node.ts:103`); Java devuelve el primero. Divergencia de API,
+    sin reflejo en la spec.
 
 ## Cobertura de tests
 

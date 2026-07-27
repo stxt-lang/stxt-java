@@ -148,7 +148,7 @@ Template (@stxt.template): test.cross.values
 """;
 		Node root = new Parser().parse(text).get(0);
 		ParseException ex = assertThrows(ParseException.class, () -> TemplateParser.transformNodeToSchema(root));
-		assertEquals("VALUES_DEFINITION_NOT_ALLOWED", ex.getCode());
+		assertEquals("VALUES_NOT_ALLOWED_IN_EXTERNAL_NAMESPACE", ex.getCode());
 	}
 
 	@Test
@@ -176,6 +176,21 @@ Template (@stxt.template): test.ref.noat
 		Node root = new Parser().parse(text).get(0);
 		ParseException ex = assertThrows(ParseException.class, () -> TemplateParser.transformNodeToSchema(root));
 		assertEquals("NODE_DEFINED_MULTIPLE_TIMES", ex.getCode());
+	}
+
+	@Test
+	void testReferenceWithValuesRejected() {
+		// STXT-TEMPLATE-SPEC 6.4: una referencia @Nombre no debe redefinir valores ENUM.
+		// Código distinto del de cross-namespace, que antes compartía VALUES_DEFINITION_NOT_ALLOWED.
+		String text = """
+Template (@stxt.template): test.ref.values
+    Structure >>
+        Foo: (1) ENUM [a, b]
+        Foo: (2) @Foo [c, d]
+""";
+		Node root = new Parser().parse(text).get(0);
+		ParseException ex = assertThrows(ParseException.class, () -> TemplateParser.transformNodeToSchema(root));
+		assertEquals("VALUES_NOT_ALLOWED_IN_REFERENCE", ex.getCode());
 	}
 
 	@Test

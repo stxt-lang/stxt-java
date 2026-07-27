@@ -69,7 +69,7 @@ public class TemplateParser {
 				throw new ParseException(node.getLine() + offset, "TYPE_DEFINITION_NOT_ALLOWED", "Not allowed type definition in external namespaces");
 			
 			if (cl.getValues() != null)
-				throw new ParseException(node.getLine() + offset, "VALUES_DEFINITION_NOT_ALLOWED", "Not allowed ENUM values in external namespaces");
+				throw new ParseException(node.getLine() + offset, "VALUES_NOT_ALLOWED_IN_EXTERNAL_NAMESPACE", "Not allowed values in external namespaces (node " + node.getName() + ")");
 			
 			if (!node.getChildren().isEmpty())
 				throw new ParseException(node.getLine() + offset, "CHILDREN_NOT_ALLOWED_IN_EXTERNAL_NAMESPACE", "Not allowed children in external namespaces");
@@ -125,10 +125,10 @@ public class TemplateParser {
 			
 			// STXT-TEMPLATE-SPEC 6.4: una referencia @Nombre Nodo NO DEBE redefinir valores ENUM ni hijos
 			if (cl.getValues() != null)
-				throw new ParseException(node.getLine() + offset, "VALUES_DEFINITION_NOT_ALLOWED", "A node reference must not redefine ENUM values: " + node.getName());
-			
+				throw new ParseException(node.getLine() + offset, "VALUES_NOT_ALLOWED_IN_REFERENCE", "Reference '@" + node.getName() + "' can not redefine ENUM values");
+
 			if (!node.getChildren().isEmpty())
-				throw new ParseException(node.getLine() + offset, "CHILDREN_NOT_ALLOWED_IN_REFERENCE", "A node reference must not redefine children: " + node.getName());
+				throw new ParseException(node.getLine() + offset, "CHILDREN_NOT_ALLOWED_IN_REFERENCE", "Reference '@" + node.getName() + "' can not redefine children");
 			
 			return; // OK Definition (referencia): sólo sobrescribe la cardinalidad del Child del padre
 		}
