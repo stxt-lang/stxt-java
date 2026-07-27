@@ -19,9 +19,36 @@ canónica es la española en `es/`, con espejo en inglés en `en/`:
 
 Al tocar comportamiento del parser o de la validación, **contrasta siempre con la spec**: usa
 palabras clave RFC 2119 (DEBE / NO DEBE / DEBERÍA / PUEDE) y casos normativos numerados por sección.
-Trata `../stxt-web` como **solo lectura** desde este proyecto: se puede consultar libremente, pero
-los cambios en la spec se hacen en aquel repositorio, no aquí. Si el parser y la spec discrepan,
-la spec manda; ajusta el parser (o pregunta) antes de cambiar la spec.
+
+Desde este proyecto, `../stxt-web` y `../stxt-vscode` son **también de escritura**: si al trabajar
+aquí hay que corregir la spec o la implementación TypeScript, se puede hacer directamente en esos
+repositorios (cada uno con su propio git). Eso no cambia el orden de autoridad: si el parser y la
+spec discrepan, **la spec manda**; el punto de partida es ajustar el parser, y cambiar la spec solo
+cuando se decida conscientemente que es ella la que está mal.
+
+### Implementación hermana: `../stxt-vscode/stxt`
+
+Existe otra implementación completa del lenguaje en el repo `stxt-vscode` (el proyecto vive en la
+subcarpeta `stxt/` de ese repo). Contiene dos cosas en `src/` (todo TypeScript):
+
+1. Una implementación del lenguaje (parser, schemas, templates, tipos, writer) en `src/core`,
+   `src/schema`, `src/template`, `src/runtime`, `src/processors`, `src/exceptions` — sin
+   dependencia de `vscode`. Originalmente fue un port casi literal de este parser Java, con la
+   misma arquitectura (pila de nodos, `Observer`/`Validator`, `Schema`/`NodeDefinition`/
+   `ChildDefinition`, `TypeRegistry`, meta-schemas bootstrap).
+2. La extensión de VS Code que la consume, en `src/extension.ts` + `src/extension/`
+   (diagnósticos, semantic tokens, hover, autocompletado, formateo).
+
+**Importante:** esa implementación TypeScript está hoy **más alineada con la spec que este parser
+Java** — pasó un repaso de conformidad contra las specs (2026-07) cuyos ajustes se aplicaron allí
+(versiones 0.4.3/0.4.4) pero aún no se han portado aquí: **normalizar stxt-java respecto a la spec
+es trabajo pendiente**. Su `PENDIENTES.md` lista los desajustes spec ↔ implementación que le
+quedan, y su `CLAUDE.md` documenta su arquitectura en detalle. Ante una ambigüedad de
+comportamiento, el orden de autoridad es: **spec (`../stxt-web`) → parser TypeScript
+(`../stxt-vscode/stxt`) → este parser Java**.
+
+Existe también `../stxt-cms` (el CMS que convierte `stxt-web` en un portal HTML); **no es
+relevante para este proyecto**.
 
 ## Comandos
 
