@@ -73,9 +73,10 @@ porque un template es azúcar equivalente a un schema (STXT-TEMPLATE-SPEC 13).
   `ChildLineParser.ts:78`, `DUPLICATE_ENUM_VALUE` en `NodeDefinition.ts:61`), y copiarlo lo habría
   importado. Queda pendiente el arreglo simétrico en `../stxt-vscode` → punto 29.
 
-29. **`DUPLICATE_ENUM_VALUE` de TS: unificar con `VALUE_DUPLICATED`** — mismo caso que el punto 25,
-    detectado al hacer el 26 y no aplicado para no ampliar el alcance sobre el otro repo sin
-    acordarlo. Es una línea en `NodeDefinition.ts:61`, más su entrada de CHANGELOG.
+El punto 29 (el simétrico del 25 para duplicados) se resolvió el 2026-07-27 en `../stxt-vscode`:
+`NodeDefinition.addValue` pasa a `VALUE_DUPLICATED`, el código que su `ChildLineParser` ya usaba, y
+de paso trimea antes de comparar —tenía el mismo hueco que Java en el punto 26, comparaba el valor
+crudo—. Compilado, lint limpio y sus 224 tests pasando, con entrada en su CHANGELOG.
 
 27. **`cl.getValues() != null` vs lista vacía** — Java rechaza por `!= null`; TS exige
     además `length > 0`. Afecta al caso límite `[]`, que en Java entra por la rama de
