@@ -83,9 +83,15 @@ crudo—. Compilado, lint limpio y sus 224 tests pasando, con entrada en su CHAN
     error de cross-namespace/referencia y en TS no. Decidir cuál es el criterio correcto
     (probablemente el de Java: una lista vacía explícita también es una redefinición).
 
-28. **`Node.getChild` con nombre ambiguo** — TS lanza `AMBIGUOUS_CHILD` cuando hay más de un
-    hijo con el mismo nombre (`Node.ts:103`); Java devuelve el primero. Divergencia de API,
-    sin reflejo en la spec.
+28. **`Node.getChild` con nombre ambiguo** — se resolvió el 2026-07-28. No era cierto que Java
+    devolviera el primer hijo en silencio: ya lanzaba excepción, pero con dos divergencias reales
+    frente a `Node.ts`: usaba `IllegalArgumentException` (JDK, sin código, fuera de
+    `dev.stxt.exceptions`) en vez de una excepción con código `AMBIGUOUS_CHILD`; y
+    `getChildren(cname)`/`getChild(cname)` no filtraban por namespace (solo por nombre
+    normalizado), mientras que TS acepta un `namespace` opcional que por defecto es el propio
+    namespace del nodo (`getChildrenByName(cname, namespace?)`). Ahora `getChild`/`getChildren`
+    tienen sobrecarga `(cname, namespace)` —con la de un solo argumento delegando en el namespace
+    propio del nodo, igual que el default de TS— y lanzan `STXTException("AMBIGUOUS_CHILD", ...)`.
 
 ## Cobertura de tests
 

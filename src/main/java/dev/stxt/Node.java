@@ -3,9 +3,11 @@ package dev.stxt;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 import dev.stxt.exceptions.ParseException;
+import dev.stxt.exceptions.STXTException;
 import dev.stxt.utils.StringUtils;
 
 public class Node {
@@ -109,9 +111,13 @@ public class Node {
 	}
 
 	public Node getChild(String cname) {
-		List<Node> result = getChildren(cname);
+		return getChild(cname, this.namespace);
+	}
+
+	public Node getChild(String cname, String namespace) {
+		List<Node> result = getChildren(cname, namespace);
 		if (result.size() > 1)
-			throw new IllegalArgumentException("More than 1 child. Use getChildren");
+			throw new STXTException("AMBIGUOUS_CHILD", "More than 1 child. Use getChildren");
 		if (result.size() == 0)
 			return null;
 		return result.get(0);
@@ -119,11 +125,15 @@ public class Node {
 
 	// Fast access methods to children
 	public List<Node> getChildren(String cname) {
+		return getChildren(cname, this.namespace);
+	}
+
+	public List<Node> getChildren(String cname, String namespace) {
 		String key = StringUtils.normalize(cname);
 		List<Node> result = new ArrayList<Node>();
 
 		for (Node child : children) {
-			if (child.getNormalizedName().equals(key))
+			if (child.getNormalizedName().equals(key) && Objects.equals(child.getNamespace(), namespace))
 				result.add(child);
 		}
 
