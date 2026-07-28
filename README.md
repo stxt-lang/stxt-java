@@ -1,0 +1,207 @@
+# dev.stxt:stxt-core
+
+Parser and schema validator for **STXT**, an indentation-based structured-text format.
+
+STXT is a plain-text format for writing structured, semantic documents: no braces, no closing tags, just indentation. It is designed to be equally readable by humans and by machines, and it comes with an optional schema layer so documents can be validated.
+
+- Website and language reference: <https://stxt.dev>
+- JavaScript/TypeScript implementation: [@stxt-lang/core](https://www.npmjs.com/package/@stxt-lang/core)
+- VSCode extension: [STXT - Semantic Text](https://marketplace.visualstudio.com/items?itemName=stxt-lang.stxt)
+
+## What STXT looks like
+
+```stxt
+# A line starting with '#' is a comment
+
+Article (blog.post):
+    Title: Getting started with STXT
+    Author: Joan
+    Published: 2026-07-28
+    Tags:
+        Tag: parser
+        Tag: text-format
+    Body >>
+        Everything indented under a '>>' node is kept verbatim
+        as a block of text lines.
+```
+
+- `Name: value` declares an **inline node**.
+- `Name >>` opens a **text block**; every deeper-indented line belongs to it.
+- Indentation is **one level per tab or per 4 spaces**.
+- `Name (a.b.c):` attaches a **namespace** to a node; children inherit it unless they declare their own.
+
+## Install
+
+Requires **Java 17** or later.
+
+```xml
+<dependency>
+    <groupId>dev.stxt</groupId>
+    <artifactId>stxt-core</artifactId>
+    <version>0.5.2</version>
+</dependency>
+```
+
+```groovy
+implementation 'dev.stxt:stxt-core:0.5.2'
+```
+
+The library has **no runtime dependencies**. Under JPMS it is an automatic module named `dev.stxt`.
+
+## Parsing
+
+```java
+import java.util.List;
+
+import dev.stxt.Node;
+import dev.stxt.ParseResult;
+import dev.stxt.Parser;
+import dev.stxt.exceptions.ParseException;
+import dev.stxt.runtime.STXT;
+
+String text = """
+        Article (blog.post):
+        \tTitle: Getting started with STXT
+        \tAuthor: Joan
+        """;
+
+// rawParser() parses syntax only, with no schema validation
+Parser parser = STXT.rawParser();
+
+// parseResult() collects every error instead of stopping at the first one
+ParseResult result = parser.parseResult(text);
+
+if (result.hasErrors()) {
+    for (ParseException error : result.getErrors()) {
+        System.err.printf("line %d [%s]: %s%n", error.getLine(), error.getCode(), error.getMessage());
+    }
+}
+
+Node article = result.getNodes().get(0);
+
+System.out.println(article.getName());                  // "Article"
+System.out.println(article.getNamespace());             // "blog.post"
+System.out.println(article.getChild("Title").getValue()); // "Getting started with STXT"
+```
+
+Use `parser.parse(text)` instead if you prefer an exception (`ParseException`) on the first error. Both have a file-based counterpart: `parseFile(File)` and `parseResultFile(File)`.
+
+A document may have **several root nodes**, which is why both entry points return a list.
+
+`getChild(String)` returns `null` when there is no such child, and node lookup is by **canonical name**: `getChild("Título")` and `getChild("titulo")` find the same node. The tree is not frozen after parsing — treat it as read-only.
+
+## Validating against a schema
+
+Schemas are themselves STXT documents, written in the reserved `@stxt.schema` namespace (or in the friendlier `@stxt.template` form, which is equivalent sugar). A `ResourcesLoader` says where they live; `STXT.parser(loader)` returns a parser that resolves both kinds, caches them, and validates every node as it is closed.
+
+`ResourcesLoaderDirectory` expects this layout on disk:
+
+```
+<dir>/@stxt.schema/blog.post.stxt      # schema for namespace blog.post
+<dir>/@stxt.template/blog.note.stxt    # template for namespace blog.note
+```
+
+```java
+import java.io.File;
+
+import dev.stxt.ParseResult;
+import dev.stxt.Parser;
+import dev.stxt.exceptions.ParseException;
+import dev.stxt.exceptions.ValidationException;
+import dev.stxt.resources.ResourcesLoader;
+import dev.stxt.resources.ResourcesLoaderDirectory;
+import dev.stxt.runtime.STXT;
+
+ResourcesLoader loader = new ResourcesLoaderDirectory(new File("schemas"));
+Parser parser = STXT.parser(loader);
+
+ParseResult result = parser.parseResult(documentText);
+
+for (ParseException error : result.getErrors()) {
+    // Schema problems are ValidationException; syntax problems are plain ParseException
+    String severity = (error instanceof ValidationException) ? "warning" : "error";
+    System.out.printf("%s at line %d [%s]: %s%n",
+            severity, error.getLine(), error.getCode(), error.getMessage());
+}
+```
+
+A schema for the document above looks like this:
+
+```stxt
+Schema (@stxt.schema): blog.post
+    Node: Article
+        Children:
+            Child: Title
+                Min: 1
+                Max: 1
+            Child: Author
+                Min: 1
+    Node: Title
+    Node: Author
+```
+
+Available value types: `INLINE`, `BLOCK`, `TEXT`, `MARKDOWN`, `BOOLEAN`, `INTEGER`, `NATURAL`, `NUMBER`, `DATE`, `TIME`, `TIMESTAMP`, `UUID`, `EMAIL`, `URL`, `HEXADECIMAL`, `BINARY`, `BASE64`, `GROUP`, `ENUM`.
+
+To add your own, implement `dev.stxt.schema.Type` and register it in `TypeRegistry`.
+
+## Observing the parse
+
+The parser itself knows nothing about schemas: validation is a decoupled layer plugged in through two hooks. `Observer` receives streaming callbacks while the document is parsed — useful for syntax highlighting, indexes or any per-node bookkeeping.
+
+```java
+import java.util.List;
+
+import dev.stxt.Node;
+import dev.stxt.Parser;
+import dev.stxt.exceptions.ValidationException;
+import dev.stxt.processors.Observer;
+import dev.stxt.processors.Validator;
+
+parser.registerObserver(new Observer() {
+    @Override
+    public void onCreate(Node node) {
+        System.out.println("open " + node.getQualifiedName());
+    }
+
+    @Override
+    public void onFinish(Node node) {
+        System.out.println("close " + node.getQualifiedName());
+    }
+});
+
+// A Validator runs when each node is closed, so documents can be validated
+// while streaming instead of waiting for EOF
+parser.registerValidator(node -> List.<ValidationException>of());
+```
+
+## Writing STXT back out
+
+```java
+import java.util.List;
+
+import dev.stxt.Node;
+import dev.stxt.runtime.NodeWriter;
+import dev.stxt.runtime.NodeWriter.IndentStyle;
+
+// A single node, or a whole document list
+String text = NodeWriter.toSTXT(node, IndentStyle.TABS);
+String docs = NodeWriter.toSTXT(result.getNodes(), IndentStyle.SPACES_4);
+```
+
+Writing a tree out and parsing it back yields the same tree, in both indentation styles.
+
+## Errors
+
+Every failure is an unchecked `dev.stxt.exceptions.STXTException` carrying an uppercase error code (`getCode()`), such as `INVALID_LINE`, `NODE_NOT_EXIST_IN_SCHEMA` or `SCHEMA_NOT_FOUND`:
+
+| Exception | Raised when |
+|---|---|
+| `ParseException` | the syntax is wrong; adds `getLine()` |
+| `ValidationException` | the document breaks its schema (type, cardinality, undeclared child) |
+| `SchemaException` | the schema or template itself is malformed |
+| `ResourceNotFoundException` | no schema or template exists for a namespace |
+| `STXTIOException` | reading a file failed |
+
+## License
+
+MIT — see [LICENSE](LICENSE).
