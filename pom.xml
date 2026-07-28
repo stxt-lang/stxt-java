@@ -9,12 +9,48 @@
     <version>0.5.2</version>
     <packaging>jar</packaging>
 
-    <name>dev.stxt.lang</name>
+    <!-- Metadatos exigidos por Maven Central (name, description, url, licencia,
+         desarrolladores y scm). El artefacto equivalente en npm es @stxt-lang/core. -->
+    <name>STXT Core</name>
+    <description>Parser and schema validator for STXT, an indentation-based structured-text format.</description>
+    <url>https://stxt.dev</url>
+    <inceptionYear>2025</inceptionYear>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://opensource.org/license/mit</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Joan Costa Mombiela</name>
+            <email>joan.costa.mombiela@gmail.com</email>
+            <url>https://github.com/stxt-lang</url>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:https://github.com/stxt-lang/stxt-java.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/stxt-lang/stxt-java.git</developerConnection>
+        <url>https://github.com/stxt-lang/stxt-java</url>
+        <tag>HEAD</tag>
+    </scm>
+
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/stxt-lang/stxt-java/issues</url>
+    </issueManagement>
 
     <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <!-- `release` en vez de source/target: compilamos con JDK 21 y así el compilador
+             valida contra la API real de 17, no solo contra su sintaxis. -->
+        <maven.compiler.release>17</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- Build reproducible: fija las fechas dentro del jar. Se actualiza en cada release. -->
+        <project.build.outputTimestamp>2026-07-28T00:00:00Z</project.build.outputTimestamp>
         <junit.version>5.10.0</junit.version>
         <jackson.version>2.18.0</jackson.version>
     </properties>
@@ -32,6 +68,7 @@
         </dependencies>
     </dependencyManagement>
 
+    <!-- Todas las dependencias son de test: el jar publicado no arrastra ninguna. -->
     <dependencies>
         <!-- Jackson núcleo (ObjectMapper) -->
         <dependency>
@@ -70,10 +107,6 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.13.0</version>
-                <configuration>
-                    <source>${maven.compiler.source}</source>
-                    <target>${maven.compiler.target}</target>
-                </configuration>
             </plugin>
 
             <!-- Plugin de tests con JUnit 5 -->
@@ -85,7 +118,80 @@
                     <useModulePath>false</useModulePath>
                 </configuration>
             </plugin>
+
+            <!-- Empaquetado. La versión va fijada para que el build no dependa de la
+                 que traiga por defecto cada versión de Maven. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.4.2</version>
+                <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <!-- Nombre de módulo estable para consumidores con JPMS,
+                                 mientras no haya module-info.java. -->
+                            <Automatic-Module-Name>dev.stxt</Automatic-Module-Name>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+
+            <!-- Central exige el jar de fuentes junto al binario. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.3.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Central exige también el jar de javadoc. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.11.2</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <!-- Firma GPG solo al publicar: `mvn -Prelease ...`. Fuera de este perfil el
+             build diario no necesita clave ni passphrase. -->
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>3.2.7</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>
