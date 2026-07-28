@@ -62,7 +62,7 @@ Build con Maven (Java 17). No hay wrapper `mvnw`; usa `mvn` del sistema.
 mvn compile                  # compilar src/main
 mvn test                     # compilar + ejecutar toda la suite JUnit 5
 mvn -o test                  # offline, si las deps ya están en ~/.m2
-mvn package                  # genera target/stxt-parser-0.1.0.jar
+mvn package                  # genera target/stxt-core-0.5.2.jar
 
 # Un solo test o método (surefire):
 mvn test -Dtest=ParserTest
