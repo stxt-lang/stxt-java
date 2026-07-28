@@ -39,14 +39,16 @@ subcarpeta `stxt/` de ese repo). Contiene dos cosas en `src/` (todo TypeScript):
 2. La extensión de VS Code que la consume, en `src/extension.ts` + `src/extension/`
    (diagnósticos, semantic tokens, hover, autocompletado, formateo).
 
-**Importante:** esa implementación TypeScript está hoy **más alineada con la spec que este parser
-Java** — pasó un repaso de conformidad contra las specs (2026-07) cuyos ajustes se aplicaron allí
-(versiones 0.4.3 a 0.5.0) y sólo en parte se han portado aquí: **normalizar stxt-java respecto a la
-spec es trabajo pendiente**, y el `PENDIENTES.md` de este repositorio es la lista viva de esos
-desajustes (consultarla antes de trabajar en conformidad y mantenerla al día). stxt-vscode ya no
-tiene `PENDIENTES.md` propio: lo borró al cerrar los suyos en 0.5.0, así que la referencia de lo
-que le queda es su `CHANGELOG.md`; su `CLAUDE.md` documenta su arquitectura en detalle. Ante una
-ambigüedad de comportamiento, el orden de autoridad es: **spec (`../stxt-web`) → parser TypeScript
+**Importante:** esa implementación TypeScript pasó durante 2026-07 un repaso de conformidad contra
+las specs (versiones 0.4.3 a 0.5.1) cuyos ajustes se fueron portando aquí. El repaso de
+conformidad de este repositorio se cerró el 2026-07-28: `PENDIENTES.md` ya no existe (se eliminó al
+cerrarlo, con el mismo criterio que stxt-vscode aplicó al cerrar el suyo en 0.5.0); su historial
+vive en el `git log` de este repo. Si en el futuro se detecta una nueva divergencia con la spec o
+con stxt-vscode, hay que volver a crear `PENDIENTES.md` con el mismo formato (lista numerada, un
+punto por desajuste, se elimina al resolverse) en vez de dejarla acumular en otro sitio.
+stxt-vscode tampoco tiene `PENDIENTES.md` propio: la referencia de lo que le queda es su
+`CHANGELOG.md`; su `CLAUDE.md` documenta su arquitectura en detalle. Ante una ambigüedad de
+comportamiento, el orden de autoridad es: **spec (`../stxt-web`) → parser TypeScript
 (`../stxt-vscode/stxt`) → este parser Java**.
 
 Existe también `../stxt-cms` (el CMS que convierte `stxt-web` en un portal HTML); **no es
