@@ -20,36 +20,35 @@ canónica es la española en `es/`, con espejo en inglés en `en/`:
 Al tocar comportamiento del parser o de la validación, **contrasta siempre con la spec**: usa
 palabras clave RFC 2119 (DEBE / NO DEBE / DEBERÍA / PUEDE) y casos normativos numerados por sección.
 
-Desde este proyecto, `../stxt-web` y `../stxt-vscode` son **también de escritura**: si al trabajar
+Desde este proyecto, `../stxt-web`, `../stxt-js` y `../stxt-vscode` son **también de escritura**: si al trabajar
 aquí hay que corregir la spec o la implementación TypeScript, se puede hacer directamente en esos
 repositorios (cada uno con su propio git). Eso no cambia el orden de autoridad: si el parser y la
 spec discrepan, **la spec manda**; el punto de partida es ajustar el parser, y cambiar la spec solo
 cuando se decida conscientemente que es ella la que está mal.
 
-### Implementación hermana: `../stxt-vscode/stxt`
+### Implementación hermana: `../stxt-js`
 
-Existe otra implementación completa del lenguaje en el repo `stxt-vscode` (el proyecto vive en la
-subcarpeta `stxt/` de ese repo). Contiene dos cosas en `src/` (todo TypeScript):
+La otra implementación completa del lenguaje (parser, schemas, templates, tipos, writer, todo
+TypeScript) vive en el repo `stxt-js` y se publica en npm como **`@stxt-lang/core`**. Originalmente
+fue un port casi literal de este parser Java, con la misma arquitectura (pila de nodos,
+`Observer`/`Validator`, `Schema`/`NodeDefinition`/`ChildDefinition`, `TypeRegistry`, meta-schemas
+bootstrap), así que sus clases siguen teniendo casi siempre un homólogo directo aquí.
 
-1. Una implementación del lenguaje (parser, schemas, templates, tipos, writer) en `src/core`,
-   `src/schema`, `src/template`, `src/runtime`, `src/processors`, `src/exceptions` — sin
-   dependencia de `vscode`. Originalmente fue un port casi literal de este parser Java, con la
-   misma arquitectura (pila de nodos, `Observer`/`Validator`, `Schema`/`NodeDefinition`/
-   `ChildDefinition`, `TypeRegistry`, meta-schemas bootstrap).
-2. La extensión de VS Code que la consume, en `src/extension.ts` + `src/extension/`
-   (diagnósticos, semantic tokens, hover, autocompletado, formateo).
+`../stxt-vscode` es **solo la extensión de VS Code** (diagnósticos, semantic tokens, hover,
+autocompletado, formateo): desde su versión 0.5.1 borró su copia del lenguaje y consume
+`@stxt-lang/core` como dependencia npm normal. No busques ahí el parser.
 
 **Importante:** esa implementación TypeScript pasó durante 2026-07 un repaso de conformidad contra
 las specs (versiones 0.4.3 a 0.5.1) cuyos ajustes se fueron portando aquí. El repaso de
 conformidad de este repositorio se cerró el 2026-07-28: `PENDIENTES.md` ya no existe (se eliminó al
 cerrarlo, con el mismo criterio que stxt-vscode aplicó al cerrar el suyo en 0.5.0); su historial
 vive en el `git log` de este repo. Si en el futuro se detecta una nueva divergencia con la spec o
-con stxt-vscode, hay que volver a crear `PENDIENTES.md` con el mismo formato (lista numerada, un
+con stxt-js, hay que volver a crear `PENDIENTES.md` con el mismo formato (lista numerada, un
 punto por desajuste, se elimina al resolverse) en vez de dejarla acumular en otro sitio.
-stxt-vscode tampoco tiene `PENDIENTES.md` propio: la referencia de lo que le queda es su
-`CHANGELOG.md`; su `CLAUDE.md` documenta su arquitectura en detalle. Ante una ambigüedad de
+stxt-js y stxt-vscode no tienen `PENDIENTES.md` propio: la referencia de lo que les queda es su
+`CHANGELOG.md`; sus `CLAUDE.md` documentan su arquitectura en detalle. Ante una ambigüedad de
 comportamiento, el orden de autoridad es: **spec (`../stxt-web`) → parser TypeScript
-(`../stxt-vscode/stxt`) → este parser Java**.
+(`../stxt-js`) → este parser Java**.
 
 Existe también `../stxt-cms` (el CMS que convierte `stxt-web` en un portal HTML); **no es
 relevante para este proyecto**.
@@ -74,6 +73,39 @@ Nota: Jackson (databind, jsr310, parameter-names) es dependencia **de test únic
 comparar el árbol parseado contra JSON de referencia en `src/test/resources/*_json/`. El parser de
 producción (`src/main`) no depende de Jackson.
 
+## Publicación en Maven Central
+
+El artefacto es **`dev.stxt:stxt-core`**, licencia **MIT**. La versión se mantiene **alineada con
+`@stxt-lang/core`** (npm): un mismo número debe significar el mismo comportamiento en las dos
+implementaciones, así que subir versión aquí sin un cambio equivalente allí (o al revés) es una
+señal de que algo se ha desalineado. El jar publicado **no arrastra dependencias** (todo es
+`test`), apunta a Java 17 y declara `Automatic-Module-Name: dev.stxt`.
+
+El `groupId` `dev.stxt` se verifica en el Central Portal con un **registro TXT en el DNS de
+`stxt.dev`** (el dominio es de la organización). La publicación es **manual**, no hay CI: el
+release se hace desde una máquina que tenga `../stxt-web` al lado, para que las suites de corpus
+se ejecuten de verdad en vez de saltarse.
+
+```bash
+mvn package                  # build normal, sin firmar
+mvn -Prelease verify         # + firma GPG de los 4 ficheros (pom y 3 jars)
+mvn -Prelease deploy         # publica (requiere ~/.m2/settings.xml con el token del Portal)
+```
+
+El perfil `release` aísla la firma GPG para que el build diario no pida clave. Al preparar una
+versión hay que tocar, además del código:
+
+1. `<version>` en [pom.xml](pom.xml) y `project.build.outputTimestamp` (fija las fechas dentro del
+   jar; si no se actualiza, el build deja de ser reproducible respecto a esa release).
+2. La versión en los dos snippets de instalación del [README.md](README.md) (Maven y Gradle).
+3. Una entrada nueva en [CHANGELOG.md](CHANGELOG.md), formato Keep a Changelog como stxt-vscode.
+
+El README es **la portada del artefacto en Central y en javadoc.io**, no un fichero interno: sus
+ejemplos están compilados y ejecutados contra el parser real, y deben seguir estándolo si se tocan.
+
+Una release publicada en Central es **inmutable**: no se puede borrar ni sustituir, solo publicar
+una versión nueva encima.
+
 ## Arquitectura
 
 El flujo es **parseo sintáctico → árbol de `Node` → validación semántica opcional vía hooks**. El
@@ -86,7 +118,9 @@ núcleo no conoce los schemas: la validación es una capa desacoplada que se eng
   nodos hasta el nivel correspondiente (`closeToLevel`, que adjunta cada nodo cerrado a su padre o a
   la lista de documentos raíz), y abre el nodo nuevo. Distingue nodo INLINE (`:`) de bloque de texto
   BLOCK (`>>`) por la primera posición de cada token. Un documento puede tener **varios nodos raíz**.
-- [Node.java](src/main/java/dev/stxt/Node.java) — nodo inmutable del árbol. Guarda nombre original,
+- [Node.java](src/main/java/dev/stxt/Node.java) — nodo del árbol. **Mutable durante el parseo**
+  (`addChild`/`addTextLine` son públicos y no existe `freeze()`); una vez cerrado el documento se
+  trata como de solo lectura, que es lo que documenta el README. Guarda nombre original,
   `normalizedName` (nombre canónico para igualdad/búsqueda), namespace, valor inline o líneas de texto,
   e hijos en orden de aparición. La igualdad lógica entre nodos es por nombre canónico.
 - [LineIndentParser.java](src/main/java/dev/stxt/LineIndentParser.java) — calcula el nivel de
