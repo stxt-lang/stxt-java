@@ -87,11 +87,13 @@ public final class ChildLineParser {
                     list.add(part);
                 }
             }
-            if (list.size()>0) {
-                values = new String[list.size()];
-                for (int i = 0; i<list.size(); i++)
-                    values[i] = list.get(i);
-            }            
+            // Los corchetes presentes (aunque vengan vacíos, "[]") cuentan como una
+            // definición explícita de valores: devolvemos un array no-nulo (posiblemente
+            // vacío) para distinguirlo de la ausencia total de corchetes (valuesStr == null,
+            // values permanece null). Así "[]" se trata como redefinición/definición real.
+            values = new String[list.size()];
+            for (int i = 0; i<list.size(); i++)
+                values[i] = list.get(i);
         }
 		
         return new ChildLine(type, min, max, values);

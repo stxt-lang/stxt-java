@@ -78,10 +78,24 @@ El punto 29 (el simétrico del 25 para duplicados) se resolvió el 2026-07-27 en
 de paso trimea antes de comparar —tenía el mismo hueco que Java en el punto 26, comparaba el valor
 crudo—. Compilado, lint limpio y sus 224 tests pasando, con entrada en su CHANGELOG.
 
-27. **`cl.getValues() != null` vs lista vacía** — Java rechaza por `!= null`; TS exige
-    además `length > 0`. Afecta al caso límite `[]`, que en Java entra por la rama de
-    error de cross-namespace/referencia y en TS no. Decidir cuál es el criterio correcto
-    (probablemente el de Java: una lista vacía explícita también es una redefinición).
+27. **`cl.getValues() != null` vs lista vacía** — se resolvió el 2026-07-28. La descripción
+    original ya no era exacta: comprobado con `ChildLineParser.parse("(1) ENUM []", 1)`, `[]`
+    devolvía `null` (idéntico a no poner corchetes), por un guard `if (list.size()>0)` en
+    `ChildLineParser.java` que colapsaba cualquier lista resultante vacía a `null` —
+    probablemente efecto colateral de un arreglo posterior (punto 26). Eso hacía que el check
+    `cl.getValues() != null` de `TemplateParser.java` nunca pudiera distinguir `[]` de la
+    ausencia de corchetes, en ningún sentido (ni el de Java ni el de TS).
+    Decisión adoptada: `[]` explícito **cuenta como redefinición/definición de valores** aunque
+    esté vacío. Arreglo: `ChildLineParser.java` ahora asigna siempre un array no-nulo (posible-
+    mente vacío) cuando el grupo `values` de la regex matchea (corchetes presentes), reservando
+    `null` solo para la ausencia total de `[...]`. Efecto: `@Nombre []` en referencia o
+    namespace externo ahora lanza `VALUES_NOT_ALLOWED_IN_REFERENCE` /
+    `VALUES_NOT_ALLOWED_IN_EXTERNAL_NAMESPACE`; y `(1) TEXT []` (tipo no ENUM) ahora lanza
+    `VALUES_ONLY_SUPPORTED_BY_ENUM` en vez de ignorarse en silencio. Sin cambios en
+    `TemplateParser.java` (los checks `!= null` ya eran correctos, solo llegaban a datos mal
+    normalizados). 286 tests siguen en verde. Pendiente: portar el mismo criterio a
+    `../stxt-vscode/stxt/src/template/ChildLineParser.ts` si allí tiene el mismo colapso a
+    lista vacía/undefined.
 
 28. **`Node.getChild` con nombre ambiguo** — se resolvió el 2026-07-28. No era cierto que Java
     devolviera el primer hijo en silencio: ya lanzaba excepción, pero con dos divergencias reales
