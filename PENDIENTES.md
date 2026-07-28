@@ -146,8 +146,10 @@ nuevo `ParseResult` (nodos + errores) sin interrumpirse en el primero. `parse(St
 `parseFile(File)` no cambian de contrato: delegan en `parseResult` y lanzan el primer
 error acumulado, preservando el comportamiento fail-fast para el código existente.)
 
-24. **Tipo de excepción en errores de `Structure`** — Java lanza `ParseException` en todos
-    los errores de template; TS los mantiene como `ValidationException` (fue un punto de su
-    0.4.2, motivado por la severidad Warning en el editor). Aquí no hay severidades, pero es
-    divergencia de contrato de API; con el punto 18 ya resuelto, esta decisión queda
-    independiente y sigue pendiente.
+El punto 24 (tipo de excepción en errores de `Structure`) se resolvió el 2026-07-28: todos los
+`throw new ParseException(...)` de `TemplateParser.java` y `ChildLineParser.java` pasan a
+`ValidationException` (que ya extiende `ParseException`, así que el código existente que capturaba
+`ParseException` sigue funcionando sin cambios), igualando el criterio de `../stxt-vscode/stxt`
+(`TemplateParser.ts`/`ChildLineParser.ts`, donde todo error de esa capa ya era `ValidationException`
+desde su 0.4.2). Sin cambios de comportamiento observable más allá del tipo de excepción; 287 tests
+en verde.

@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import dev.stxt.exceptions.ParseException;
 import dev.stxt.exceptions.ValidationException;
 
 public final class ChildLineParser {
@@ -27,7 +26,7 @@ public final class ChildLineParser {
     	
         Matcher m = CHILD_LINE_PATTERN.matcher(rawLine);
         if (!m.matches()) {
-            throw new ParseException(lineNumber, "INVALID_CHILD_LINE", "Line not valid: " + rawLine);
+            throw new ValidationException(lineNumber, "INVALID_CHILD_LINE", "Line not valid: " + rawLine);
         }
 
         String type = m.group("type");
@@ -56,7 +55,7 @@ public final class ChildLineParser {
 		} else if (count.contains(",")) {
             String[] minMax = count.split(",", -1);
             if (minMax.length != 2)
-                throw new ParseException(lineNumber, "INVALID_CHILD_COUNT", "Invalid count " + count + " in line: " + rawLine);
+                throw new ValidationException(lineNumber, "INVALID_CHILD_COUNT", "Invalid count " + count + " in line: " + rawLine);
 
             int minValue = parseCount(minMax[0].trim(), count, rawLine, lineNumber);
             int maxValue = parseCount(minMax[1].trim(), count, rawLine, lineNumber);
@@ -83,7 +82,7 @@ public final class ChildLineParser {
                 part = part.trim();
                 if (!part.isEmpty()) {
                     if (list.contains(part)) 
-                        throw new ParseException(lineNumber, "VALUE_DUPLICATED", "The values " + part + " is duplicated");
+                        throw new ValidationException(lineNumber, "VALUE_DUPLICATED", "The values " + part + " is duplicated");
                     list.add(part);
                 }
             }
@@ -104,7 +103,7 @@ public final class ChildLineParser {
     // NumberFormatException sin envolver
     private static int parseCount(String num, String count, String rawLine, int lineNumber) {
         if (!num.matches("\\d+"))
-            throw new ParseException(lineNumber, "INVALID_CHILD_COUNT", "Invalid count " + count + " in line: " + rawLine);
+            throw new ValidationException(lineNumber, "INVALID_CHILD_COUNT", "Invalid count " + count + " in line: " + rawLine);
         return Integer.parseInt(num);
     }
 }

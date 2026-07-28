@@ -4,7 +4,7 @@ import java.util.List;
 
 import dev.stxt.Node;
 import dev.stxt.Parser;
-import dev.stxt.exceptions.ParseException;
+import dev.stxt.exceptions.ValidationException;
 import dev.stxt.schema.ChildDefinition;
 import dev.stxt.schema.NodeDefinition;
 import dev.stxt.schema.Schema;
@@ -21,7 +21,7 @@ public class TemplateParser {
 		// Buscamos nodo structure
 		Node structure = node.getChild("structure");
 		if (structure == null) {
-		    throw new ParseException(node.getLine(), "TEMPLATE_STRUCTURE_REQUIRED",
+		    throw new ValidationException(node.getLine(), "TEMPLATE_STRUCTURE_REQUIRED",
 		        "Template must define 'Structure >>'");
 		}
 		
@@ -66,13 +66,13 @@ public class TemplateParser {
 			// tipo, valores ENUM e hijos no están permitidos y deben rechazarse, no ignorarse
 			String type = cl.getType();
 			if (type != null && !type.trim().isEmpty()) 
-				throw new ParseException(node.getLine() + offset, "TYPE_DEFINITION_NOT_ALLOWED", "Not allowed type definition in external namespaces");
+				throw new ValidationException(node.getLine() + offset, "TYPE_DEFINITION_NOT_ALLOWED", "Not allowed type definition in external namespaces");
 			
 			if (cl.getValues() != null)
-				throw new ParseException(node.getLine() + offset, "VALUES_NOT_ALLOWED_IN_EXTERNAL_NAMESPACE", "Not allowed values in external namespaces (node " + node.getName() + ")");
+				throw new ValidationException(node.getLine() + offset, "VALUES_NOT_ALLOWED_IN_EXTERNAL_NAMESPACE", "Not allowed values in external namespaces (node " + node.getName() + ")");
 			
 			if (!node.getChildren().isEmpty())
-				throw new ParseException(node.getLine() + offset, "CHILDREN_NOT_ALLOWED_IN_EXTERNAL_NAMESPACE", "Not allowed children in external namespaces");
+				throw new ValidationException(node.getLine() + offset, "CHILDREN_NOT_ALLOWED_IN_EXTERNAL_NAMESPACE", "Not allowed children in external namespaces");
 			
 			return; // No hacemos nada con creación de nodos que no son de @stxt.template!!
 		}
@@ -86,11 +86,11 @@ public class TemplateParser {
 			// como los ancestros abiertos, así que una referencia que no resuelve aquí no
 			// resuelve a nada (STXT-TEMPLATE-SPEC 6.4 y 14.11)
 			if (type.startsWith("@"))
-				throw new ParseException(node.getLine() + offset, "REFERENCE_NOT_FOUND", "Reference '" + type + "' does not point to a previous definition or an open ancestor");
+				throw new ValidationException(node.getLine() + offset, "REFERENCE_NOT_FOUND", "Reference '" + type + "' does not point to a previous definition or an open ancestor");
 
 			// STXT-TEMPLATE-SPEC 14.6: el tipo debe ser uno de los soportados
 			if (TypeRegistry.get(type) == null)
-				throw new ParseException(node.getLine() + offset, "TYPE_NOT_VALID", "Type not valid: " + type);
+				throw new ValidationException(node.getLine() + offset, "TYPE_NOT_VALID", "Type not valid: " + type);
 
 			schemaNode = new NodeDefinition(node.getName(), type, node.getLine() + offset);
 			schema.addNodeDefinition(schemaNode);
@@ -98,37 +98,37 @@ public class TemplateParser {
             
             // STXT-TEMPLATE-SPEC 9/14.7/14.8: [values] sólo para ENUM, y ENUM exige valores no vacíos
             if (values != null && !type.equals("ENUM"))
-                throw new ParseException(node.getLine() + offset, "VALUES_ONLY_SUPPORTED_BY_ENUM", "Values only supported for type ENUM, not for type " + type);
+                throw new ValidationException(node.getLine() + offset, "VALUES_ONLY_SUPPORTED_BY_ENUM", "Values only supported for type ENUM, not for type " + type);
             
             if (values != null)
                 for (String value: values)
                     schemaNode.addValue(value, node.getLine() + offset);
             
             if (type.equals("ENUM") && (values == null || values.length == 0))
-                throw new ParseException(node.getLine() + offset, "VALUES_EMPTY_FOR_ENUM", "ENUM Type must include values");
+                throw new ValidationException(node.getLine() + offset, "VALUES_EMPTY_FOR_ENUM", "ENUM Type must include values");
 		} else {
 			String type = cl.getType();
 			// STXT-TEMPLATE-SPEC 6.4: una reaparición local DEBE ser una referencia '@Nombre';
 			// si no lleva tipo (type == null), no es una referencia válida (evita NPE)
 			if (type == null || !type.startsWith("@"))
-				throw new ParseException(node.getLine() + offset, "NODE_DEFINED_MULTIPLE_TIMES", "Multiple node reference must start with @: " + node.getName());				
+				throw new ValidationException(node.getLine() + offset, "NODE_DEFINED_MULTIPLE_TIMES", "Multiple node reference must start with @: " + node.getName());				
 				
 			String reference = type.substring(1).trim();
 
 			// STXT-TEMPLATE-SPEC 14.13: no se puede declarar referencia y tipo explícito a la vez
 			String explicitType = referenceType(reference, node.getNormalizedName());
 			if (explicitType != null)
-				throw new ParseException(node.getLine() + offset, "REFERENCE_WITH_TYPE_NOT_ALLOWED", "Reference '@" + node.getName() + "' can not declare a type: " + explicitType);
+				throw new ValidationException(node.getLine() + offset, "REFERENCE_WITH_TYPE_NOT_ALLOWED", "Reference '@" + node.getName() + "' can not declare a type: " + explicitType);
 
 			if (!StringUtils.normalize(reference).equals(node.getNormalizedName()))
-				throw new ParseException(node.getLine() + offset, "NODE_REFERENCE_NOT_VALID", "Reference must be '" + "@" + node.getName() + "', not '" + reference + "'");
+				throw new ValidationException(node.getLine() + offset, "NODE_REFERENCE_NOT_VALID", "Reference must be '" + "@" + node.getName() + "', not '" + reference + "'");
 			
 			// STXT-TEMPLATE-SPEC 6.4: una referencia @Nombre Nodo NO DEBE redefinir valores ENUM ni hijos
 			if (cl.getValues() != null)
-				throw new ParseException(node.getLine() + offset, "VALUES_NOT_ALLOWED_IN_REFERENCE", "Reference '@" + node.getName() + "' can not redefine ENUM values");
+				throw new ValidationException(node.getLine() + offset, "VALUES_NOT_ALLOWED_IN_REFERENCE", "Reference '@" + node.getName() + "' can not redefine ENUM values");
 
 			if (!node.getChildren().isEmpty())
-				throw new ParseException(node.getLine() + offset, "CHILDREN_NOT_ALLOWED_IN_REFERENCE", "Reference '@" + node.getName() + "' can not redefine children");
+				throw new ValidationException(node.getLine() + offset, "CHILDREN_NOT_ALLOWED_IN_REFERENCE", "Reference '@" + node.getName() + "' can not redefine children");
 			
 			return; // OK Definition (referencia): sólo sobrescribe la cardinalidad del Child del padre
 		}
@@ -138,7 +138,7 @@ public class TemplateParser {
 		
 		// STXT-TEMPLATE-SPEC 8.2/14.9: sólo INLINE y GROUP admiten hijos
 		if (!childrenNode.isEmpty() && !TypeRegistry.admitsChildren(schemaNode.getType()))
-			throw new ParseException(node.getLine() + offset, "CHILDREN_NOT_ALLOWED_FOR_TYPE", "Type " + schemaNode.getType() + " does not allow children (node " + node.getName() + ")");
+			throw new ValidationException(node.getLine() + offset, "CHILDREN_NOT_ALLOWED_FOR_TYPE", "Type " + schemaNode.getType() + " does not allow children (node " + node.getName() + ")");
 		
 		// Insertamos childs
 		for (Node child: childrenNode) {
@@ -187,20 +187,20 @@ public class TemplateParser {
 			
 			// STXT-TEMPLATE-SPEC 14.19: una entrada de Description no puede declarar otro namespace
 			if (!namespace.equals(schema.getNamespace()))
-				throw new ParseException(node.getLine() + offset, "EXTERNAL_DESCRIPTION_NOT_ALLOWED", "Not allowed description in external namespaces");
+				throw new ValidationException(node.getLine() + offset, "EXTERNAL_DESCRIPTION_NOT_ALLOWED", "Not allowed description in external namespaces");
 			
 			// STXT-TEMPLATE-SPEC 14.18: una entrada de Description no admite hijos estructurados
 			if (!node.getChildren().isEmpty())
-				throw new ParseException(node.getLine() + offset, "CHILDREN_DESCRIPTION_NOT_ALLOWED", "Not allowed children in description");
+				throw new ValidationException(node.getLine() + offset, "CHILDREN_DESCRIPTION_NOT_ALLOWED", "Not allowed children in description");
 			
 			// STXT-TEMPLATE-SPEC 14.17: la entrada debe corresponder a un nodo definido en Structure
 			NodeDefinition nodeDef = schema.getNodeDefinition(node.getName());
 			if (nodeDef == null)
-				throw new ParseException(node.getLine() + offset, "NODE_NOT_FOUND", "Not found node with name: " + node.getName());
+				throw new ValidationException(node.getLine() + offset, "NODE_NOT_FOUND", "Not found node with name: " + node.getName());
 			
 			// STXT-TEMPLATE-SPEC 14.20: no puede haber más de una entrada por nodo
 			if (nodeDef.getDescription() != null)
-				throw new ParseException(node.getLine() + offset, "DESCRIPTION_ALREADY_DEFINED", "Exists a previous description for node: " + node.getName());
+				throw new ValidationException(node.getLine() + offset, "DESCRIPTION_ALREADY_DEFINED", "Exists a previous description for node: " + node.getName());
 			
 			nodeDef.setDescription(node.getText());
 		}
