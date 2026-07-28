@@ -126,8 +126,13 @@ compara el primer error) porque las suites de corpus usan `parse()`/`parseFile()
 `parseResult()`; adaptarlas a comparar la lista completa de errores queda pendiente si se quiere
 paridad total con TS.
 
-23. **`docs_raw/` sigue reservada y vacía** — cobertura de parseo puro (documentos sin
-    namespace, sin validación de schema) todavía sin escribir.
+23. **`docs_raw/` sigue reservada y vacía** — se resolvió el 2026-07-28. Nuevo
+    `dev.stxt.runtime.ParserAllRawDocsTest`, análogo a `ParserAllDocsTest` pero usando
+    `STXT.rawParser()` (sin `SchemaValidator`, ya que estos documentos no declaran namespace y no
+    hay schema que resolver) sobre los ficheros de `docs_raw/`. Compara el árbol contra
+    `docs_raw_json/` y el resultado de `NodeWriter.toSTXT` contra `docs_raw_txt/`, igual que el
+    resto de suites `ParserAllDocsTest`. El único fixture existente, `client_raw.stxt`, es
+    `docs/client.stxt` sin el `(com.gym.docs)` del nodo raíz.
 
 ## Decisiones de diseño (no estrictamente spec)
 
