@@ -14,7 +14,7 @@ import test.FileTestLoction;
 import test.FileUtils;
 
 /**
- * Cobertura de parseo puro (PENDIENTES.md punto 23): documentos de {@code docs_raw/} no
+ * Cobertura de parseo puro: los documentos de {@code docs_raw/} no
  * declaran namespace, así que se parsean con {@link STXT#rawParser()} (sin
  * {@code SchemaValidator}: no hay schema que resolver para un namespace vacío). Comprueba el
  * árbol resultante contra {@code docs_raw_json/} y que {@link NodeWriter} reproduce el mismo

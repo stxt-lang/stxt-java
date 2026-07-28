@@ -166,8 +166,9 @@ Los fixtures en `src/test/resources/` siguen una convención por carpetas; los t
 - `@stxt.schema/<ns>.stxt` y `@stxt.template/<ns>.stxt` — schemas/templates indexados por namespace.
 - `schema_json/<ns>.json` — el `Schema` resultante esperado, tanto si viene de un schema como de un
   template (por eso `TemplateToSchema*Test` y `SchemaReaderTestAll` comparten esta carpeta).
-- `docs_raw/` — **reservada, aún sin tests**: documentos sin namespace (parseo puro, sin validación de
-  schema). No borrarla; es el sitio donde añadir esa cobertura cuando toque.
+- `docs_raw/` — documentos sin namespace (parseo puro con `STXT.rawParser()`, sin validación de
+  schema); `docs_raw_json/` el árbol esperado y `docs_raw_txt/` el render texto. Los recorre
+  `ParserAllRawDocsTest`.
 
 Al añadir un caso, respeta el emparejamiento documento ↔ JSON/TXT esperado y la carpeta `error_*` si la entrada debe rechazarse.
 
