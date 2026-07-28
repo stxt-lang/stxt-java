@@ -100,22 +100,29 @@ El puente es `test.Corpus.CorpusLoader`, un `ResourcesLoader` en memoria que ind
 namespace que declara cada fichero, porque el layout de stxt-web (`schemas/`, `templates/`,
 `website/`, …) no es el `<ns>/<resource>.stxt` que espera `ResourcesLoaderDirectory`.
 
-Dos diferencias con el equivalente de stxt-vscode, ambas derivadas del punto 18: donde el TS
-compara listas de errores, aquí la comprobación es "no lanza excepción", y la equivalencia
-schema ↔ template compara el código del primer error (o `OK`).
+Dos diferencias con el equivalente de stxt-vscode, ambas derivadas del (ya resuelto) punto 18:
+donde el TS compara listas de errores, aquí la comprobación sigue siendo "no lanza excepción" (o
+compara el primer error) porque las suites de corpus usan `parse()`/`parseFile()`, no el nuevo
+`parseResult()`; adaptarlas a comparar la lista completa de errores queda pendiente si se quiere
+paridad total con TS.
 
 23. **`docs_raw/` sigue reservada y vacía** — cobertura de parseo puro (documentos sin
     namespace, sin validación de schema) todavía sin escribir.
 
 ## Decisiones de diseño (no estrictamente spec)
 
-18. **Modelo de errores fail-fast vs multi-error** — el `Validator` Java lanza la
-    primera excepción; el TS devuelve `ValidationException[]` y `parseResult()`
-    acumula errores sin abortar. Para una librería de parseo el fail-fast puede
-    ser aceptable; decidir si se porta el modelo multi-error (útil para
-    herramientas construidas encima).
+(el punto 18 —modelo de errores fail-fast vs multi-error— se resolvió el 2026-07-28,
+siguiendo el diseño de `../stxt-vscode`: `Validator.validate` devuelve
+`List<ValidationException>` en vez de lanzar; `SchemaValidator` acumula en esa lista
+los errores de tipo, hijos no declarados y cardinalidad de un mismo nodo en vez de
+abortar en el primero; `Parser` gana `parseResult(String)`/`parseResultFile(File)`,
+que recorren todo el documento acumulando errores de sintaxis y de validación en un
+nuevo `ParseResult` (nodos + errores) sin interrumpirse en el primero. `parse(String)`/
+`parseFile(File)` no cambian de contrato: delegan en `parseResult` y lanzan el primer
+error acumulado, preservando el comportamiento fail-fast para el código existente.)
 
 24. **Tipo de excepción en errores de `Structure`** — Java lanza `ParseException` en todos
     los errores de template; TS los mantiene como `ValidationException` (fue un punto de su
     0.4.2, motivado por la severidad Warning en el editor). Aquí no hay severidades, pero es
-    divergencia de contrato de API y va ligada a la decisión del punto 18.
+    divergencia de contrato de API; con el punto 18 ya resuelto, esta decisión queda
+    independiente y sigue pendiente.

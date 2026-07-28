@@ -9,6 +9,7 @@ import java.util.List;
 
 import dev.stxt.exceptions.ParseException;
 import dev.stxt.exceptions.STXTIOException;
+import dev.stxt.exceptions.ValidationException;
 import dev.stxt.processors.Observer;
 import dev.stxt.processors.Validator;
 import dev.stxt.utils.FileUtils;
@@ -38,9 +39,45 @@ public class Parser {
 		}
 	}
 
+	public ParseResult parseResultFile(File srcFile) {
+		try {
+			return parseResult(FileUtils.readFileContent(srcFile));
+		} catch (java.io.IOException e) {
+			throw new STXTIOException(e);
+		}
+	}
+
+	/**
+	 * Modo tradicional fail-fast: lanza la primera excepción encontrada (de sintaxis o de
+	 * validación), sin seguir recorriendo el resto del documento (importante en documentos muy
+	 * grandes). Internamente reutiliza el mismo recorrido que {@link #parseResult(String)}, pero
+	 * cortando en el primer error en vez de acumularlos todos.
+	 */
 	public List<Node> parse(String content) {
+		ParseResult result = doParse(content, true);
+		if (result.hasErrors())
+			throw result.getErrors().get(0);
+		return result.getNodes();
+	}
+
+	/**
+	 * Modo multi-error: parsea todo el contenido acumulando todos los errores encontrados (de
+	 * sintaxis y de validación) sin abortar en el primero. Ver {@link ParseResult}.
+	 */
+	public ParseResult parseResult(String content) {
+		return doParse(content, false);
+	}
+
+	/**
+	 * Recorrido único compartido por {@link #parse(String)} y {@link #parseResult(String)}. Cuando
+	 * {@code stopOnFirstError} es true, corta la lectura en cuanto aparece el primer error (no lee
+	 * más líneas, no cierra el resto de nodos pendientes ni sigue validando), evitando recorrer un
+	 * documento entero para un resultado que de todas formas se va a descartar.
+	 */
+	private ParseResult doParse(String content, boolean stopOnFirstError) {
 		content = FileUtils.removeUTF8BOM(content);
 
+		ParseResult result = new ParseResult();
 		ArrayDeque<Node> stack = new ArrayDeque<>();
 		List<Node> documents = new ArrayList<>();
 		
@@ -50,59 +87,76 @@ public class Parser {
 			String line;
 			while ((line = in.readLine()) != null) {
 				lineNumber++;
-				processLine(line, lineNumber, stack, documents);
+				processLine(line, lineNumber, stack, documents, result, stopOnFirstError);
+				if (stopOnFirstError && result.hasErrors())
+					break;
 			}
 		} catch (java.io.IOException e) {
 			throw new STXTIOException(e);
 		}
 
-		// Cerrar todos los nodos pendientes al EOF
-		closeToLevel(stack, documents, 0);
-		
-		// Retorno documentos
-		return documents;
+		// Cerrar todos los nodos pendientes al EOF (nos la saltamos si ya hemos cortado antes)
+		if (!(stopOnFirstError && result.hasErrors()))
+			closeToLevel(stack, documents, 0, result, stopOnFirstError);
+
+		// Agregamos nodos raíz al resultado
+		for (Node doc : documents)
+			result.addNode(doc);
+
+		return result;
 	}
 
-	private void processLine(String line, int lineNumber, ArrayDeque<Node> stack, List<Node> documents) {
-        Node lastNode            = stack.isEmpty() ? null : stack.peek();
-        int lastLevel           = lastNode != null ? lastNode.getLevel(): 0; 
-        boolean lastNodeText    = lastNode != null && lastNode.isTextNode();
-	    
-        // Parseamos línea
-		LineIndent lineIndent = LineIndentParser.parseLine(line, lastNodeText, lastLevel, lineNumber);
-		if (lineIndent == null)
-			return;
+	private void processLine(String line, int lineNumber, ArrayDeque<Node> stack, List<Node> documents, ParseResult result, boolean stopOnFirstError) {
+		try {
+			Node lastNode            = stack.isEmpty() ? null : stack.peek();
+			int lastLevel           = lastNode != null ? lastNode.getLevel(): 0; 
+			boolean lastNodeText    = lastNode != null && lastNode.isTextNode();
 
-		int currentLevel = lineIndent.indentLevel;
+			// Parseamos línea
+			LineIndent lineIndent = LineIndentParser.parseLine(line, lastNodeText, lastLevel, lineNumber);
+			if (lineIndent == null)
+				return;
 
-		// Si estamos dentro de un nodo texto, y el nivel indica que sigue siendo texto,
-		// añadimos línea de texto y no creamos nodo.
-		if (lastNodeText && currentLevel > lastLevel) {
-			lastNode.addTextLine(lineIndent.lineWithoutIndent);
-			return;
+			int currentLevel = lineIndent.indentLevel;
+
+			// Si estamos dentro de un nodo texto, y el nivel indica que sigue siendo texto,
+			// añadimos línea de texto y no creamos nodo.
+			if (lastNodeText && currentLevel > lastLevel) {
+				lastNode.addTextLine(lineIndent.lineWithoutIndent);
+				return;
+			}
+
+			// Cerramos nodos hasta el nivel actual (esto "finaliza" y adjunta al padre/documentos)
+			closeToLevel(stack, documents, currentLevel, result, stopOnFirstError);
+			if (stopOnFirstError && result.hasErrors())
+				return;
+
+			// Creamos el nuevo nodo y lo dejamos "abierto" en la pila (NO lo adjuntamos aún)
+			Node parent = stack.isEmpty() ? null : stack.peek();
+			Node node = createNode(lineIndent, lineNumber, currentLevel, parent);
+			
+			// Pasamos a observers
+			observeNode(node);
+
+			// Añadimos a stack
+			stack.push(node);
+		} catch (ParseException e) {
+			result.addError(e);
+		} catch (RuntimeException e) {
+			result.addError(new ParseException(lineNumber, "UNEXPECTED_ERROR", e.getMessage()));
 		}
-
-		// Cerramos nodos hasta el nivel actual (esto "finaliza" y adjunta al padre/documentos)
-		closeToLevel(stack, documents, currentLevel);
-
-		// Creamos el nuevo nodo y lo dejamos "abierto" en la pila (NO lo adjuntamos aún)
-		Node parent = stack.isEmpty() ? null : stack.peek();
-		Node node = createNode(lineIndent, lineNumber, currentLevel, parent);
-		
-		// Pasamos a observers
-		observeNode(node);
-
-		// Añadimos a stack
-		stack.push(node);
 	}
 
-	private void closeToLevel(ArrayDeque<Node> stack, List<Node> documents, int targetLevel) {
+	private void closeToLevel(ArrayDeque<Node> stack, List<Node> documents, int targetLevel, ParseResult result, boolean stopOnFirstError) {
 		while (stack.size() > targetLevel) {
 			Node completed = stack.pop();
-			finishNode(completed);
+			finishNode(completed, result);
 
 			if (stack.isEmpty())	documents.add(completed);
 			else					stack.peek().addChild(completed);
+
+			if (stopOnFirstError && result.hasErrors())
+				return;
 		}
 	}
 
@@ -158,13 +212,23 @@ public class Parser {
 		return node;
 	}
 	
-	private void finishNode(Node node) {
+	private void finishNode(Node node, ParseResult result) {
 	    if (observers != null)
 	        for (Observer o : observers)
 	            o.onFinish(node);
 
 	    if (validators != null)
-	        for (Validator v : validators)
-	            v.validate(node);
+	        for (Validator v : validators) {
+	            try {
+	                List<ValidationException> errors = v.validate(node);
+	                if (errors != null)
+	                    for (ValidationException e : errors)
+	                        result.addError(e);
+	            } catch (ValidationException e) {
+	                result.addError(e);
+	            } catch (RuntimeException e) {
+	                result.addError(new ValidationException(node.getLine(), "VALIDATION_ERROR", e.getMessage()));
+	            }
+	        }
 	}	
 }

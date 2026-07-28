@@ -1,6 +1,8 @@
 package dev.stxt.schema;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import dev.stxt.Node;
@@ -20,55 +22,82 @@ public class SchemaValidator implements Validator {
 	}
 
 	@Override
-	public void validate(Node node) {
+	public List<ValidationException> validate(Node node) {
+		List<ValidationException> errors = new ArrayList<>();
+
 		// Obtenemos namespace
 		String namespace = node.getNamespace();
 		Schema sch = schemaProvider.getSchema(namespace);
-		if (sch == null)
-			throw new ValidationException(node.getLine(), "SCHEMA_NOT_FOUND", "Not found schema: " + namespace);
+		if (sch == null) {
+			errors.add(new ValidationException(node.getLine(), "SCHEMA_NOT_FOUND", "Not found schema: " + namespace));
+			return errors;
+		}
 
 		// Validamos nodo
-		validateAgainstSchema(node, sch);
-		
+		errors.addAll(validateAgainstSchema(node, sch));
+
 		// Validamos children
 		if (recursiveValidation)
 			for (Node n: node.getChildren())
-				validate(n);
+				errors.addAll(validate(n));
+
+		return errors;
 	}
 	
-	public void validateAgainstSchema(Node node, Schema sch) {
+	public List<ValidationException> validateAgainstSchema(Node node, Schema sch) {
+		List<ValidationException> errors = new ArrayList<>();
+
 	    NodeDefinition schemaNode = sch.getNodeDefinition(node.getNormalizedName());
 	    if (schemaNode == null) {
 	        String error = "NOT EXIST NODE " + node.getNormalizedName() + " for namespace " + sch.getNamespace();
-	        throw new ValidationException(node.getLine(), "NODE_NOT_EXIST_IN_SCHEMA", error);
+	        errors.add(new ValidationException(node.getLine(), "NODE_NOT_EXIST_IN_SCHEMA", error));
+	        return errors;
 	    }
 
-	    validateValue(schemaNode, node);
-	    validateChildrenDeclared(schemaNode, node);
-	    validateCount(schemaNode, node);
+	    errors.addAll(validateValue(schemaNode, node));
+	    errors.addAll(validateChildrenDeclared(schemaNode, node));
+	    errors.addAll(validateCount(schemaNode, node));
+
+	    return errors;
 	}
 
 	// Modelo de contenido cerrado (STXT-SCHEMA-SPEC, sección 6): solo se permiten
 	// los hijos directos declarados en la definición del padre; sin Children, cierre total
-	private static void validateChildrenDeclared(NodeDefinition nsNode, Node node) {
+	private static List<ValidationException> validateChildrenDeclared(NodeDefinition nsNode, Node node) {
+		List<ValidationException> errors = new ArrayList<>();
+
 		for (Node child : node.getChildren()) {
 			if (!nsNode.getChildren().containsKey(child.getQualifiedName()))
-				throw new ValidationException(child.getLine(), "CHILD_NOT_DECLARED",
-						"Child '" + child.getQualifiedName() + "' not declared in node '" + node.getQualifiedName() + "'");
+				errors.add(new ValidationException(child.getLine(), "CHILD_NOT_DECLARED",
+						"Child '" + child.getQualifiedName() + "' not declared in node '" + node.getQualifiedName() + "'"));
 		}
+
+		return errors;
 	}
 
-	private static void validateValue(NodeDefinition nsNode, Node n) {
+	private static List<ValidationException> validateValue(NodeDefinition nsNode, Node n) {
+		List<ValidationException> errors = new ArrayList<>();
 		String nodeType = nsNode.getType();
 
 		Type validator = TypeRegistry.get(nodeType);
-		if (validator == null)
-			throw new ValidationException(n.getLine(), "TYPE_NOT_SUPPORTED", "Node type not supported: " + nodeType);
+		if (validator == null) {
+			errors.add(new ValidationException(n.getLine(), "TYPE_NOT_SUPPORTED", "Node type not supported: " + nodeType));
+			return errors;
+		}
 
-		validator.validate(nsNode, n);
+		try {
+			validator.validate(nsNode, n);
+		} catch (ValidationException e) {
+			errors.add(e);
+		} catch (RuntimeException e) {
+			errors.add(new ValidationException(n.getLine(), "VALIDATION_ERROR", e.getMessage()));
+		}
+
+		return errors;
 	}
 
-	private static void validateCount(NodeDefinition nsNode, Node node) {
+	private static List<ValidationException> validateCount(NodeDefinition nsNode, Node node) {
+		List<ValidationException> errors = new ArrayList<>();
 		Map<String, Integer> count = new HashMap<>();
 
 		for (Node child : node.getChildren()) {
@@ -78,21 +107,26 @@ public class SchemaValidator implements Validator {
 		}
 
 		for (ChildDefinition chNode : nsNode.getChildren().values()) {
-			validateCount(chNode, count.getOrDefault(chNode.getQualifiedName(), 0), node);
+			errors.addAll(validateCount(chNode, count.getOrDefault(chNode.getQualifiedName(), 0), node));
 		}
+
+		return errors;
 	}
 
-	private static void validateCount(ChildDefinition chNode, int num, Node node) {
+	private static List<ValidationException> validateCount(ChildDefinition chNode, int num, Node node) {
+		List<ValidationException> errors = new ArrayList<>();
 		Integer min = chNode.getMin();
 		Integer max = chNode.getMax();
 
 		if (min != null && num < min)
-			throw new ValidationException(node.getLine(), "INVALID_NUMBER",
-					num + " nodes of '" + chNode.getQualifiedName() + " and min is " + min);
+			errors.add(new ValidationException(node.getLine(), "INVALID_NUMBER",
+					num + " nodes of '" + chNode.getQualifiedName() + " and min is " + min));
 
 		if (max != null && num > max)
-			throw new ValidationException(node.getLine(), "INVALID_NUMBER",
-					num + " nodes of '" + chNode.getQualifiedName() + " and max is " + max);
+			errors.add(new ValidationException(node.getLine(), "INVALID_NUMBER",
+					num + " nodes of '" + chNode.getQualifiedName() + " and max is " + max));
+
+		return errors;
 	}
 
 }
