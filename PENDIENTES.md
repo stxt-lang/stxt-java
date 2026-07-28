@@ -120,11 +120,13 @@ El puente es `test.Corpus.CorpusLoader`, un `ResourcesLoader` en memoria que ind
 namespace que declara cada fichero, porque el layout de stxt-web (`schemas/`, `templates/`,
 `website/`, …) no es el `<ns>/<resource>.stxt` que espera `ResourcesLoaderDirectory`.
 
-Dos diferencias con el equivalente de stxt-vscode, ambas derivadas del (ya resuelto) punto 18:
-donde el TS compara listas de errores, aquí la comprobación sigue siendo "no lanza excepción" (o
-compara el primer error) porque las suites de corpus usan `parse()`/`parseFile()`, no el nuevo
-`parseResult()`; adaptarlas a comparar la lista completa de errores queda pendiente si se quiere
-paridad total con TS.
+La paridad con el equivalente de stxt-vscode (derivada del punto 18) se cerró el 2026-07-28:
+`CorpusDocumentsTest.validaCadaDocumento` usa ahora `parseResult()` y comprueba `getErrors()`
+vacío, con un mensaje que lista todos los errores (código + línea + mensaje) si falla, en vez
+de "no lanza excepción"; `schemaYTemplateValidanIgual` compara la lista completa de errores
+(código + línea, en orden) entre la vía de schema y la de template, no sólo el primero, igual
+que `documents.test.ts` en TS. Sin cambios de comportamiento del parser, sólo de la aserción;
+287 tests en verde.
 
 23. **`docs_raw/` sigue reservada y vacía** — se resolvió el 2026-07-28. Nuevo
     `dev.stxt.runtime.ParserAllRawDocsTest`, análogo a `ParserAllDocsTest` pero usando
