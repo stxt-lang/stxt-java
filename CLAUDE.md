@@ -40,18 +40,36 @@ autocompletado, formateo): desde su versión 0.5.1 borró su copia del lenguaje 
 
 **Importante:** esa implementación TypeScript pasó durante 2026-07 un repaso de conformidad contra
 las specs (versiones 0.4.3 a 0.5.1) cuyos ajustes se fueron portando aquí. El repaso de
-conformidad de este repositorio se cerró el 2026-07-28: `PENDIENTES.md` ya no existe (se eliminó al
-cerrarlo, con el mismo criterio que stxt-vscode aplicó al cerrar el suyo en 0.5.0); su historial
-vive en el `git log` de este repo. Si en el futuro se detecta una nueva divergencia con la spec o
-con stxt-js, hay que volver a crear `PENDIENTES.md` con el mismo formato (lista numerada, un
-punto por desajuste, se elimina al resolverse) en vez de dejarla acumular en otro sitio.
+conformidad de este repositorio se cerró el 2026-07-28 y su historial vive en el `git log`.
 stxt-js y stxt-vscode no tienen `PENDIENTES.md` propio: la referencia de lo que les queda es su
 `CHANGELOG.md`; sus `CLAUDE.md` documentan su arquitectura en detalle. Ante una ambigüedad de
 comportamiento, el orden de autoridad es: **spec (`../stxt-web`) → parser TypeScript
 (`../stxt-js`) → este parser Java**.
 
-Existe también `../stxt-cms` (el CMS que convierte `stxt-web` en un portal HTML); **no es
-relevante para este proyecto**.
+### `PENDIENTES.md`
+
+Es el único sitio donde se acumula trabajo pendiente de este repositorio, con un formato fijo: lista
+numerada, un punto por tarea, cada punto se borra al resolverse y **el fichero se elimina cuando
+queda vacío**. No es un fichero permanente: se crea cuando arranca una tanda de trabajo con varios
+puntos y desaparece al cerrarla. Ya ha pasado dos veces por ese ciclo — se eliminó al cerrar el
+repaso de conformidad (2026-07-28) y se recreó el mismo día, esta vez para **preparar la publicación
+en Maven Central**, que es la tanda abierta ahora mismo (ver la sección de más abajo). Si en el
+futuro aparece una divergencia nueva con la spec o con stxt-js, va también ahí, no en otro sitio.
+
+### Los demás repositorios hermanos
+
+Ninguno es necesario para trabajar aquí, pero conviene saber qué son para no buscar cosas en el sitio
+equivocado:
+
+- `../stxt-cms` — el CMS que convierte `stxt-web` en un portal HTML.
+- `../stxt-dev` — el sitio **generado** por stxt-cms (lo que se publica en `stxt.dev`). Es salida de
+  build: no se edita a mano. Su dominio es además el que verifica por DNS el `groupId` `dev.stxt`.
+- `../stxt-impl` — descripción del parser en **pseudocódigo** neutro de lenguaje (`core/`, `schema/`,
+  `template/`, con la guía de estilo en su `README.md`), pensada como plano para portar el lenguaje a
+  implementaciones nuevas. Sus ficheros son homólogos de las clases de este repo.
+- `../stxt-python` — implementación en Python, hoy solo un esqueleto (README y nada más).
+- `../stxt-js-OLD` — la implementación JavaScript anterior, sustituida por `../stxt-js`. No es
+  referencia de nada.
 
 ## Comandos
 
@@ -82,9 +100,13 @@ señal de que algo se ha desalineado. El jar publicado **no arrastra dependencia
 `test`), apunta a Java 17 y declara `Automatic-Module-Name: dev.stxt`.
 
 El `groupId` `dev.stxt` se verifica en el Central Portal con un **registro TXT en el DNS de
-`stxt.dev`** (el dominio es de la organización). La publicación es **manual**, no hay CI: el
-release se hace desde una máquina que tenga `../stxt-web` al lado, para que las suites de corpus
-se ejecuten de verdad en vez de saltarse.
+`stxt.dev`** (el dominio es de la organización); ya está registrado y validado. La publicación es
+**manual**, no hay CI: el release se hace desde una máquina que tenga `../stxt-web` al lado, para
+que las suites de corpus se ejecuten de verdad en vez de saltarse.
+
+Esta sección describe el flujo previsto; **todavía no se ha publicado ninguna versión**. Lo que falta
+para la primera (clave GPG, `settings.xml`, plugin de publicación, ensayo) está en
+[PENDIENTES.md](PENDIENTES.md).
 
 ```bash
 mvn package                  # build normal, sin firmar
