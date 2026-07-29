@@ -10,6 +10,7 @@ import dev.stxt.schema.Type;
  * contenido es Markdown válido); sólo se prohíben hijos.
  */
 public final class MARKDOWN implements Type {
+	/** Instancia única de este tipo. */
 	public static final MARKDOWN INSTANCE = new MARKDOWN();
 
 	private MARKDOWN() {

@@ -4,9 +4,10 @@ import java.util.regex.Pattern;
 
 import dev.stxt.exceptions.ParseException;
 
+/** Valida el formato de los namespaces {@code (a.b.c)} de STXT. */
 public class NamespaceValidator {
 	/**
-	 * Valida el namespace lógico.
+	 * Formato del namespace lógico.
 	 *
 	 * Reglas:
 	 * - Solo minúsculas, dígitos y punto.
@@ -16,6 +17,12 @@ public class NamespaceValidator {
 	 * ejemplos válidos: "xxx", "xxx.ddd", "zzz.ttt.ooo", "@xxx", "@xxx.ddd".
 	 */
 	private static final Pattern NAMESPACE_FORMAT = Pattern.compile("^@?[a-z0-9]+(\\.[a-z0-9]+)+$");
+
+	/**
+	 * @param namespace namespace ya normalizado a validar; se ignora si es {@code null} o vacío.
+	 * @param lineNumber número de línea, para el mensaje de error.
+	 * @throws ParseException con código {@code INVALID_NAMESPACE} si no cumple el formato.
+	 */
 	public static void validateNamespaceFormat(String namespace, int lineNumber) {
 		if (namespace == null || namespace.isEmpty())
 			return;

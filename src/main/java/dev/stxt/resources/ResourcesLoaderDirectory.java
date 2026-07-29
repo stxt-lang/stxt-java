@@ -7,13 +7,16 @@ import dev.stxt.exceptions.STXTException;
 import dev.stxt.exceptions.STXTIOException;
 import dev.stxt.utils.FileUtils;
 
+/** {@link ResourcesLoader} que busca los recursos en {@code <dir>/<namespace>/<resource>.stxt}. */
 public class ResourcesLoaderDirectory implements ResourcesLoader {
 	private final File dir;
 
+	/** @param dir ruta del directorio raíz de recursos. @throws STXTException si no existe o no es un directorio. */
 	public ResourcesLoaderDirectory(String dir) {
 		this(new File(dir));
 	}
 
+	/** @param dirResources directorio raíz de recursos. @throws STXTException si no existe o no es un directorio. */
 	public ResourcesLoaderDirectory(File dirResources) {
 		this.dir = dirResources;
 		if (!dir.exists() || !dir.isDirectory())

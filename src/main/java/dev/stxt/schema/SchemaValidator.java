@@ -9,13 +9,19 @@ import dev.stxt.Node;
 import dev.stxt.exceptions.ValidationException;
 import dev.stxt.processors.Validator;
 
+/** {@link Validator} que, por cada nodo, resuelve su {@link Schema} vía un {@link SchemaProvider} y valida tipo y cardinalidad. */
 public class SchemaValidator implements Validator {
 	private final SchemaProvider schemaProvider;
 	private boolean recursiveValidation = false;
 
+	/** @param schemaProvider de dónde resolver el schema de cada namespace. Sin validación recursiva de hijos. */
 	public SchemaValidator(SchemaProvider schemaProvider) {
 		this.schemaProvider = schemaProvider;
 	}
+	/**
+	 * @param schemaProvider de dónde resolver el schema de cada namespace.
+	 * @param recursive si valida también recursivamente los hijos de cada nodo.
+	 */
 	public SchemaValidator(SchemaProvider schemaProvider, boolean recursive) {
 		this.schemaProvider = schemaProvider;
 		this.recursiveValidation = recursive;
@@ -44,6 +50,13 @@ public class SchemaValidator implements Validator {
 		return errors;
 	}
 	
+	/**
+	 * Valida un nodo contra un schema ya resuelto: existencia, tipo de valor y cardinalidades de sus hijos.
+	 *
+	 * @param node nodo a validar.
+	 * @param sch schema contra el que validar.
+	 * @return los errores de validación encontrados, vacío si el nodo es válido.
+	 */
 	public List<ValidationException> validateAgainstSchema(Node node, Schema sch) {
 		List<ValidationException> errors = new ArrayList<>();
 

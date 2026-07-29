@@ -4,11 +4,20 @@ import java.util.Locale;
 
 import dev.stxt.exceptions.ParseException;
 
+/** Extrae el nombre y el namespace {@code (a.b.c)} de la parte izquierda de una línea STXT. */
 public final class NameNamespaceParser {
     private NameNamespaceParser() {
         // Utility
     }
 
+    /**
+     * @param rawName nombre en bruto, con el namespace entre paréntesis si lo tiene.
+     * @param inheritedNs namespace heredado del padre, usado si {@code rawName} no trae el suyo propio.
+     * @param lineNumber número de línea, para los mensajes de error.
+     * @param fullLine línea completa original, para los mensajes de error.
+     * @return el nombre y el namespace ya separados y resueltos.
+     * @throws ParseException si el nombre o el namespace no tienen un formato válido.
+     */
     public static NameNamespace parse(String rawName, String inheritedNs, int lineNumber, String fullLine) {
         if (rawName == null) {
             throw new ParseException(lineNumber, "INVALID_LINE", "Line not valid: " + fullLine);

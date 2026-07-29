@@ -7,7 +7,9 @@ import dev.stxt.exceptions.ValidationException;
 import dev.stxt.schema.NodeDefinition;
 import dev.stxt.schema.Type;
 
+/** Tipo {@code BASE64}: valida que el contenido sea Base64 válido. */
 public final class BASE64 implements Type {
+	/** Instancia única de este tipo. */
 	public static final BASE64 INSTANCE = new BASE64();
 
 	private BASE64() {

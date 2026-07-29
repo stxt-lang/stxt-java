@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 
 import dev.stxt.exceptions.ValidationException;
 
+/** Parsea el valor inline de un nodo hijo dentro de un {@code @stxt.template}, con la forma {@code (min,max) TIPO [valores]}. */
 public final class ChildLineParser {
 
     private static final Pattern CHILD_LINE_PATTERN = Pattern.compile(
@@ -20,6 +21,12 @@ public final class ChildLineParser {
     private ChildLineParser() {
     }
 
+    /**
+     * @param rawLine valor inline en bruto de la línea del hijo.
+     * @param lineNumber número de línea, para el mensaje de error.
+     * @return la definición de hijo parseada.
+     * @throws ValidationException con código {@code INVALID_CHILD_LINE} si el formato no es válido.
+     */
     public static ChildLine parse(String rawLine, int lineNumber) {
     	if (rawLine.trim().isEmpty())
     		return new ChildLine(null, null, null, null);

@@ -8,10 +8,12 @@ import java.util.concurrent.ConcurrentHashMap;
 import dev.stxt.exceptions.ResourceNotFoundException;
 import dev.stxt.exceptions.SchemaException;
 
+/** {@link SchemaProvider} que envuelve una lista de providers, probando en orden y cacheando el resultado por namespace. */
 public final class SchemaProviderCache implements SchemaProvider {
 	private final Map<String, Schema> cache = new ConcurrentHashMap<>();
 	private final List<SchemaProvider> providers;
 	
+	/** @param providers providers a probar en orden hasta que uno resuelva el schema. */
 	public SchemaProviderCache(List<SchemaProvider> providers) {
 		this.providers = providers;
 	}

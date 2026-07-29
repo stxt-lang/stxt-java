@@ -8,15 +8,18 @@ import dev.stxt.Parser;
 import dev.stxt.exceptions.SchemaException;
 import dev.stxt.resources.ResourcesLoader;
 
+/** {@link SchemaProvider} que carga un documento {@code @stxt.schema} desde un {@link ResourcesLoader} y lo transforma en {@link Schema}. */
 public final class SchemaProviderResources implements SchemaProvider {
 	private final ResourcesLoader resourcesLoader;
 	private final SchemaValidator schemaValidator;
 
+	/** @param pathResolver de dónde cargar el documento {@code @stxt.schema} de cada namespace. */
 	public SchemaProviderResources(ResourcesLoader pathResolver) {
 		this.resourcesLoader = pathResolver;
 		this.schemaValidator = new SchemaValidator(new SchemaProviderMeta());
 	}
 
+	/** @return el schema cargado y validado contra el meta-schema, o {@code null} si el recurso no existe. */
 	public Schema getSchema(String namespace) {
 		// Retorno de cache
 		if (namespace == null || namespace.isEmpty())

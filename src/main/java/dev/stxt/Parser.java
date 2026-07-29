@@ -14,16 +14,23 @@ import dev.stxt.processors.Observer;
 import dev.stxt.processors.Validator;
 import dev.stxt.utils.FileUtils;
 
+/**
+ * Motor de parseo de STXT línea a línea. No conoce los schemas: la validación semántica se
+ * engancha mediante {@link #registerValidator(Validator)} y {@link #registerObserver(Observer)}.
+ * Ver {@link dev.stxt.runtime.STXT} como fachada de uso habitual, ya configurada con validación.
+ */
 public class Parser {
 	private List<Validator> validators;
 	private List<Observer> observers;
 
+	/** @param v el {@link Validator} a registrar, invocado al cerrar cada nodo durante el parseo. */
 	public void registerValidator(Validator v) {
         if (validators == null) {
             validators = new ArrayList<>();
         }
         validators.add(v);
 	}
+	/** @param o el {@link Observer} a registrar, notificado al abrir y cerrar cada nodo durante el parseo. */
 	public void registerObserver(Observer o) {
         if (observers == null) {
             observers = new ArrayList<>();
@@ -31,6 +38,13 @@ public class Parser {
         observers.add(o);
 	}
 
+	/**
+	 * Igual que {@link #parse(String)} pero leyendo el contenido de un fichero.
+	 *
+	 * @param srcFile fichero con el documento STXT.
+	 * @return los nodos raíz del documento parseado.
+	 * @throws STXTIOException si el fichero no se puede leer.
+	 */
 	public List<Node> parseFile(File srcFile) {
 		try {
 			return parse(FileUtils.readFileContent(srcFile));
@@ -39,6 +53,13 @@ public class Parser {
 		}
 	}
 
+	/**
+	 * Igual que {@link #parseResult(String)} pero leyendo el contenido de un fichero.
+	 *
+	 * @param srcFile fichero con el documento STXT.
+	 * @return el resultado del parseo en modo multi-error.
+	 * @throws STXTIOException si el fichero no se puede leer.
+	 */
 	public ParseResult parseResultFile(File srcFile) {
 		try {
 			return parseResult(FileUtils.readFileContent(srcFile));
@@ -53,6 +74,10 @@ public class Parser {
 	 * grandes). Internamente reutiliza el mismo recorrido que {@link #parseResult(String)}, pero
 	 * cortando en el primer error en vez de acumularlos todos.
 	 */
+	/**
+	 * @param content documento STXT completo a parsear.
+	 * @return los nodos raíz del documento.
+	 */
 	public List<Node> parse(String content) {
 		ParseResult result = doParse(content, true);
 		if (result.hasErrors())
@@ -63,6 +88,10 @@ public class Parser {
 	/**
 	 * Modo multi-error: parsea todo el contenido acumulando todos los errores encontrados (de
 	 * sintaxis y de validación) sin abortar en el primero. Ver {@link ParseResult}.
+	 */
+	/**
+	 * @param content documento STXT completo a parsear.
+	 * @return el resultado acumulado, con los nodos raíz obtenidos y todos los errores encontrados.
 	 */
 	public ParseResult parseResult(String content) {
 		return doParse(content, false);

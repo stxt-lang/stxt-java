@@ -8,7 +8,9 @@ import dev.stxt.exceptions.ValidationException;
 import dev.stxt.schema.NodeDefinition;
 import dev.stxt.schema.Type;
 
+/** Tipo {@code URL}: valida que el valor sea una URI/URL sintácticamente válida. */
 public final class URL implements Type {
+	/** Instancia única de este tipo. */
 	public static final URL INSTANCE = new URL();
 
 	private URL() {

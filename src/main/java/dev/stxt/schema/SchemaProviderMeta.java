@@ -7,6 +7,10 @@ import dev.stxt.Parser;
 import dev.stxt.exceptions.ResourceNotFoundException;
 import dev.stxt.exceptions.SchemaException;
 
+/**
+ * {@link SchemaProvider} que define en código el meta-schema del propio lenguaje de schemas
+ * ({@code @stxt.schema}), para que un schema cargado pueda validarse a sí mismo.
+ */
 public final class SchemaProviderMeta implements SchemaProvider {
 	private static final String META_TEXT = """
 Schema (@stxt.schema): @stxt.schema
@@ -75,6 +79,7 @@ Schema (@stxt.schema): @stxt.schema
 	
 	private final Schema meta;
 
+	/** Construye el meta-schema parseando y validando {@code META_TEXT} contra sí mismo. */
 	public SchemaProviderMeta() {
 		Schema metaSchema = null;
 		Parser parser = new Parser();

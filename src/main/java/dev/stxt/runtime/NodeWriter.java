@@ -4,28 +4,50 @@ import java.util.List;
 
 import dev.stxt.Node;
 
+/** Serializa un {@link Node} (o una lista de nodos raíz) de vuelta a texto STXT. */
 public final class NodeWriter {
     private NodeWriter() {}
 
+    /** Estilo de indentación a usar al escribir. */
     public enum IndentStyle {
+        /** Un carácter tabulador por nivel. */
         TABS,
+        /** Cuatro espacios por nivel. */
         SPACES_4
     }
 
+    /**
+     * @param node nodo a serializar (junto con sus hijos).
+     * @return el nodo serializado a texto STXT, con indentación de tabuladores.
+     */
     public static String toSTXT(Node node) {
         return toSTXT(node, IndentStyle.TABS);
     }
 
+    /**
+     * @param node nodo a serializar (junto con sus hijos).
+     * @param style estilo de indentación a usar.
+     * @return el nodo serializado a texto STXT.
+     */
     public static String toSTXT(Node node, IndentStyle style) {
         StringBuilder out = new StringBuilder(256);
         writeNode(out, node, 0, style, "");
         return out.toString();
     }
 
+    /**
+     * @param docs nodos raíz a serializar.
+     * @return los documentos serializados a texto STXT, con indentación de tabuladores.
+     */
     public static String toSTXT(List<Node> docs) {
         return toSTXT(docs, IndentStyle.TABS);
     }
 
+    /**
+     * @param docs nodos raíz a serializar.
+     * @param style estilo de indentación a usar.
+     * @return los documentos serializados a texto STXT.
+     */
     public static String toSTXT(List<Node> docs, IndentStyle style) {
         StringBuilder out = new StringBuilder();
         for (int i = 0; i < docs.size(); i++) {

@@ -5,7 +5,9 @@ import dev.stxt.exceptions.ValidationException;
 import dev.stxt.schema.NodeDefinition;
 import dev.stxt.schema.Type;
 
+/** Tipo {@code ENUM}: valida que el valor esté entre los declarados en {@link NodeDefinition#getValues()}. */
 public final class ENUM implements Type {
+	/** Instancia única de este tipo. */
 	public static final ENUM INSTANCE = new ENUM();
 
 	private ENUM() {

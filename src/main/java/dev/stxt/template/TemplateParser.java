@@ -11,8 +11,13 @@ import dev.stxt.schema.Schema;
 import dev.stxt.schema.TypeRegistry;
 import dev.stxt.utils.StringUtils;
 
+/** Transforma el árbol de un documento {@code @stxt.template} ya parseado en un {@link Schema} equivalente. */
 public class TemplateParser {
 	
+	/**
+	 * @param node raíz del documento {@code @stxt.template} ya parseado.
+	 * @return el {@link Schema} resultante.
+	 */
 	public static Schema transformNodeToSchema(Node node) {
 		
 		// Insertamos namespace

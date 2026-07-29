@@ -5,7 +5,9 @@ import dev.stxt.exceptions.ValidationException;
 import dev.stxt.schema.NodeDefinition;
 import dev.stxt.schema.Type;
 
+/** Tipo {@code TEXT}: nodo de bloque de texto libre, sin hijos permitidos. */
 public final class TEXT implements Type {
+	/** Instancia única de este tipo. */
 	public static final TEXT INSTANCE = new TEXT();
 
 	private TEXT() {

@@ -24,6 +24,7 @@ import dev.stxt.schema.type.TIMESTAMP;
 import dev.stxt.schema.type.URL;
 import dev.stxt.schema.type.UUID;
 
+/** Registro estático de los tipos de valor de STXT, indexados por su nombre. Añadir un tipo nuevo: nueva clase {@link Type} + {@code register(...)} aquí. */
 public final class TypeRegistry {
 	private static final Map<String, Type> REGISTRY = new HashMap<>();
 
@@ -52,11 +53,19 @@ public final class TypeRegistry {
 		register(MARKDOWN.INSTANCE);
 	}
 
+	/**
+	 * @param nodeType nombre del tipo buscado.
+	 * @return el {@link Type} registrado con ese nombre, o {@code null} si no existe.
+	 */
 	public static Type get(String nodeType) {
 		return REGISTRY.get(nodeType);
 	}
 
 	// STXT-SCHEMA-SPEC 9 / STXT-TEMPLATE-SPEC 15: sólo INLINE y GROUP admiten hijos
+	/**
+	 * @param nodeType nombre del tipo.
+	 * @return {@code true} si los nodos de este tipo pueden tener hijos (solo INLINE y GROUP).
+	 */
 	public static boolean admitsChildren(String nodeType) {
 		return "INLINE".equals(nodeType) || "GROUP".equals(nodeType);
 	}

@@ -45,11 +45,6 @@ LICENSE, README y CHANGELOG) está en el `git log`; aquí solo queda lo que falt
 
 ## Mejoras opcionales, no bloqueantes
 
-8. **Javadoc de la API pública**: el build genera **100 warnings de "no comment"** sobre clases y
-   métodos públicos (`NodeWriter.toSTXT`, los singletons `INSTANCE` de los tipos,
-   `ChildDefinition`, `Type`…). No impide publicar, pero es lo que verá quien abra `javadoc.io`.
-   Prioridad: la fachada `STXT`, `Parser`, `Node`, `NodeWriter` y `ParseResult`.
-
 9. **Publicación automatizada** con GitHub Actions al crear un tag. Descartada de momento a favor
    del flujo manual; si se retoma, tener en cuenta que en CI **no está `../stxt-web`** y las suites
    de corpus se saltarían, que es justo la red de seguridad que valida la conformidad.

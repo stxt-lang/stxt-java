@@ -10,9 +10,11 @@ import dev.stxt.schema.Schema;
 import dev.stxt.schema.SchemaProvider;
 import dev.stxt.schema.SchemaValidator;
 
+/** {@link SchemaProvider} que carga un documento {@code @stxt.template} desde un {@link ResourcesLoader} y lo transforma en {@link Schema}. */
 public class TemplateSchemaProvider implements SchemaProvider {
 	private final ResourcesLoader loader;
 	
+	/** @param loader de dónde cargar el documento {@code @stxt.template} de cada namespace. */
 	public TemplateSchemaProvider(ResourcesLoader loader) {
 		this.loader = loader;
 	}	

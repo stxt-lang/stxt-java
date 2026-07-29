@@ -12,8 +12,13 @@ import dev.stxt.exceptions.STXTException;
 import dev.stxt.exceptions.SchemaException;
 import dev.stxt.exceptions.ValidationException;
 
+/** Transforma el árbol de un documento {@code @stxt.schema} ya parseado en un {@link Schema}. */
 public class SchemaParser {
 
+	/**
+	 * @param node raíz del documento {@code @stxt.schema} ya parseado.
+	 * @return el {@link Schema} resultante.
+	 */
 	public static Schema transformNodeToSchema(Node node) {
 		// Node name
 		String nodeName = node.getNormalizedName();
