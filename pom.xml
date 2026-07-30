@@ -189,6 +189,31 @@
                             </execution>
                         </executions>
                     </plugin>
+
+                    <!-- Sube el bundle firmado al Central Portal (fase deploy). `extensions`
+                         es imprescindible: registra el participante de ciclo de vida que
+                         desactiva el maven-deploy-plugin, que si no intentaría desplegar
+                         además en un <distributionManagement> que no existe. -->
+                    <plugin>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>0.11.0</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <!-- id del <server> de ~/.m2/settings.xml que lleva el user token
+                                 del Portal (no la contraseña de la cuenta). -->
+                            <publishingServerId>central</publishingServerId>
+                            <!-- El deploy deja el despliegue validado y *pendiente* en el
+                                 Portal, para revisarlo y confirmarlo a mano desde la web. Una
+                                 vez publicado en Central no se puede retirar ni sustituir. -->
+                            <autoPublish>false</autoPublish>
+                            <!-- Espera a que el Portal valide el bundle, para que un error de
+                                 validación falle el build en vez de quedarse escondido en la
+                                 web. Los tres valores posibles son UPLOADED, VALIDATED y
+                                 PUBLISHED. -->
+                            <waitUntil>VALIDATED</waitUntil>
+                        </configuration>
+                    </plugin>
                 </plugins>
             </build>
         </profile>

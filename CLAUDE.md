@@ -114,6 +114,15 @@ mvn -Prelease verify         # + firma GPG de los 4 ficheros (pom y 3 jars)
 mvn -Prelease deploy         # publica (requiere ~/.m2/settings.xml con el token del Portal)
 ```
 
+La clave que firma los artefactos es **`AAC9F568A98BE7F0`** (fingerprint
+`5A2B2A6D82DBC0DD02B38E14AAC9F568A98BE7F0`), RSA 4096 **sin caducidad**, publicada en
+`keyserver.ubuntu.com` y respaldada fuera de la máquina junto a su certificado de revocación. Las
+versiones futuras deben firmarse con ella: cambiar de clave obliga a los consumidores que la hubieran
+anclado a actualizarla. En el keyserver hay además una clave huérfana anterior
+(`7A221A776C45B26D`, mismo nombre y email) que **no firma nada** — se perdió su passphrase antes de
+usarla y, sin ella, no se puede ni revocar. Si alguna vez hay que distinguirlas, la buena es la de
+arriba.
+
 El perfil `release` aísla la firma GPG para que el build diario no pida clave. Al preparar una
 versión hay que tocar, además del código:
 
