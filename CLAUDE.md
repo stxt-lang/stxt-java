@@ -114,6 +114,12 @@ mvn -Prelease verify         # + firma GPG de los 4 ficheros (pom y 3 jars)
 mvn -Prelease deploy         # publica (requiere ~/.m2/settings.xml con el token del Portal)
 ```
 
+Los dos comandos con `-Prelease` **hay que lanzarlos desde un terminal interactivo**: la firma la
+pide gpg-agent por pinentry (el diálogo de GNOME) y desde una shell no interactiva —por ejemplo la de
+un agente— falla con `gpg: signing failed: No hay Pinentry`. Todo lo anterior (compilar, tests,
+empaquetar, y la inspección posterior del bundle) sí se puede automatizar; el paso de firmar, no. La
+passphrase **no está en ningún fichero de configuración**, a propósito.
+
 La clave que firma los artefactos es **`AAC9F568A98BE7F0`** (fingerprint
 `5A2B2A6D82DBC0DD02B38E14AAC9F568A98BE7F0`), RSA 4096 **sin caducidad**, publicada en
 `keyserver.ubuntu.com` y respaldada fuera de la máquina junto a su certificado de revocación. Las
