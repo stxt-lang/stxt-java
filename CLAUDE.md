@@ -104,15 +104,19 @@ El `groupId` `dev.stxt` se verifica en el Central Portal con un **registro TXT e
 **manual**, no hay CI: el release se hace desde una máquina que tenga `../stxt-web` al lado, para
 que las suites de corpus se ejecuten de verdad en vez de saltarse.
 
-Esta sección describe el flujo previsto; **todavía no se ha publicado ninguna versión**. Lo que falta
-para la primera (clave GPG, `settings.xml`, plugin de publicación, ensayo) está en
-[PENDIENTES.md](PENDIENTES.md).
+La primera versión publicada es **0.5.2, el 2026-07-30**, desde el tag `v0.5.2` (cuyo `pom.xml` es
+idéntico al `.pom` que se subió). Lo de abajo es, por tanto, el flujo ya ejecutado, no un plan.
 
 ```bash
 mvn package                  # build normal, sin firmar
 mvn -Prelease verify         # + firma GPG de los 4 ficheros (pom y 3 jars)
-mvn -Prelease deploy         # publica (requiere ~/.m2/settings.xml con el token del Portal)
+mvn -Prelease deploy         # sube el bundle y lo deja validado y PENDIENTE en el Portal
 ```
+
+El `deploy` **no publica**: con `autoPublish=false` sube el bundle, espera a que el Portal lo valide y
+lo deja pendiente. Publicar es un clic manual en `central.sonatype.com/publishing/deployments`, y ese
+clic es el punto de no retorno. Hasta entonces, *Drop* descarta el despliegue y se puede reintentar
+con el mismo número de versión.
 
 Los dos comandos con `-Prelease` **hay que lanzarlos desde un terminal interactivo**: la firma la
 pide gpg-agent por pinentry (el diálogo de GNOME) y desde una shell no interactiva —por ejemplo la de
@@ -136,6 +140,13 @@ versión hay que tocar, además del código:
    jar; si no se actualiza, el build deja de ser reproducible respecto a esa release).
 2. La versión en los dos snippets de instalación del [README.md](README.md) (Maven y Gradle).
 3. Una entrada nueva en [CHANGELOG.md](CHANGELOG.md), formato Keep a Changelog como stxt-vscode.
+
+Y al cerrarla, dos pasos que no son del build:
+
+4. Confirmar el despliegue a mano en el Portal (ver arriba). Antes de ese clic conviene tener el
+   commit hecho, para que el artefacto inmutable corresponda a un estado que está en git.
+5. `git tag -s vX.Y.Z` sobre el commit publicado y empujarlo. La 0.5.2 se etiquetó como `v0.5.2`,
+   pero *lightweight*; a partir de la siguiente, anotado y firmado con la clave de arriba.
 
 El README es **la portada del artefacto en Central y en javadoc.io**, no un fichero interno: sus
 ejemplos están compilados y ejecutados contra el parser real, y deben seguir estándolo si se tocan.
