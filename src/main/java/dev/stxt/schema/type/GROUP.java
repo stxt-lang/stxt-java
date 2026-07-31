@@ -5,9 +5,9 @@ import dev.stxt.exceptions.ValidationException;
 import dev.stxt.schema.NodeDefinition;
 import dev.stxt.schema.Type;
 
-/** Tipo {@code GROUP}: nodo contenedor sin valor propio, admite hijos igual que INLINE. */
+/** {@code GROUP} type: container node with no value of its own, accepting children just like INLINE. */
 public final class GROUP implements Type {
-	/** Instancia única de este tipo. */
+	/** Single instance of this type. */
 	public static final GROUP INSTANCE = new GROUP();
 
 	private GROUP() {
@@ -20,7 +20,7 @@ public final class GROUP implements Type {
     
 	@Override
     public void validate(NodeDefinition ndef, Node n) {
-		// Forma del valor NONE (STXT-SCHEMA-SPEC 9.2): ni valor inline ni bloque '>>'
+		// NONE value form (STXT-SCHEMA-SPEC 9.2): neither an inline value nor a '>>' block
 		if (!n.getValue().isEmpty() || n.isTextNode()) {
 			throw new ValidationException(n.getLine(), "INVALID_VALUE", "Node '" + n.getName() + "' has to be empty");
 		}

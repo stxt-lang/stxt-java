@@ -14,11 +14,11 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import dev.stxt.schema.NodeDefinition;
 
 public final class JSON {
-	private static final String IDENTER_STRING = "    "; // También podría ser "\t"
+	private static final String IDENTER_STRING = "    "; // It could also be "\t"
 
-	// Mixin: 'description' es un campo nuevo y opcional en NodeDefinition; se omite cuando es
-	// null para no romper los fixtures existentes, que no lo declaran. El resto de campos (p.
-	// ej. min/max en ChildDefinition) siguen serializando null explícitamente como hasta ahora.
+	// Mixin: 'description' is a new, optional field in NodeDefinition; it is left out when it is
+	// null so the existing fixtures, which do not declare it, keep working. The other fields
+	// (e.g. min/max in ChildDefinition) still serialize null explicitly, as they always did.
 	private abstract static class NodeDefinitionMixin {
 		@JsonInclude(JsonInclude.Include.NON_NULL)
 		abstract String getDescription();

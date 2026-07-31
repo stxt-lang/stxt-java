@@ -7,9 +7,9 @@ import dev.stxt.exceptions.ValidationException;
 import dev.stxt.schema.NodeDefinition;
 import dev.stxt.schema.Type;
 
-/** Tipo {@code BASE64}: valida que el contenido sea Base64 válido. */
+/** {@code BASE64} type: checks that the content is valid Base64. */
 public final class BASE64 implements Type {
-	/** Instancia única de este tipo. */
+	/** Single instance of this type. */
 	public static final BASE64 INSTANCE = new BASE64();
 
 	private BASE64() {
@@ -25,8 +25,8 @@ public final class BASE64 implements Type {
 		String raw = BinaryValue.get(n);
 		try {
 			byte[] decoded = Base64.getDecoder().decode(raw);
-			// Re-codificamos para evitar aceptar cadenas parcialmente válidas
-			// (p.ej. bits sobrantes en el último bloque codificado)
+			// Re-encode it so partially valid strings are not accepted
+			// (e.g. leftover bits in the last encoded block)
 			String reencoded = Base64.getEncoder().encodeToString(decoded);
 			if (!stripPadding(raw).equals(stripPadding(reencoded))) {
 				throw new ValidationException(n.getLine(), "INVALID_VALUE", "Node '" + n.getName() + "' Invalid Base64");

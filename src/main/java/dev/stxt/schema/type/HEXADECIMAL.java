@@ -7,12 +7,12 @@ import dev.stxt.exceptions.ValidationException;
 import dev.stxt.schema.NodeDefinition;
 import dev.stxt.schema.Type;
 
-/** Tipo {@code HEXADECIMAL}: valida una cadena hexadecimal ({@code [0-9A-Fa-f]+}), sin prefijo ni longitud par obligatoria. */
+/** {@code HEXADECIMAL} type: checks a hexadecimal string ({@code [0-9A-Fa-f]+}), with no prefix and no mandatory even length. */
 public final class HEXADECIMAL implements Type {
-	// STXT-SCHEMA-SPEC 9.5: cadena [0-9A-Fa-f]+, sin prefijo '#' ni exigencia de longitud par
+	// STXT-SCHEMA-SPEC 9.5: [0-9A-Fa-f]+ string, with no '#' prefix and no even-length requirement
 	private static final Pattern P_HEX = Pattern.compile("^[0-9A-Fa-f]+$");
 
-	/** Instancia única de este tipo. */
+	/** Single instance of this type. */
 	public static final HEXADECIMAL INSTANCE = new HEXADECIMAL();
 
 	private HEXADECIMAL() {

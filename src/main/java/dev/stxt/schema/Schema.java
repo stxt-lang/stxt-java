@@ -8,39 +8,39 @@ import dev.stxt.NamespaceValidator;
 import dev.stxt.exceptions.SchemaException;
 import dev.stxt.utils.StringUtils;
 
-/** Schema de un namespace: conjunto de {@link NodeDefinition} válidas para los nodos de ese namespace. */
+/** Schema of a namespace: the set of {@link NodeDefinition} valid for the nodes of that namespace. */
 public class Schema {
-	/** Namespace del propio lenguaje de schemas, {@code @stxt.schema}. */
+	/** Namespace of the schema language itself, {@code @stxt.schema}. */
 	public static final String SCHEMA_NAMESPACE = "@stxt.schema";
 
 	private Map<String, NodeDefinition> nodes = new LinkedHashMap<String, NodeDefinition>();
 	private final String namespace;
 	
 	/**
-	 * @param namespace namespace al que aplica este schema.
-	 * @param line número de línea, para el mensaje de error.
+	 * @param namespace namespace this schema applies to.
+	 * @param line line number, for the error message.
 	 */
 	public Schema(String namespace, int line) {
 		this.namespace = StringUtils.lowerCase(namespace);
 		NamespaceValidator.validateNamespaceFormat(this.namespace, line);
 	}
 	
-	/** @return definiciones de nodo, indexadas por su nombre canónico. */
+	/** @return node definitions, indexed by their canonical name. */
 	public Map<String, NodeDefinition> getNodes() {
 		return Collections.unmodifiableMap(nodes);
 	}
 	
 	/**
-	 * @param name nombre del nodo buscado.
-	 * @return la definición del nodo con ese nombre, o {@code null} si no está definido en este schema.
+	 * @param name name of the node to look for.
+	 * @return the definition of the node with that name, or {@code null} if it is not defined in this schema.
 	 */
 	public NodeDefinition getNodeDefinition(String name) {
 		return nodes.get(StringUtils.normalize(name));
 	}
 	
 	/**
-	 * @param nodeDefinition definición de nodo a añadir.
-	 * @throws dev.stxt.exceptions.SchemaException si ya había una definición de nodo con el mismo nombre.
+	 * @param nodeDefinition node definition to add.
+	 * @throws dev.stxt.exceptions.SchemaException if there already was a node definition with the same name.
 	 */
 	public void addNodeDefinition(NodeDefinition nodeDefinition) {
 		String qname = nodeDefinition.getNormalizedName();
@@ -48,7 +48,7 @@ public class Schema {
 		nodes.put(qname, nodeDefinition);
 	}
 	
-	/** @return namespace al que aplica este schema. */
+	/** @return namespace this schema applies to. */
 	public String getNamespace() {
 		return namespace;
 	}

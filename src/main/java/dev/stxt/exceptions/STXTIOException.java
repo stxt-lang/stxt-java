@@ -1,10 +1,10 @@
 package dev.stxt.exceptions;
 
-/** Envuelve un {@link java.io.IOException} al leer un fichero STXT o de recursos. */
+/** Wraps a {@link java.io.IOException} raised while reading an STXT or resource file. */
 public class STXTIOException extends STXTException {
 	private static final long serialVersionUID = 1L;
 
-    /** @param cause excepción de E/S original. */
+    /** @param cause original I/O exception. */
     public STXTIOException(java.io.IOException cause) {
         super("IO_ERROR", "I/O error: " + cause.getMessage(), cause);
     }

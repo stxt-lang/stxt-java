@@ -20,8 +20,8 @@ public class ResourcesLoaderDirectoryTest {
 
 		String result = finder.retrieve("@stxt.schema", "com.example.docs");
 		System.out.println("Result = " + result);
-		assertNotNull(result, "Debemos encontrar un resultado");
-		assertTrue(result.startsWith("Schema (@stxt.schema): com.example.docs"), "Debe empezar por schema");
+		assertNotNull(result, "We must find a result");
+		assertTrue(result.startsWith("Schema (@stxt.schema): com.example.docs"), "It must start with the schema");
 	}
 
 	@Test
@@ -31,7 +31,7 @@ public class ResourcesLoaderDirectoryTest {
 		try {
 			finder.retrieve("@stxt.nonexistent", "com.example.nonexistent");
 			System.out.println("ERROR! Not exception");
-			fail("Se esperaba una excepción");
+			fail("An exception was expected");
 		} catch (ResourceNotFoundException nfr) {
 			System.out.println("OK exception");
 			assertEquals(nfr.getNamespace(), "@stxt.nonexistent");
@@ -44,7 +44,7 @@ public class ResourcesLoaderDirectoryTest {
 		try {
 			new ResourcesLoaderDirectory(new File("testnotexistent/stxt"));
 			System.out.println("ERROR! Not exception");
-			fail("Se esperaba una excepción");
+			fail("An exception was expected");
 		} catch (STXTException nfr) {
 			System.out.println("OK exception");
 		}

@@ -6,11 +6,11 @@ import dev.stxt.schema.NodeDefinition;
 import dev.stxt.schema.Type;
 
 /**
- * STXT-SCHEMA-SPEC 9.7: a efectos de validación equivale a TEXT (cualquier
- * contenido es Markdown válido); sólo se prohíben hijos.
+ * STXT-SCHEMA-SPEC 9.7: for validation purposes it is equivalent to TEXT (any
+ * content is valid Markdown); only children are forbidden.
  */
 public final class MARKDOWN implements Type {
-	/** Instancia única de este tipo. */
+	/** Single instance of this type. */
 	public static final MARKDOWN INSTANCE = new MARKDOWN();
 
 	private MARKDOWN() {

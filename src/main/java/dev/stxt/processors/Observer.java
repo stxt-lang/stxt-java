@@ -2,10 +2,10 @@ package dev.stxt.processors;
 
 import dev.stxt.Node;
 
-/** Hook de proceso notificado por el {@link dev.stxt.Parser} al abrir y cerrar cada nodo. */
+/** Process hook notified by the {@link dev.stxt.Parser} when each node is opened and closed. */
 public interface Observer {
-	/** @param node nodo recién abierto (aún sin hijos ni valor completos). */
+	/** @param node node just opened (its children and value are not complete yet). */
 	void onCreate(Node node);
-	/** @param node nodo recién cerrado, ya con todos sus hijos y su valor completos. */
+	/** @param node node just closed, with all its children and its value already complete. */
 	void onFinish(Node node);
 }

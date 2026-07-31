@@ -5,15 +5,15 @@ import java.util.List;
 import dev.stxt.Node;
 import dev.stxt.exceptions.ValidationException;
 
-/** Hook de proceso invocado por el {@link dev.stxt.Parser} al cerrar cada nodo, para validar en streaming. */
+/** Process hook invoked by the {@link dev.stxt.Parser} when each node is closed, to validate in streaming. */
 public interface Validator {
 	/**
-	 * Valida un nodo y devuelve todos los errores encontrados (sin lanzar excepción), permitiendo
-	 * al llamador acumular errores de varios nodos en vez de abortar en el primero. Una lista vacía
-	 * indica que el nodo es válido.
+	 * Validates a node and returns every error found (without throwing), letting the caller
+	 * collect errors from several nodes instead of bailing out on the first one. An empty list
+	 * means the node is valid.
 	 *
-	 * @param n nodo ya cerrado a validar.
-	 * @return los errores de validación encontrados, o una lista vacía si el nodo es válido.
+	 * @param n already closed node to validate.
+	 * @return the validation errors found, or an empty list if the node is valid.
 	 */
 	List<ValidationException> validate(Node n);
 }

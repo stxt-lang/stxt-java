@@ -2,7 +2,7 @@ package dev.stxt.template;
 
 import java.util.Arrays;
 
-/** Una línea de definición de hijo dentro de un {@code @stxt.template}: tipo, cardinalidad y valores permitidos. */
+/** A child definition line inside an {@code @stxt.template}: type, cardinality and allowed values. */
 public class ChildLine {
     private final String type;
     private final Integer min;
@@ -10,10 +10,10 @@ public class ChildLine {
     private final String[] values;
 
     /**
-     * @param type nombre del tipo, o {@code null} si no se especifica.
-     * @param min cardinalidad mínima, o {@code null}.
-     * @param max cardinalidad máxima, o {@code null}.
-     * @param values valores permitidos (ENUM), o {@code null} si no se restringen.
+     * @param type name of the type, or {@code null} if it is not given.
+     * @param min minimum cardinality, or {@code null}.
+     * @param max maximum cardinality, or {@code null}.
+     * @param values allowed values (ENUM), or {@code null} if they are not restricted.
      */
     public ChildLine(String type, Integer min, Integer max, String[] values) {
 		super();
@@ -23,19 +23,19 @@ public class ChildLine {
 		this.values = values;
 	}
     
-	/** @return nombre del tipo declarado, o {@code null} si no se especifica. */
+	/** @return name of the declared type, or {@code null} if it is not given. */
 	public String getType() {
         return type;
     }
-    /** @return cardinalidad mínima, o {@code null} si no hay mínimo. */
+    /** @return minimum cardinality, or {@code null} if there is no minimum. */
     public Integer getMin() {
     	return min;
     }
-    /** @return cardinalidad máxima, o {@code null} si no hay máximo. */
+    /** @return maximum cardinality, or {@code null} if there is no maximum. */
     public Integer getMax() {
     	return max;
     }
-    /** @return valores permitidos (ENUM), o {@code null} si no se restringen. */
+    /** @return allowed values (ENUM), or {@code null} if they are not restricted. */
     public String[] getValues() {
         return values;
     }

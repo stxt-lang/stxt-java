@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 
 import dev.stxt.exceptions.ValidationException;
 
-/** Parsea el valor inline de un nodo hijo dentro de un {@code @stxt.template}, con la forma {@code (min,max) TIPO [valores]}. */
+/** Parses the inline value of a child node inside an {@code @stxt.template}, shaped as {@code (min,max) TYPE [values]}. */
 public final class ChildLineParser {
 
     private static final Pattern CHILD_LINE_PATTERN = Pattern.compile(
@@ -22,10 +22,10 @@ public final class ChildLineParser {
     }
 
     /**
-     * @param rawLine valor inline en bruto de la línea del hijo.
-     * @param lineNumber número de línea, para el mensaje de error.
-     * @return la definición de hijo parseada.
-     * @throws ValidationException con código {@code INVALID_CHILD_LINE} si el formato no es válido.
+     * @param rawLine raw inline value of the child line.
+     * @param lineNumber line number, for the error message.
+     * @return the parsed child definition.
+     * @throws ValidationException with code {@code INVALID_CHILD_LINE} if the format is not valid.
      */
     public static ChildLine parse(String rawLine, int lineNumber) {
     	if (rawLine.trim().isEmpty())
@@ -67,7 +67,7 @@ public final class ChildLineParser {
             int minValue = parseCount(minMax[0].trim(), count, rawLine, lineNumber);
             int maxValue = parseCount(minMax[1].trim(), count, rawLine, lineNumber);
 
-            // STXT-TEMPLATE-SPEC 7.1: en (min,max) debe cumplirse min <= max
+            // STXT-TEMPLATE-SPEC 7.1: in (min,max) it must hold that min <= max
             if (minValue > maxValue)
                 throw new ValidationException(lineNumber, "MIN_GREATER_THAN_MAX",
                         "Min " + minValue + " greater than Max " + maxValue + " in line: " + rawLine);
@@ -93,10 +93,10 @@ public final class ChildLineParser {
                     list.add(part);
                 }
             }
-            // Los corchetes presentes (aunque vengan vacíos, "[]") cuentan como una
-            // definición explícita de valores: devolvemos un array no-nulo (posiblemente
-            // vacío) para distinguirlo de la ausencia total de corchetes (valuesStr == null,
-            // values permanece null). Así "[]" se trata como redefinición/definición real.
+            // Brackets being present (even empty ones, "[]") count as an explicit value
+            // definition: we return a non-null array (possibly empty) to tell it apart from
+            // brackets missing altogether (valuesStr == null, values stays null). That way
+            // "[]" is treated as a real definition/redefinition.
             values = new String[list.size()];
             for (int i = 0; i<list.size(); i++)
                 values[i] = list.get(i);
@@ -105,9 +105,9 @@ public final class ChildLineParser {
         return new ChildLine(type, min, max, values);
     }
 
-    // STXT-TEMPLATE-SPEC 7.1: num, min y max deben ser enteros no negativos (sin signo, sin
-    // texto sobrante); lanza INVALID_CHILD_COUNT si no lo son, en vez de propagar
-    // NumberFormatException sin envolver
+    // STXT-TEMPLATE-SPEC 7.1: num, min and max must be non-negative integers (no sign, no
+    // leftover text); it throws INVALID_CHILD_COUNT when they are not, instead of letting an
+    // unwrapped NumberFormatException through
     private static int parseCount(String num, String count, String rawLine, int lineNumber) {
         if (!num.matches("\\d+"))
             throw new ValidationException(lineNumber, "INVALID_CHILD_COUNT", "Invalid count " + count + " in line: " + rawLine);

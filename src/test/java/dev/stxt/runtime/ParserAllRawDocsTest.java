@@ -14,11 +14,10 @@ import test.FileTestLoction;
 import test.FileUtils;
 
 /**
- * Cobertura de parseo puro: los documentos de {@code docs_raw/} no
- * declaran namespace, así que se parsean con {@link STXT#rawParser()} (sin
- * {@code SchemaValidator}: no hay schema que resolver para un namespace vacío). Comprueba el
- * árbol resultante contra {@code docs_raw_json/} y que {@link NodeWriter} reproduce el mismo
- * texto en {@code docs_raw_txt/}.
+ * Pure parsing coverage: the documents in {@code docs_raw/} declare no namespace, so they are
+ * parsed with {@link STXT#rawParser()} (without {@code SchemaValidator}: there is no schema to
+ * resolve for an empty namespace). It checks the resulting tree against {@code docs_raw_json/}
+ * and that {@link NodeWriter} reproduces the same text in {@code docs_raw_txt/}.
  */
 public class ParserAllRawDocsTest {
 	public static void main(String[] args) throws IOException, ParseException {
@@ -29,7 +28,7 @@ public class ParserAllRawDocsTest {
 	public void mainTest() throws IOException, ParseException {
 		System.out.println("Inici");
 
-		// Create parser (sin validación de schema)
+		// Create parser (without schema validation)
 		Parser parser = STXT.rawParser();
 		File docsDir = FileTestLoction.getFile("docs_raw");
 

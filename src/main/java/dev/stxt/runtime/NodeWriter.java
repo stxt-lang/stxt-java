@@ -4,30 +4,30 @@ import java.util.List;
 
 import dev.stxt.Node;
 
-/** Serializa un {@link Node} (o una lista de nodos raíz) de vuelta a texto STXT. */
+/** Serializes a {@link Node} (or a list of root nodes) back to STXT text. */
 public final class NodeWriter {
     private NodeWriter() {}
 
-    /** Estilo de indentación a usar al escribir. */
+    /** Indentation style to use when writing. */
     public enum IndentStyle {
-        /** Un carácter tabulador por nivel. */
+        /** One tab character per level. */
         TABS,
-        /** Cuatro espacios por nivel. */
+        /** Four spaces per level. */
         SPACES_4
     }
 
     /**
-     * @param node nodo a serializar (junto con sus hijos).
-     * @return el nodo serializado a texto STXT, con indentación de tabuladores.
+     * @param node node to serialize (along with its children).
+     * @return the node serialized to STXT text, indented with tabs.
      */
     public static String toSTXT(Node node) {
         return toSTXT(node, IndentStyle.TABS);
     }
 
     /**
-     * @param node nodo a serializar (junto con sus hijos).
-     * @param style estilo de indentación a usar.
-     * @return el nodo serializado a texto STXT.
+     * @param node node to serialize (along with its children).
+     * @param style indentation style to use.
+     * @return the node serialized to STXT text.
      */
     public static String toSTXT(Node node, IndentStyle style) {
         StringBuilder out = new StringBuilder(256);
@@ -36,17 +36,17 @@ public final class NodeWriter {
     }
 
     /**
-     * @param docs nodos raíz a serializar.
-     * @return los documentos serializados a texto STXT, con indentación de tabuladores.
+     * @param docs root nodes to serialize.
+     * @return the documents serialized to STXT text, indented with tabs.
      */
     public static String toSTXT(List<Node> docs) {
         return toSTXT(docs, IndentStyle.TABS);
     }
 
     /**
-     * @param docs nodos raíz a serializar.
-     * @param style estilo de indentación a usar.
-     * @return los documentos serializados a texto STXT.
+     * @param docs root nodes to serialize.
+     * @param style indentation style to use.
+     * @return the documents serialized to STXT text.
      */
     public static String toSTXT(List<Node> docs, IndentStyle style) {
         StringBuilder out = new StringBuilder();

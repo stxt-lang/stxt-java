@@ -39,7 +39,7 @@ public class ParserTestValidator {
 		
 		System.out.println("NODES: " + validator.total);
 		
-		assertEquals(10, validator.total, "Deben haber 10 nodos");
+		assertEquals(10, validator.total, "There must be 10 nodes");
  
 		System.out.println("End");
 	}

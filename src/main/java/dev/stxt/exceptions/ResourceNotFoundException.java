@@ -1,17 +1,17 @@
 package dev.stxt.exceptions;
 
-/** Un {@link dev.stxt.resources.ResourcesLoader} no encontró el recurso pedido para un namespace. */
+/** A {@link dev.stxt.resources.ResourcesLoader} did not find the requested resource for a namespace. */
 public class ResourceNotFoundException extends STXTException {
 	private static final long serialVersionUID = 1L;
 
-	/** Namespace para el que se buscaba el recurso. */
+	/** Namespace the resource was being looked up for. */
 	private final String namespace;
-	/** Nombre del recurso buscado (p. ej. {@code schema} o {@code template}). */
+	/** Name of the resource looked up (e.g. {@code schema} or {@code template}). */
 	private final String resource;
 
 	/**
-	 * @param namespace namespace para el que se buscaba el recurso.
-	 * @param resource nombre del recurso buscado.
+	 * @param namespace namespace the resource was being looked up for.
+	 * @param resource name of the resource looked up.
 	 */
 	public ResourceNotFoundException(String namespace, String resource) {
 		super("RESOURCE_NOT_FOUND", "Not found '" + resource + "' in namespace: " + namespace);
@@ -19,12 +19,12 @@ public class ResourceNotFoundException extends STXTException {
 		this.resource = resource;
 	}
 
-	/** @return namespace para el que se buscaba el recurso. */
+	/** @return namespace the resource was being looked up for. */
 	public String getNamespace() {
 		return namespace;
 	}
 
-	/** @return nombre del recurso buscado. */
+	/** @return name of the resource looked up. */
 	public String getResource() {
 		return resource;
 	}

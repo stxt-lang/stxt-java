@@ -1,12 +1,12 @@
 package dev.stxt.resources;
 
-/** Abstrae de dónde vienen los recursos ({@code @stxt.schema}/{@code @stxt.template}) por namespace. */
+/** Abstracts where resources ({@code @stxt.schema}/{@code @stxt.template}) come from, per namespace. */
 public interface ResourcesLoader {
 	/**
-	 * @param namespace namespace del recurso a buscar.
-	 * @param resource nombre del recurso (p. ej. {@code schema} o {@code template}).
-	 * @return el contenido del recurso.
-	 * @throws dev.stxt.exceptions.ResourceNotFoundException si no existe.
+	 * @param namespace namespace of the resource to look up.
+	 * @param resource name of the resource (e.g. {@code schema} or {@code template}).
+	 * @return the content of the resource.
+	 * @throws dev.stxt.exceptions.ResourceNotFoundException if it does not exist.
 	 */
 	public String retrieve(String namespace, String resource);
 }

@@ -14,7 +14,7 @@ class LineIndentParser {
     }
     
 	public static LineIndent parseLine(String line, boolean lastNodeBlock, int lastLevel, int numLine) {
-        // Recorremos
+        // Walk the line
         int level = 0;
         int spaces = 0;
         int pointer = 0;
@@ -38,24 +38,24 @@ class LineIndentParser {
             } else if (c == COMMENT_CHAR) {
                 return null;
             } else {
-                // Primer carácter no espacio/tab/comentario => fin de indentación
+                // First character that is not space/tab/comment => end of indentation
                 break;
             }
 
             pointer++;
 
-            // Dentro del bloque de texto
+            // Inside the text block
             if (lastNodeBlock && level > lastLevel) {
                 String text = rightTrim(line.substring(pointer));
-                // El prefijo que cubre el nivel de bloque debe ser homogéneo (spec 10.2, regla 2);
-                // las líneas vacías se preservan siempre y quedan exentas (spec 10.3)
+                // The prefix covering the block level must be homogeneous (spec 10.2, rule 2);
+                // empty lines are always preserved and are exempt (spec 10.3)
                 if (sawSpace && sawTab && !text.isEmpty())
                     throw new ParseException(numLine, "MIXED_INDENTATION", "Mixed tabs and spaces in indentation");
                 return new LineIndent(level, text);
             }
         }
 
-        // En este punto ya estamos fuera de bloque de texto (si existía)
+        // At this point we are already outside the text block (if there was one)
 
         // Empty
         if (pointer == line.length()) {
@@ -63,20 +63,20 @@ class LineIndentParser {
             else                return null;
         }
 
-        // Mezcla de espacios y tabuladores en la indentación (spec 8.1 y 8.3)
+        // Spaces and tabs mixed in the indentation (spec 8.1 and 8.3)
         if (sawSpace && sawTab)
             throw new ParseException(numLine, "MIXED_INDENTATION", "Mixed tabs and spaces in indentation");
 
-        // Indentación no és múltiplo de 4 con espacios
+        // Space indentation is not a multiple of 4
         if (spaces > 0)
             throw new ParseException(numLine, "INVALID_NUMBER_SPACES", "There are " + spaces + " spaces before node");
         
-        // Validamos level
+        // Validate the level
         if (level > (lastLevel + 1))
             throw new ParseException(numLine, "INDENTATION_LEVEL_NOT_VALID",
                     "Level of indent incorrect: " + level);            
 
-        // 4) Caso general: devolver la línea sin la indentación consumida
+        // 4) General case: return the line without the indentation already consumed
         return new LineIndent(level, line.substring(pointer).trim());
 	}
 }

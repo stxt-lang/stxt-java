@@ -19,16 +19,16 @@ import dev.stxt.runtime.STXT;
 import test.Corpus;
 
 /**
- * Regresión del writer: escribir un documento parseado y volver a parsearlo no debe perder ni
- * cambiar nada. Se prueba con los dos estilos de indentación sobre todo el corpus de stxt-web,
- * schemas y documentos incluidos.
+ * Writer regression: writing a parsed document out and parsing it back must lose nothing and
+ * change nothing. It is exercised with both indentation styles over the whole stxt-web corpus,
+ * schemas and documents alike.
  */
 public class CorpusWriterTest {
 
 	@TestFactory
-	List<DynamicTest> idaYVuelta() {
+	List<DynamicTest> roundTrip() {
 		File root = Corpus.findStxtWeb();
-		Assumptions.assumeTrue(root != null, "requiere el proyecto hermano stxt-web (usa STXT_WEB=/ruta para indicarlo)");
+		Assumptions.assumeTrue(root != null, "requires the sibling stxt-web project (use STXT_WEB=/path to point at it)");
 
 		List<File> files = new ArrayList<>();
 		files.addAll(Corpus.corpusFiles(root, Corpus.SCHEMA_DIRS));
@@ -39,19 +39,19 @@ public class CorpusWriterTest {
 			for (File file: files) {
 				String name = Corpus.relative(root, file);
 
-				tests.add(dynamicTest(style + ": estable en " + name, () -> {
+				tests.add(dynamicTest(style + ": stable in " + name, () -> {
 					List<Node> original = STXT.rawParser().parse(Corpus.read(file));
 					String written = NodeWriter.toSTXT(original, style);
 
-					// Sin esto, un writer que devolviera "" pasaría la comparación de abajo
-					assertFalse(written.isBlank(), name + ": el writer no ha producido nada");
+					// Without this, a writer returning "" would pass the comparison below
+					assertFalse(written.isBlank(), name + ": the writer produced nothing");
 
 					List<Node> reparsed = STXT.rawParser().parse(written);
 					assertEquals(original.size(), reparsed.size(),
-							name + ": la salida del writer no tiene las mismas raíces");
+							name + ": the writer output does not have the same roots");
 
 					assertEquals(written, NodeWriter.toSTXT(reparsed, style),
-							name + ": el árbol cambia al reparsear la salida del writer");
+							name + ": the tree changes when reparsing the writer output");
 				}));
 			}
 		}

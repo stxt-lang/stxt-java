@@ -17,25 +17,25 @@ import dev.stxt.resources.ResourcesLoader;
 import dev.stxt.utils.FileUtils;
 
 /**
- * Utilidades para los tests de regresión contra el corpus real de `../stxt-web`.
+ * Helpers for the regression tests against the real corpus of `../stxt-web`.
  *
- * No se copia el corpus a este repositorio a propósito: stxt-web es la fuente normativa del
- * lenguaje y los tests deben fallar cuando la implementación se separa de los documentos
- * reales, no de una copia congelada. Si el proyecto hermano no está, los tests se saltan
- * (ver `Assumptions.assumeTrue` en cada suite) para no romper un clon aislado.
+ * The corpus is deliberately not copied into this repository: stxt-web is the normative
+ * source of the language and the tests must fail when the implementation drifts away from
+ * the real documents, not from a frozen copy. If the sibling project is missing, the tests
+ * are skipped (see `Assumptions.assumeTrue` in each suite) so a standalone clone still builds.
  */
 public final class Corpus {
 	private Corpus() {}
 
-	// Carpetas de stxt-web con schemas y templates (se cargan en el loader).
+	// Folders of stxt-web holding schemas and templates (they get loaded into the loader).
 	public static final List<String> SCHEMA_DIRS = List.of(".stxt");
 
-	// Carpetas de stxt-web con documentos que deben validar contra esos schemas.
+	// Folders of stxt-web holding documents that must validate against those schemas.
 	public static final List<String> DOC_DIRS = List.of("docs", "es", "en");
 
 	/**
-	 * Localiza `stxt-web`. Se puede forzar con la variable de entorno STXT_WEB; por defecto se
-	 * busca como proyecto hermano (`../stxt-web` desde la raíz de este repositorio).
+	 * Locates `stxt-web`. It can be forced through the STXT_WEB environment variable; by
+	 * default it is looked up as a sibling project (`../stxt-web` from the root of this repo).
 	 */
 	public static File findStxtWeb() {
 		List<String> candidates = new ArrayList<>();
@@ -53,7 +53,7 @@ public final class Corpus {
 		return null;
 	}
 
-	// Todos los .stxt bajo un directorio, recursivo y en orden estable.
+	// Every .stxt under a directory, recursively and in a stable order.
 	public static List<File> findStxtFiles(File dir) {
 		List<File> result = new ArrayList<>();
 		if (!dir.isDirectory())
@@ -74,7 +74,7 @@ public final class Corpus {
 		return result;
 	}
 
-	// Los .stxt de las carpetas indicadas, relativas a la raíz de stxt-web.
+	// The .stxt of the given folders, relative to the root of stxt-web.
 	public static List<File> corpusFiles(File root, List<String> dirs) {
 		List<File> result = new ArrayList<>();
 		for (String dir: dirs)
@@ -92,7 +92,7 @@ public final class Corpus {
 		}
 	}
 
-	// Ruta legible en los nombres de test: relativa a la raíz de stxt-web y con '/'.
+	// Readable path for the test names: relative to the root of stxt-web and using '/'.
 	public static String relative(File root, File file) {
 		String path = file.getAbsolutePath();
 		String prefix = root.getAbsolutePath() + File.separator;
@@ -103,10 +103,10 @@ public final class Corpus {
 	}
 
 	/**
-	 * `ResourcesLoader` en memoria que indexa los schemas y templates por el namespace que
-	 * declaran, no por su ruta. Es lo que permite cargar el `.stxt/**` de stxt-web, cuyo layout
-	 * (`schemas/`, `templates/`, `website/`, ...) no es el `<ns>/<resource>.stxt` que espera
-	 * `ResourcesLoaderDirectory`.
+	 * In-memory `ResourcesLoader` that indexes schemas and templates by the namespace they
+	 * declare, not by their path. That is what makes it possible to load the `.stxt/**` of
+	 * stxt-web, whose layout (`schemas/`, `templates/`, `website/`, ...) is not the
+	 * `<ns>/<resource>.stxt` that `ResourcesLoaderDirectory` expects.
 	 */
 	public static final class CorpusLoader implements ResourcesLoader {
 		private final Map<String, String> resources = new HashMap<>();
@@ -116,7 +116,7 @@ public final class Corpus {
 		public void addFile(File file) {
 			String content = read(file);
 
-			// El namespace de la raíz dice si es schema o template; su valor, el namespace destino
+			// The namespace of the root says whether it is a schema or a template; its value, the target namespace
 			List<Node> nodes = new Parser().parse(content);
 			if (nodes.size() != 1)
 				throw new IllegalStateException("Expected 1 root node in " + file + ", found " + nodes.size());
@@ -149,7 +149,7 @@ public final class Corpus {
 			return content;
 		}
 
-		// Todos los namespaces destino indexados, sin repetir y en orden estable
+		// Every indexed target namespace, without repeats and in a stable order
 		public List<String> namespaces() {
 			List<String> result = new ArrayList<>();
 			for (String key: resources.keySet()) {
@@ -162,7 +162,7 @@ public final class Corpus {
 			return result;
 		}
 
-		// Namespaces que tienen a la vez schema y template, para comprobar que son equivalentes
+		// Namespaces having both a schema and a template, to check that they are equivalent
 		public List<String> namespacesWithBoth() {
 			List<String> result = new ArrayList<>();
 			for (String key: resources.keySet()) {
@@ -190,12 +190,12 @@ public final class Corpus {
 		}
 	}
 
-	/** Carga en un loader todos los schemas/templates de `.stxt/**`. */
+	/** Loads every schema/template of `.stxt/**` into a loader. */
 	public static CorpusLoader loadLoader(File root) {
 		return loadLoader(root, SCHEMA_DIRS);
 	}
 
-	/** Igual, pero restringido a unas carpetas concretas (para comparar schemas vs templates). */
+	/** Same, but restricted to specific folders (to compare schemas against templates). */
 	public static CorpusLoader loadLoader(File root, List<String> dirs) {
 		CorpusLoader loader = new CorpusLoader();
 		for (File file: corpusFiles(root, dirs))

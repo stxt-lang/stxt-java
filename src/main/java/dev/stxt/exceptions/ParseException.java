@@ -1,21 +1,21 @@
 package dev.stxt.exceptions;
 
-/** Error de sintaxis detectado durante el parseo (fase léxica/estructural, no de schema). */
+/** Syntax error detected while parsing (lexical/structural phase, not schema). */
 public class ParseException extends STXTException {
 	private static final long serialVersionUID = 1L;
 	
-	/** Número de línea del documento donde se detectó el error. */
+	/** Line number of the document where the error was detected. */
 	private final int line;
-    
+
     /**
-     * @param line número de línea donde se detectó el error.
-     * @param code código de error en MAYÚSCULAS.
-     * @param message mensaje descriptivo.
+     * @param line line number where the error was detected.
+     * @param code error code in UPPERCASE.
+     * @param message descriptive message.
      */
     public ParseException(int line, String code, String message) {
         super(code, "Error at line: " + line + ", " + message);
         this.line = line;
     }
-    /** @return número de línea del documento donde se detectó el error. */
+    /** @return line number of the document where the error was detected. */
     public int getLine() { return line; }
 }

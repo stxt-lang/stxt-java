@@ -7,16 +7,16 @@ import dev.stxt.exceptions.STXTException;
 import dev.stxt.exceptions.STXTIOException;
 import dev.stxt.utils.FileUtils;
 
-/** {@link ResourcesLoader} que busca los recursos en {@code <dir>/<namespace>/<resource>.stxt}. */
+/** {@link ResourcesLoader} that looks resources up in {@code <dir>/<namespace>/<resource>.stxt}. */
 public class ResourcesLoaderDirectory implements ResourcesLoader {
 	private final File dir;
 
-	/** @param dir ruta del directorio raíz de recursos. @throws STXTException si no existe o no es un directorio. */
+	/** @param dir path of the root resources directory. @throws STXTException if it does not exist or is not a directory. */
 	public ResourcesLoaderDirectory(String dir) {
 		this(new File(dir));
 	}
 
-	/** @param dirResources directorio raíz de recursos. @throws STXTException si no existe o no es un directorio. */
+	/** @param dirResources root resources directory. @throws STXTException if it does not exist or is not a directory. */
 	public ResourcesLoaderDirectory(File dirResources) {
 		this.dir = dirResources;
 		if (!dir.exists() || !dir.isDirectory())
@@ -26,14 +26,14 @@ public class ResourcesLoaderDirectory implements ResourcesLoader {
 
 	@Override
 	public String retrieve(String namespace, String resource) {
-		// Obtenemos fichero
+		// Get the file
 		File file = new File(dir, namespace + '/' + resource + ".stxt");
 
-		// Validamos exista
+		// Check that it exists
 		if (!file.exists() || !file.isFile())
 			throw new ResourceNotFoundException(namespace, resource);
 
-		// Retornamos valor
+		// Return its value
 		try {
 			return FileUtils.readFileContent(file);
 		}

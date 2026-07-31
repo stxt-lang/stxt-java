@@ -8,9 +8,9 @@ import dev.stxt.exceptions.ValidationException;
 import dev.stxt.schema.NodeDefinition;
 import dev.stxt.schema.Type;
 
-/** Tipo {@code URL}: valida que el valor sea una URI/URL sintácticamente válida. */
+/** {@code URL} type: checks that the value is a syntactically valid URI/URL. */
 public final class URL implements Type {
-	/** Instancia única de este tipo. */
+	/** Single instance of this type. */
 	public static final URL INSTANCE = new URL();
 
 	private URL() {
@@ -23,7 +23,7 @@ public final class URL implements Type {
     
 	@Override
     public void validate(NodeDefinition ndef, Node n) {
-		// Forma del valor INLINE (STXT-SCHEMA-SPEC 9.4): no admite bloque '>>'
+		// INLINE value form (STXT-SCHEMA-SPEC 9.4): the '>>' block is not accepted
 		if (n.isTextNode()) {
 			throw new ValidationException(n.getLine(), "NOT_ALLOWED_TEXT",
 					"Not allowed text in node " + n.getQualifiedName());

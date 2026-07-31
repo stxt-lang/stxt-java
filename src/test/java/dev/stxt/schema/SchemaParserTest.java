@@ -38,7 +38,7 @@ public class SchemaParserTest {
 
 	@Test
 	void testChildrenNotAllowedForType() {
-		// STXT-SCHEMA-SPEC 9.1/13.5: sólo INLINE y GROUP admiten hijos
+		// STXT-SCHEMA-SPEC 9.1/13.5: only INLINE and GROUP accept children
 		String text = """
 Schema (@stxt.schema): test.leaf.children
     Node: Foo
@@ -54,9 +54,9 @@ Schema (@stxt.schema): test.leaf.children
 
 	@Test
 	void testDuplicatedValueRejected() {
-		// STXT-SCHEMA-SPEC 13.9: 'Value' duplicado tras la normalización por trim. La vía de
-		// template ya lo rechazaba en ChildLineParser; la de schema se lo tragaba en silencio
-		// porque los valores se guardan en un Set.
+		// STXT-SCHEMA-SPEC 13.9: duplicated 'Value' after trim normalization. The template route
+		// already rejected it in ChildLineParser; the schema one swallowed it silently because
+		// the values are kept in a Set.
 		String text = """
 Schema (@stxt.schema): test.value.dup
     Node: Estado
@@ -72,7 +72,7 @@ Schema (@stxt.schema): test.value.dup
 
 	@Test
 	void testDuplicatedValueAfterTrimRejected() {
-		// La regla es "tras la normalización por trim": 'alta' y '  alta  ' son el mismo valor
+		// The rule is "after trim normalization": 'alta' and '  alta  ' are the same value
 		String text = """
 Schema (@stxt.schema): test.value.dup.trim
     Node: Estado
@@ -88,7 +88,7 @@ Schema (@stxt.schema): test.value.dup.trim
 
 	@Test
 	void testMinGreaterThanMax() {
-		// STXT-SCHEMA-SPEC 10/13.7: Min no debe ser mayor que Max
+		// STXT-SCHEMA-SPEC 10/13.7: Min must not be greater than Max
 		String text = """
 Schema (@stxt.schema): test.min.max
     Node: Foo
@@ -105,8 +105,8 @@ Schema (@stxt.schema): test.min.max
 
 	@Test
 	void testMetaSchemaRejectsUnknownTypeAtLoad() {
-		// STXT-SCHEMA-SPEC 13.4/15.2: un Type desconocido debe fallar al cargar el schema,
-		// no sólo al validar documentos contra él
+		// STXT-SCHEMA-SPEC 13.4/15.2: an unknown Type must fail when the schema is loaded,
+		// not only when validating documents against it
 		String text = """
 Schema (@stxt.schema): test.unknown.type
     Node: Foo
@@ -120,7 +120,7 @@ Schema (@stxt.schema): test.unknown.type
 
 	@Test
 	void testMetaSchemaRejectsValueOnValuesNode() {
-		// STXT-SCHEMA-SPEC 15.2: 'Values' es de tipo GROUP, no admite valor inline
+		// STXT-SCHEMA-SPEC 15.2: 'Values' is of type GROUP, it accepts no inline value
 		String text = """
 Schema (@stxt.schema): test.values.group
     Node: Foo

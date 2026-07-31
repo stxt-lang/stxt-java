@@ -10,8 +10,8 @@ import dev.stxt.schema.Schema;
 import dev.stxt.schema.SchemaProvider;
 
 /**
- * {@link SchemaProvider} que define en código el meta-schema del propio lenguaje de templates
- * ({@code @stxt.template}), análogo a {@link dev.stxt.schema.SchemaProviderMeta} para schemas.
+ * {@link SchemaProvider} that defines in code the meta-schema of the template language itself
+ * ({@code @stxt.template}), the counterpart of {@link dev.stxt.schema.SchemaProviderMeta} for schemas.
  */
 public class MetaTemplateSchemaProvider implements SchemaProvider {
 
@@ -25,7 +25,7 @@ Template (@stxt.template): @stxt.template
 			
 	private final Schema meta;
 	
-	/** Construye el meta-schema de templates parseando y validando {@code META_TEXT}. */
+	/** Builds the template meta-schema by parsing and validating {@code META_TEXT}. */
 	public MetaTemplateSchemaProvider() {
 		Schema metaSchema = null;
 		Parser parser = new Parser();

@@ -11,13 +11,13 @@ import dev.stxt.exceptions.STXTException;
 import dev.stxt.utils.StringUtils;
 
 /**
- * Nodo del árbol STXT. Mutable durante el parseo ({@link #addChild(Node)}/
- * {@link #addTextLine(String)} son públicos); una vez cerrado el documento se debe tratar como
- * de solo lectura. Representa tanto nodos INLINE (con {@link #getValue()}) como nodos de bloque
- * de texto BLOCK (con {@link #getTextLines()}), según {@link #isTextNode()}.
+ * Node of the STXT tree. Mutable while parsing ({@link #addChild(Node)}/
+ * {@link #addTextLine(String)} are public); once the document is closed it must be treated as
+ * read-only. It represents both INLINE nodes (with {@link #getValue()}) and BLOCK text nodes
+ * (with {@link #getTextLines()}), as told apart by {@link #isTextNode()}.
  */
 public class Node {
-	// STXT-SPEC 4.2: letras y dígitos Unicode (categorías L y Nd) más '-', '_' y espacio
+	// STXT-SPEC 4.2: Unicode letters and digits (categories L and Nd) plus '-', '_' and space
 	private static final Pattern VALID_NAME = Pattern.compile("^[\\p{L}\\p{Nd}\\-_ ]+$");
 
 	private final String name;
@@ -32,41 +32,41 @@ public class Node {
 	private List<Node> children = new ArrayList<>();
 
     /**
-     * Crea un nodo sin namespace ni posición conocida en el documento (línea/nivel = -1).
-     * Pensado para construir nodos fuera del parseo normal (p. ej. en tests).
+     * Creates a node with neither namespace nor a known position in the document (line/level = -1).
+     * Meant for building nodes outside normal parsing (e.g. in tests).
      *
-     * @param name nombre del nodo.
-     * @param textNode {@code true} si es un nodo de bloque de texto (BLOCK); {@code false} si es INLINE.
-     * @param value valor inline del nodo (nodo INLINE), ignorado si es BLOCK.
+     * @param name name of the node.
+     * @param textNode {@code true} if it is a text block node (BLOCK); {@code false} if it is INLINE.
+     * @param value inline value of the node (INLINE node), ignored when it is BLOCK.
      */
     public Node(String name, boolean textNode, String value) {
         this(-1,-1,name,null,textNode,value);
     }
     
 	/**
-	 * Crea un nodo con namespace explícito pero sin posición conocida en el documento
-	 * (línea/nivel = -1). Pensado para construir nodos fuera del parseo normal (p. ej. en tests).
+	 * Creates a node with an explicit namespace but no known position in the document
+	 * (line/level = -1). Meant for building nodes outside normal parsing (e.g. in tests).
 	 *
-	 * @param name nombre del nodo.
-	 * @param namespace namespace del nodo, o {@code null} si no tiene.
-	 * @param textNode {@code true} si es un nodo de bloque de texto (BLOCK); {@code false} si es INLINE.
-	 * @param value valor inline del nodo (nodo INLINE), ignorado si es BLOCK.
+	 * @param name name of the node.
+	 * @param namespace namespace of the node, or {@code null} if it has none.
+	 * @param textNode {@code true} if it is a text block node (BLOCK); {@code false} if it is INLINE.
+	 * @param value inline value of the node (INLINE node), ignored when it is BLOCK.
 	 */
 	public Node(String name, String namespace, boolean textNode, String value) {
 	    this(-1,-1,name,namespace,textNode,value);
 	}
 	
 	/**
-	 * Crea un nodo con su posición completa en el documento. Es el constructor que usa el
-	 * {@link Parser} al parsear.
+	 * Creates a node with its full position in the document. This is the constructor the
+	 * {@link Parser} uses while parsing.
 	 *
-	 * @param line número de línea del documento donde se abre el nodo.
-	 * @param level nivel de indentación del nodo.
-	 * @param name nombre del nodo.
-	 * @param namespace namespace del nodo, o {@code null} si no tiene.
-	 * @param textNode {@code true} si es un nodo de bloque de texto (BLOCK); {@code false} si es INLINE.
-	 * @param value valor inline del nodo (nodo INLINE), ignorado si es BLOCK.
-	 * @throws ParseException si el nombre o el namespace no son válidos.
+	 * @param line line number of the document where the node opens.
+	 * @param level indentation level of the node.
+	 * @param name name of the node.
+	 * @param namespace namespace of the node, or {@code null} if it has none.
+	 * @param textNode {@code true} if it is a text block node (BLOCK); {@code false} if it is INLINE.
+	 * @param value inline value of the node (INLINE node), ignored when it is BLOCK.
+	 * @throws ParseException if the name or the namespace are not valid.
 	 */
 	public Node(int line, int level, String name, String namespace, boolean textNode, String value) {
 		this.level = level;
@@ -90,67 +90,67 @@ public class Node {
 		}
 	}
 
-	/** @param line línea de texto a añadir a un nodo BLOCK ({@link #isTextNode()}). */
+	/** @param line text line to append to a BLOCK node ({@link #isTextNode()}). */
 	public void addTextLine(String line) {
 		this.textLines.add(line);
 	}
 
-	/** @return nombre original del nodo tal como aparece en el documento (con espacios compactados). */
+	/** @return original name of the node as it appears in the document (with spaces compacted). */
 	public String getName() {
 		return name;
 	}
 
-	/** @return nombre canónico del nodo, usado para comparar/buscar por identidad estructural. */
+	/** @return canonical name of the node, used to compare/look up by structural identity. */
 	public String getNormalizedName() {
 		return normalizedName;
 	}
 
-	/** @return nombre canónico prefijado por namespace ({@code namespace:nombre}), o solo el nombre si no hay namespace. */
+	/** @return canonical name prefixed by its namespace ({@code namespace:name}), or just the name when there is no namespace. */
 	public String getQualifiedName() {
 		return namespace.isEmpty() ? normalizedName : namespace + ":" + normalizedName;
 	}
 
-	/** @return namespace efectivo del nodo (propio o heredado del padre), en minúsculas, o cadena vacía si no tiene. */
+	/** @return effective namespace of the node (its own or inherited from the parent), lower-cased, or the empty string if it has none. */
 	public String getNamespace() {
 		return namespace;
 	}
 
-	/** @return hijos del nodo en orden de aparición, vista de solo lectura. */
+	/** @return children of the node in order of appearance, as a read-only view. */
 	public List<Node> getChildren() {
 		return Collections.unmodifiableList(children);
 	}
 	
-	/** @param node hijo ya cerrado a añadir al final de la lista de hijos de este nodo. */
+	/** @param node already closed child to append at the end of this node's list of children. */
 	public void addChild(Node node) {
 		children.add(node);
 	}
 
-	/** @return valor inline del nodo (nodo INLINE), o cadena vacía si es un nodo BLOCK. */
+	/** @return inline value of the node (INLINE node), or the empty string if it is a BLOCK node. */
 	public String getValue() {
 		return value;
 	}
 
-	/** @return líneas de texto de un nodo BLOCK ({@link #isTextNode()}), en orden de aparición. */
+	/** @return text lines of a BLOCK node ({@link #isTextNode()}), in order of appearance. */
 	public List<String> getTextLines() {
 		return textLines;
 	}
 
-	/** @return número de línea del documento donde se abrió este nodo. */
+	/** @return line number of the document where this node was opened. */
 	public int getLine() {
 		return line;
 	}
 
-	/** @return nivel de indentación del nodo (0 para nodos raíz). */
+	/** @return indentation level of the node (0 for root nodes). */
 	public int getLevel() {
 		return level;
 	}
 
-	/** @return {@code true} si el nodo es de bloque de texto (BLOCK, {@code >>}); {@code false} si es INLINE. */
+	/** @return {@code true} if the node is a text block (BLOCK, {@code >>}); {@code false} if it is INLINE. */
 	public boolean isTextNode() {
 		return textNode;
 	}
 
-	/** @return contenido textual del nodo: las líneas de texto unidas con '\n' si es BLOCK, o el valor inline si no. */
+	/** @return textual content of the node: the text lines joined with '\n' if it is BLOCK, or the inline value otherwise. */
 	public String getText() {
 		if (isTextNode())
 			return String.join("\n", textLines);
@@ -159,25 +159,25 @@ public class Node {
 	}
 
 	/**
-	 * Busca el único hijo directo con ese nombre en el namespace propio de este nodo.
+	 * Looks up the single direct child with that name in this node's own namespace.
 	 *
-	 * @param cname nombre del hijo buscado.
-	 * @return el hijo encontrado, o {@code null} si no hay ninguno.
-	 * @throws STXTException con código {@code AMBIGUOUS_CHILD} si hay más de un hijo que encaja;
-	 *         usar {@link #getChildren(String)} en ese caso.
+	 * @param cname name of the child to look for.
+	 * @return the child found, or {@code null} if there is none.
+	 * @throws STXTException with code {@code AMBIGUOUS_CHILD} if more than one child matches;
+	 *         use {@link #getChildren(String)} in that case.
 	 */
 	public Node getChild(String cname) {
 		return getChild(cname, this.namespace);
 	}
 
 	/**
-	 * Busca el único hijo directo con ese nombre en el namespace indicado.
+	 * Looks up the single direct child with that name in the given namespace.
 	 *
-	 * @param cname nombre del hijo buscado.
-	 * @param namespace namespace en el que buscar.
-	 * @return el hijo encontrado, o {@code null} si no hay ninguno.
-	 * @throws STXTException con código {@code AMBIGUOUS_CHILD} si hay más de un hijo que encaja;
-	 *         usar {@link #getChildren(String, String)} en ese caso.
+	 * @param cname name of the child to look for.
+	 * @param namespace namespace to search in.
+	 * @return the child found, or {@code null} if there is none.
+	 * @throws STXTException with code {@code AMBIGUOUS_CHILD} if more than one child matches;
+	 *         use {@link #getChildren(String, String)} in that case.
 	 */
 	public Node getChild(String cname, String namespace) {
 		List<Node> result = getChildren(cname, namespace);
@@ -190,17 +190,17 @@ public class Node {
 
 	// Fast access methods to children
 	/**
-	 * @param cname nombre del hijo buscado.
-	 * @return todos los hijos directos con ese nombre en el namespace propio de este nodo.
+	 * @param cname name of the child to look for.
+	 * @return every direct child with that name in this node's own namespace.
 	 */
 	public List<Node> getChildren(String cname) {
 		return getChildren(cname, this.namespace);
 	}
 
 	/**
-	 * @param cname nombre del hijo buscado.
-	 * @param namespace namespace en el que buscar.
-	 * @return todos los hijos directos con ese nombre en el namespace indicado.
+	 * @param cname name of the child to look for.
+	 * @param namespace namespace to search in.
+	 * @return every direct child with that name in the given namespace.
 	 */
 	public List<Node> getChildren(String cname, String namespace) {
 		String key = StringUtils.normalize(cname);

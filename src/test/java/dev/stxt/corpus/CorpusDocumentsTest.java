@@ -22,47 +22,47 @@ import dev.stxt.runtime.STXT;
 import test.Corpus;
 
 /**
- * Regresión de validación: los documentos reales de stxt-web deben parsear y validar sin
- * errores contra los schemas/templates del propio stxt-web.
+ * Validation regression: the real documents of stxt-web must parse and validate without
+ * errors against the schemas/templates of stxt-web itself.
  *
- * Usa el modo multi-error ({@link dev.stxt.Parser#parseResult(String)}) para que un fallo
- * muestre la lista completa de errores del documento en vez de sólo el primero, igual que el
- * equivalente en stxt-vscode (que compara `result.getErrors()`).
+ * It uses the multi-error mode ({@link dev.stxt.Parser#parseResult(String)}) so a failure
+ * shows the full list of errors of the document instead of just the first one, like the
+ * counterpart in stxt-vscode does (which compares `result.getErrors()`).
  */
 public class CorpusDocumentsTest {
 
 	@TestFactory
-	List<DynamicTest> validaCadaDocumento() {
+	List<DynamicTest> validatesEachDocument() {
 		File root = Corpus.findStxtWeb();
-		Assumptions.assumeTrue(root != null, "requiere el proyecto hermano stxt-web (usa STXT_WEB=/ruta para indicarlo)");
+		Assumptions.assumeTrue(root != null, "requires the sibling stxt-web project (use STXT_WEB=/path to point at it)");
 
 		Corpus.CorpusLoader loader = Corpus.loadLoader(root);
 		List<File> files = Corpus.corpusFiles(root, Corpus.DOC_DIRS);
-		assertTrue(files.size() > 0, "no se ha encontrado ningún .stxt en " + Corpus.DOC_DIRS);
+		assertTrue(files.size() > 0, "no .stxt found in " + Corpus.DOC_DIRS);
 
 		List<DynamicTest> tests = new ArrayList<>();
 		for (File file: files) {
 			String name = Corpus.relative(root, file);
 
-			tests.add(dynamicTest("valida " + name, () -> {
+			tests.add(dynamicTest("validates " + name, () -> {
 				ParseResult result = STXT.parser(loader).parseResult(Corpus.read(file));
 
 				assertTrue(result.getErrors().isEmpty(),
-						name + " tiene " + result.getErrors().size() + " error(es):" + describeErrors(result.getErrors()));
-				assertTrue(result.getNodes().size() > 0, name + " no ha producido ningún nodo");
+						name + " has " + result.getErrors().size() + " error(s):" + describeErrors(result.getErrors()));
+				assertTrue(result.getNodes().size() > 0, name + " produced no node at all");
 			}));
 		}
 
-		tests.add(dynamicTest("todos los documentos declaran un namespace con schema conocido", () -> {
-			// Sin esto los tests de arriba podrían pasar de forma trivial: un documento sin
-			// namespace no se contrasta contra ningún schema.
+		tests.add(dynamicTest("every document declares a namespace with a known schema", () -> {
+			// Without this the tests above could pass trivially: a document with no namespace
+			// is not checked against any schema at all.
 			for (File file: files) {
 				for (Node node: STXT.rawParser().parse(Corpus.read(file))) {
 					String label = Corpus.relative(root, file) + " → " + node.getName();
 
-					assertNotEquals("", node.getNamespace(), label + ": documento sin namespace");
+					assertNotEquals("", node.getNamespace(), label + ": document with no namespace");
 					assertNotNull(STXT.schemaProvider(loader).getSchema(node.getNamespace()),
-							label + ": no hay schema para " + node.getNamespace());
+							label + ": there is no schema for " + node.getNamespace());
 				}
 			}
 		}));
@@ -71,15 +71,15 @@ public class CorpusDocumentsTest {
 	}
 
 	/**
-	 * Un mismo namespace está descrito en stxt-web dos veces: como schema (`.stxt/schemas/`) y
-	 * como template (`.stxt/templates/`). Como el template se compila a Schema, ambos deben
-	 * validar los documentos exactamente igual: no sólo el mismo primer error, la misma lista
-	 * completa de errores (código + línea, en el mismo orden).
+	 * One and the same namespace is described twice in stxt-web: as a schema (`.stxt/schemas/`)
+	 * and as a template (`.stxt/templates/`). Since the template compiles down to a Schema, both
+	 * must validate the documents exactly alike: not just the same first error, but the same
+	 * full list of errors (code + line, in the same order).
 	 */
 	@TestFactory
-	List<DynamicTest> schemaYTemplateValidanIgual() {
+	List<DynamicTest> schemaAndTemplateValidateAlike() {
 		File root = Corpus.findStxtWeb();
-		Assumptions.assumeTrue(root != null, "requiere el proyecto hermano stxt-web (usa STXT_WEB=/ruta para indicarlo)");
+		Assumptions.assumeTrue(root != null, "requires the sibling stxt-web project (use STXT_WEB=/path to point at it)");
 
 		Corpus.CorpusLoader fromSchemas = Corpus.loadLoader(root, List.of(".stxt/schemas"));
 		Corpus.CorpusLoader fromTemplates = Corpus.loadLoader(root, List.of(".stxt/templates"));
@@ -89,16 +89,16 @@ public class CorpusDocumentsTest {
 			String name = Corpus.relative(root, file);
 			String text = Corpus.read(file);
 
-			// Sólo son comparables los documentos cuyo namespace está descrito de las dos formas
+			// Only the documents whose namespace is described both ways are comparable
 			if (!describedBoth(text, fromSchemas, fromTemplates))
 				continue;
 
-			tests.add(dynamicTest("mismo resultado en " + name, () ->
+			tests.add(dynamicTest("same result in " + name, () ->
 					assertEquals(errorCodes(text, fromTemplates), errorCodes(text, fromSchemas),
-							name + ": el template y el schema no validan igual")));
+							name + ": the template and the schema do not validate alike")));
 		}
 
-		assertTrue(tests.size() > 0, "ningún documento tiene su namespace descrito como schema y como template");
+		assertTrue(tests.size() > 0, "no document has its namespace described both as a schema and as a template");
 		return tests;
 	}
 
@@ -115,19 +115,19 @@ public class CorpusDocumentsTest {
 		return true;
 	}
 
-	// Lista comparable de errores de validar: código y línea de cada uno, en orden de aparición.
+	// Comparable list of validation errors: code and line of each one, in order of appearance.
 	private static List<String> errorCodes(String text, Corpus.CorpusLoader loader) {
 		ParseResult result = STXT.parser(loader).parseResult(text);
 		return result.getErrors().stream()
-				.map(e -> "[" + e.getCode() + "] línea " + e.getLine())
+				.map(e -> "[" + e.getCode() + "] line " + e.getLine())
 				.collect(Collectors.toList());
 	}
 
-	// Mensaje legible para el assert: "\n\t[CODE] línea 12: mensaje" por cada error.
+	// Readable message for the assert: "\n\t[CODE] line 12: message" for each error.
 	private static String describeErrors(List<ParseException> errors) {
 		StringBuilder sb = new StringBuilder();
 		for (ParseException e: errors)
-			sb.append("\n\t[").append(e.getCode()).append("] línea ").append(e.getLine()).append(": ").append(e.getMessage());
+			sb.append("\n\t[").append(e.getCode()).append("] line ").append(e.getLine()).append(": ").append(e.getMessage());
 		return sb.toString();
 	}
 }

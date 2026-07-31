@@ -4,19 +4,19 @@ import java.util.Locale;
 
 import dev.stxt.exceptions.ParseException;
 
-/** Extrae el nombre y el namespace {@code (a.b.c)} de la parte izquierda de una línea STXT. */
+/** Extracts the name and the namespace {@code (a.b.c)} from the left-hand side of an STXT line. */
 public final class NameNamespaceParser {
     private NameNamespaceParser() {
         // Utility
     }
 
     /**
-     * @param rawName nombre en bruto, con el namespace entre paréntesis si lo tiene.
-     * @param inheritedNs namespace heredado del padre, usado si {@code rawName} no trae el suyo propio.
-     * @param lineNumber número de línea, para los mensajes de error.
-     * @param fullLine línea completa original, para los mensajes de error.
-     * @return el nombre y el namespace ya separados y resueltos.
-     * @throws ParseException si el nombre o el namespace no tienen un formato válido.
+     * @param rawName raw name, with the namespace in parentheses if it carries one.
+     * @param inheritedNs namespace inherited from the parent, used when {@code rawName} brings none of its own.
+     * @param lineNumber line number, for the error messages.
+     * @param fullLine original full line, for the error messages.
+     * @return the name and the namespace, already split apart and resolved.
+     * @throws ParseException if the name or the namespace are not well formed.
      */
     public static NameNamespace parse(String rawName, String inheritedNs, int lineNumber, String fullLine) {
         if (rawName == null) {
@@ -24,27 +24,27 @@ public final class NameNamespaceParser {
         }
 
         rawName = rawName.trim();
-        int indexInicio = rawName.indexOf("(");
-        int indexFin    = rawName.indexOf(")");
-        
-        // Encontrados los dos
+        int openIndex  = rawName.indexOf("(");
+        int closeIndex = rawName.indexOf(")");
+
+        // Both of them found
         String name = null;
         String namespace = inheritedNs;
         if (namespace == null) namespace = "";
         
-        if (indexInicio != -1 && indexFin != -1)
+        if (openIndex != -1 && closeIndex != -1)
         {
-        	if (indexInicio > indexFin || indexFin != rawName.length()-1) 
+        	if (openIndex > closeIndex || closeIndex != rawName.length()-1)
         		throw new ParseException(lineNumber, "INVALID_NAMESPACE", "Line not valid: " + fullLine);
-        	
-        	name = rawName.substring(0, indexInicio).trim();
-        	// Sin trim: la gramática (STXT-SPEC 7/16) no admite espacios dentro de '( )'
-        	namespace = rawName.substring(indexInicio+1, indexFin);
+
+        	name = rawName.substring(0, openIndex).trim();
+        	// No trim here: the grammar (STXT-SPEC 7/16) allows no spaces inside '( )'
+        	namespace = rawName.substring(openIndex+1, closeIndex);
         	
         	if (namespace.isEmpty())
         		throw new ParseException(lineNumber, "INVALID_NAMESPACE", "Line not valid: " + fullLine);
         }
-        else if (indexInicio == -1 && indexFin == -1)
+        else if (openIndex == -1 && closeIndex == -1)
         {
         	name = rawName;
         }

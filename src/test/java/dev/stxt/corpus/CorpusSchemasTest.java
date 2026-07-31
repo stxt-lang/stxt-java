@@ -18,44 +18,44 @@ import dev.stxt.schema.SchemaProvider;
 import test.Corpus;
 
 /**
- * Regresión de carga: todos los schemas y templates reales de stxt-web deben parsear, validar
- * contra su meta-schema y transformarse a Schema sin excepción.
+ * Loading regression: every real schema and template of stxt-web must parse, validate against
+ * its meta-schema and turn into a Schema without throwing.
  *
- * Cada fichero se carga en un loader propio para que un fallo señale el fichero culpable y no
- * quede enmascarado por los demás.
+ * Each file is loaded into its own loader so a failure points at the guilty file instead of
+ * being masked by the others.
  */
 public class CorpusSchemasTest {
 
 	@TestFactory
-	List<DynamicTest> cargaCadaSchemaYTemplate() {
+	List<DynamicTest> loadsEachSchemaAndTemplate() {
 		File root = Corpus.findStxtWeb();
-		Assumptions.assumeTrue(root != null, "requiere el proyecto hermano stxt-web (usa STXT_WEB=/ruta para indicarlo)");
+		Assumptions.assumeTrue(root != null, "requires the sibling stxt-web project (use STXT_WEB=/path to point at it)");
 
 		List<File> files = Corpus.corpusFiles(root, Corpus.SCHEMA_DIRS);
-		assertTrue(files.size() > 0, "no se ha encontrado ningún .stxt en " + Corpus.SCHEMA_DIRS);
+		assertTrue(files.size() > 0, "no .stxt found in " + Corpus.SCHEMA_DIRS);
 
 		List<DynamicTest> tests = new ArrayList<>();
 		for (File file: files) {
 			String name = Corpus.relative(root, file);
 
-			tests.add(dynamicTest("carga " + name, () -> {
+			tests.add(dynamicTest("loads " + name, () -> {
 				Corpus.CorpusLoader loader = new Corpus.CorpusLoader();
 				loader.addFile(file);
 
-				// El namespace destino que declara el propio fichero
+				// The target namespace declared by the file itself
 				String namespace = loader.namespaces().get(0);
 				Schema schema = STXT.schemaProvider(loader).getSchema(namespace);
 
-				assertNotNull(schema, name + ": no ha producido ningún schema");
+				assertNotNull(schema, name + ": produced no schema at all");
 			}));
 		}
 
-		tests.add(dynamicTest("todos juntos se cargan en un único loader", () -> {
+		tests.add(dynamicTest("all of them load together into a single loader", () -> {
 			Corpus.CorpusLoader loader = Corpus.loadLoader(root);
 			SchemaProvider provider = STXT.schemaProvider(loader);
 
 			for (String namespace: loader.namespaces())
-				assertNotNull(provider.getSchema(namespace), "sin schema para " + namespace);
+				assertNotNull(provider.getSchema(namespace), "no schema for " + namespace);
 		}));
 
 		return tests;

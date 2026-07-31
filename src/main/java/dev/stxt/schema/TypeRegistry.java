@@ -24,16 +24,16 @@ import dev.stxt.schema.type.TIMESTAMP;
 import dev.stxt.schema.type.URL;
 import dev.stxt.schema.type.UUID;
 
-/** Registro estático de los tipos de valor de STXT, indexados por su nombre. Añadir un tipo nuevo: nueva clase {@link Type} + {@code register(...)} aquí. */
+/** Static registry of the STXT value types, indexed by name. Adding a new type: a new {@link Type} class + {@code register(...)} here. */
 public final class TypeRegistry {
 	private static final Map<String, Type> REGISTRY = new HashMap<>();
 
 	static {
-		// Tipos principales
+		// Main types
 		register(INLINE.INSTANCE);
 		register(BLOCK.INSTANCE);
-		
-		// Subtipos
+
+		// Subtypes
 		register(TEXT.INSTANCE);
 		register(BOOLEAN.INSTANCE);
 		register(URL.INSTANCE);
@@ -54,17 +54,17 @@ public final class TypeRegistry {
 	}
 
 	/**
-	 * @param nodeType nombre del tipo buscado.
-	 * @return el {@link Type} registrado con ese nombre, o {@code null} si no existe.
+	 * @param nodeType name of the type to look for.
+	 * @return the {@link Type} registered under that name, or {@code null} if it does not exist.
 	 */
 	public static Type get(String nodeType) {
 		return REGISTRY.get(nodeType);
 	}
 
-	// STXT-SCHEMA-SPEC 9 / STXT-TEMPLATE-SPEC 15: sólo INLINE y GROUP admiten hijos
+	// STXT-SCHEMA-SPEC 9 / STXT-TEMPLATE-SPEC 15: only INLINE and GROUP accept children
 	/**
-	 * @param nodeType nombre del tipo.
-	 * @return {@code true} si los nodos de este tipo pueden tener hijos (solo INLINE y GROUP).
+	 * @param nodeType name of the type.
+	 * @return {@code true} if nodes of this type may have children (only INLINE and GROUP).
 	 */
 	public static boolean admitsChildren(String nodeType) {
 		return "INLINE".equals(nodeType) || "GROUP".equals(nodeType);

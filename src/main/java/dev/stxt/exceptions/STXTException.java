@@ -1,15 +1,15 @@
 package dev.stxt.exceptions;
 
-/** Excepción raíz de todas las excepciones de STXT. Toda excepción lleva un código en MAYÚSCULAS ({@link #getCode()}). */
+/** Root of every STXT exception. Every exception carries an UPPERCASE code ({@link #getCode()}). */
 public class STXTException extends RuntimeException {
 	
 	private static final long serialVersionUID = 1L;
-	/** Código de error en MAYÚSCULAS (p. ej. {@code INVALID_LINE}). */
+	/** Error code in UPPERCASE (e.g. {@code INVALID_LINE}). */
 	private final String code;
-    
+
     /**
-     * @param code código de error en MAYÚSCULAS.
-     * @param message mensaje descriptivo.
+     * @param code error code in UPPERCASE.
+     * @param message descriptive message.
      */
     public STXTException(String code, String message) {
         super(message);
@@ -17,16 +17,16 @@ public class STXTException extends RuntimeException {
     }
     
     /**
-     * @param code código de error en MAYÚSCULAS.
-     * @param message mensaje descriptivo.
-     * @param cause causa original.
+     * @param code error code in UPPERCASE.
+     * @param message descriptive message.
+     * @param cause original cause.
      */
     public STXTException(String code, String message, Throwable cause) {
         super(message, cause);
         this.code = code;
     }
     
-    /** @return código de error en MAYÚSCULAS. */
+    /** @return error code in UPPERCASE. */
     public String getCode() { return code; }
     
     @Override

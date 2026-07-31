@@ -8,27 +8,27 @@ import java.util.concurrent.ConcurrentHashMap;
 import dev.stxt.exceptions.ResourceNotFoundException;
 import dev.stxt.exceptions.SchemaException;
 
-/** {@link SchemaProvider} que envuelve una lista de providers, probando en orden y cacheando el resultado por namespace. */
+/** {@link SchemaProvider} that wraps a list of providers, trying them in order and caching the result per namespace. */
 public final class SchemaProviderCache implements SchemaProvider {
 	private final Map<String, Schema> cache = new ConcurrentHashMap<>();
 	private final List<SchemaProvider> providers;
 	
-	/** @param providers providers a probar en orden hasta que uno resuelva el schema. */
+	/** @param providers providers to try in order until one of them resolves the schema. */
 	public SchemaProviderCache(List<SchemaProvider> providers) {
 		this.providers = providers;
 	}
 
 	public Schema getSchema(String namespace) {
-		// Retorno de cache
+		// Return from the cache
 		if (namespace == null || namespace.isEmpty())
 		    throw new SchemaException("NAMESPACE_REQUIRED", "Namespace is required to load schema");
-		
+
 		namespace = namespace.toLowerCase(Locale.ROOT);
 		Schema cached = cache.get(namespace);
 		if (cached != null)
 			return cached;
 
-		// Cargamos schema
+		// Load the schema
 		Schema result = null;
 		
 		for (SchemaProvider provider: providers) {
@@ -43,7 +43,7 @@ public final class SchemaProviderCache implements SchemaProvider {
 		if (result == null)
 			throw new SchemaException("NOT_FOUND_SCHEMA", "Not found schema " + namespace);
 		
-		// Insertamos en cache
+		// Put it in the cache
 		cache.put(namespace, result);
 		return result;
 	}

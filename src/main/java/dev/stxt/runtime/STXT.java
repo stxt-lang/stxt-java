@@ -11,16 +11,16 @@ import dev.stxt.schema.SchemaValidator;
 import dev.stxt.template.TemplateSchemaProvider;
 
 /**
- * Fachada de uso habitual de STXT. {@link #parser(ResourcesLoader)} da un {@link Parser} ya
- * configurado con validación de schemas y templates (con caché); {@link #rawParser()} da un
- * parser sin validación (solo sintaxis).
+ * Usual entry point of STXT. {@link #parser(ResourcesLoader)} gives a {@link Parser} already
+ * wired up with schema and template validation (cached); {@link #rawParser()} gives a parser
+ * with no validation at all (syntax only).
  */
 public final class STXT {
     private STXT() {}
 
     /**
-     * @param loader de dónde cargar los schemas/templates.
-     * @return un parser con validación de schema ya registrada.
+     * @param loader where to load the schemas/templates from.
+     * @return a parser with schema validation already registered.
      */
     public static Parser parser(ResourcesLoader loader) {
         Parser p = new Parser();
@@ -28,14 +28,14 @@ public final class STXT {
         return p;
     }
 
-    /** @return un parser sin ningún validador registrado (solo valida sintaxis). */
+    /** @return a parser with no validator registered (it only validates syntax). */
     public static Parser rawParser() {
         return new Parser();
     }
 
     /**
-     * @param loader de dónde cargar los schemas/templates.
-     * @return un {@link SchemaProvider} que combina schemas y templates, con caché.
+     * @param loader where to load the schemas/templates from.
+     * @return a {@link SchemaProvider} that combines schemas and templates, with a cache.
      */
     public static SchemaProvider schemaProvider(ResourcesLoader loader) {
         return new SchemaProviderCache(List.of(

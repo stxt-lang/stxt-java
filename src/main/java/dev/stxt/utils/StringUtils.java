@@ -3,15 +3,15 @@ package dev.stxt.utils;
 import java.text.Normalizer;
 import java.util.Locale;
 
-/** Utilidades de normalización de cadenas usadas en nombres, namespaces y valores. */
+/** String normalization helpers used for names, namespaces and values. */
 public class StringUtils {
 	private StringUtils() {
 	}
 
-	// Usado para nodos name>>
+	// Used for name>> nodes
 	/**
-	 * @param s cadena de la que quitar los espacios finales.
-	 * @return la cadena sin espacios en blanco al final; {@code null} se trata como cadena vacía.
+	 * @param s string to strip the trailing spaces from.
+	 * @return the string without trailing whitespace; {@code null} is treated as the empty string.
 	 */
 	public static String rightTrim(String s) {
 		if (s == null)
@@ -23,29 +23,29 @@ public class StringUtils {
 		return s.substring(0, i + 1);
 	}
 
-	// Usado para nodos tipo Base64 y Hex
+	// Used for Base64 and Hex typed nodes
 	/**
-	 * @param input cadena de la que eliminar los espacios.
-	 * @return la cadena sin ningún espacio en blanco.
+	 * @param input string to remove the spaces from.
+	 * @return the string without any whitespace at all.
 	 */
 	public static String cleanSpaces(String input) {
 		return input.replaceAll("\\s+", "");
 	}
 	
-	// Usado para normalizar namespace
+	// Used to normalize namespaces
 	/**
-	 * @param input cadena a pasar a minúsculas.
-	 * @return la cadena en minúsculas; {@code null} se trata como cadena vacía.
+	 * @param input string to lower-case.
+	 * @return the lower-cased string; {@code null} is treated as the empty string.
 	 */
 	public static String lowerCase(String input) {
 		if (input == null) return "";
 		return input.toLowerCase(Locale.ROOT);
 	}
 	
-	// Usados para name de los nodos
+	// Used for the name of the nodes
 	/**
-	 * @param s cadena a compactar.
-	 * @return la cadena con los espacios de los extremos recortados y los internos colapsados a uno solo; {@code null} se trata como cadena vacía.
+	 * @param s string to compact.
+	 * @return the string with the outer spaces trimmed and the inner ones collapsed into a single one; {@code null} is treated as the empty string.
 	 */
 	public static String compactSpaces(String s) {
 		if (s == null)
@@ -53,11 +53,11 @@ public class StringUtils {
 		return s.trim().replaceAll("\\s+", " ");
 	}
 
-	// Usados para name normalizado de nodos (STXT-SPEC 4.3): NFC + minúsculas,
-	// conservando diacríticos y alfabetos no latinos (modelo IDN)
+	// Used for the normalized name of the nodes (STXT-SPEC 4.3): NFC + lower case,
+	// keeping diacritics and non-Latin alphabets (IDN model)
 	/**
-	 * @param input cadena a normalizar.
-	 * @return el nombre canónico de un nodo: NFC + minúsculas, con separadores colapsados a '-'; {@code null} se trata como cadena vacía.
+	 * @param input string to normalize.
+	 * @return the canonical name of a node: NFC + lower case, with separators collapsed into '-'; {@code null} is treated as the empty string.
 	 */
 	public static String normalize(String input) {
 	    if (input == null) return "";
@@ -67,10 +67,10 @@ public class StringUtils {
 	    s = Normalizer.normalize(s, Normalizer.Form.NFC);
 	    s = s.toLowerCase(Locale.ROOT);
 
-	    // toda secuencia de separadores ('-', '_', espacios) => un solo '-'
+	    // every run of separators ('-', '_', spaces) => a single '-'
 	    s = s.replaceAll("[-_\\s]+", "-");
 
-	    // trim de '-'
+	    // trim the '-'
 	    s = s.replaceAll("^-+|-+$", "");
 	    return s;
 	}

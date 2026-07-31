@@ -1,25 +1,25 @@
 package dev.stxt;
 
-/** Resultado de separar un nombre de nodo en bruto en su nombre y su namespace ya resueltos. */
+/** Result of splitting a raw node name into its resolved name and namespace. */
 public final class NameNamespace {
     private final String name;
     private final String namespace;
 
     /**
-     * @param name nombre del nodo sin la parte de namespace.
-     * @param namespace namespace resuelto (propio o heredado).
+     * @param name name of the node without the namespace part.
+     * @param namespace resolved namespace (its own or inherited).
      */
     public NameNamespace(String name, String namespace) {
         this.name = name;
         this.namespace = namespace;
     }
 
-    /** @return nombre del nodo, sin la parte de namespace. */
+    /** @return name of the node, without the namespace part. */
     public String getName() {
         return name;
     }
 
-    /** @return namespace resuelto (propio o heredado del padre), o cadena vacía si no tiene. */
+    /** @return resolved namespace (its own or inherited from the parent), or the empty string if it has none. */
     public String getNamespace() {
         return namespace;
     }

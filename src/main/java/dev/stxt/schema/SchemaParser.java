@@ -12,39 +12,39 @@ import dev.stxt.exceptions.STXTException;
 import dev.stxt.exceptions.SchemaException;
 import dev.stxt.exceptions.ValidationException;
 
-/** Transforma el árbol de un documento {@code @stxt.schema} ya parseado en un {@link Schema}. */
+/** Turns the tree of an already parsed {@code @stxt.schema} document into a {@link Schema}. */
 public class SchemaParser {
 
 	/**
-	 * @param node raíz del documento {@code @stxt.schema} ya parseado.
-	 * @return el {@link Schema} resultante.
+	 * @param node root of the already parsed {@code @stxt.schema} document.
+	 * @return the resulting {@link Schema}.
 	 */
 	public static Schema transformNodeToSchema(Node node) {
 		// Node name
 		String nodeName = node.getNormalizedName();
 		String namespaceSchema = node.getNamespace();
 
-		// Obtenemos name y namespace
+		// Get the name and the namespace
 		if (!nodeName.equals("schema") || !namespaceSchema.equals(Schema.SCHEMA_NAMESPACE)) {
 			throw new SchemaException("NOT_STXT_SCHEMA",
-					"Se espera schema(" + Schema.SCHEMA_NAMESPACE + ") y es " + nodeName + "(" + namespaceSchema + ")");
+					"Expected schema(" + Schema.SCHEMA_NAMESPACE + ") but got " + nodeName + "(" + namespaceSchema + ")");
 		}
 		Schema schema = new Schema(node.getValue(), node.getLine());
 
-		// Para validar
-		Set<String> allNames = new HashSet<String>(); // Para validar que existan los childs
-		
-		// Obtenemos los nodos
+		// For validation
+		Set<String> allNames = new HashSet<String>(); // To check that the children exist
+
+		// Get the nodes
 		for (Node n : node.getChildren("node")) {
 			NodeDefinition schNode = createFrom(n, schema.getNamespace());
 			schema.addNodeDefinition(schNode);
 			allNames.add(schNode.getNormalizedName());
 		}
 
-		// Validamos que todos los nombres estén definidos
+		// Check that every name is defined
 		for (NodeDefinition schNode : schema.getNodes().values()) {
 			for (ChildDefinition schChild : schNode.getChildren().values()) {
-				if (schChild.getNamespace().equals(schema.getNamespace())) // Sólo validamos del mismo namespace
+				if (schChild.getNamespace().equals(schema.getNamespace())) // We only check the ones in the same namespace
 				{
 					if (!allNames.contains(schChild.getNormalizedName()))
 						throw new ValidationException(0, "CHILD_NOT_DEFINED",
@@ -64,14 +64,14 @@ public class SchemaParser {
 
 		NodeDefinition result = new NodeDefinition(name, type, n.getLine());
 		
-		// STXT-SCHEMA-SPEC 7.1: descripción opcional del nodo
+		// STXT-SCHEMA-SPEC 7.1: optional description of the node
 		Node descriptionNode = n.getChild("description");
 		if (descriptionNode != null)
 			result.setDescription(descriptionNode.getText());
 		
 		Node children = n.getChild("children");
 		if (children != null) {
-			// STXT-SCHEMA-SPEC 7.1/9.1/13.5: sólo INLINE y GROUP admiten hijos
+			// STXT-SCHEMA-SPEC 7.1/9.1/13.5: only INLINE and GROUP accept children
 			if (!TypeRegistry.admitsChildren(type))
 				throw new ValidationException(children.getLine(), "CHILDREN_NOT_ALLOWED_FOR_TYPE",
 						"Type " + type + " does not allow children (node " + name + ")");
@@ -79,7 +79,7 @@ public class SchemaParser {
 				putChildToSchemaNode(result, child, namespace);
 		}
 		
-		// Miramos values
+		// Look at the values
 		List<Node> values = n.getChildren("values");
 		if (values != null && values.size()>0) {
 		    if (!type.equals("ENUM")) 
@@ -94,7 +94,7 @@ public class SchemaParser {
 		        result.addValue(value.getValue(), value.getLine());
 		}
 		
-		// Miramos enum
+		// Look at the enum
 		if (type.equals("ENUM") && (values == null || values.size()==0))
 		    throw new ParseException(n.getLine(), "VALUES_EMPTY_FOR_ENUM", "ENUM Type must include values");
 		
@@ -102,14 +102,14 @@ public class SchemaParser {
 	}
 
 	private static void putChildToSchemaNode(NodeDefinition schemaNode, Node child, String defNamespace) {
-		// Obtenemos name y namespace
+		// Get the name and the namespace
 		NameNamespace ns = NameNamespaceParser.parse(child.getValue(), defNamespace, child.getLine(), child.getValue());
 		String name = ns.getName();
 		String namespace = ns.getNamespace();
 		
 		Integer min = getInteger(child, "min");
 		Integer max = getInteger(child, "max");
-		// STXT-SCHEMA-SPEC 10/13.7: la cardinalidad es inválida si Min > Max
+		// STXT-SCHEMA-SPEC 10/13.7: the cardinality is invalid when Min > Max
 		if (min != null && max != null && min > max)
 			throw new ValidationException(child.getLine(), "MIN_GREATER_THAN_MAX",
 					"Min " + min + " greater than Max " + max);

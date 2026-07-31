@@ -2,14 +2,14 @@ package dev.stxt.schema;
 
 import dev.stxt.Node;
 
-/** Tipo de valor de un nodo (TEXT, INTEGER, URL...). Cada tipo vive en {@code dev.stxt.schema.type} como singleton {@code INSTANCE}. */
+/** Value type of a node (TEXT, INTEGER, URL...). Each type lives in {@code dev.stxt.schema.type} as an {@code INSTANCE} singleton. */
 public interface Type {
 	/**
-	 * @param nsNode definición del nodo en el schema.
-	 * @param node nodo a validar.
-	 * @throws dev.stxt.exceptions.ValidationException si el valor del nodo no cumple el tipo.
+	 * @param nsNode definition of the node in the schema.
+	 * @param node node to validate.
+	 * @throws dev.stxt.exceptions.ValidationException if the value of the node does not match the type.
 	 */
 	void validate(NodeDefinition nsNode, Node node);
-	/** @return nombre del tipo, tal como se usa en los schemas (p. ej. {@code "TEXT"}). */
+	/** @return name of the type, as used in the schemas (e.g. {@code "TEXT"}). */
 	String getName();
 }

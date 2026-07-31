@@ -7,12 +7,12 @@ import dev.stxt.exceptions.ValidationException;
 import dev.stxt.schema.NodeDefinition;
 import dev.stxt.schema.Type;
 
-/** Tipo {@code BINARY}: valida que el contenido sea una cadena de ceros y unos ({@code [01]+}). */
+/** {@code BINARY} type: checks that the content is a string of zeros and ones ({@code [01]+}). */
 public final class BINARY implements Type {
-	// STXT-SCHEMA-SPEC 9.5: cadena [01]+
+	// STXT-SCHEMA-SPEC 9.5: [01]+ string
 	private static final Pattern P_BINARY = Pattern.compile("^[01]+$");
 
-	/** Instancia única de este tipo. */
+	/** Single instance of this type. */
 	public static final BINARY INSTANCE = new BINARY();
 
 	private BINARY() {

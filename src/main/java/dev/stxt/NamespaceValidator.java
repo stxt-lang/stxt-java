@@ -4,24 +4,24 @@ import java.util.regex.Pattern;
 
 import dev.stxt.exceptions.ParseException;
 
-/** Valida el formato de los namespaces {@code (a.b.c)} de STXT. */
+/** Validates the format of STXT {@code (a.b.c)} namespaces. */
 public class NamespaceValidator {
 	/**
-	 * Formato del namespace lógico.
+	 * Format of the logical namespace.
 	 *
-	 * Reglas:
-	 * - Solo minúsculas, dígitos y punto.
-	 * - Puede empezar opcionalmente por '@'.
-	 * - Debe ser una o varias etiquetas estilo dominio separadas por '.':
-	 *   etiqueta := [a-z0-9]+
-	 * ejemplos válidos: "xxx", "xxx.ddd", "zzz.ttt.ooo", "@xxx", "@xxx.ddd".
+	 * Rules:
+	 * - Lower-case letters, digits and dot only.
+	 * - It may optionally start with '@'.
+	 * - It must be one or more domain-style labels separated by '.':
+	 *   label := [a-z0-9]+
+	 * valid examples: "xxx", "xxx.ddd", "zzz.ttt.ooo", "@xxx", "@xxx.ddd".
 	 */
 	private static final Pattern NAMESPACE_FORMAT = Pattern.compile("^@?[a-z0-9]+(\\.[a-z0-9]+)+$");
 
 	/**
-	 * @param namespace namespace ya normalizado a validar; se ignora si es {@code null} o vacío.
-	 * @param lineNumber número de línea, para el mensaje de error.
-	 * @throws ParseException con código {@code INVALID_NAMESPACE} si no cumple el formato.
+	 * @param namespace already normalized namespace to validate; ignored when {@code null} or empty.
+	 * @param lineNumber line number, for the error message.
+	 * @throws ParseException with code {@code INVALID_NAMESPACE} if it does not match the format.
 	 */
 	public static void validateNamespaceFormat(String namespace, int lineNumber) {
 		if (namespace == null || namespace.isEmpty())

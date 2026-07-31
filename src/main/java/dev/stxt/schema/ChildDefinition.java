@@ -4,7 +4,7 @@ import dev.stxt.NamespaceValidator;
 import dev.stxt.exceptions.ParseException;
 import dev.stxt.utils.StringUtils;
 
-/** Definición de un hijo esperado dentro de un {@link NodeDefinition}: nombre, namespace y cardinalidad min/max. */
+/** Definition of an expected child inside a {@link NodeDefinition}: name, namespace and min/max cardinality. */
 public class ChildDefinition {
 	private final String normalizedName;
 	private final String name;
@@ -13,11 +13,11 @@ public class ChildDefinition {
 	private final Integer max;
 
 	/**
-	 * @param name nombre del hijo esperado.
-	 * @param namespace namespace del hijo esperado (puede ser {@code null}).
-	 * @param min cardinalidad mínima, o {@code null} si no hay mínimo.
-	 * @param max cardinalidad máxima, o {@code null} si no hay máximo.
-	 * @param numLine número de línea, para los mensajes de error.
+	 * @param name name of the expected child.
+	 * @param namespace namespace of the expected child (may be {@code null}).
+	 * @param min minimum cardinality, or {@code null} if there is no minimum.
+	 * @param max maximum cardinality, or {@code null} if there is no maximum.
+	 * @param numLine line number, for the error messages.
 	 */
 	public ChildDefinition(String name, String namespace, Integer min, Integer max, int numLine) {
 		this.name = StringUtils.compactSpaces(name);
@@ -31,32 +31,32 @@ public class ChildDefinition {
 		}
 	}
 
-	/** @return nombre del hijo esperado, tal como aparece en el schema. */
+	/** @return name of the expected child, as it appears in the schema. */
 	public String getName() {
 		return name;
 	}
 
-	/** @return nombre canónico del hijo esperado. */
+	/** @return canonical name of the expected child. */
 	public String getNormalizedName() {
 		return normalizedName;
 	}
 
-	/** @return namespace del hijo esperado, o cadena vacía si no tiene. */
+	/** @return namespace of the expected child, or the empty string if it has none. */
 	public String getNamespace() {
 		return namespace;
 	}
 
-	/** @return cardinalidad mínima, o {@code null} si no hay mínimo. */
+	/** @return minimum cardinality, or {@code null} if there is no minimum. */
 	public Integer getMin() {
 		return min;
 	}
 
-	/** @return cardinalidad máxima, o {@code null} si no hay máximo. */
+	/** @return maximum cardinality, or {@code null} if there is no maximum. */
 	public Integer getMax() {
 		return max;
 	}
 
-	/** @return nombre canónico prefijado por namespace, usado como clave en {@link NodeDefinition#getChildren()}. */
+	/** @return canonical name prefixed by its namespace, used as the key in {@link NodeDefinition#getChildren()}. */
 	public String getQualifiedName() {
 		return namespace.isEmpty() ? normalizedName : namespace + ":" + normalizedName;
 	}

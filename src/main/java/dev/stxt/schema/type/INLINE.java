@@ -5,9 +5,9 @@ import dev.stxt.exceptions.ValidationException;
 import dev.stxt.schema.NodeDefinition;
 import dev.stxt.schema.Type;
 
-/** Tipo {@code INLINE}: nodo con valor inline (tras {@code :}), admite hijos. */
+/** {@code INLINE} type: node with an inline value (after {@code :}), accepting children. */
 public final class INLINE implements Type {
-	/** Instancia única de este tipo. */
+	/** Single instance of this type. */
 	public static final INLINE INSTANCE = new INLINE();
 
 	private INLINE() {

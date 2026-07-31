@@ -15,7 +15,7 @@ public class TemplateParserTest {
 
 	@Test
 	void testValuesOnlyForEnum() {
-		// STXT-TEMPLATE-SPEC 9/14.7: [values] sólo está permitido para el tipo ENUM
+		// STXT-TEMPLATE-SPEC 9/14.7: [values] is only allowed for the ENUM type
 		String text = """
 Template (@stxt.template): test.values.notenum
     Structure >>
@@ -28,7 +28,7 @@ Template (@stxt.template): test.values.notenum
 
 	@Test
 	void testEnumRequiresValues() {
-		// STXT-TEMPLATE-SPEC 14.8: ENUM exige valores no vacíos
+		// STXT-TEMPLATE-SPEC 14.8: ENUM requires non-empty values
 		String text = """
 Template (@stxt.template): test.enum.empty
     Structure >>
@@ -41,8 +41,8 @@ Template (@stxt.template): test.enum.empty
 
 	@Test
 	void testChildrenNotAllowedForTypeTemplate() {
-		// STXT-TEMPLATE-SPEC 8.2/14.9: sólo INLINE y GROUP admiten hijos (equivalente al punto
-		// 10, ya resuelto en el lado de schema)
+		// STXT-TEMPLATE-SPEC 8.2/14.9: only INLINE and GROUP accept children (the counterpart of
+		// point 10, already settled on the schema side)
 		String text = """
 Template (@stxt.template): test.leaf.children
     Structure >>
@@ -140,7 +140,7 @@ Template (@stxt.template): test.desc.external
 
 	@Test
 	void testCrossNamespaceValuesRejected() {
-		// STXT-TEMPLATE-SPEC 14.15: un nodo cross-namespace sólo puede fijar cardinalidad
+		// STXT-TEMPLATE-SPEC 14.15: a cross-namespace node may only set cardinality
 		String text = """
 Template (@stxt.template): test.cross.values
     Structure >>
@@ -166,7 +166,7 @@ Template (@stxt.template): test.cross.children
 
 	@Test
 	void testReferenceWithoutAtRejected() {
-		// Regresión NPE: reaparición local sin tipo '@Nombre'
+		// NPE regression: local reappearance without a '@Name' type
 		String text = """
 Template (@stxt.template): test.ref.noat
     Structure >>
@@ -180,8 +180,8 @@ Template (@stxt.template): test.ref.noat
 
 	@Test
 	void testReferenceWithValuesRejected() {
-		// STXT-TEMPLATE-SPEC 6.4: una referencia @Nombre no debe redefinir valores ENUM.
-		// Código distinto del de cross-namespace, que antes compartía VALUES_DEFINITION_NOT_ALLOWED.
+		// STXT-TEMPLATE-SPEC 6.4: a @Name reference must not redefine ENUM values.
+		// A different code from the cross-namespace one, which used to share VALUES_DEFINITION_NOT_ALLOWED.
 		String text = """
 Template (@stxt.template): test.ref.values
     Structure >>
@@ -195,7 +195,7 @@ Template (@stxt.template): test.ref.values
 
 	@Test
 	void testReferenceWithChildrenRejected() {
-		// STXT-TEMPLATE-SPEC 6.4: una referencia @Nombre no debe redefinir hijos
+		// STXT-TEMPLATE-SPEC 6.4: a @Name reference must not redefine children
 		String text = """
 Template (@stxt.template): test.ref.children
     Structure >>
@@ -210,8 +210,8 @@ Template (@stxt.template): test.ref.children
 
 	@Test
 	void testDuplicatedValueRejected() {
-		// STXT-TEMPLATE-SPEC 14.14: mismo código que por la vía de schema (VALUE_DUPLICATED),
-		// para que la condición no cambie de nombre según la puerta de entrada
+		// STXT-TEMPLATE-SPEC 14.14: the same code as through the schema route (VALUE_DUPLICATED),
+		// so the condition does not change name depending on the door it came in through
 		String text = """
 Template (@stxt.template): test.value.dup
     Structure >>
@@ -224,9 +224,9 @@ Template (@stxt.template): test.value.dup
 
 	@Test
 	void testUnknownTypeRejected() {
-		// STXT-TEMPLATE-SPEC 14.6: el tipo debe ser uno de los soportados. En schemas ya lo
-		// cubría el meta-schema (Type es ENUM), pero el Structure de un template es un bloque
-		// de texto y la meta-validación no lo alcanza.
+		// STXT-TEMPLATE-SPEC 14.6: the type must be one of the supported ones. In schemas the
+		// meta-schema already covered it (Type is an ENUM), but the Structure of a template is a
+		// text block and meta-validation does not reach into it.
 		String text = """
 Template (@stxt.template): test.type.unknown
     Structure >>
@@ -239,8 +239,8 @@ Template (@stxt.template): test.type.unknown
 
 	@Test
 	void testReferenceNotFoundRejected() {
-		// STXT-TEMPLATE-SPEC 14.11: una referencia debe apuntar a una definición previa o a un
-		// ancestro abierto; si no, antes se creaba un nodo cuyo tipo era literalmente '@Otro'
+		// STXT-TEMPLATE-SPEC 14.11: a reference must point at a previous definition or at an open
+		// ancestor; otherwise a node used to be created whose type was literally '@Otro'
 		String text = """
 Template (@stxt.template): test.ref.notfound
     Structure >>
@@ -253,8 +253,8 @@ Template (@stxt.template): test.ref.notfound
 
 	@Test
 	void testReferenceWithTypeRejected() {
-		// STXT-TEMPLATE-SPEC 14.13: referencia y tipo explícito en la misma línea. Antes se
-		// reportaba como NODE_REFERENCE_NOT_VALID, cuyo mensaje culpaba al nombre.
+		// STXT-TEMPLATE-SPEC 14.13: a reference and an explicit type on the same line. It used to
+		// be reported as NODE_REFERENCE_NOT_VALID, whose message blamed the name.
 		String text = """
 Template (@stxt.template): test.ref.withtype
     Structure >>
@@ -268,8 +268,8 @@ Template (@stxt.template): test.ref.withtype
 
 	@Test
 	void testReferenceToOpenAncestorAllowed() {
-		// La recursión por ancestro abierto sigue resolviendo: al recorrer los hijos, el
-		// ancestro ya está en el schema
+		// Recursion through an open ancestor still resolves: by the time the children are walked,
+		// the ancestor is already in the schema
 		String text = """
 Template (@stxt.template): test.ref.recursive
     Structure >>
@@ -284,8 +284,8 @@ Template (@stxt.template): test.ref.recursive
 
 	@Test
 	void testReferenceWithSpacesInNameIsNotAType() {
-		// Los nombres de nodo admiten espacios: '@Max Threads' es una referencia simple, no
-		// una referencia con tipo (el último token no es un tipo conocido)
+		// Node names may contain spaces: '@Max Threads' is a plain reference, not a reference
+		// with a type (the last token is not a known type)
 		String text = """
 Template (@stxt.template): test.ref.spaces
     Structure >>

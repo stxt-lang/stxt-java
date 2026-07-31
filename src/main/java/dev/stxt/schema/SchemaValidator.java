@@ -9,18 +9,18 @@ import dev.stxt.Node;
 import dev.stxt.exceptions.ValidationException;
 import dev.stxt.processors.Validator;
 
-/** {@link Validator} que, por cada nodo, resuelve su {@link Schema} vía un {@link SchemaProvider} y valida tipo y cardinalidad. */
+/** {@link Validator} that, for each node, resolves its {@link Schema} through a {@link SchemaProvider} and validates type and cardinality. */
 public class SchemaValidator implements Validator {
 	private final SchemaProvider schemaProvider;
 	private boolean recursiveValidation = false;
 
-	/** @param schemaProvider de dónde resolver el schema de cada namespace. Sin validación recursiva de hijos. */
+	/** @param schemaProvider where to resolve the schema of each namespace from. Without recursive validation of the children. */
 	public SchemaValidator(SchemaProvider schemaProvider) {
 		this.schemaProvider = schemaProvider;
 	}
 	/**
-	 * @param schemaProvider de dónde resolver el schema de cada namespace.
-	 * @param recursive si valida también recursivamente los hijos de cada nodo.
+	 * @param schemaProvider where to resolve the schema of each namespace from.
+	 * @param recursive whether the children of each node are validated recursively too.
 	 */
 	public SchemaValidator(SchemaProvider schemaProvider, boolean recursive) {
 		this.schemaProvider = schemaProvider;
@@ -31,7 +31,7 @@ public class SchemaValidator implements Validator {
 	public List<ValidationException> validate(Node node) {
 		List<ValidationException> errors = new ArrayList<>();
 
-		// Obtenemos namespace
+		// Get the namespace
 		String namespace = node.getNamespace();
 		Schema sch = schemaProvider.getSchema(namespace);
 		if (sch == null) {
@@ -39,10 +39,10 @@ public class SchemaValidator implements Validator {
 			return errors;
 		}
 
-		// Validamos nodo
+		// Validate the node
 		errors.addAll(validateAgainstSchema(node, sch));
 
-		// Validamos children
+		// Validate the children
 		if (recursiveValidation)
 			for (Node n: node.getChildren())
 				errors.addAll(validate(n));
@@ -51,11 +51,11 @@ public class SchemaValidator implements Validator {
 	}
 	
 	/**
-	 * Valida un nodo contra un schema ya resuelto: existencia, tipo de valor y cardinalidades de sus hijos.
+	 * Validates a node against an already resolved schema: existence, value type and cardinalities of its children.
 	 *
-	 * @param node nodo a validar.
-	 * @param sch schema contra el que validar.
-	 * @return los errores de validación encontrados, vacío si el nodo es válido.
+	 * @param node node to validate.
+	 * @param sch schema to validate against.
+	 * @return the validation errors found, empty if the node is valid.
 	 */
 	public List<ValidationException> validateAgainstSchema(Node node, Schema sch) {
 		List<ValidationException> errors = new ArrayList<>();
@@ -74,8 +74,8 @@ public class SchemaValidator implements Validator {
 	    return errors;
 	}
 
-	// Modelo de contenido cerrado (STXT-SCHEMA-SPEC, sección 6): solo se permiten
-	// los hijos directos declarados en la definición del padre; sin Children, cierre total
+	// Closed content model (STXT-SCHEMA-SPEC, section 6): only the direct children declared
+	// in the parent definition are allowed; with no Children, nothing at all is allowed
 	private static List<ValidationException> validateChildrenDeclared(NodeDefinition nsNode, Node node) {
 		List<ValidationException> errors = new ArrayList<>();
 

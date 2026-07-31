@@ -10,11 +10,11 @@ import dev.stxt.schema.Schema;
 import dev.stxt.schema.SchemaProvider;
 import dev.stxt.schema.SchemaValidator;
 
-/** {@link SchemaProvider} que carga un documento {@code @stxt.template} desde un {@link ResourcesLoader} y lo transforma en {@link Schema}. */
+/** {@link SchemaProvider} that loads an {@code @stxt.template} document from a {@link ResourcesLoader} and turns it into a {@link Schema}. */
 public class TemplateSchemaProvider implements SchemaProvider {
 	private final ResourcesLoader loader;
 	
-	/** @param loader de dónde cargar el documento {@code @stxt.template} de cada namespace. */
+	/** @param loader where to load the {@code @stxt.template} document of each namespace from. */
 	public TemplateSchemaProvider(ResourcesLoader loader) {
 		this.loader = loader;
 	}	
@@ -23,7 +23,7 @@ public class TemplateSchemaProvider implements SchemaProvider {
 	public Schema getSchema(String namespace) {
 		String template = loader.retrieve("@stxt.template", namespace);
 
-		// Creamos parser
+		// Create the parser
 		Parser parser = new Parser();
 		parser.registerValidator(new SchemaValidator(new MetaTemplateSchemaProvider()));
 		
@@ -31,10 +31,10 @@ public class TemplateSchemaProvider implements SchemaProvider {
 		if (nodes.size() != 1)
 			throw new SchemaException("INVALID_SCHEMA", "There are " + nodes.size() + ", and expected is 1");
 
-		// Obtenemos schema
+		// Get the schema
 		Schema sch = TemplateParser.transformNodeToSchema(nodes.get(0)); 
 		
-		// Comprobar namespace esperado
+		// Check the expected namespace
 		if (!sch.getNamespace().equalsIgnoreCase(namespace))
 			throw new SchemaException("INVALID_SCHEMA", "Schema namespace is " + sch.getNamespace() + ", and expected is " + namespace);
 		

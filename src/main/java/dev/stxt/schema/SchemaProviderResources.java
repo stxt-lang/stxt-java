@@ -8,26 +8,26 @@ import dev.stxt.Parser;
 import dev.stxt.exceptions.SchemaException;
 import dev.stxt.resources.ResourcesLoader;
 
-/** {@link SchemaProvider} que carga un documento {@code @stxt.schema} desde un {@link ResourcesLoader} y lo transforma en {@link Schema}. */
+/** {@link SchemaProvider} that loads an {@code @stxt.schema} document from a {@link ResourcesLoader} and turns it into a {@link Schema}. */
 public final class SchemaProviderResources implements SchemaProvider {
 	private final ResourcesLoader resourcesLoader;
 	private final SchemaValidator schemaValidator;
 
-	/** @param pathResolver de dónde cargar el documento {@code @stxt.schema} de cada namespace. */
+	/** @param pathResolver where to load the {@code @stxt.schema} document of each namespace from. */
 	public SchemaProviderResources(ResourcesLoader pathResolver) {
 		this.resourcesLoader = pathResolver;
 		this.schemaValidator = new SchemaValidator(new SchemaProviderMeta());
 	}
 
-	/** @return el schema cargado y validado contra el meta-schema, o {@code null} si el recurso no existe. */
+	/** @return the schema loaded and validated against the meta-schema, or {@code null} if the resource does not exist. */
 	public Schema getSchema(String namespace) {
-		// Retorno de cache
+		// Return from the cache
 		if (namespace == null || namespace.isEmpty())
 		    throw new SchemaException("NAMESPACE_REQUIRED", "Namespace is required to load schema");
-		
+
 		namespace = namespace.toLowerCase(Locale.ROOT);
 
-		// Cargamos schema
+		// Load the schema
 		String textSchema = resourcesLoader.retrieve(Schema.SCHEMA_NAMESPACE, namespace);
 		Parser parser = new Parser();
 		parser.registerValidator(schemaValidator);
@@ -36,15 +36,15 @@ public final class SchemaProviderResources implements SchemaProvider {
 		if (nodes.size() != 1)
 			throw new SchemaException("INVALID_SCHEMA", "There are " + nodes.size() + ", and expected is 1");
 
-		// Convertimos a schema
+		// Turn it into a schema
 		Node root = nodes.get(0);
 		Schema sch = SchemaParser.transformNodeToSchema(root);
 
-		// Comprobar namespace esperado
+		// Check the expected namespace
 		if (!sch.getNamespace().equalsIgnoreCase(namespace))
 			throw new SchemaException("INVALID_SCHEMA", "Schema namespace is " + sch.getNamespace() + ", and expected is " + namespace);
 
-		// Insertamos en cache
+		// Put it in the cache
 		return sch;
 	}
 }

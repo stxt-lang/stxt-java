@@ -41,7 +41,7 @@ public class TemplateParserAllError {
 				Node node = parser.parseFile(file).get(0);
 				Schema sch = TemplateParser.transformNodeToSchema(node);
 				System.out.println(JSON.toJsonPretty(sch));
-				fail("Debería haber saltado excepción!!");
+				fail("An exception should have been thrown!!");
 			} catch (ParseException e) {
 				// Build JSON node with line and code from the exception
 				Map<String, Object> errorInfo = new HashMap<>();

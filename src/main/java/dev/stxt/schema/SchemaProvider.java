@@ -1,10 +1,10 @@
 package dev.stxt.schema;
 
-/** Resuelve el {@link Schema} aplicable a un namespace. Implementaciones componibles (caché, recursos, meta-schema...). */
+/** Resolves the {@link Schema} that applies to a namespace. Composable implementations (cache, resources, meta-schema...). */
 public interface SchemaProvider {
 	/**
-	 * @param namespace namespace del que se quiere el schema.
-	 * @return el schema del namespace, o {@code null} si no hay ninguno para ese namespace.
+	 * @param namespace namespace whose schema is wanted.
+	 * @return the schema of the namespace, or {@code null} if there is none for that namespace.
 	 */
 	public Schema getSchema(String namespace);
 }

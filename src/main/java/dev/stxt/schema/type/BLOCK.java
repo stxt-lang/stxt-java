@@ -5,9 +5,9 @@ import dev.stxt.exceptions.ValidationException;
 import dev.stxt.schema.NodeDefinition;
 import dev.stxt.schema.Type;
 
-/** Tipo {@code BLOCK}: nodo de bloque de texto ({@code >>}), sin restricciones adicionales sobre el contenido. */
+/** {@code BLOCK} type: text block node ({@code >>}), with no further restriction on the content. */
 public final class BLOCK implements Type {
-	/** Instancia única de este tipo. */
+	/** Single instance of this type. */
 	public static final BLOCK INSTANCE = new BLOCK();
 
 	private BLOCK() {
@@ -20,7 +20,7 @@ public final class BLOCK implements Type {
     
 	@Override
     public void validate(NodeDefinition ndef, Node n) {
-		// Forma del valor BLOCK (STXT-SCHEMA-SPEC 9.2): sólo bloque '>>', no forma inline
+		// BLOCK value form (STXT-SCHEMA-SPEC 9.2): only the '>>' block, not the inline form
 		if (!n.isTextNode()) {
 			throw new ValidationException(n.getLine(), "BLOCK_FORM_REQUIRED",
 					"Node " + n.getQualifiedName() + " requires block form '>>'");

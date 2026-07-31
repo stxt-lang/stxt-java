@@ -38,7 +38,7 @@ public class ParserAllErrorDocsTest {
 				System.out.println("***************************************************");
 				System.out.println("FILE: " + file.getAbsolutePath());
 				parser.parseFile(file);
-				fail("Debería haber saltado excepción!!");
+				fail("An exception should have been thrown!!");
 			} catch (ParseException e) {
 				// Build JSON node with line and code from the exception
 				Map<String, Object> errorInfo = new HashMap<>();

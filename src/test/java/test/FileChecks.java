@@ -32,8 +32,8 @@ public class FileChecks {
 		} else {
 			System.out.println("Checking text...");
 			String fileContent = FileUtils.readFileContent(textFile);
-			// git en Windows puede materializar los fixtures con CRLF (autocrlf);
-			// la comparación es sobre el contenido lógico, no sobre el final de línea
+			// git on Windows may materialize the fixtures with CRLF (autocrlf);
+			// the comparison is about the logical content, not about the line ending
 			assertEquals(normalizeEol(fileContent), normalizeEol(content));
 		}
 	}

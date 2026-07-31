@@ -30,7 +30,7 @@ public class TemplateChildParserTest {
 
 	@Test
 	void testNegativeCountRejected() {
-		// STXT-TEMPLATE-SPEC 7.1: los números de cardinalidad deben ser enteros no negativos
+		// STXT-TEMPLATE-SPEC 7.1: the cardinality numbers must be non-negative integers
 		ParseException ex = Assertions.assertThrows(ParseException.class, () -> ChildLineParser.parse("(-2) TEXT", 5));
 		Assertions.assertEquals("INVALID_CHILD_COUNT", ex.getCode());
 	}
@@ -49,14 +49,14 @@ public class TemplateChildParserTest {
 
 	@Test
 	void testCommaCountWithThreePartsRejected() {
-		// STXT-TEMPLATE-SPEC 7.1: (min,max) sólo admite dos partes
+		// STXT-TEMPLATE-SPEC 7.1: (min,max) accepts only two parts
 		ParseException ex = Assertions.assertThrows(ParseException.class, () -> ChildLineParser.parse("(1,2,3) TEXT", 5));
 		Assertions.assertEquals("INVALID_CHILD_COUNT", ex.getCode());
 	}
 
 	@Test
 	void testCommaCountMinGreaterThanMaxRejected() {
-		// STXT-TEMPLATE-SPEC 7.1: en (min,max) debe cumplirse min <= max
+		// STXT-TEMPLATE-SPEC 7.1: in (min,max) it must hold that min <= max
 		ValidationException ex = Assertions.assertThrows(ValidationException.class, () -> ChildLineParser.parse("(3,1) TEXT", 5));
 		Assertions.assertEquals("MIN_GREATER_THAN_MAX", ex.getCode());
 	}

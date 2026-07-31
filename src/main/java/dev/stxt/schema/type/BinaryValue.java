@@ -3,11 +3,11 @@ package dev.stxt.schema.type;
 import dev.stxt.Node;
 
 /**
- * STXT-SCHEMA-SPEC 9.5: valor efectivo para los tipos binarios INLINE/BLOCK
- * (HEXADECIMAL, BINARY, BASE64). En forma BLOCK, la validación se aplica sobre
- * la concatenación de las líneas del bloque, ignorando saltos de línea, líneas
- * vacías y espacios/tabuladores iniciales y finales de cada línea; el
- * whitespace interior de una línea NO se elimina en silencio.
+ * STXT-SCHEMA-SPEC 9.5: effective value for the INLINE/BLOCK binary types
+ * (HEXADECIMAL, BINARY, BASE64). In BLOCK form, validation applies to the
+ * concatenation of the lines of the block, ignoring line breaks, empty lines
+ * and the leading and trailing spaces/tabs of each line; whitespace inside a
+ * line is NOT silently removed.
  */
 final class BinaryValue {
 	private BinaryValue() {

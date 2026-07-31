@@ -3,9 +3,9 @@ package dev.stxt.utils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-// Nombre canónico según STXT-SPEC 4.3 (modelo IDN): NFC + minúsculas Unicode,
-// separadores ('-', '_', espacio) colapsan a un solo '-', y los diacríticos
-// y alfabetos no latinos se conservan.
+// Canonical name as per STXT-SPEC 4.3 (IDN model): NFC + Unicode lower case,
+// separators ('-', '_', space) collapse into a single '-', and diacritics
+// and non-Latin alphabets are kept.
 public class NormalizeFullTest {
 	@Test
 	void demo() {
@@ -18,28 +18,28 @@ public class NormalizeFullTest {
 	}
 
 	@Test
-	void diacriticosYAlfabetosSeConservan() {
-		checkEquals("Título", "título");                 // Título => título
+	void diacriticsAndAlphabetsArePreserved() {
+		checkEquals("Título", "título");                 // Título => título (accents are kept)
 		checkEquals("   Hólä_Mundo ", "hólä-mundo");
 		checkEquals("Пример 1", "пример-1"); // Пример 1 => пример-1
 
-		// Sensible a acentos: 'Año' y 'Ano' son nodos distintos (spec 4.3)
+		// Accent sensitive: 'Año' and 'Ano' are different nodes (spec 4.3)
 		Assertions.assertNotEquals(StringUtils.normalize("Año"), StringUtils.normalize("Ano"));
 	}
 
 	@Test
-	void normalizacionUnicodeNFC() {
-		// 'é' precompuesto (U+00E9) y 'e' + acento combinante (U+0301) son el mismo nombre
-		String precompuesto = "Caf\u00E9";
-		String descompuesto = "Cafe\u0301";
-		checkEquals(precompuesto, "café");
-		checkEquals(descompuesto, "café");
-		Assertions.assertEquals(StringUtils.normalize(precompuesto), StringUtils.normalize(descompuesto));
+	void unicodeNFCNormalization() {
+		// precomposed 'é' (U+00E9) and 'e' + combining accent (U+0301) are the same name
+		String precomposed = "Caf\u00E9";
+		String decomposed = "Cafe\u0301";
+		checkEquals(precomposed, "café");
+		checkEquals(decomposed, "café");
+		Assertions.assertEquals(StringUtils.normalize(precomposed), StringUtils.normalize(decomposed));
 	}
 
 	@Test
-	void nombreCanonicoVacio() {
-		// Solo separadores => nombre canónico vacío (inválido a nivel de Node, spec 4.2/4.3)
+	void emptyCanonicalName() {
+		// Separators only => empty canonical name (invalid at Node level, spec 4.2/4.3)
 		checkEquals("___", "");
 		checkEquals(" - _ ", "");
 	}

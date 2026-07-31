@@ -17,7 +17,7 @@ public class SchemaLocatorTest {
 		SchemaProvider schemaLocator = new SchemaProviderResources(resourcesLoader);
 
 		Schema sch = schemaLocator.getSchema("com.example.docs");
-		assertNotNull(sch, "Debería resolver un schema");
+		assertNotNull(sch, "It should resolve a schema");
 		System.out.println("SCH => " + JSON.toJsonPretty(sch));
 	}
 

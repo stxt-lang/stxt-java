@@ -2,9 +2,9 @@ package dev.stxt.schema.type;
 
 import java.util.regex.Pattern;
 
-/** Tipo {@code NUMBER}: valida un número decimal, con signo y notación exponencial opcionales. */
+/** {@code NUMBER} type: checks a decimal number, with optional sign and exponent notation. */
 public final class NUMBER extends RegexValue {
-    // Acepta:
+    // Accepts:
     //  - 12, -12, +12
     //  - 12.34, 12., .34
     //  - 1e10, 1E10, -1.2e-3, .5e+2
@@ -12,7 +12,7 @@ public final class NUMBER extends RegexValue {
             "^[+-]?(?:\\d+(?:\\.\\d*)?|\\.\\d+)(?:[eE][+-]?\\d+)?$"
     );
 
-    /** Instancia única de este tipo. */
+    /** Single instance of this type. */
     public static final NUMBER INSTANCE = new NUMBER();
 
     private NUMBER() {

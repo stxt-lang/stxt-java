@@ -15,22 +15,22 @@ import dev.stxt.processors.Validator;
 import dev.stxt.utils.FileUtils;
 
 /**
- * Motor de parseo de STXT línea a línea. No conoce los schemas: la validación semántica se
- * engancha mediante {@link #registerValidator(Validator)} y {@link #registerObserver(Observer)}.
- * Ver {@link dev.stxt.runtime.STXT} como fachada de uso habitual, ya configurada con validación.
+ * Line-by-line STXT parsing engine. It knows nothing about schemas: semantic validation is
+ * plugged in through {@link #registerValidator(Validator)} and {@link #registerObserver(Observer)}.
+ * See {@link dev.stxt.runtime.STXT} for the usual entry point, already wired up with validation.
  */
 public class Parser {
 	private List<Validator> validators;
 	private List<Observer> observers;
 
-	/** @param v el {@link Validator} a registrar, invocado al cerrar cada nodo durante el parseo. */
+	/** @param v the {@link Validator} to register, invoked when each node is closed during parsing. */
 	public void registerValidator(Validator v) {
         if (validators == null) {
             validators = new ArrayList<>();
         }
         validators.add(v);
 	}
-	/** @param o el {@link Observer} a registrar, notificado al abrir y cerrar cada nodo durante el parseo. */
+	/** @param o the {@link Observer} to register, notified when each node is opened and closed during parsing. */
 	public void registerObserver(Observer o) {
         if (observers == null) {
             observers = new ArrayList<>();
@@ -39,11 +39,11 @@ public class Parser {
 	}
 
 	/**
-	 * Igual que {@link #parse(String)} pero leyendo el contenido de un fichero.
+	 * Same as {@link #parse(String)} but reading the content from a file.
 	 *
-	 * @param srcFile fichero con el documento STXT.
-	 * @return los nodos raíz del documento parseado.
-	 * @throws STXTIOException si el fichero no se puede leer.
+	 * @param srcFile file holding the STXT document.
+	 * @return the root nodes of the parsed document.
+	 * @throws STXTIOException if the file cannot be read.
 	 */
 	public List<Node> parseFile(File srcFile) {
 		try {
@@ -54,11 +54,11 @@ public class Parser {
 	}
 
 	/**
-	 * Igual que {@link #parseResult(String)} pero leyendo el contenido de un fichero.
+	 * Same as {@link #parseResult(String)} but reading the content from a file.
 	 *
-	 * @param srcFile fichero con el documento STXT.
-	 * @return el resultado del parseo en modo multi-error.
-	 * @throws STXTIOException si el fichero no se puede leer.
+	 * @param srcFile file holding the STXT document.
+	 * @return the result of parsing in multi-error mode.
+	 * @throws STXTIOException if the file cannot be read.
 	 */
 	public ParseResult parseResultFile(File srcFile) {
 		try {
@@ -69,14 +69,13 @@ public class Parser {
 	}
 
 	/**
-	 * Modo tradicional fail-fast: lanza la primera excepción encontrada (de sintaxis o de
-	 * validación), sin seguir recorriendo el resto del documento (importante en documentos muy
-	 * grandes). Internamente reutiliza el mismo recorrido que {@link #parseResult(String)}, pero
-	 * cortando en el primer error en vez de acumularlos todos.
-	 */
-	/**
-	 * @param content documento STXT completo a parsear.
-	 * @return los nodos raíz del documento.
+	 * Traditional fail-fast mode: throws the first error found (either syntax or validation),
+	 * without walking the rest of the document (which matters on very large documents).
+	 * Internally it reuses the same traversal as {@link #parseResult(String)}, but stopping at
+	 * the first error instead of collecting them all.
+	 *
+	 * @param content the whole STXT document to parse.
+	 * @return the root nodes of the document.
 	 */
 	public List<Node> parse(String content) {
 		ParseResult result = doParse(content, true);
@@ -86,22 +85,21 @@ public class Parser {
 	}
 
 	/**
-	 * Modo multi-error: parsea todo el contenido acumulando todos los errores encontrados (de
-	 * sintaxis y de validación) sin abortar en el primero. Ver {@link ParseResult}.
-	 */
-	/**
-	 * @param content documento STXT completo a parsear.
-	 * @return el resultado acumulado, con los nodos raíz obtenidos y todos los errores encontrados.
+	 * Multi-error mode: parses the whole content collecting every error found (both syntax and
+	 * validation) without bailing out on the first one. See {@link ParseResult}.
+	 *
+	 * @param content the whole STXT document to parse.
+	 * @return the collected result, with the root nodes obtained and every error found.
 	 */
 	public ParseResult parseResult(String content) {
 		return doParse(content, false);
 	}
 
 	/**
-	 * Recorrido único compartido por {@link #parse(String)} y {@link #parseResult(String)}. Cuando
-	 * {@code stopOnFirstError} es true, corta la lectura en cuanto aparece el primer error (no lee
-	 * más líneas, no cierra el resto de nodos pendientes ni sigue validando), evitando recorrer un
-	 * documento entero para un resultado que de todas formas se va a descartar.
+	 * Single traversal shared by {@link #parse(String)} and {@link #parseResult(String)}. When
+	 * {@code stopOnFirstError} is true, reading stops as soon as the first error shows up (no more
+	 * lines are read, no pending nodes are closed and no further validation happens), avoiding a
+	 * full walk over a document whose result is going to be discarded anyway.
 	 */
 	private ParseResult doParse(String content, boolean stopOnFirstError) {
 		content = FileUtils.removeUTF8BOM(content);
@@ -124,11 +122,11 @@ public class Parser {
 			throw new STXTIOException(e);
 		}
 
-		// Cerrar todos los nodos pendientes al EOF (nos la saltamos si ya hemos cortado antes)
+		// Close every pending node at EOF (skipped if we already bailed out earlier)
 		if (!(stopOnFirstError && result.hasErrors()))
 			closeToLevel(stack, documents, 0, result, stopOnFirstError);
 
-		// Agregamos nodos raíz al resultado
+		// Add the root nodes to the result
 		for (Node doc : documents)
 			result.addNode(doc);
 
@@ -141,33 +139,33 @@ public class Parser {
 			int lastLevel           = lastNode != null ? lastNode.getLevel(): 0; 
 			boolean lastNodeText    = lastNode != null && lastNode.isTextNode();
 
-			// Parseamos línea
+			// Parse the line
 			LineIndent lineIndent = LineIndentParser.parseLine(line, lastNodeText, lastLevel, lineNumber);
 			if (lineIndent == null)
 				return;
 
 			int currentLevel = lineIndent.indentLevel;
 
-			// Si estamos dentro de un nodo texto, y el nivel indica que sigue siendo texto,
-			// añadimos línea de texto y no creamos nodo.
+			// If we are inside a text node, and the level says it is still text,
+			// append a text line instead of creating a node.
 			if (lastNodeText && currentLevel > lastLevel) {
 				lastNode.addTextLine(lineIndent.lineWithoutIndent);
 				return;
 			}
 
-			// Cerramos nodos hasta el nivel actual (esto "finaliza" y adjunta al padre/documentos)
+			// Close nodes down to the current level (this "finishes" them and attaches them to their parent/documents)
 			closeToLevel(stack, documents, currentLevel, result, stopOnFirstError);
 			if (stopOnFirstError && result.hasErrors())
 				return;
 
-			// Creamos el nuevo nodo y lo dejamos "abierto" en la pila (NO lo adjuntamos aún)
+			// Create the new node and leave it "open" on the stack (do NOT attach it yet)
 			Node parent = stack.isEmpty() ? null : stack.peek();
 			Node node = createNode(lineIndent, lineNumber, currentLevel, parent);
 			
-			// Pasamos a observers
+			// Hand it over to the observers
 			observeNode(node);
 
-			// Añadimos a stack
+			// Push it onto the stack
 			stack.push(node);
 		} catch (ParseException e) {
 			result.addError(e);
@@ -216,21 +214,21 @@ public class Parser {
 		if (textNode &&  !value.trim().isEmpty())
 				throw new ParseException(lineNumber, "INLINE_VALUE_NOT_VALID", "Line not valid: " + line);
 
-		// Namespace por defecto: heredado del padre
+		// Default namespace: inherited from the parent
 		NameNamespace nn = NameNamespaceParser.parse(name, parent != null ? parent.getNamespace(): null, lineNumber, line);
 		name = nn.getName();
 		String namespace = nn.getNamespace();
 		
-		// Validamos nombre
+		// Validate the name
 		if (name.isEmpty())
 			throw new ParseException(lineNumber, "INVALID_LINE", "Line not valid: " + line);
 
-		// Creamos nodo
+		// Create the node
 		return new Node(lineNumber, level, name, namespace, textNode, value);
 	}
 
 	// -------------------------------------------
-	// Métodos de validación, transformación, etc.
+	// Validation, transformation, etc. methods
 	// -------------------------------------------
 	
 	private Node observeNode(Node node) {

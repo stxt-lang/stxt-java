@@ -27,14 +27,14 @@ class NamespaceValidatorTest
     private void checkInvalid(String string) {
         try {
             NamespaceValidator.validateNamespaceFormat(string, 0);
-            fail("Debería haber saltado excepción con '" + string + "'");
+            fail("An exception should have been thrown for '" + string + "'");
         } catch (ParseException e) {
-            System.out.println("OK Error con " + string);
+            System.out.println("OK Error with " + string);
         }        
     }
 
     private void checkValid(String string) {
         NamespaceValidator.validateNamespaceFormat(string, 0);
-        System.out.println("OK con '" + string + "'");
+        System.out.println("OK with '" + string + "'");
     }
 }

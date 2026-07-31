@@ -12,29 +12,29 @@ import java.util.stream.Stream;
 public class AllForAI {
 	public static void main(String[] args) {
 		try {
-			String contenido = leerTodoSrcMainJava();
-			System.out.println(contenido);
-			FileUtils.writeStringToFile(contenido, new File("all.txt"));
+			String content = readAllSrcMainJava();
+			System.out.println(content);
+			FileUtils.writeStringToFile(content, new File("all.txt"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	/**
-	 * Lee de forma recursiva todos los ficheros bajo "src/main/java" (relativo al
-	 * directorio de trabajo actual) y concatena su contenido en un solo String.
+	 * Recursively reads every file under "src/main/java" (relative to the current working
+	 * directory) and concatenates their content into a single String.
 	 *
-	 * Formato de salida por fichero:
-	 * Fichero: ruta/relativa/desde/src/main/java/Nombre.java
+	 * Output format per file:
+	 * File: relative/path/from/src/main/java/Name.java
 	 * ```
-	 * <contenido>
+	 * <content>
 	 * ```
 	 */
-	public static String leerTodoSrcMainJava() throws IOException {
+	public static String readAllSrcMainJava() throws IOException {
 		Path root = Paths.get("src", "main", "java");
 
 		if (!Files.exists(root) || !Files.isDirectory(root)) {
-			return ""; // o lanzar excepción si prefieres
+			return ""; // or throw an exception, if you prefer
 		}
 
 		try (Stream<Path> paths = Files.walk(root)) {
@@ -42,7 +42,7 @@ public class AllForAI {
 					.filter(Files::isRegularFile)
 					.map(path -> {
 						try {
-							// Nombre de fichero relativo a src/main/java
+							// File name relative to src/main/java
 							Path relative = root.relativize(path);
 							String fileName = relative.toString().replace('\\', '/');
 
@@ -50,16 +50,16 @@ public class AllForAI {
 							String content = new String(bytes, StandardCharsets.UTF_8);
 
 							String lineSep = System.lineSeparator();
-							return "Fichero: " + fileName + lineSep
+							return "File: " + fileName + lineSep
 									+ "```" + lineSep
 									+ content + lineSep
 									+ "```" + lineSep + lineSep;
 						} catch (IOException e) {
-							System.err.println("No se ha podido leer el fichero: " + path + " -> " + e.getMessage());
+							System.err.println("Could not read the file: " + path + " -> " + e.getMessage());
 							return "";
 						}
 					})
-					// ya incluyen saltos de línea al final de cada bloque
+					// they already include line breaks at the end of each block
 					.collect(Collectors.joining());
 		}
 	}
