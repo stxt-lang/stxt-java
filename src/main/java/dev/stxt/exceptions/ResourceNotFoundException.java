@@ -10,6 +10,8 @@ public class ResourceNotFoundException extends STXTException {
 	private final String resource;
 
 	/**
+	 * Creates the exception for a resource that could not be found.
+	 *
 	 * @param namespace namespace the resource was being looked up for.
 	 * @param resource name of the resource looked up.
 	 */
@@ -19,12 +21,12 @@ public class ResourceNotFoundException extends STXTException {
 		this.resource = resource;
 	}
 
-	/** @return namespace the resource was being looked up for. */
+	/** {@return the namespace the resource was being looked up for} */
 	public String getNamespace() {
 		return namespace;
 	}
 
-	/** @return name of the resource looked up. */
+	/** {@return the name of the resource looked up} */
 	public String getResource() {
 		return resource;
 	}

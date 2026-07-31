@@ -10,6 +10,8 @@ public class ChildLine {
     private final String[] values;
 
     /**
+     * Creates a child definition line.
+     *
      * @param type name of the type, or {@code null} if it is not given.
      * @param min minimum cardinality, or {@code null}.
      * @param max maximum cardinality, or {@code null}.
@@ -23,19 +25,19 @@ public class ChildLine {
 		this.values = values;
 	}
     
-	/** @return name of the declared type, or {@code null} if it is not given. */
+	/** {@return the name of the declared type, or {@code null} if it is not given} */
 	public String getType() {
         return type;
     }
-    /** @return minimum cardinality, or {@code null} if there is no minimum. */
+    /** {@return the minimum cardinality, or {@code null} if there is no minimum} */
     public Integer getMin() {
     	return min;
     }
-    /** @return maximum cardinality, or {@code null} if there is no maximum. */
+    /** {@return the maximum cardinality, or {@code null} if there is no maximum} */
     public Integer getMax() {
     	return max;
     }
-    /** @return allowed values (ENUM), or {@code null} if they are not restricted. */
+    /** {@return the allowed values (ENUM), or {@code null} if they are not restricted} */
     public String[] getValues() {
         return values;
     }

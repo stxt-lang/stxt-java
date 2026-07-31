@@ -20,6 +20,8 @@ public class NodeDefinition {
 	private final Set<String> values = new HashSet<String>();
 	
 	/**
+	 * Creates the definition of a node.
+	 *
 	 * @param name name of the node.
 	 * @param type name of the type (see {@link TypeRegistry}).
 	 * @param line line number, for the error message.
@@ -32,31 +34,37 @@ public class NodeDefinition {
 		    throw new ParseException(line, "INVALID_NODE_NAME", "Node name not valid: " + name);
 		}
 	}
-	/** @return name of the node, as it appears in the schema. */
+	/** {@return the name of the node, as it appears in the schema} */
 	public String getName() {
 		return name;
 	}
-	/** @return canonical name of the node. */
+	/** {@return the canonical name of the node} */
 	public String getNormalizedName() {
 		return normalizedName;
 	}
-	/** @return name of the value type of this node (see {@link TypeRegistry}). */
+	/** {@return the name of the value type of this node (see {@link TypeRegistry})} */
 	public String getType() {
 		return type;
 	}
-	/** @return optional description of the node, or {@code null} if it has none. */
+	/** {@return the optional description of the node, or {@code null} if it has none} */
 	public String getDescription() {
 		return description;
 	}
-	/** @param description new optional description of the node. */
+	/**
+	 * Sets the optional description of the node.
+	 *
+	 * @param description new optional description of the node.
+	 */
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	/** @return definitions of the expected children, indexed by their qualified canonical name. */
+	/** {@return the definitions of the expected children, indexed by their qualified canonical name} */
 	public Map<String, ChildDefinition> getChildren() {
 		return Collections.unmodifiableMap(children);
 	}
 	/**
+	 * Adds the definition of an expected child.
+	 *
 	 * @param childDefinition definition of the child to add.
 	 * @throws dev.stxt.exceptions.SchemaException with code {@code CHILD_DEF_ALREADY_DEFINED} if a definition for that child already existed.
 	 */
@@ -69,6 +77,8 @@ public class NodeDefinition {
 	// after trim normalization. It lives here, and not in each parser, because this is the point
 	// both routes (schema and template) go through, so the error code stays the same.
 	/**
+	 * Adds a value to the list of values allowed for this node.
+	 *
 	 * @param value value to add to the list of allowed values.
 	 * @param line line number, for the error message.
 	 * @throws ParseException with code {@code VALUE_DUPLICATED} if the value (once trimmed) had already been added.
@@ -79,6 +89,8 @@ public class NodeDefinition {
 	        throw new ParseException(line, "VALUE_DUPLICATED", "The values " + trimmed + " is duplicated");
 	}
     /**
+     * Tells whether a value is allowed for this node.
+     *
      * @param value value to check.
      * @return {@code true} if no restricted values are defined, or if the value is among the allowed ones.
      */
@@ -86,7 +98,7 @@ public class NodeDefinition {
         if (this.values.size()==0) return true;
         return this.values.contains(value);
     }
-    /** @return values allowed for this node (ENUM), or empty if there is no restriction. */
+    /** {@return the values allowed for this node (ENUM), or empty if there is no restriction} */
     public Set<String> getValues() {
         return Collections.unmodifiableSet(this.values);
     }

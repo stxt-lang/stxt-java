@@ -5,6 +5,8 @@ public class SchemaException extends STXTException {
     private static final long serialVersionUID = 1L;
 
 	/**
+	 * Creates an exception for a malformed schema or template.
+	 *
 	 * @param code error code in UPPERCASE.
 	 * @param message descriptive message.
 	 */

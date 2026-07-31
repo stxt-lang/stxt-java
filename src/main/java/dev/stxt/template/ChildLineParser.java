@@ -22,6 +22,8 @@ public final class ChildLineParser {
     }
 
     /**
+     * Parses the inline value of a child line.
+     *
      * @param rawLine raw inline value of the child line.
      * @param lineNumber line number, for the error message.
      * @return the parsed child definition.

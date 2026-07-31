@@ -15,7 +15,12 @@ import dev.stxt.exceptions.ValidationException;
 /** Turns the tree of an already parsed {@code @stxt.schema} document into a {@link Schema}. */
 public class SchemaParser {
 
+	private SchemaParser() {
+	}
+
 	/**
+	 * Transforms the document tree into the {@link Schema} it describes.
+	 *
 	 * @param node root of the already parsed {@code @stxt.schema} document.
 	 * @return the resulting {@link Schema}.
 	 */

@@ -13,13 +13,17 @@ public final class SchemaProviderResources implements SchemaProvider {
 	private final ResourcesLoader resourcesLoader;
 	private final SchemaValidator schemaValidator;
 
-	/** @param pathResolver where to load the {@code @stxt.schema} document of each namespace from. */
+	/**
+	 * Creates a provider that loads schemas through a {@link ResourcesLoader}.
+	 *
+	 * @param pathResolver where to load the {@code @stxt.schema} document of each namespace from.
+	 */
 	public SchemaProviderResources(ResourcesLoader pathResolver) {
 		this.resourcesLoader = pathResolver;
 		this.schemaValidator = new SchemaValidator(new SchemaProviderMeta());
 	}
 
-	/** @return the schema loaded and validated against the meta-schema, or {@code null} if the resource does not exist. */
+	/** {@return the schema loaded and validated against the meta-schema, or {@code null} if the resource does not exist} */
 	public Schema getSchema(String namespace) {
 		// Return from the cache
 		if (namespace == null || namespace.isEmpty())

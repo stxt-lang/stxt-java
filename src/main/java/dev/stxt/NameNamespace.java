@@ -6,6 +6,8 @@ public final class NameNamespace {
     private final String namespace;
 
     /**
+     * Creates a resolved name and namespace pair.
+     *
      * @param name name of the node without the namespace part.
      * @param namespace resolved namespace (its own or inherited).
      */
@@ -14,12 +16,12 @@ public final class NameNamespace {
         this.namespace = namespace;
     }
 
-    /** @return name of the node, without the namespace part. */
+    /** {@return the name of the node, without the namespace part} */
     public String getName() {
         return name;
     }
 
-    /** @return resolved namespace (its own or inherited from the parent), or the empty string if it has none. */
+    /** {@return the resolved namespace (its own or inherited from the parent), or the empty string if it has none} */
     public String getNamespace() {
         return namespace;
     }

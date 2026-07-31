@@ -17,6 +17,8 @@ public class Schema {
 	private final String namespace;
 	
 	/**
+	 * Creates an empty schema for a namespace.
+	 *
 	 * @param namespace namespace this schema applies to.
 	 * @param line line number, for the error message.
 	 */
@@ -25,12 +27,14 @@ public class Schema {
 		NamespaceValidator.validateNamespaceFormat(this.namespace, line);
 	}
 	
-	/** @return node definitions, indexed by their canonical name. */
+	/** {@return the node definitions, indexed by their canonical name} */
 	public Map<String, NodeDefinition> getNodes() {
 		return Collections.unmodifiableMap(nodes);
 	}
 	
 	/**
+	 * Looks up the definition of a node by name.
+	 *
 	 * @param name name of the node to look for.
 	 * @return the definition of the node with that name, or {@code null} if it is not defined in this schema.
 	 */
@@ -39,6 +43,8 @@ public class Schema {
 	}
 	
 	/**
+	 * Adds the definition of a node to this schema.
+	 *
 	 * @param nodeDefinition node definition to add.
 	 * @throws dev.stxt.exceptions.SchemaException if there already was a node definition with the same name.
 	 */
@@ -48,7 +54,7 @@ public class Schema {
 		nodes.put(qname, nodeDefinition);
 	}
 	
-	/** @return namespace this schema applies to. */
+	/** {@return the namespace this schema applies to} */
 	public String getNamespace() {
 		return namespace;
 	}

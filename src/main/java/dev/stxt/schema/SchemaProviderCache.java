@@ -13,7 +13,11 @@ public final class SchemaProviderCache implements SchemaProvider {
 	private final Map<String, Schema> cache = new ConcurrentHashMap<>();
 	private final List<SchemaProvider> providers;
 	
-	/** @param providers providers to try in order until one of them resolves the schema. */
+	/**
+	 * Creates a cache over a list of providers.
+	 *
+	 * @param providers providers to try in order until one of them resolves the schema.
+	 */
 	public SchemaProviderCache(List<SchemaProvider> providers) {
 		this.providers = providers;
 	}

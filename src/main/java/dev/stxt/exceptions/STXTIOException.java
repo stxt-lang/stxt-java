@@ -4,7 +4,11 @@ package dev.stxt.exceptions;
 public class STXTIOException extends STXTException {
 	private static final long serialVersionUID = 1L;
 
-    /** @param cause original I/O exception. */
+    /**
+     * Wraps an I/O exception raised while reading a file.
+     *
+     * @param cause original I/O exception.
+     */
     public STXTIOException(java.io.IOException cause) {
         super("IO_ERROR", "I/O error: " + cause.getMessage(), cause);
     }

@@ -8,6 +8,8 @@ public class STXTException extends RuntimeException {
 	private final String code;
 
     /**
+     * Creates an exception with an error code and a message.
+     *
      * @param code error code in UPPERCASE.
      * @param message descriptive message.
      */
@@ -17,6 +19,8 @@ public class STXTException extends RuntimeException {
     }
     
     /**
+     * Creates an exception with an error code, a message and a cause.
+     *
      * @param code error code in UPPERCASE.
      * @param message descriptive message.
      * @param cause original cause.
@@ -26,7 +30,7 @@ public class STXTException extends RuntimeException {
         this.code = code;
     }
     
-    /** @return error code in UPPERCASE. */
+    /** {@return the error code in UPPERCASE} */
     public String getCode() { return code; }
     
     @Override

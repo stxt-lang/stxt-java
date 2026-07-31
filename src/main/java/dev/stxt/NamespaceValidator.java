@@ -18,7 +18,12 @@ public class NamespaceValidator {
 	 */
 	private static final Pattern NAMESPACE_FORMAT = Pattern.compile("^@?[a-z0-9]+(\\.[a-z0-9]+)+$");
 
+	private NamespaceValidator() {
+	}
+
 	/**
+	 * Validates the format of a namespace.
+	 *
 	 * @param namespace already normalized namespace to validate; ignored when {@code null} or empty.
 	 * @param lineNumber line number, for the error message.
 	 * @throws ParseException with code {@code INVALID_NAMESPACE} if it does not match the format.

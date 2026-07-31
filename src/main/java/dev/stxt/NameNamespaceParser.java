@@ -11,6 +11,8 @@ public final class NameNamespaceParser {
     }
 
     /**
+     * Splits a raw node name into its name and its namespace.
+     *
      * @param rawName raw name, with the namespace in parentheses if it carries one.
      * @param inheritedNs namespace inherited from the parent, used when {@code rawName} brings none of its own.
      * @param lineNumber line number, for the error messages.

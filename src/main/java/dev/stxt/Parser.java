@@ -23,14 +23,26 @@ public class Parser {
 	private List<Validator> validators;
 	private List<Observer> observers;
 
-	/** @param v the {@link Validator} to register, invoked when each node is closed during parsing. */
+	/** Creates a parser with no validator and no observer registered. */
+	public Parser() {
+	}
+
+	/**
+	 * Registers a validator, invoked when each node is closed.
+	 *
+	 * @param v the {@link Validator} to register, invoked when each node is closed during parsing.
+	 */
 	public void registerValidator(Validator v) {
         if (validators == null) {
             validators = new ArrayList<>();
         }
         validators.add(v);
 	}
-	/** @param o the {@link Observer} to register, notified when each node is opened and closed during parsing. */
+	/**
+	 * Registers an observer, notified when each node is opened and closed.
+	 *
+	 * @param o the {@link Observer} to register, notified when each node is opened and closed during parsing.
+	 */
 	public void registerObserver(Observer o) {
         if (observers == null) {
             observers = new ArrayList<>();

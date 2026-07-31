@@ -90,67 +90,75 @@ public class Node {
 		}
 	}
 
-	/** @param line text line to append to a BLOCK node ({@link #isTextNode()}). */
+	/**
+	 * Appends a text line to a BLOCK node.
+	 *
+	 * @param line text line to append to a BLOCK node ({@link #isTextNode()}).
+	 */
 	public void addTextLine(String line) {
 		this.textLines.add(line);
 	}
 
-	/** @return original name of the node as it appears in the document (with spaces compacted). */
+	/** {@return the original name of the node as it appears in the document (with spaces compacted)} */
 	public String getName() {
 		return name;
 	}
 
-	/** @return canonical name of the node, used to compare/look up by structural identity. */
+	/** {@return the canonical name of the node, used to compare/look up by structural identity} */
 	public String getNormalizedName() {
 		return normalizedName;
 	}
 
-	/** @return canonical name prefixed by its namespace ({@code namespace:name}), or just the name when there is no namespace. */
+	/** {@return the canonical name prefixed by its namespace ({@code namespace:name}), or just the name when there is no namespace} */
 	public String getQualifiedName() {
 		return namespace.isEmpty() ? normalizedName : namespace + ":" + normalizedName;
 	}
 
-	/** @return effective namespace of the node (its own or inherited from the parent), lower-cased, or the empty string if it has none. */
+	/** {@return the effective namespace of the node (its own or inherited from the parent), lower-cased, or the empty string if it has none} */
 	public String getNamespace() {
 		return namespace;
 	}
 
-	/** @return children of the node in order of appearance, as a read-only view. */
+	/** {@return the children of the node in order of appearance, as a read-only view} */
 	public List<Node> getChildren() {
 		return Collections.unmodifiableList(children);
 	}
 	
-	/** @param node already closed child to append at the end of this node's list of children. */
+	/**
+	 * Appends an already closed child to this node.
+	 *
+	 * @param node already closed child to append at the end of this node's list of children.
+	 */
 	public void addChild(Node node) {
 		children.add(node);
 	}
 
-	/** @return inline value of the node (INLINE node), or the empty string if it is a BLOCK node. */
+	/** {@return the inline value of the node (INLINE node), or the empty string if it is a BLOCK node} */
 	public String getValue() {
 		return value;
 	}
 
-	/** @return text lines of a BLOCK node ({@link #isTextNode()}), in order of appearance. */
+	/** {@return the text lines of a BLOCK node ({@link #isTextNode()}), in order of appearance} */
 	public List<String> getTextLines() {
 		return textLines;
 	}
 
-	/** @return line number of the document where this node was opened. */
+	/** {@return the line number of the document where this node was opened} */
 	public int getLine() {
 		return line;
 	}
 
-	/** @return indentation level of the node (0 for root nodes). */
+	/** {@return the indentation level of the node (0 for root nodes)} */
 	public int getLevel() {
 		return level;
 	}
 
-	/** @return {@code true} if the node is a text block (BLOCK, {@code >>}); {@code false} if it is INLINE. */
+	/** {@return {@code true} if the node is a text block (BLOCK, {@code >>}); {@code false} if it is INLINE} */
 	public boolean isTextNode() {
 		return textNode;
 	}
 
-	/** @return textual content of the node: the text lines joined with '\n' if it is BLOCK, or the inline value otherwise. */
+	/** {@return the textual content of the node: the text lines joined with '\n' if it is BLOCK, or the inline value otherwise} */
 	public String getText() {
 		if (isTextNode())
 			return String.join("\n", textLines);
@@ -190,6 +198,8 @@ public class Node {
 
 	// Fast access methods to children
 	/**
+	 * Looks up every direct child with that name, in this node's own namespace.
+	 *
 	 * @param cname name of the child to look for.
 	 * @return every direct child with that name in this node's own namespace.
 	 */
@@ -198,6 +208,8 @@ public class Node {
 	}
 
 	/**
+	 * Looks up every direct child with that name, in the given namespace.
+	 *
 	 * @param cname name of the child to look for.
 	 * @param namespace namespace to search in.
 	 * @return every direct child with that name in the given namespace.

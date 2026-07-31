@@ -28,6 +28,9 @@ import dev.stxt.schema.type.UUID;
 public final class TypeRegistry {
 	private static final Map<String, Type> REGISTRY = new HashMap<>();
 
+	private TypeRegistry() {
+	}
+
 	static {
 		// Main types
 		register(INLINE.INSTANCE);
@@ -54,6 +57,8 @@ public final class TypeRegistry {
 	}
 
 	/**
+	 * Looks up a registered type by name.
+	 *
 	 * @param nodeType name of the type to look for.
 	 * @return the {@link Type} registered under that name, or {@code null} if it does not exist.
 	 */
@@ -63,6 +68,8 @@ public final class TypeRegistry {
 
 	// STXT-SCHEMA-SPEC 9 / STXT-TEMPLATE-SPEC 15: only INLINE and GROUP accept children
 	/**
+	 * Tells whether nodes of a type may have children.
+	 *
 	 * @param nodeType name of the type.
 	 * @return {@code true} if nodes of this type may have children (only INLINE and GROUP).
 	 */

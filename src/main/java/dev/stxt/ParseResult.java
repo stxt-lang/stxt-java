@@ -16,27 +16,39 @@ public class ParseResult {
 	private final List<Node> nodes = new ArrayList<>();
 	private final List<ParseException> errors = new ArrayList<>();
 
-	/** @return root nodes collected so far. */
+	/** Creates an empty result, with no nodes and no errors. */
+	public ParseResult() {
+	}
+
+	/** {@return the root nodes collected so far} */
 	public List<Node> getNodes() {
 		return nodes;
 	}
 
-	/** @return syntax or validation errors collected so far, in order of appearance. */
+	/** {@return the syntax or validation errors collected so far, in order of appearance} */
 	public List<ParseException> getErrors() {
 		return errors;
 	}
 
-	/** @return {@code true} if at least one error has been collected. */
+	/** {@return {@code true} if at least one error has been collected} */
 	public boolean hasErrors() {
 		return !errors.isEmpty();
 	}
 
-	/** @param node already closed root node to add to the result. */
+	/**
+	 * Adds a root node to the result.
+	 *
+	 * @param node already closed root node to add to the result.
+	 */
 	public void addNode(Node node) {
 		nodes.add(node);
 	}
 
-	/** @param error error found while parsing, without aborting the traversal. */
+	/**
+	 * Adds an error found while parsing.
+	 *
+	 * @param error error found while parsing, without aborting the traversal.
+	 */
 	public void addError(ParseException error) {
 		errors.add(error);
 	}

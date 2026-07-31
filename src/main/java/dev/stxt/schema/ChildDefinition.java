@@ -13,6 +13,8 @@ public class ChildDefinition {
 	private final Integer max;
 
 	/**
+	 * Creates the definition of an expected child.
+	 *
 	 * @param name name of the expected child.
 	 * @param namespace namespace of the expected child (may be {@code null}).
 	 * @param min minimum cardinality, or {@code null} if there is no minimum.
@@ -31,32 +33,32 @@ public class ChildDefinition {
 		}
 	}
 
-	/** @return name of the expected child, as it appears in the schema. */
+	/** {@return the name of the expected child, as it appears in the schema} */
 	public String getName() {
 		return name;
 	}
 
-	/** @return canonical name of the expected child. */
+	/** {@return the canonical name of the expected child} */
 	public String getNormalizedName() {
 		return normalizedName;
 	}
 
-	/** @return namespace of the expected child, or the empty string if it has none. */
+	/** {@return the namespace of the expected child, or the empty string if it has none} */
 	public String getNamespace() {
 		return namespace;
 	}
 
-	/** @return minimum cardinality, or {@code null} if there is no minimum. */
+	/** {@return the minimum cardinality, or {@code null} if there is no minimum} */
 	public Integer getMin() {
 		return min;
 	}
 
-	/** @return maximum cardinality, or {@code null} if there is no maximum. */
+	/** {@return the maximum cardinality, or {@code null} if there is no maximum} */
 	public Integer getMax() {
 		return max;
 	}
 
-	/** @return canonical name prefixed by its namespace, used as the key in {@link NodeDefinition#getChildren()}. */
+	/** {@return the canonical name prefixed by its namespace, used as the key in {@link NodeDefinition#getChildren()}} */
 	public String getQualifiedName() {
 		return namespace.isEmpty() ? normalizedName : namespace + ":" + normalizedName;
 	}

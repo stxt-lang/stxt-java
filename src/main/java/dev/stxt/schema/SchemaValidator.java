@@ -14,11 +14,17 @@ public class SchemaValidator implements Validator {
 	private final SchemaProvider schemaProvider;
 	private boolean recursiveValidation = false;
 
-	/** @param schemaProvider where to resolve the schema of each namespace from. Without recursive validation of the children. */
+	/**
+	 * Creates a validator that resolves schemas through the given provider.
+	 *
+	 * @param schemaProvider where to resolve the schema of each namespace from. Without recursive validation of the children.
+	 */
 	public SchemaValidator(SchemaProvider schemaProvider) {
 		this.schemaProvider = schemaProvider;
 	}
 	/**
+	 * Creates a validator, optionally validating the children of each node too.
+	 *
 	 * @param schemaProvider where to resolve the schema of each namespace from.
 	 * @param recursive whether the children of each node are validated recursively too.
 	 */

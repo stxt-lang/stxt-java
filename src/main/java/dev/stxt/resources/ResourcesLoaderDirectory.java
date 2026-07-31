@@ -11,12 +11,22 @@ import dev.stxt.utils.FileUtils;
 public class ResourcesLoaderDirectory implements ResourcesLoader {
 	private final File dir;
 
-	/** @param dir path of the root resources directory. @throws STXTException if it does not exist or is not a directory. */
+	/**
+	 * Creates a loader over the resources directory at the given path.
+	 *
+	 * @param dir path of the root resources directory.
+	 * @throws STXTException if it does not exist or is not a directory.
+	 */
 	public ResourcesLoaderDirectory(String dir) {
 		this(new File(dir));
 	}
 
-	/** @param dirResources root resources directory. @throws STXTException if it does not exist or is not a directory. */
+	/**
+	 * Creates a loader over the given resources directory.
+	 *
+	 * @param dirResources root resources directory.
+	 * @throws STXTException if it does not exist or is not a directory.
+	 */
 	public ResourcesLoaderDirectory(File dirResources) {
 		this.dir = dirResources;
 		if (!dir.exists() || !dir.isDirectory())

@@ -19,6 +19,8 @@ public final class STXT {
     private STXT() {}
 
     /**
+     * Creates a parser with schema and template validation already registered.
+     *
      * @param loader where to load the schemas/templates from.
      * @return a parser with schema validation already registered.
      */
@@ -28,12 +30,14 @@ public final class STXT {
         return p;
     }
 
-    /** @return a parser with no validator registered (it only validates syntax). */
+    /** {@return a parser with no validator registered (it only validates syntax)} */
     public static Parser rawParser() {
         return new Parser();
     }
 
     /**
+     * Creates the schema provider used by {@link #parser(ResourcesLoader)}.
+     *
      * @param loader where to load the schemas/templates from.
      * @return a {@link SchemaProvider} that combines schemas and templates, with a cache.
      */

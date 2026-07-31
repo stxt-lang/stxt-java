@@ -8,6 +8,8 @@ public class ParseException extends STXTException {
 	private final int line;
 
     /**
+     * Creates a syntax error located at a line of the document.
+     *
      * @param line line number where the error was detected.
      * @param code error code in UPPERCASE.
      * @param message descriptive message.
@@ -16,6 +18,6 @@ public class ParseException extends STXTException {
         super(code, "Error at line: " + line + ", " + message);
         this.line = line;
     }
-    /** @return line number of the document where the error was detected. */
+    /** {@return the line number of the document where the error was detected} */
     public int getLine() { return line; }
 }

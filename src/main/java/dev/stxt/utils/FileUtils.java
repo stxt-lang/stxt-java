@@ -13,6 +13,8 @@ public class FileUtils {
 	}
 
 	/**
+	 * Removes the leading UTF-8 BOM of a string.
+	 *
 	 * @param s string to strip the leading BOM from.
 	 * @return the string without its leading UTF-8 BOM, if it had one.
 	 */
@@ -23,6 +25,8 @@ public class FileUtils {
 	}
 
 	/**
+	 * Reads a whole file as bytes.
+	 *
 	 * @param file file to read.
 	 * @return the whole content of the file as bytes.
 	 * @throws IOException if the file cannot be read or is larger than 2 GB.
@@ -43,6 +47,8 @@ public class FileUtils {
 	}
 
 	/**
+	 * Reads a whole file as UTF-8 text.
+	 *
 	 * @param file file to read.
 	 * @return the whole content of the file as UTF-8 text.
 	 * @throws IOException if the file cannot be read.

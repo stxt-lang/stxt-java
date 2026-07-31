@@ -17,6 +17,8 @@ public final class NodeWriter {
     }
 
     /**
+     * Serializes a node to STXT text, indented with tabs.
+     *
      * @param node node to serialize (along with its children).
      * @return the node serialized to STXT text, indented with tabs.
      */
@@ -25,6 +27,8 @@ public final class NodeWriter {
     }
 
     /**
+     * Serializes a node to STXT text, with the given indentation style.
+     *
      * @param node node to serialize (along with its children).
      * @param style indentation style to use.
      * @return the node serialized to STXT text.
@@ -36,6 +40,8 @@ public final class NodeWriter {
     }
 
     /**
+     * Serializes a list of root nodes to STXT text, indented with tabs.
+     *
      * @param docs root nodes to serialize.
      * @return the documents serialized to STXT text, indented with tabs.
      */
@@ -44,6 +50,8 @@ public final class NodeWriter {
     }
 
     /**
+     * Serializes a list of root nodes to STXT text, with the given indentation style.
+     *
      * @param docs root nodes to serialize.
      * @param style indentation style to use.
      * @return the documents serialized to STXT text.

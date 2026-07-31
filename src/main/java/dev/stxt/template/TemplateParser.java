@@ -13,8 +13,13 @@ import dev.stxt.utils.StringUtils;
 
 /** Turns the tree of an already parsed {@code @stxt.template} document into an equivalent {@link Schema}. */
 public class TemplateParser {
-	
+
+	private TemplateParser() {
+	}
+
 	/**
+	 * Transforms the document tree into the equivalent {@link Schema}.
+	 *
 	 * @param node root of the already parsed {@code @stxt.template} document.
 	 * @return the resulting {@link Schema}.
 	 */

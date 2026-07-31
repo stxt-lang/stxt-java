@@ -14,7 +14,11 @@ import dev.stxt.schema.SchemaValidator;
 public class TemplateSchemaProvider implements SchemaProvider {
 	private final ResourcesLoader loader;
 	
-	/** @param loader where to load the {@code @stxt.template} document of each namespace from. */
+	/**
+	 * Creates a provider that loads templates through a {@link ResourcesLoader}.
+	 *
+	 * @param loader where to load the {@code @stxt.template} document of each namespace from.
+	 */
 	public TemplateSchemaProvider(ResourcesLoader loader) {
 		this.loader = loader;
 	}	

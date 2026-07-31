@@ -10,6 +10,8 @@ public class StringUtils {
 
 	// Used for name>> nodes
 	/**
+	 * Removes the trailing whitespace of a string.
+	 *
 	 * @param s string to strip the trailing spaces from.
 	 * @return the string without trailing whitespace; {@code null} is treated as the empty string.
 	 */
@@ -25,6 +27,8 @@ public class StringUtils {
 
 	// Used for Base64 and Hex typed nodes
 	/**
+	 * Removes every whitespace character of a string.
+	 *
 	 * @param input string to remove the spaces from.
 	 * @return the string without any whitespace at all.
 	 */
@@ -34,6 +38,8 @@ public class StringUtils {
 	
 	// Used to normalize namespaces
 	/**
+	 * Lower-cases a string.
+	 *
 	 * @param input string to lower-case.
 	 * @return the lower-cased string; {@code null} is treated as the empty string.
 	 */
@@ -44,6 +50,8 @@ public class StringUtils {
 	
 	// Used for the name of the nodes
 	/**
+	 * Trims a string and collapses its inner whitespace.
+	 *
 	 * @param s string to compact.
 	 * @return the string with the outer spaces trimmed and the inner ones collapsed into a single one; {@code null} is treated as the empty string.
 	 */
@@ -56,6 +64,8 @@ public class StringUtils {
 	// Used for the normalized name of the nodes (STXT-SPEC 4.3): NFC + lower case,
 	// keeping diacritics and non-Latin alphabets (IDN model)
 	/**
+	 * Builds the canonical name of a node, as defined by STXT-SPEC 4.3.
+	 *
 	 * @param input string to normalize.
 	 * @return the canonical name of a node: NFC + lower case, with separators collapsed into '-'; {@code null} is treated as the empty string.
 	 */

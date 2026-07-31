@@ -5,6 +5,8 @@ public class ValidationException extends ParseException {
 	private static final long serialVersionUID = 1L;
 	
 	/**
+	 * Creates a validation error located at a line of the document.
+	 *
 	 * @param line line number where the error was detected.
 	 * @param code error code in UPPERCASE.
 	 * @param message descriptive message.
