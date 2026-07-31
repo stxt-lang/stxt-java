@@ -79,7 +79,7 @@ Build con Maven (Java 17). No hay wrapper `mvnw`; usa `mvn` del sistema.
 mvn compile                  # compilar src/main
 mvn test                     # compilar + ejecutar toda la suite JUnit 5
 mvn -o test                  # offline, si las deps ya están en ~/.m2
-mvn package                  # genera target/stxt-core-0.5.2.jar
+mvn package                  # genera target/stxt-core-0.5.3.jar
 
 # Un solo test o método (surefire):
 mvn test -Dtest=ParserTest
@@ -104,14 +104,23 @@ El `groupId` `dev.stxt` se verifica en el Central Portal con un **registro TXT e
 **manual**, no hay CI: el release se hace desde una máquina que tenga `../stxt-web` al lado, para
 que las suites de corpus se ejecuten de verdad en vez de saltarse.
 
-La primera versión publicada es **0.5.2, el 2026-07-30**, desde el tag `v0.5.2` (cuyo `pom.xml` es
-idéntico al `.pom` que se subió). Lo de abajo es, por tanto, el flujo ya ejecutado, no un plan.
+La primera versión publicada fue **0.5.2, el 2026-07-30**, desde el tag `v0.5.2`; la última es
+**0.5.3, el 2026-07-31**, desde el tag `v0.5.3` (el `pom.xml` de cada tag es idéntico al `.pom` que
+se subió). Lo de abajo es, por tanto, el flujo ya ejecutado dos veces, no un plan.
 
 ```bash
+mvn clean                    # obligatorio si se ha abierto el proyecto en Eclipse (ver más abajo)
 mvn package                  # build normal, sin firmar
 mvn -Prelease verify         # + firma GPG de los 4 ficheros (pom y 3 jars)
 mvn -Prelease deploy         # sube el bundle y lo deja validado y PENDIENTE en el Portal
 ```
+
+El paso a paso completo, con comprobaciones y errores frecuentes, está en
+[RELEASING.md](RELEASING.md); esta sección se queda con el porqué de cada decisión. Un detalle que
+conviene no olvidar: si el proyecto se ha abierto en Eclipse, m2e deja su propio
+`target/classes/META-INF/MANIFEST.MF` con `Automatic-Module-Name`, el maven-javadoc-plugin lo detecta,
+cambia a modo modular y el javadoc jar —obligatorio en Central— falla con
+`error: No source files for package dev.stxt`. De ahí el `mvn clean` de la primera línea.
 
 El `deploy` **no publica**: con `autoPublish=false` sube el bundle, espera a que el Portal lo valide y
 lo deja pendiente. Publicar es un clic manual en `central.sonatype.com/publishing/deployments`, y ese
@@ -146,7 +155,8 @@ Y al cerrarla, dos pasos que no son del build:
 4. Confirmar el despliegue a mano en el Portal (ver arriba). Antes de ese clic conviene tener el
    commit hecho, para que el artefacto inmutable corresponda a un estado que está en git.
 5. `git tag -s vX.Y.Z` sobre el commit publicado y empujarlo. La 0.5.2 se etiquetó como `v0.5.2`,
-   pero *lightweight*; a partir de la siguiente, anotado y firmado con la clave de arriba.
+   pero *lightweight*; desde la 0.5.3 el tag es anotado y firmado con la clave de arriba, que es
+   como deben hacerse los siguientes.
 
 El README es **la portada del artefacto en Central y en javadoc.io**, no un fichero interno: sus
 ejemplos están compilados y ejecutados contra el parser real, y deben seguir estándolo si se tocan.

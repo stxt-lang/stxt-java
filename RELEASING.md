@@ -64,6 +64,16 @@ Qué mirar en la salida de `mvn test`:
 - Las tres suites de corpus deben aparecer: `CorpusDocumentsTest`, `CorpusSchemasTest`,
   `CorpusWriterTest`.
 
+Y en la de `mvn package`, **cero avisos de javadoc**. Desde la 0.5.3 el javadoc sale limpio y esa es
+la vara de medir: cualquier `warning` nuevo es documentación que se ha quedado a medias, y se ve en
+javadoc.io. Ojo con el tope de la herramienta, que **corta la lista en 100 avisos** y engaña sobre el
+total; para ver la cifra real:
+
+```bash
+javadoc -Xmaxwarns 10000 -quiet -d /tmp/jd -encoding UTF-8 -protected --release 17 \
+    $(find src/main/java -name '*.java') 2>&1 | grep -c 'warning:'
+```
+
 Y comprobar que el bundle lleva los cuatro ficheros:
 
 ```bash
@@ -124,8 +134,8 @@ git tag -s vX.Y.Z -m "vX.Y.Z"     # anotado y firmado con AAC9F568A98BE7F0
 git push origin vX.Y.Z
 ```
 
-La 0.5.2 se etiquetó como `v0.5.2` pero *lightweight*; de la siguiente en adelante, anotado y
-firmado.
+La 0.5.2 se etiquetó como `v0.5.2` pero *lightweight*. Desde la **0.5.3** el tag es anotado y
+firmado, que es como deben hacerse los siguientes.
 
 ---
 
@@ -138,7 +148,7 @@ mvn package                  # 3. build sin firmar
 mvn -Prelease verify         # 4. + firma GPG        (terminal interactivo)
 mvn -Prelease deploy         # 5. sube y deja PENDIENTE (terminal interactivo)
 #   6. clic manual en central.sonatype.com/publishing/deployments
-git tag -s vX.Y.Z && git push origin vX.Y.Z          # 7.
+git tag -s vX.Y.Z -m "vX.Y.Z" && git push origin vX.Y.Z          # 7.
 ```
 
 ---
