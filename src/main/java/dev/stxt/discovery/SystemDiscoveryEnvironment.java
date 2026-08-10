@@ -12,6 +12,10 @@ import java.util.Locale;
  */
 public final class SystemDiscoveryEnvironment implements DiscoveryEnvironment {
 
+	/** Creates an environment backed by the real process environment and the host OS. */
+	public SystemDiscoveryEnvironment() {
+	}
+
 	@Override
 	public List<String> getStxtPath() {
 		String value = System.getenv("STXT_PATH");
