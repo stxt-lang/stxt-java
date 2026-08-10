@@ -6,6 +6,26 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+## [0.6.0]
+
+Adds `dev.stxt.discovery`, the reference port of STXT-DISCOVERY-SPEC, aligned with the
+`src/discovery/` package `stxt-js` introduced in its own 0.6.0.
+
+- `DiscoveryResolver` builds the resolution chain of a document (project ascent, user level,
+  system level, or the `STXT_PATH` override), loads every `.stxt` definition of every level and
+  applies the per-namespace precedence, with a per-directory cache (`clearCache()` when files may
+  have changed).
+- `DiscoveryResult` implements `SchemaProvider` and additionally exposes `getDefinition`,
+  `getActiveDefinitions`, `getChain` and `getErrors`, so the provenance of every active definition
+  is inspectable.
+- `DiscoveryError` reports the four resolution errors of spec section 8
+  (`DISCOVERY_DUPLICATE_NAMESPACE`, `DISCOVERY_NOT_PARSEABLE`, `DISCOVERY_NOT_A_DEFINITION`,
+  `DISCOVERY_INVALID_DEFINITION`) without aborting the rest of the load.
+- `DiscoveryEnvironment`/`SystemDiscoveryEnvironment` isolate `STXT_PATH` and the user/system
+  directories; file access itself uses `java.nio.file.Path` directly, since (unlike `stxt-js`) this
+  port has no need to run inside a browser or an editor host.
+- 22 new tests in `DiscoveryResolverTest`, ported from `stxt-js`'s `discovery.test.ts`.
+
 ## [0.5.4]
 
 Conformance release aligned with the 2026-08-09 pseudocode audit.
