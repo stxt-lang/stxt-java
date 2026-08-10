@@ -72,7 +72,7 @@ public class CorpusDocumentsTest {
 
 	/**
 	 * One and the same namespace is described twice in stxt-web: as a schema (`.stxt/schemas/`)
-	 * and as a template (`.stxt/templates/`). Since the template compiles down to a Schema, both
+	 * and as a template (`examples/definitions/templates/`). Since the template compiles down to a Schema, both
 	 * must validate the documents exactly alike: not just the same first error, but the same
 	 * full list of errors (code + line, in the same order).
 	 */
@@ -82,7 +82,7 @@ public class CorpusDocumentsTest {
 		Assumptions.assumeTrue(root != null, "requires the sibling stxt-web project (use STXT_WEB=/path to point at it)");
 
 		Corpus.CorpusLoader fromSchemas = Corpus.loadLoader(root, List.of(".stxt/schemas"));
-		Corpus.CorpusLoader fromTemplates = Corpus.loadLoader(root, List.of(".stxt/templates"));
+		Corpus.CorpusLoader fromTemplates = Corpus.loadLoader(root, List.of("examples/definitions/templates"));
 
 		List<DynamicTest> tests = new ArrayList<>();
 		for (File file: Corpus.corpusFiles(root, Corpus.DOC_DIRS)) {

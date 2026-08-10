@@ -59,6 +59,11 @@ public class TemplateParser {
 	}
 
 	private static void addToSchema(Schema schema, Node node, int offset) {
+		// Structure has its own grammar: every non-empty line must use ':'. The core
+		// parser also accepts BLOCK nodes here, so reject that form explicitly.
+		if (node.isTextNode())
+			throw new ValidationException(node.getLine() + offset, "INVALID_CHILD_LINE", "Template Structure lines must use ':'");
+
 		// Get the qualified name
 		String namespace = node.getNamespace();
 		String name = node.getName();

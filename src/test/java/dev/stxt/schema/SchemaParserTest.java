@@ -134,6 +134,30 @@ Schema (@stxt.schema): test.values.group
 		assertEquals("INVALID_VALUE", ex.getCode());
 	}
 
+	@Test
+	void testSchemaNodeNameMustBeAValidStxtNodeName() {
+		String text = """
+Schema (@stxt.schema): test.invalid.node
+    Node: Invalid!
+""";
+		Node root = new Parser().parse(text).get(0);
+		ValidationException ex = assertThrows(ValidationException.class, () -> SchemaParser.transformNodeToSchema(root));
+		assertEquals("INVALID_NODE_NAME", ex.getCode());
+	}
+
+	@Test
+	void testSchemaChildNameMustBeAValidStxtNodeName() {
+		String text = """
+Schema (@stxt.schema): test.invalid.child
+    Node: Root
+        Children:
+            Child: Invalid!
+""";
+		Node root = new Parser().parse(text).get(0);
+		ValidationException ex = assertThrows(ValidationException.class, () -> SchemaParser.transformNodeToSchema(root));
+		assertEquals("INVALID_NODE_NAME", ex.getCode());
+	}
+
 	private void showSchema(Schema sch) {
 		System.out.println("SCH => " + JSON.toJsonPretty(sch));
 	}

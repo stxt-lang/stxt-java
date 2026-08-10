@@ -2,9 +2,12 @@ package dev.stxt.utils;
 
 import java.text.Normalizer;
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 /** String normalization helpers used for names, namespaces and values. */
 public class StringUtils {
+	private static final Pattern NODE_NAME = Pattern.compile("^[\\p{L}\\p{Nd}\\-_ ]+$");
+
 	private StringUtils() {
 	}
 
@@ -35,7 +38,7 @@ public class StringUtils {
 	public static String cleanSpaces(String input) {
 		return input.replaceAll("\\s+", "");
 	}
-	
+
 	// Used to normalize namespaces
 	/**
 	 * Lower-cases a string.
@@ -59,6 +62,20 @@ public class StringUtils {
 		if (s == null)
 			return "";
 		return s.trim().replaceAll("\\s+", " ");
+	}
+
+	/**
+	 * Tells whether a value is a valid STXT node name.
+	 *
+	 * The character check happens after NFC normalization so a decomposed spelling such
+	 * as {@code e + combining acute} is accepted as the equivalent {@code é}.
+	 *
+	 * @param input name to validate.
+	 * @return {@code true} when the name uses permitted characters and has a non-empty canonical form.
+	 */
+	public static boolean isValidNodeName(String input) {
+		String nfc = Normalizer.normalize(compactSpaces(input), Normalizer.Form.NFC);
+		return NODE_NAME.matcher(nfc).matches() && !normalize(nfc).isEmpty();
 	}
 
 	// Used for the normalized name of the nodes (STXT-SPEC 4.3): NFC + lower case,

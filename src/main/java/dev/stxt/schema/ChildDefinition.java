@@ -1,7 +1,7 @@
 package dev.stxt.schema;
 
 import dev.stxt.NamespaceValidator;
-import dev.stxt.exceptions.ParseException;
+import dev.stxt.exceptions.ValidationException;
 import dev.stxt.utils.StringUtils;
 
 /** Definition of an expected child inside a {@link NodeDefinition}: name, namespace and min/max cardinality. */
@@ -28,8 +28,8 @@ public class ChildDefinition {
 		this.min = min;
 		this.max = max;
 		NamespaceValidator.validateNamespaceFormat(this.namespace, numLine);
-		if (this.normalizedName.isEmpty()) {
-		    throw new ParseException(numLine, "INVALID_NODE_NAME", "Node name not valid: " + name);
+		if (!StringUtils.isValidNodeName(this.name)) {
+		    throw new ValidationException(numLine, "INVALID_NODE_NAME", "Node name not valid: " + name);
 		}
 	}
 

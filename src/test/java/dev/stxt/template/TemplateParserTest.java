@@ -296,4 +296,16 @@ Template (@stxt.template): test.ref.spaces
 		Schema sch = TemplateParser.transformNodeToSchema(root);
 		assertEquals("NATURAL", sch.getNodeDefinition("Max Threads").getType());
 	}
+
+	@Test
+	void testStructureLineMustUseInlineForm() {
+		String text = """
+Template (@stxt.template): test.structure.inline
+    Structure >>
+        Field >>
+""";
+		Node root = new Parser().parse(text).get(0);
+		ParseException ex = assertThrows(ParseException.class, () -> TemplateParser.transformNodeToSchema(root));
+		assertEquals("INVALID_CHILD_LINE", ex.getCode());
+	}
 }

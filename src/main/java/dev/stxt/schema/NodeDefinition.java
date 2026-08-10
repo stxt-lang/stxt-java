@@ -8,6 +8,7 @@ import java.util.Set;
 
 import dev.stxt.exceptions.ParseException;
 import dev.stxt.exceptions.SchemaException;
+import dev.stxt.exceptions.ValidationException;
 import dev.stxt.utils.StringUtils;
 
 /** Definition of a node inside a {@link Schema}: type, expected children, allowed values and description. */
@@ -30,8 +31,8 @@ public class NodeDefinition {
 		this.name = StringUtils.compactSpaces(name);
 		this.normalizedName = StringUtils.normalize(name);
 		this.type = type;
-		if (this.normalizedName.isEmpty()) {
-		    throw new ParseException(line, "INVALID_NODE_NAME", "Node name not valid: " + name);
+		if (!StringUtils.isValidNodeName(this.name)) {
+		    throw new ValidationException(line, "INVALID_NODE_NAME", "Node name not valid: " + name);
 		}
 	}
 	/** {@return the name of the node, as it appears in the schema} */

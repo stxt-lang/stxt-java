@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.regex.Pattern;
 
 import dev.stxt.exceptions.ParseException;
 import dev.stxt.exceptions.STXTException;
@@ -17,9 +16,6 @@ import dev.stxt.utils.StringUtils;
  * (with {@link #getTextLines()}), as told apart by {@link #isTextNode()}.
  */
 public class Node {
-	// STXT-SPEC 4.2: Unicode letters and digits (categories L and Nd) plus '-', '_' and space
-	private static final Pattern VALID_NAME = Pattern.compile("^[\\p{L}\\p{Nd}\\-_ ]+$");
-
 	private final String name;
 	private final String normalizedName;
 	private final String namespace;
@@ -81,11 +77,7 @@ public class Node {
 		if (!this.value.isEmpty() && this.isTextNode())
 			throw new IllegalArgumentException("Not empty value with textNode");
 
-		if (name == null || !VALID_NAME.matcher(name).matches()) {
-		    throw new ParseException(line, "INVALID_NODE_NAME", "Node name contains invalid characters: " + name);
-		}
-
-		if (this.normalizedName.isEmpty()) {
+		if (!StringUtils.isValidNodeName(this.name)) {
 		    throw new ParseException(line, "INVALID_NODE_NAME", "Node name not valid: " + name);
 		}
 	}
