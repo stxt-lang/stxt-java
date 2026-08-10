@@ -6,6 +6,17 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+## [0.5.4]
+
+Conformance release aligned with the 2026-08-09 pseudocode audit.
+
+- Node names are validated after NFC normalization, so decomposed and precomposed Unicode
+  spellings are treated equivalently.
+- Schema `Node` and `Child` values now enforce the full STXT node-name grammar.
+- Template `Structure` lines must use the inline `:` form; core BLOCK (`>>`) lines are rejected.
+- The corpus equivalence test now loads templates from `examples/definitions/templates`, their
+  current location in `stxt-web`.
+
 ## [0.5.3]
 
 A documentation release: the published javadoc is now complete and in one language. No parser,

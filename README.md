@@ -38,12 +38,12 @@ Requires **Java 17** or later.
 <dependency>
     <groupId>dev.stxt</groupId>
     <artifactId>stxt-core</artifactId>
-    <version>0.5.3</version>
+    <version>0.5.4</version>
 </dependency>
 ```
 
 ```groovy
-implementation 'dev.stxt:stxt-core:0.5.3'
+implementation 'dev.stxt:stxt-core:0.5.4'
 ```
 
 The library has **no runtime dependencies**. Under JPMS it is an automatic module named `dev.stxt`.
