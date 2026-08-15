@@ -6,7 +6,7 @@
 
     <groupId>dev.stxt</groupId>
     <artifactId>stxt-core</artifactId>
-    <version>0.6.0</version>
+    <version>0.6.1</version>
     <packaging>jar</packaging>
 
     <!-- Metadatos exigidos por Maven Central (name, description, url, licencia,
