@@ -8,7 +8,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -29,7 +28,6 @@ public class CorpusSchemasTest {
 	@TestFactory
 	List<DynamicTest> loadsEachSchemaAndTemplate() {
 		File root = Corpus.findStxtWeb();
-		Assumptions.assumeTrue(root != null, "requires the sibling stxt-web project (use STXT_WEB=/path to point at it)");
 
 		List<File> files = Corpus.corpusFiles(root, Corpus.SCHEMA_DIRS);
 		assertTrue(files.size() > 0, "no .stxt found in " + Corpus.SCHEMA_DIRS);

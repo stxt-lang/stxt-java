@@ -9,7 +9,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -25,7 +24,6 @@ public class CanonicalTreeTest {
     @TestFactory
     List<DynamicTest> matchesNormativeTreeCorpus() {
         File root = Corpus.findStxtWeb();
-        Assumptions.assumeTrue(root != null, "requires the sibling project stxt-web (use STXT_WEB=/path to point at it)");
 
         List<File> files = Corpus.corpusFiles(root, List.of("conformance" + File.separator + "tree"));
         List<DynamicTest> tests = new ArrayList<>();

@@ -8,7 +8,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -28,7 +27,6 @@ public class CorpusWriterTest {
 	@TestFactory
 	List<DynamicTest> roundTrip() {
 		File root = Corpus.findStxtWeb();
-		Assumptions.assumeTrue(root != null, "requires the sibling stxt-web project (use STXT_WEB=/path to point at it)");
 
 		List<File> files = new ArrayList<>();
 		files.addAll(Corpus.corpusFiles(root, Corpus.SCHEMA_DIRS));

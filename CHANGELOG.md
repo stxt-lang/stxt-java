@@ -6,6 +6,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+- Tests: the `stxt-web` corpus is now mandatory. `Corpus.findStxtWeb()` throws when the sibling
+  project (or `STXT_WEB`) cannot be found, so the `dev.stxt.corpus` suites fail instead of being
+  skipped through `Assumptions`. A silently skipped corpus can no longer hide a broken locator.
+
 ## [0.6.0]
 
 Adds `dev.stxt.discovery`, the reference port of STXT-DISCOVERY-SPEC, aligned with the

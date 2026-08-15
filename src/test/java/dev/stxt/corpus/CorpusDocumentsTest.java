@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -34,7 +33,6 @@ public class CorpusDocumentsTest {
 	@TestFactory
 	List<DynamicTest> validatesEachDocument() {
 		File root = Corpus.findStxtWeb();
-		Assumptions.assumeTrue(root != null, "requires the sibling stxt-web project (use STXT_WEB=/path to point at it)");
 
 		Corpus.CorpusLoader loader = Corpus.loadLoader(root);
 		List<File> files = Corpus.corpusFiles(root, Corpus.DOC_DIRS);
@@ -79,7 +77,6 @@ public class CorpusDocumentsTest {
 	@TestFactory
 	List<DynamicTest> schemaAndTemplateValidateAlike() {
 		File root = Corpus.findStxtWeb();
-		Assumptions.assumeTrue(root != null, "requires the sibling stxt-web project (use STXT_WEB=/path to point at it)");
 
 		Corpus.CorpusLoader fromSchemas = Corpus.loadLoader(root, List.of(".stxt/schemas"));
 		Corpus.CorpusLoader fromTemplates = Corpus.loadLoader(root, List.of("examples/definitions/templates"));

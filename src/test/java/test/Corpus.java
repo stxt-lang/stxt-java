@@ -21,8 +21,11 @@ import dev.stxt.utils.FileUtils;
  *
  * The corpus is deliberately not copied into this repository: stxt-web is the normative
  * source of the language and the tests must fail when the implementation drifts away from
- * the real documents, not from a frozen copy. If the sibling project is missing, the tests
- * are skipped (see `Assumptions.assumeTrue` in each suite) so a standalone clone still builds.
+ * the real documents, not from a frozen copy.
+ *
+ * The corpus is mandatory: if the sibling project is missing, {@link #findStxtWeb()} throws
+ * and every corpus suite fails. They are never skipped: a silently skipped corpus once hid a
+ * broken locator for days in a sibling port, so "no corpus" is an error, not an assumption.
  */
 public final class Corpus {
 	private Corpus() {}
@@ -36,21 +39,28 @@ public final class Corpus {
 	/**
 	 * Locates `stxt-web`. It can be forced through the STXT_WEB environment variable; by
 	 * default it is looked up as a sibling project (`../stxt-web` from the root of this repo).
+	 *
+	 * @return the root of stxt-web, never null.
+	 * @throws IllegalStateException if it cannot be found: the corpus is mandatory.
 	 */
 	public static File findStxtWeb() {
 		List<String> candidates = new ArrayList<>();
 		candidates.add(System.getenv("STXT_WEB"));
 		candidates.add(".." + File.separator + "stxt-web");
 
+		List<String> tried = new ArrayList<>();
 		for (String candidate: candidates) {
 			if (candidate == null) continue;
 
 			File root = new File(candidate);
+			tried.add(root.getAbsolutePath());
 			if (new File(root, ".stxt").isDirectory())
 				return root;
 		}
 
-		return null;
+		throw new IllegalStateException(
+			"The corpus of the sibling project stxt-web is required and was not found. Tried: "
+			+ tried + ". Clone stxt-lang/stxt-web next to this repository or set STXT_WEB=/path/to/stxt-web.");
 	}
 
 	// Every .stxt under a directory, recursively and in a stable order.
