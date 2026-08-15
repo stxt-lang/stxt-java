@@ -4,7 +4,6 @@ import java.util.List;
 
 import dev.stxt.Node;
 import dev.stxt.Parser;
-import dev.stxt.exceptions.ResourceNotFoundException;
 import dev.stxt.exceptions.SchemaException;
 import dev.stxt.schema.Schema;
 import dev.stxt.schema.SchemaProvider;
@@ -37,10 +36,16 @@ Template (@stxt.template): @stxt.template
 		meta = metaSchema;
 	}
 	
+	/**
+	 * Serves the meta-template. Follows the {@link SchemaProvider} contract: providers never throw
+	 * "not found", so any namespace other than {@code @stxt.template} yields {@code null}.
+	 *
+	 * @return the meta-schema of the template language, or {@code null} for any other namespace.
+	 */
 	@Override
 	public Schema getSchema(String namespace) {
 		if (!"@stxt.template".equals(namespace))
-			throw new ResourceNotFoundException("@stxt.template", namespace);
+			return null;
 
 	    if (meta == null)
 	        throw new SchemaException("META_SCHEMA_NOT_AVAILABLE", "Meta schema not available");

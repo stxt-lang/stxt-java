@@ -5,7 +5,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import dev.stxt.exceptions.ResourceNotFoundException;
 import dev.stxt.exceptions.SchemaException;
 
 /** {@link SchemaProvider} that wraps a list of providers, trying them in order and caching the result per namespace. */
@@ -32,21 +31,17 @@ public final class SchemaProviderCache implements SchemaProvider {
 		if (cached != null)
 			return cached;
 
-		// Load the schema
+		// Ask the providers in order; per the SchemaProvider contract none of them throws "not found"
 		Schema result = null;
-		
 		for (SchemaProvider provider: providers) {
-			try {
-				result = provider.getSchema(namespace);
-				if (result != null) break;
-			}
-			catch (ResourceNotFoundException e) {
-			}
+			result = provider.getSchema(namespace);
+			if (result != null) break;
 		}
-		
+
+		// No provider has it: null, so that SchemaValidator reports SCHEMA_NOT_FOUND (misses are not cached)
 		if (result == null)
-			throw new SchemaException("NOT_FOUND_SCHEMA", "Not found schema " + namespace);
-		
+			return null;
+
 		// Put it in the cache
 		cache.put(namespace, result);
 		return result;

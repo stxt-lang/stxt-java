@@ -4,6 +4,7 @@ import java.util.List;
 
 import dev.stxt.Node;
 import dev.stxt.Parser;
+import dev.stxt.exceptions.ResourceNotFoundException;
 import dev.stxt.exceptions.SchemaException;
 import dev.stxt.resources.ResourcesLoader;
 import dev.stxt.schema.Schema;
@@ -25,7 +26,14 @@ public class TemplateSchemaProvider implements SchemaProvider {
 	
 	@Override
 	public Schema getSchema(String namespace) {
-		String template = loader.retrieve("@stxt.template", namespace);
+		// A missing resource is "no template for this namespace", not an error (SchemaProvider contract)
+		String template;
+		try {
+			template = loader.retrieve("@stxt.template", namespace);
+		}
+		catch (ResourceNotFoundException e) {
+			return null;
+		}
 
 		// Create the parser
 		Parser parser = new Parser();

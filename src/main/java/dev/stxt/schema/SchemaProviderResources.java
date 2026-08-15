@@ -5,6 +5,7 @@ import java.util.Locale;
 
 import dev.stxt.Node;
 import dev.stxt.Parser;
+import dev.stxt.exceptions.ResourceNotFoundException;
 import dev.stxt.exceptions.SchemaException;
 import dev.stxt.resources.ResourcesLoader;
 
@@ -31,8 +32,14 @@ public final class SchemaProviderResources implements SchemaProvider {
 
 		namespace = namespace.toLowerCase(Locale.ROOT);
 
-		// Load the schema
-		String textSchema = resourcesLoader.retrieve(Schema.SCHEMA_NAMESPACE, namespace);
+		// Load the schema; a missing resource is "no schema for this namespace", not an error
+		String textSchema;
+		try {
+			textSchema = resourcesLoader.retrieve(Schema.SCHEMA_NAMESPACE, namespace);
+		}
+		catch (ResourceNotFoundException e) {
+			return null;
+		}
 		Parser parser = new Parser();
 		parser.registerValidator(schemaValidator);
 		List<Node> nodes = parser.parse(textSchema);

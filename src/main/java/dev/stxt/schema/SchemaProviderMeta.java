@@ -4,7 +4,6 @@ import java.util.List;
 
 import dev.stxt.Node;
 import dev.stxt.Parser;
-import dev.stxt.exceptions.ResourceNotFoundException;
 import dev.stxt.exceptions.SchemaException;
 
 /**
@@ -90,9 +89,16 @@ Schema (@stxt.schema): @stxt.schema
 		meta = metaSchema;
 	}
 
+	/**
+	 * Serves the meta-schema. Follows the {@link SchemaProvider} contract: providers never throw
+	 * "not found", so any namespace other than {@code @stxt.schema} yields {@code null} and only
+	 * {@link SchemaValidator} reports {@code SCHEMA_NOT_FOUND}.
+	 *
+	 * @return the meta-schema for {@code @stxt.schema}, or {@code null} for any other namespace.
+	 */
 	public Schema getSchema(String namespace) {
 	    if (!Schema.SCHEMA_NAMESPACE.equals(namespace))
-	        throw new ResourceNotFoundException(Schema.SCHEMA_NAMESPACE, namespace);
+	        return null;
 
 	    if (meta == null)
 	        throw new SchemaException("META_SCHEMA_NOT_AVAILABLE", "Meta schema not available");

@@ -6,6 +6,15 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+- `SchemaProvider` contract: providers never throw "not found". `SchemaProviderMeta` and
+  `MetaTemplateSchemaProvider` return `null` for any namespace but their own (they used to throw
+  `RESOURCE_NOT_FOUND`), `SchemaProviderResources` and `TemplateSchemaProvider` return `null`
+  when the `ResourcesLoader` has no such resource, and `SchemaProviderCache` returns `null` when
+  no member has the namespace (it used to throw a `NOT_FOUND_SCHEMA` `SchemaException`). The
+  only code for "no schema" is now `SCHEMA_NOT_FOUND`, reported once by `SchemaValidator` as a
+  finding; through the `STXT.parser(loader)` facade an unknown namespace used to surface as
+  `VALIDATION_ERROR`. New `SchemaProviderContractTest`.
+
 - Tests: the `stxt-web` corpus is now mandatory. `Corpus.findStxtWeb()` throws when the sibling
   project (or `STXT_WEB`) cannot be found, so the `dev.stxt.corpus` suites fail instead of being
   skipped through `Assumptions`. A silently skipped corpus can no longer hide a broken locator.
