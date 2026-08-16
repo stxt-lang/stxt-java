@@ -38,12 +38,12 @@ Requires **Java 17** or later.
 <dependency>
     <groupId>dev.stxt</groupId>
     <artifactId>stxt-core</artifactId>
-    <version>0.6.0</version>
+    <version>0.7.0</version>
 </dependency>
 ```
 
 ```groovy
-implementation 'dev.stxt:stxt-core:0.6.0'
+implementation 'dev.stxt:stxt-core:0.7.0'
 ```
 
 The library has **no runtime dependencies**. Under JPMS it is an automatic module named `dev.stxt`.
@@ -81,14 +81,52 @@ Node article = result.getNodes().get(0);
 
 System.out.println(article.getName());                  // "Article"
 System.out.println(article.getNamespace());             // "blog.post"
-System.out.println(article.getChild("Title").getValue()); // "Getting started with STXT"
+System.out.println(article.getChild("Title").getText()); // "Getting started with STXT"
 ```
 
 Use `parser.parse(text)` instead if you prefer an exception (`ParseException`) on the first error. Both have a file-based counterpart: `parseFile(File)` and `parseResultFile(File)`.
 
 A document may have **several root nodes**, which is why both entry points return a list.
 
-`getChild(String)` returns `null` when there is no such child, and node lookup is by **canonical name**: `getChild("Título")` and `getChild("titulo")` find the same node. The tree is not frozen after parsing — treat it as read-only.
+`getChild(String)` returns `null` when there is no such child, and node lookup is by **canonical name**: `getChild("Título")` and `getChild("titulo")` find the same node.
+
+## Working with the tree
+
+`Node` is a sealed class with exactly two forms: `InlineNode` (`Name: value`, an optional value and children) and `TextNode` (`Name >>`, literal text lines, no children). What they share lives in `Node`: name and canonical name, declared and effective namespace, source line, parent, child lookups and `getText()` — the value of an inline node or the joined lines of a text node.
+
+Trees are mutable and keep their own integrity: every node knows its parent, `addChild` links both ends and refuses a node that already has one, and `removeChild` / `detach()` undo it. Levels are derived from the chain of parents; the source line is only set by the parser.
+
+```java
+import dev.stxt.InlineNode;
+import dev.stxt.Node;
+import dev.stxt.TextNode;
+
+InlineNode email = new InlineNode("Email", "com.example.docs", "Weekly report");
+email.addInlineNode("From", "ana@example.com");
+InlineNode to = email.addInlineNode("To");
+to.addInlineNode("Address", "bob@example.com");
+TextNode body = email.addTextNode("Body", "Hi Bob,\n\nSee attached.");
+
+body.getParent() == email;          // true
+body.getLevel();                    // 1
+to.getNamespace();                  // "com.example.docs", inherited
+to.getDeclaredNamespace();          // "" — it declares none
+
+// Reorganise: move "To" to the front
+to.detach();
+email.addChild(0, to);
+
+// Edit in place
+email.setNamespace("com.example.mail");   // the whole inheriting subtree follows
+body.setText("Hi Bob,\n\nSee the new attachment.");
+
+for (Node child : email.getChildren()) {
+    if (child instanceof InlineNode inline) System.out.println(inline.getValue());
+    if (child instanceof TextNode text)     System.out.println(text.getTextLines());
+}
+```
+
+Overloads with two strings always take the second one as the *content* (value or text); the namespace only appears in the three-argument forms. Adding a node that already has a parent throws `NODE_ALREADY_ATTACHED`; adding an ancestor throws `NODE_CYCLE`.
 
 ## Validating against a schema
 
@@ -199,7 +237,8 @@ Every failure is an unchecked `dev.stxt.exceptions.STXTException` carrying an up
 | `ParseException` | the syntax is wrong; adds `getLine()` |
 | `ValidationException` | the document breaks its schema (type, cardinality, undeclared child) |
 | `SchemaException` | the schema or template itself is malformed |
-| `ResourceNotFoundException` | no schema or template exists for a namespace |
+| `ResourceNotFoundException` | a `ResourcesLoader` has no such resource (schema providers turn it into a `SCHEMA_NOT_FOUND` finding) |
+| `STXTException` (base) | tree integrity is broken (`NODE_ALREADY_ATTACHED`, `NODE_CYCLE`), an ambiguous lookup (`AMBIGUOUS_CHILD`), and other runtime failures |
 | `STXTIOException` | reading a file failed |
 
 ## License

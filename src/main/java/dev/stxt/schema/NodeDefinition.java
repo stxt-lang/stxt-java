@@ -40,6 +40,14 @@ public class NodeDefinition {
 		return name;
 	}
 	/** {@return the canonical name of the node} */
+	public String getCanonicalName() {
+		return normalizedName;
+	}
+	/**
+	 * @return the canonical name of the node.
+	 * @deprecated since 0.7.0, use {@link #getCanonicalName()}.
+	 */
+	@Deprecated
 	public String getNormalizedName() {
 		return normalizedName;
 	}

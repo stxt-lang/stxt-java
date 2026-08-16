@@ -6,6 +6,48 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+## [0.7.0]
+
+**Breaking: a new node model.** `Node` is now a sealed abstract class with two forms,
+`InlineNode` (`Name: value`) and `TextNode` (`Name >>`), designed from real use of the API. Only
+the in-memory model changes: the language, STXT-TREE-SPEC and every error code are the same.
+
+- **Two forms.** `InlineNode` has `getValue()`/`setValue()`, children and the factories; `TextNode`
+  has `getTextLines()`, `setText()`, `setTextLines()`, `addTextLine()`, `clearText()` and no
+  children. `Node` keeps what is common: name, canonical name, namespaces, line, parent, child
+  lookups (`getChildren()` is empty for a text node, so tree walks need no distinction),
+  `isTextNode()` and `getText()`. Both concrete classes are `final`.
+- **Parent links with integrity.** `getParent()`, `addChild(node)`, `addChild(index, node)`,
+  `removeChild(node)` and `detach()`. `addChild` links both ends and refuses a node that already
+  has a parent (`NODE_ALREADY_ATTACHED`) or that is an ancestor (`NODE_CYCLE`); `removeChild`
+  compares by identity. The parser attaches each node when it opens it, so observers already see
+  its parent, effective namespace and level in `onCreate`.
+- **Declared vs effective namespace.** A node stores the namespace it *declares*
+  (`getDeclaredNamespace()`, `setNamespace()`); `getNamespace()` is the effective one, resolved
+  through the parent chain. Changing a declared namespace changes the whole inheriting subtree,
+  and so does moving a subtree. `NodeWriter` writes the namespace where it is declared, exactly
+  as in the source; the canonical tree is unchanged.
+- **Level is derived** from the chain of parents (`getLevel()`, 0 for a root); it is no longer a
+  constructor argument.
+- **Line is optional and mutable**: `getLine()`/`setLine()`, `Node.NO_LINE` when unknown. The
+  parser sets it; code building trees usually does not.
+- **Everything is mutable**: `setName()` (revalidated, canonical name recomputed),
+  `setNamespace()` (validated), `setValue()`, and the text setters above.
+- **Factories** on `InlineNode`: `addInlineNode(name[, value])`, `addInlineNode(name, ns, value)`,
+  `addTextNode(name[, text])`, `addTextNode(name, ns, text)`, `addTextNode(name, ns, lines)`. With
+  two strings the second one is always the content; the namespace only exists in the
+  three-argument forms.
+- **Renamed** `getNormalizedName()` → `getCanonicalName()` on `Node`, `NodeDefinition` and
+  `ChildDefinition` ("canonical name" is the term of the specifications). The old getters remain
+  as `@Deprecated` aliases and will be removed in a later version.
+- **Removed**: the `Node` constructors (use `InlineNode`/`TextNode`), the `level` argument, and
+  `getValue()`/`getTextLines()`/`addTextLine()` on the base class (use `getText()`, or the concrete
+  form). `getTextLines()` and `getChildren()` are now read-only views.
+- New `NodeTest` (19 cases); the historical `docs_json/` fixtures are compared through a
+  test-side serializer that keeps their pre-0.7 shape.
+
+## [0.6.1]
+
 - `SchemaProvider` contract: providers never throw "not found". `SchemaProviderMeta` and
   `MetaTemplateSchemaProvider` return `null` for any namespace but their own (they used to throw
   `RESOURCE_NOT_FOUND`), `SchemaProviderResources` and `TemplateSchemaProvider` return `null`

@@ -66,9 +66,9 @@ public class SchemaValidator implements Validator {
 	public List<ValidationException> validateAgainstSchema(Node node, Schema sch) {
 		List<ValidationException> errors = new ArrayList<>();
 
-	    NodeDefinition schemaNode = sch.getNodeDefinition(node.getNormalizedName());
+	    NodeDefinition schemaNode = sch.getNodeDefinition(node.getCanonicalName());
 	    if (schemaNode == null) {
-	        String error = "NOT EXIST NODE " + node.getNormalizedName() + " for namespace " + sch.getNamespace();
+	        String error = "NOT EXIST NODE " + node.getCanonicalName() + " for namespace " + sch.getNamespace();
 	        errors.add(new ValidationException(node.getLine(), "NODE_NOT_EXIST_IN_SCHEMA", error));
 	        return errors;
 	    }

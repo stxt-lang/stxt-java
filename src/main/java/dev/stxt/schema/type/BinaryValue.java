@@ -1,6 +1,7 @@
 package dev.stxt.schema.type;
 
 import dev.stxt.Node;
+import dev.stxt.TextNode;
 
 /**
  * STXT-SCHEMA-SPEC 9.5: effective value for the INLINE/BLOCK binary types
@@ -14,11 +15,11 @@ final class BinaryValue {
 	}
 
 	static String get(Node n) {
-		if (!n.isTextNode())
-			return n.getValue();
+		if (!(n instanceof TextNode text))
+			return n.getText();
 
 		StringBuilder sb = new StringBuilder();
-		for (String line : n.getTextLines())
+		for (String line : text.getTextLines())
 			sb.append(line.trim());
 		return sb.toString();
 	}

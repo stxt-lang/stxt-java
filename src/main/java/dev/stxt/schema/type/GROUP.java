@@ -21,7 +21,7 @@ public final class GROUP implements Type {
 	@Override
     public void validate(NodeDefinition ndef, Node n) {
 		// NONE value form (STXT-SCHEMA-SPEC 9.2): neither an inline value nor a '>>' block
-		if (!n.getValue().isEmpty() || n.isTextNode()) {
+		if (n.isTextNode() || !n.getText().isEmpty()) {
 			throw new ValidationException(n.getLine(), "INVALID_VALUE", "Node '" + n.getName() + "' has to be empty");
 		}
 	}

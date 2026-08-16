@@ -20,12 +20,13 @@ public final class ENUM implements Type {
     
 	@Override
     public void validate(NodeDefinition ndef, Node n) {
-		if (n.getTextLines().size() > 0) {
+		if (n.isTextNode()) {
 			throw new ValidationException(n.getLine(), "NOT_ALLOWED_TEXT",
 					"Not allowed text in node " + n.getQualifiedName());
 		}
 		
-		if (!ndef.getValues().contains(n.getValue()))
-		    throw new ValidationException(n.getLine(), "INVALID_VALUE", "The value '" + n.getValue() + "' not allowed. Only: " + ndef.getValues());
+		String value = n.getText();
+		if (!ndef.getValues().contains(value))
+		    throw new ValidationException(n.getLine(), "INVALID_VALUE", "The value '" + value + "' not allowed. Only: " + ndef.getValues());
 	}
 }

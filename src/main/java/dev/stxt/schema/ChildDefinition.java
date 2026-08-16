@@ -39,6 +39,14 @@ public class ChildDefinition {
 	}
 
 	/** {@return the canonical name of the expected child} */
+	public String getCanonicalName() {
+		return normalizedName;
+	}
+	/**
+	 * @return the canonical name of the expected child.
+	 * @deprecated since 0.7.0, use {@link #getCanonicalName()}.
+	 */
+	@Deprecated
 	public String getNormalizedName() {
 		return normalizedName;
 	}

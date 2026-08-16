@@ -136,7 +136,7 @@ public class Parser {
 
 		// Close every pending node at EOF (skipped if we already bailed out earlier)
 		if (!(stopOnFirstError && result.hasErrors()))
-			closeToLevel(stack, documents, 0, result, stopOnFirstError);
+			closeToLevel(stack, 0, result, stopOnFirstError);
 
 		// Add the root nodes to the result
 		for (Node doc : documents)
@@ -148,8 +148,9 @@ public class Parser {
 	private void processLine(String line, int lineNumber, ArrayDeque<Node> stack, List<Node> documents, ParseResult result, boolean stopOnFirstError) {
 		try {
 			Node lastNode            = stack.isEmpty() ? null : stack.peek();
-			int lastLevel           = lastNode != null ? lastNode.getLevel(): 0; 
-			boolean lastNodeText    = lastNode != null && lastNode.isTextNode();
+			// The stack holds the open nodes, one per level: its size is the level of the next line's parent
+			int lastLevel           = lastNode != null ? stack.size() - 1 : 0;
+			boolean lastNodeText    = lastNode instanceof TextNode;
 
 			// Parse the line
 			LineIndent lineIndent = LineIndentParser.parseLine(line, lastNodeText, lastLevel, lineNumber);
@@ -161,19 +162,23 @@ public class Parser {
 			// If we are inside a text node, and the level says it is still text,
 			// append a text line instead of creating a node.
 			if (lastNodeText && currentLevel > lastLevel) {
-				lastNode.addTextLine(lineIndent.lineWithoutIndent);
+				((TextNode) lastNode).addTextLine(lineIndent.lineWithoutIndent);
 				return;
 			}
 
-			// Close nodes down to the current level (this "finishes" them and attaches them to their parent/documents)
-			closeToLevel(stack, documents, currentLevel, result, stopOnFirstError);
+			// Close nodes down to the current level (this "finishes" them: observers and validators run)
+			closeToLevel(stack, currentLevel, result, stopOnFirstError);
 			if (stopOnFirstError && result.hasErrors())
 				return;
 
-			// Create the new node and leave it "open" on the stack (do NOT attach it yet)
+			// Create the new node, attach it to its parent (or to the documents if it is a root)
+			// and leave it "open" on the stack. Attaching links both ends: the node already knows
+			// its parent, and so its effective namespace and its level, when the observers see it.
 			Node parent = stack.isEmpty() ? null : stack.peek();
-			Node node = createNode(lineIndent, lineNumber, currentLevel, parent);
-			
+			Node node = createNode(lineIndent, lineNumber);
+			if (parent == null)		documents.add(node);
+			else					((InlineNode) parent).addChild(node);
+
 			// Hand it over to the observers
 			observeNode(node);
 
@@ -186,20 +191,17 @@ public class Parser {
 		}
 	}
 
-	private void closeToLevel(ArrayDeque<Node> stack, List<Node> documents, int targetLevel, ParseResult result, boolean stopOnFirstError) {
+	private void closeToLevel(ArrayDeque<Node> stack, int targetLevel, ParseResult result, boolean stopOnFirstError) {
 		while (stack.size() > targetLevel) {
 			Node completed = stack.pop();
 			finishNode(completed, result);
-
-			if (stack.isEmpty())	documents.add(completed);
-			else					stack.peek().addChild(completed);
 
 			if (stopOnFirstError && result.hasErrors())
 				return;
 		}
 	}
 
-	private Node createNode(LineIndent lineIndent, int lineNumber, int level, Node parent) {
+	private Node createNode(LineIndent lineIndent, int lineNumber) {
 		final String line = lineIndent.lineWithoutIndent;
 		String name = null;
 		String value = null;
@@ -226,8 +228,9 @@ public class Parser {
 		if (textNode &&  !value.trim().isEmpty())
 				throw new ParseException(lineNumber, "INLINE_VALUE_NOT_VALID", "Line not valid: " + line);
 
-		// Default namespace: inherited from the parent
-		NameNamespace nn = NameNamespaceParser.parse(name, parent != null ? parent.getNamespace(): null, lineNumber, line);
+		// The namespace the line declares, if any; inheritance from the parent is resolved by
+		// the node itself through its parent link (Node.getNamespace())
+		NameNamespace nn = NameNamespaceParser.parse(name, null, lineNumber, line);
 		name = nn.getName();
 		String namespace = nn.getNamespace();
 		
@@ -236,7 +239,8 @@ public class Parser {
 			throw new ParseException(lineNumber, "INVALID_LINE", "Line not valid: " + line);
 
 		// Create the node
-		return new Node(lineNumber, level, name, namespace, textNode, value);
+		if (textNode)	return new TextNode(name, namespace, null, lineNumber);
+		else			return new InlineNode(name, namespace, value, lineNumber);
 	}
 
 	// -------------------------------------------

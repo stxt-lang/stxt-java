@@ -133,7 +133,7 @@ public final class Corpus {
 
 			Node root = nodes.get(0);
 			String kind = root.getNamespace();
-			String target = root.getValue();
+			String target = root.getText();
 
 			if (!"@stxt.schema".equals(kind) && !"@stxt.template".equals(kind))
 				throw new IllegalStateException("Not a schema or template: " + file + " (namespace " + kind + ")");

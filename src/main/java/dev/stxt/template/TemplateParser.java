@@ -26,7 +26,7 @@ public class TemplateParser {
 	public static Schema transformNodeToSchema(Node node) {
 		
 		// Set the namespace
-		Schema result = new Schema(node.getValue(), node.getLine());
+		Schema result = new Schema(node.getText(), node.getLine());
 		
 		// Look for the structure node
 		Node structure = node.getChild("structure");
@@ -74,7 +74,7 @@ public class TemplateParser {
         }           
         
 		// Look at the data
-		ChildLine cl = ChildLineParser.parse(node.getValue(), node.getLine() + offset);
+		ChildLine cl = ChildLineParser.parse(node.getText(), node.getLine() + offset);
 		
 		if (!namespace.equals(schema.getNamespace())) { 
 			// STXT-TEMPLATE-SPEC 14.15: a cross-namespace node may only declare cardinality;
@@ -131,11 +131,11 @@ public class TemplateParser {
 			String reference = type.substring(1).trim();
 
 			// STXT-TEMPLATE-SPEC 14.13: a reference and an explicit type cannot be declared at once
-			String explicitType = referenceType(reference, node.getNormalizedName());
+			String explicitType = referenceType(reference, node.getCanonicalName());
 			if (explicitType != null)
 				throw new ValidationException(node.getLine() + offset, "REFERENCE_WITH_TYPE_NOT_ALLOWED", "Reference '@" + node.getName() + "' can not declare a type: " + explicitType);
 
-			if (!StringUtils.normalize(reference).equals(node.getNormalizedName()))
+			if (!StringUtils.normalize(reference).equals(node.getCanonicalName()))
 				throw new ValidationException(node.getLine() + offset, "NODE_REFERENCE_NOT_VALID", "Reference must be '" + "@" + node.getName() + "', not '" + reference + "'");
 			
 			// STXT-TEMPLATE-SPEC 6.4: a @Node Name reference MUST NOT redefine ENUM values nor children
@@ -157,7 +157,7 @@ public class TemplateParser {
 		
 		// Add the children
 		for (Node child: childrenNode) {
-			cl = ChildLineParser.parse(child.getValue(), child.getLine() + offset);
+			cl = ChildLineParser.parse(child.getText(), child.getLine() + offset);
 			
 			String childName = child.getName();
 			String childNamespace = child.getNamespace();

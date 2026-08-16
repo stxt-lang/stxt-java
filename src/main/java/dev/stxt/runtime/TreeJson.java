@@ -2,7 +2,9 @@ package dev.stxt.runtime;
 
 import java.util.List;
 
+import dev.stxt.InlineNode;
 import dev.stxt.Node;
+import dev.stxt.TextNode;
 
 /**
  * Serializes parsed STXT nodes to the canonical JSON tree defined by STXT-TREE-SPEC.
@@ -59,14 +61,14 @@ public final class TreeJson {
     private static void appendNode(StringBuilder out, Node node, int depth) {
         out.append("{\n");
         appendMember(out, depth + 1, "name", node.getName(), true);
-        appendMember(out, depth + 1, "canonicalName", node.getNormalizedName(), true);
+        appendMember(out, depth + 1, "canonicalName", node.getCanonicalName(), true);
         appendMember(out, depth + 1, "namespace", node.getNamespace(), true);
         appendMember(out, depth + 1, "form", node.isTextNode() ? "block" : "inline", true);
 
-        if (node.isTextNode()) {
+        if (node instanceof TextNode text) {
             indent(out, depth + 1);
             out.append("\"lines\": ");
-            appendStrings(out, node.getTextLines(), depth + 1);
+            appendStrings(out, text.getTextLines(), depth + 1);
             out.append('\n');
             indent(out, depth);
             out.append('}');
@@ -75,7 +77,7 @@ public final class TreeJson {
 
         indent(out, depth + 1);
         out.append("\"value\": ");
-        appendString(out, node.getValue());
+        appendString(out, ((InlineNode) node).getValue());
         out.append(",\n");
 
         indent(out, depth + 1);

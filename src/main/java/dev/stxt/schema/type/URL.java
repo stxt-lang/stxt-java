@@ -29,7 +29,7 @@ public final class URL implements Type {
 					"Not allowed text in node " + n.getQualifiedName());
 		}
 
-		String url = n.getValue();
+		String url = n.getText();
 		try {
 			URI uri = new URI(url);
 			boolean ok = uri.getScheme() != null && uri.getHost() != null;

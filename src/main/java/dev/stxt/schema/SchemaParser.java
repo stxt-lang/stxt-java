@@ -26,7 +26,7 @@ public class SchemaParser {
 	 */
 	public static Schema transformNodeToSchema(Node node) {
 		// Node name
-		String nodeName = node.getNormalizedName();
+		String nodeName = node.getCanonicalName();
 		String namespaceSchema = node.getNamespace();
 
 		// Get the name and the namespace
@@ -34,7 +34,7 @@ public class SchemaParser {
 			throw new SchemaException("NOT_STXT_SCHEMA",
 					"Expected schema(" + Schema.SCHEMA_NAMESPACE + ") but got " + nodeName + "(" + namespaceSchema + ")");
 		}
-		Schema schema = new Schema(node.getValue(), node.getLine());
+		Schema schema = new Schema(node.getText(), node.getLine());
 
 		// For validation
 		Set<String> allNames = new HashSet<String>(); // To check that the children exist
@@ -43,7 +43,7 @@ public class SchemaParser {
 		for (Node n : node.getChildren("node")) {
 			NodeDefinition schNode = createFrom(n, schema.getNamespace());
 			schema.addNodeDefinition(schNode);
-			allNames.add(schNode.getNormalizedName());
+			allNames.add(schNode.getCanonicalName());
 		}
 
 		// Check that every name is defined
@@ -51,9 +51,9 @@ public class SchemaParser {
 			for (ChildDefinition schChild : schNode.getChildren().values()) {
 				if (schChild.getNamespace().equals(schema.getNamespace())) // We only check the ones in the same namespace
 				{
-					if (!allNames.contains(schChild.getNormalizedName()))
+					if (!allNames.contains(schChild.getCanonicalName()))
 						throw new ValidationException(0, "CHILD_NOT_DEFINED",
-								"Child " + schChild.getNormalizedName() + " not defined in " + schema.getNamespace());
+								"Child " + schChild.getCanonicalName() + " not defined in " + schema.getNamespace());
 				}
 			}
 		}
@@ -62,10 +62,10 @@ public class SchemaParser {
 	}
 
 	private static NodeDefinition createFrom(Node n, String namespace) {
-		String name = n.getValue();
+		String name = n.getText();
 		String type = "INLINE";
 		Node typeNode = n.getChild("type");
-		if (typeNode != null) type = typeNode.getValue();
+		if (typeNode != null) type = typeNode.getText();
 
 		NodeDefinition result = new NodeDefinition(name, type, n.getLine());
 		
@@ -96,7 +96,7 @@ public class SchemaParser {
 		    Node valuesNode = values.get(0);
 		    values = valuesNode.getChildren("value");
 		    for (Node value: values)
-		        result.addValue(value.getValue(), value.getLine());
+		        result.addValue(value.getText(), value.getLine());
 		}
 		
 		// Look at the enum
@@ -108,7 +108,7 @@ public class SchemaParser {
 
 	private static void putChildToSchemaNode(NodeDefinition schemaNode, Node child, String defNamespace) {
 		// Get the name and the namespace
-		NameNamespace ns = NameNamespaceParser.parse(child.getValue(), defNamespace, child.getLine(), child.getValue());
+		NameNamespace ns = NameNamespaceParser.parse(child.getText(), defNamespace, child.getLine(), child.getText());
 		String name = ns.getName();
 		String namespace = ns.getNamespace();
 		
@@ -128,9 +128,9 @@ public class SchemaParser {
 		if (n == null) return null;
 		
 		try	{
-			return Integer.parseInt(n.getValue());
+			return Integer.parseInt(n.getText());
 		} catch (Exception e) {
-			throw new ParseException(node.getLine(), "INVALID_INTEGER", "Integer not valid: " + n.getValue());
+			throw new ParseException(node.getLine(), "INVALID_INTEGER", "Integer not valid: " + n.getText());
 		}
 	}
 }

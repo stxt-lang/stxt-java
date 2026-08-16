@@ -20,7 +20,7 @@ public final class INLINE implements Type {
 
     @Override
     public void validate(NodeDefinition ndef, Node n) {
-		if (n.getTextLines().size() > 0) {
+		if (n.isTextNode()) {
 			throw new ValidationException(n.getLine(), "NOT_ALLOWED_TEXT",
 					"Not allowed text in node " + n.getQualifiedName());
 		}

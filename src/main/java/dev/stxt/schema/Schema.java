@@ -49,7 +49,7 @@ public class Schema {
 	 * @throws dev.stxt.exceptions.SchemaException if there already was a node definition with the same name.
 	 */
 	public void addNodeDefinition(NodeDefinition nodeDefinition) {
-		String qname = nodeDefinition.getNormalizedName();
+		String qname = nodeDefinition.getCanonicalName();
 		if (nodes.containsKey(qname)) throw new SchemaException("NODE_DEF_ALREADY_DEFINED", "Exists a previous node definition with: " + qname);
 		nodes.put(qname, nodeDefinition);
 	}
