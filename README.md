@@ -53,6 +53,7 @@ The library has **no runtime dependencies**. Under JPMS it is an automatic modul
 ```java
 import java.util.List;
 
+import dev.stxt.InlineNode;
 import dev.stxt.Node;
 import dev.stxt.ParseResult;
 import dev.stxt.Parser;
@@ -81,7 +82,8 @@ Node article = result.getNodes().get(0);
 
 System.out.println(article.getName());                  // "Article"
 System.out.println(article.getNamespace());             // "blog.post"
-System.out.println(article.getChild("Title").getText()); // "Getting started with STXT"
+if (article instanceof InlineNode inline)
+    System.out.println(inline.getChild("Title").getText()); // "Getting started with STXT"
 ```
 
 Use `parser.parse(text)` instead if you prefer an exception (`ParseException`) on the first error. Both have a file-based counterpart: `parseFile(File)` and `parseResultFile(File)`.
@@ -92,7 +94,7 @@ A document may have **several root nodes**, which is why both entry points retur
 
 ## Working with the tree
 
-`Node` is a sealed class with exactly two forms: `InlineNode` (`Name: value`, an optional value and children) and `TextNode` (`Name >>`, literal text lines, no children). What they share lives in `Node`: name and canonical name, declared and effective namespace, source line, parent, child lookups and `getText()` — the value of an inline node or the joined lines of a text node.
+`Node` is a sealed class with exactly two forms, and each one owns only what is really its own: `InlineNode` (`Name: value`) has the optional value, the children and the child lookups (`getChildren()`, `getChild(name)`, `getChildren(name)`); `TextNode` (`Name >>`) has the literal text lines and nothing else. What they share lives in `Node`: name and canonical name, declared and effective namespace, source line, parent (always an `InlineNode`) and `getText()` — the value of an inline node or the joined lines of a text node. Walking a tree therefore asks for the form (`instanceof InlineNode inline`), the same way the canonical tree of STXT-TREE-SPEC has `children` only for inline nodes.
 
 Trees are mutable and keep their own integrity: every node knows its parent, `addChild` links both ends and refuses a node that already has one, and `removeChild` / `detach()` undo it. Levels are derived from the chain of parents; the source line is only set by the parser.
 
@@ -121,7 +123,7 @@ email.setNamespace("com.example.mail");   // the whole inheriting subtree follow
 body.setText("Hi Bob,\n\nSee the new attachment.");
 
 for (Node child : email.getChildren()) {
-    if (child instanceof InlineNode inline) System.out.println(inline.getValue());
+    if (child instanceof InlineNode inline) System.out.println(inline.getValue() + " " + inline.getChildren().size());
     if (child instanceof TextNode text)     System.out.println(text.getTextLines());
 }
 ```

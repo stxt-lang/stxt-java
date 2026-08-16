@@ -6,6 +6,7 @@ import java.util.Set;
 
 import dev.stxt.NameNamespace;
 import dev.stxt.NameNamespaceParser;
+import dev.stxt.InlineNode;
 import dev.stxt.Node;
 import dev.stxt.exceptions.ParseException;
 import dev.stxt.exceptions.STXTException;
@@ -34,13 +35,14 @@ public class SchemaParser {
 			throw new SchemaException("NOT_STXT_SCHEMA",
 					"Expected schema(" + Schema.SCHEMA_NAMESPACE + ") but got " + nodeName + "(" + namespaceSchema + ")");
 		}
-		Schema schema = new Schema(node.getText(), node.getLine());
+		InlineNode root = inline(node);
+		Schema schema = new Schema(root.getValue(), root.getLine());
 
 		// For validation
 		Set<String> allNames = new HashSet<String>(); // To check that the children exist
 
 		// Get the nodes
-		for (Node n : node.getChildren("node")) {
+		for (Node n : root.getChildren("node")) {
 			NodeDefinition schNode = createFrom(n, schema.getNamespace());
 			schema.addNodeDefinition(schNode);
 			allNames.add(schNode.getCanonicalName());
@@ -61,7 +63,15 @@ public class SchemaParser {
 		return schema;
 	}
 
-	private static NodeDefinition createFrom(Node n, String namespace) {
+	// The schema language is written with inline nodes; anything else is not a schema
+	private static InlineNode inline(Node node) {
+		if (node instanceof InlineNode inline)
+			return inline;
+		throw new SchemaException("INVALID_SCHEMA", "Node '" + node.getName() + "' must be inline in a schema (line " + node.getLine() + ")");
+	}
+
+	private static NodeDefinition createFrom(Node node, String namespace) {
+		InlineNode n = inline(node);
 		String name = n.getText();
 		String type = "INLINE";
 		Node typeNode = n.getChild("type");
@@ -80,7 +90,7 @@ public class SchemaParser {
 			if (!TypeRegistry.admitsChildren(type))
 				throw new ValidationException(children.getLine(), "CHILDREN_NOT_ALLOWED_FOR_TYPE",
 						"Type " + type + " does not allow children (node " + name + ")");
-			for (Node child: children.getChildren("child"))
+			for (Node child: inline(children).getChildren("child"))
 				putChildToSchemaNode(result, child, namespace);
 		}
 		
@@ -94,7 +104,7 @@ public class SchemaParser {
 		        throw new STXTException("INVALID_SIZE_VALUES", "Unexpected number of values: " + values.size());
 		    
 		    Node valuesNode = values.get(0);
-		    values = valuesNode.getChildren("value");
+		    values = inline(valuesNode).getChildren("value");
 		    for (Node value: values)
 		        result.addValue(value.getText(), value.getLine());
 		}
@@ -106,7 +116,9 @@ public class SchemaParser {
 		return result;
 	}
 
-	private static void putChildToSchemaNode(NodeDefinition schemaNode, Node child, String defNamespace) {
+	private static void putChildToSchemaNode(NodeDefinition schemaNode, Node childNode, String defNamespace) {
+		InlineNode child = inline(childNode);
+
 		// Get the name and the namespace
 		NameNamespace ns = NameNamespaceParser.parse(child.getText(), defNamespace, child.getLine(), child.getText());
 		String name = ns.getName();
@@ -123,7 +135,7 @@ public class SchemaParser {
 		schemaNode.addChildDefinition(schemaChild);
 	}
 
-	private static Integer getInteger(Node node, String name) {
+	private static Integer getInteger(InlineNode node, String name) {
 		Node n = node.getChild(name);
 		if (n == null) return null;
 		

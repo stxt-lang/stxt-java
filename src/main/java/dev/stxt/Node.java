@@ -1,21 +1,21 @@
 package dev.stxt;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
 import dev.stxt.exceptions.ParseException;
-import dev.stxt.exceptions.STXTException;
 import dev.stxt.utils.StringUtils;
 
 /**
  * Node of the STXT tree: what INLINE nodes ({@link InlineNode}) and BLOCK text nodes
- * ({@link TextNode}) have in common. The hierarchy is sealed: those two are the only forms.
+ * ({@link TextNode}) have in common. The hierarchy is sealed: those two are the only forms, and
+ * each one owns what is really its own — only an {@link InlineNode} has a value and children (and
+ * so the child lookups); only a {@link TextNode} has text lines. Code that walks a tree asks for
+ * the form ({@code instanceof InlineNode inline}), the same way the canonical tree of
+ * STXT-TREE-SPEC has {@code children} only for inline nodes.
  *
  * <p>Nodes are mutable, and the tree keeps its own integrity: a node knows its
- * {@link #getParent() parent}, {@link InlineNode#addChild(Node)} links both ends and refuses a
- * node that already has a parent, and {@link InlineNode#removeChild(Node)} / {@link #detach()}
- * undo it. The {@link #getLevel() level} is derived from the chain of parents, never stored.
+ * {@link #getParent() parent} (always an {@link InlineNode}), {@link InlineNode#addChild(Node)}
+ * links both ends and refuses a node that already has a parent, and
+ * {@link InlineNode#removeChild(Node)} / {@link #detach()} undo it. The {@link #getLevel() level}
+ * is derived from the chain of parents, never stored.
  *
  * <p>The namespace a node <em>declares</em> ({@link #getDeclaredNamespace()}) and the one that
  * <em>applies</em> to it ({@link #getNamespace()}) are different things: the effective namespace
@@ -34,7 +34,7 @@ public sealed abstract class Node permits InlineNode, TextNode {
 	private String canonicalName;
 	private String declaredNamespace;
 	private int line;
-	private Node parent;
+	private InlineNode parent;
 
 	/**
 	 * Common initialisation, for the two concrete forms.
@@ -156,7 +156,7 @@ public sealed abstract class Node permits InlineNode, TextNode {
 	// ----------------------------------------------------------------
 
 	/** {@return the parent of this node, or {@code null} if it is a root node} */
-	public Node getParent() {
+	public InlineNode getParent() {
 		return parent;
 	}
 
@@ -169,79 +169,12 @@ public sealed abstract class Node permits InlineNode, TextNode {
 	public boolean detach() {
 		if (parent == null)
 			return false;
-		return ((InlineNode) parent).removeChild(this);
+		return parent.removeChild(this);
 	}
 
 	// Both ends of the link are kept in sync by InlineNode; nobody else touches this.
-	void setParent(Node parent) {
+	void setParent(InlineNode parent) {
 		this.parent = parent;
-	}
-
-	/**
-	 * Children of the node in order of appearance, as a read-only view. A {@link TextNode} has
-	 * none: this lets code that walks the tree treat both forms alike.
-	 *
-	 * @return the children of the node, or an empty list.
-	 */
-	public abstract List<Node> getChildren();
-
-	/**
-	 * Looks up the single direct child with that name in this node's effective namespace.
-	 *
-	 * @param cname name of the child to look for.
-	 * @return the child found, or {@code null} if there is none.
-	 * @throws STXTException with code {@code AMBIGUOUS_CHILD} if more than one child matches;
-	 *         use {@link #getChildren(String)} in that case.
-	 */
-	public Node getChild(String cname) {
-		return getChild(cname, getNamespace());
-	}
-
-	/**
-	 * Looks up the single direct child with that name in the given namespace.
-	 *
-	 * @param cname name of the child to look for.
-	 * @param namespace effective namespace to search in.
-	 * @return the child found, or {@code null} if there is none.
-	 * @throws STXTException with code {@code AMBIGUOUS_CHILD} if more than one child matches;
-	 *         use {@link #getChildren(String, String)} in that case.
-	 */
-	public Node getChild(String cname, String namespace) {
-		List<Node> result = getChildren(cname, namespace);
-		if (result.size() > 1)
-			throw new STXTException("AMBIGUOUS_CHILD", "More than 1 child. Use getChildren");
-		if (result.isEmpty())
-			return null;
-		return result.get(0);
-	}
-
-	/**
-	 * Looks up every direct child with that name, in this node's effective namespace.
-	 *
-	 * @param cname name of the child to look for.
-	 * @return every direct child with that name in this node's effective namespace.
-	 */
-	public List<Node> getChildren(String cname) {
-		return getChildren(cname, getNamespace());
-	}
-
-	/**
-	 * Looks up every direct child with that name, in the given namespace.
-	 *
-	 * @param cname name of the child to look for.
-	 * @param namespace effective namespace to search in.
-	 * @return every direct child with that name in the given namespace.
-	 */
-	public List<Node> getChildren(String cname, String namespace) {
-		String key = StringUtils.normalize(cname);
-		List<Node> result = new ArrayList<>();
-
-		for (Node child : getChildren()) {
-			if (child.getCanonicalName().equals(key) && Objects.equals(child.getNamespace(), namespace))
-				result.add(child);
-		}
-
-		return result;
 	}
 
 	// ----------------------------------------------------------------

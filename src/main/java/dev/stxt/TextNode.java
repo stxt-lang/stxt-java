@@ -127,12 +127,6 @@ public final class TextNode extends Node {
 		return true;
 	}
 
-	/** {@return an empty list: a text node has no children} */
-	@Override
-	public List<Node> getChildren() {
-		return Collections.emptyList();
-	}
-
 	// LF or CRLF; the trailing part after the last break is a line too (possibly empty)
 	static String[] splitLines(String text) {
 		return text.split("\\r?\\n", -1);

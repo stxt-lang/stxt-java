@@ -1,5 +1,6 @@
 package dev.stxt.schema.type;
 
+import dev.stxt.InlineNode;
 import dev.stxt.Node;
 import dev.stxt.exceptions.ValidationException;
 import dev.stxt.schema.NodeDefinition;
@@ -23,7 +24,7 @@ public final class MARKDOWN implements Type {
 
 	@Override
     public void validate(NodeDefinition ndef, Node n) {
-		if (n.getChildren().size() > 0) {
+		if (n instanceof InlineNode inline && !inline.getChildren().isEmpty()) {
 			throw new ValidationException(n.getLine(), "NOT_ALLOWED_CHILDREN_TEXT",
 					"Not allowed children nodes in node " + n.getQualifiedName());
 		}

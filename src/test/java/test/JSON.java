@@ -68,8 +68,9 @@ public final class JSON {
 			gen.writeNumberField("line", node.getLine());
 			gen.writeNumberField("level", node.getLevel());
 			gen.writeArrayFieldStart("children");
-			for (Node child : node.getChildren())
-				serialize(child, gen, provider);
+			if (node instanceof InlineNode inline)
+				for (Node child : inline.getChildren())
+					serialize(child, gen, provider);
 			gen.writeEndArray();
 			gen.writeStringField("qualified_name", node.getQualifiedName());
 			gen.writeStringField("text", node.getText());

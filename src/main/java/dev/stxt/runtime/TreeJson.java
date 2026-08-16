@@ -77,12 +77,13 @@ public final class TreeJson {
 
         indent(out, depth + 1);
         out.append("\"value\": ");
-        appendString(out, ((InlineNode) node).getValue());
+        InlineNode inline = (InlineNode) node;
+        appendString(out, inline.getValue());
         out.append(",\n");
 
         indent(out, depth + 1);
         out.append("\"children\": ");
-        appendNodes(out, node.getChildren(), depth + 1);
+        appendNodes(out, inline.getChildren(), depth + 1);
         out.append('\n');
         indent(out, depth);
         out.append('}');

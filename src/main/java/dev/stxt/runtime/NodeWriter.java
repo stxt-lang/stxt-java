@@ -90,10 +90,10 @@ public final class NodeWriter {
             String value = inline.getValue();
             if (!value.isEmpty()) out.append(' ').append(value);
             out.append('\n');
-        }
 
-        for (Node child : n.getChildren()) {
-            writeNode(out, child, depth + 1, style);
+            for (Node child : inline.getChildren()) {
+                writeNode(out, child, depth + 1, style);
+            }
         }
     }
 

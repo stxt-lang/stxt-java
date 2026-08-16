@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import dev.stxt.InlineNode;
 import dev.stxt.Node;
 import dev.stxt.exceptions.ValidationException;
 import dev.stxt.processors.Validator;
@@ -48,9 +49,9 @@ public class SchemaValidator implements Validator {
 		// Validate the node
 		errors.addAll(validateAgainstSchema(node, sch));
 
-		// Validate the children
-		if (recursiveValidation)
-			for (Node n: node.getChildren())
+		// Validate the children (only an inline node has any)
+		if (recursiveValidation && node instanceof InlineNode inline)
+			for (Node n: inline.getChildren())
 				errors.addAll(validate(n));
 
 		return errors;
@@ -85,13 +86,18 @@ public class SchemaValidator implements Validator {
 	private static List<ValidationException> validateChildrenDeclared(NodeDefinition nsNode, Node node) {
 		List<ValidationException> errors = new ArrayList<>();
 
-		for (Node child : node.getChildren()) {
+		for (Node child : childrenOf(node)) {
 			if (!nsNode.getChildren().containsKey(child.getQualifiedName()))
 				errors.add(new ValidationException(child.getLine(), "CHILD_NOT_DECLARED",
 						"Child '" + child.getQualifiedName() + "' not declared in node '" + node.getQualifiedName() + "'"));
 		}
 
 		return errors;
+	}
+
+	// The children of a node for the purposes of the content model: a text node has none
+	private static List<Node> childrenOf(Node node) {
+		return node instanceof InlineNode inline ? inline.getChildren() : List.of();
 	}
 
 	private static List<ValidationException> validateValue(NodeDefinition nsNode, Node n) {
@@ -119,7 +125,7 @@ public class SchemaValidator implements Validator {
 		List<ValidationException> errors = new ArrayList<>();
 		Map<String, Integer> count = new HashMap<>();
 
-		for (Node child : node.getChildren()) {
+		for (Node child : childrenOf(node)) {
 			// Count childs
 			String childName = child.getQualifiedName();
 			count.put(childName, count.getOrDefault(childName, 0) + 1);

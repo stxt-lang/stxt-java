@@ -2,6 +2,7 @@ package dev.stxt.core;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -37,7 +38,31 @@ public class NodeTest {
 		assertTrue(text.isTextNode());
 		assertEquals(List.of("line 1", "line 2"), text.getTextLines());
 		assertEquals("line 1\nline 2", text.getText());
-		assertTrue(text.getChildren().isEmpty(), "a text node has no children, but can be walked like any node");
+	}
+
+	@Test
+	void eachFormOwnsOnlyWhatIsReallyItsOwn() throws NoSuchMethodException {
+		// Children and lookups live in InlineNode; text lines in TextNode; nothing of that in Node
+		assertNotNull(InlineNode.class.getMethod("getChildren"));
+		assertNotNull(InlineNode.class.getMethod("getChild", String.class));
+		assertNotNull(TextNode.class.getMethod("getTextLines"));
+		assertThrows(NoSuchMethodException.class, () -> Node.class.getMethod("getChildren"));
+		assertThrows(NoSuchMethodException.class, () -> Node.class.getMethod("getChild", String.class));
+		assertThrows(NoSuchMethodException.class, () -> Node.class.getMethod("getValue"));
+		assertThrows(NoSuchMethodException.class, () -> Node.class.getMethod("getTextLines"));
+		assertThrows(NoSuchMethodException.class, () -> TextNode.class.getMethod("getChildren"));
+
+		// Walking a tree asks for the form
+		InlineNode root = new InlineNode("Doc");
+		root.addTextNode("Text", "t");
+		root.addInlineNode("Inline");
+		int inline = 0, text = 0;
+		for (Node child : root.getChildren()) {
+			if (child instanceof InlineNode) inline++;
+			if (child instanceof TextNode) text++;
+		}
+		assertEquals(1, inline);
+		assertEquals(1, text);
 	}
 
 	@Test
@@ -211,9 +236,9 @@ public class NodeTest {
 			"\t\tOther (org.other.ns): z",
 			"\t\t\tDeep: w",
 			""));
-		Node doc = docs.get(0);
-		Node child = doc.getChildren().get(0);
-		Node other = child.getChildren().get(0);
+		InlineNode doc = (InlineNode) docs.get(0);
+		InlineNode child = (InlineNode) doc.getChildren().get(0);
+		InlineNode other = (InlineNode) child.getChildren().get(0);
 		Node deep = other.getChildren().get(0);
 
 		assertEquals("com.example.docs", doc.getDeclaredNamespace());
@@ -249,7 +274,7 @@ public class NodeTest {
 
 	@Test
 	void parserSetsTheLineAndCodeBuiltNodesHaveNone() {
-		Node parsed = new Parser().parse("Doc: x\n\tChild: y\n").get(0).getChildren().get(0);
+		Node parsed = ((InlineNode) new Parser().parse("Doc: x\n\tChild: y\n").get(0)).getChildren().get(0);
 		assertEquals(2, parsed.getLine());
 		assertEquals(Node.NO_LINE, new TextNode("T").getLine());
 	}

@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import dev.stxt.exceptions.STXTException;
+import dev.stxt.utils.StringUtils;
 
 /**
  * INLINE node of the STXT tree ({@code Name: value}): an optional inline value and an ordered
- * list of children. It is the only form that can have children, and the only one that can
+ * list of children. It is the only form that has children — and so the only one with child
+ * lookups ({@link #getChild(String)}, {@link #getChildren(String)}) — and the only one that can
  * create them ({@link #addInlineNode(String)}, {@link #addTextNode(String)}).
  *
  * <p>Overloads with two strings always take the second one as the <em>content</em> (the value);
@@ -96,9 +99,68 @@ public final class InlineNode extends Node {
 	// Children
 	// ----------------------------------------------------------------
 
-	@Override
+	/** {@return the children of the node in order of appearance, as a read-only view} */
 	public List<Node> getChildren() {
 		return Collections.unmodifiableList(children);
+	}
+
+	/**
+	 * Looks up the single direct child with that name in this node's effective namespace.
+	 *
+	 * @param cname name of the child to look for.
+	 * @return the child found, or {@code null} if there is none.
+	 * @throws STXTException with code {@code AMBIGUOUS_CHILD} if more than one child matches;
+	 *         use {@link #getChildren(String)} in that case.
+	 */
+	public Node getChild(String cname) {
+		return getChild(cname, getNamespace());
+	}
+
+	/**
+	 * Looks up the single direct child with that name in the given namespace.
+	 *
+	 * @param cname name of the child to look for.
+	 * @param namespace effective namespace to search in.
+	 * @return the child found, or {@code null} if there is none.
+	 * @throws STXTException with code {@code AMBIGUOUS_CHILD} if more than one child matches;
+	 *         use {@link #getChildren(String, String)} in that case.
+	 */
+	public Node getChild(String cname, String namespace) {
+		List<Node> result = getChildren(cname, namespace);
+		if (result.size() > 1)
+			throw new STXTException("AMBIGUOUS_CHILD", "More than 1 child. Use getChildren");
+		if (result.isEmpty())
+			return null;
+		return result.get(0);
+	}
+
+	/**
+	 * Looks up every direct child with that name, in this node's effective namespace.
+	 *
+	 * @param cname name of the child to look for.
+	 * @return every direct child with that name in this node's effective namespace.
+	 */
+	public List<Node> getChildren(String cname) {
+		return getChildren(cname, getNamespace());
+	}
+
+	/**
+	 * Looks up every direct child with that name, in the given namespace.
+	 *
+	 * @param cname name of the child to look for.
+	 * @param namespace effective namespace to search in.
+	 * @return every direct child with that name in the given namespace.
+	 */
+	public List<Node> getChildren(String cname, String namespace) {
+		String key = StringUtils.normalize(cname);
+		List<Node> result = new ArrayList<>();
+
+		for (Node child : children) {
+			if (child.getCanonicalName().equals(key) && Objects.equals(child.getNamespace(), namespace))
+				result.add(child);
+		}
+
+		return result;
 	}
 
 	/**

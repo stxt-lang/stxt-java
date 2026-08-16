@@ -2,6 +2,7 @@ package dev.stxt.template;
 
 import java.util.List;
 
+import dev.stxt.InlineNode;
 import dev.stxt.Node;
 import dev.stxt.Parser;
 import dev.stxt.exceptions.ValidationException;
@@ -28,8 +29,8 @@ public class TemplateParser {
 		// Set the namespace
 		Schema result = new Schema(node.getText(), node.getLine());
 		
-		// Look for the structure node
-		Node structure = node.getChild("structure");
+		// Look for the structure node (a template is an inline root; a text root has none)
+		Node structure = node instanceof InlineNode root ? root.getChild("structure") : null;
 		if (structure == null) {
 		    throw new ValidationException(node.getLine(), "TEMPLATE_STRUCTURE_REQUIRED",
 		        "Template must define 'Structure >>'");
@@ -46,7 +47,7 @@ public class TemplateParser {
 			addToSchema(result, n, offset);
 		
 		// STXT-TEMPLATE-SPEC 12: per-node descriptions, in a separate block
-		Node description = node.getChild("description");
+		Node description = ((InlineNode) node).getChild("description");
 		if (description != null) {
 			String descriptionText = description.getText();
 			int descriptionOffset = description.getLine();
@@ -61,7 +62,7 @@ public class TemplateParser {
 	private static void addToSchema(Schema schema, Node node, int offset) {
 		// Structure has its own grammar: every non-empty line must use ':'. The core
 		// parser also accepts BLOCK nodes here, so reject that form explicitly.
-		if (node.isTextNode())
+		if (!(node instanceof InlineNode inline))
 			throw new ValidationException(node.getLine() + offset, "INVALID_CHILD_LINE", "Template Structure lines must use ':'");
 
 		// Get the qualified name
@@ -86,7 +87,7 @@ public class TemplateParser {
 			if (cl.getValues() != null)
 				throw new ValidationException(node.getLine() + offset, "VALUES_NOT_ALLOWED_IN_EXTERNAL_NAMESPACE", "Not allowed values in external namespaces (node " + node.getName() + ")");
 			
-			if (!node.getChildren().isEmpty())
+			if (!inline.getChildren().isEmpty())
 				throw new ValidationException(node.getLine() + offset, "CHILDREN_NOT_ALLOWED_IN_EXTERNAL_NAMESPACE", "Not allowed children in external namespaces");
 			
 			return; // We do not create nodes that do not belong to @stxt.template!!
@@ -142,14 +143,14 @@ public class TemplateParser {
 			if (cl.getValues() != null)
 				throw new ValidationException(node.getLine() + offset, "VALUES_NOT_ALLOWED_IN_REFERENCE", "Reference '@" + node.getName() + "' can not redefine ENUM values");
 
-			if (!node.getChildren().isEmpty())
+			if (!inline.getChildren().isEmpty())
 				throw new ValidationException(node.getLine() + offset, "CHILDREN_NOT_ALLOWED_IN_REFERENCE", "Reference '@" + node.getName() + "' can not redefine children");
 			
 			return; // OK Definition (reference): it only overrides the cardinality of the parent's Child
 		}
 		
 		// Once it exists, if it has children we try to create them.
-		List<Node> childrenNode = node.getChildren();
+		List<Node> childrenNode = inline.getChildren();
 		
 		// STXT-TEMPLATE-SPEC 8.2/14.9: only INLINE and GROUP accept children
 		if (!childrenNode.isEmpty() && !TypeRegistry.admitsChildren(schemaNode.getType()))
@@ -205,7 +206,7 @@ public class TemplateParser {
 				throw new ValidationException(node.getLine() + offset, "EXTERNAL_DESCRIPTION_NOT_ALLOWED", "Not allowed description in external namespaces");
 			
 			// STXT-TEMPLATE-SPEC 14.18: a Description entry accepts no structured children
-			if (!node.getChildren().isEmpty())
+			if (node instanceof InlineNode inline && !inline.getChildren().isEmpty())
 				throw new ValidationException(node.getLine() + offset, "CHILDREN_DESCRIPTION_NOT_ALLOWED", "Not allowed children in description");
 			
 			// STXT-TEMPLATE-SPEC 14.17: the entry must match a node defined in Structure

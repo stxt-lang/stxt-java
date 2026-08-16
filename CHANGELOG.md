@@ -12,11 +12,13 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 `InlineNode` (`Name: value`) and `TextNode` (`Name >>`), designed from real use of the API. Only
 the in-memory model changes: the language, STXT-TREE-SPEC and every error code are the same.
 
-- **Two forms.** `InlineNode` has `getValue()`/`setValue()`, children and the factories; `TextNode`
-  has `getTextLines()`, `setText()`, `setTextLines()`, `addTextLine()`, `clearText()` and no
-  children. `Node` keeps what is common: name, canonical name, namespaces, line, parent, child
-  lookups (`getChildren()` is empty for a text node, so tree walks need no distinction),
-  `isTextNode()` and `getText()`. Both concrete classes are `final`.
+- **Two forms, each owning only what is its own.** `InlineNode` has `getValue()`/`setValue()`,
+  the children, the child lookups (`getChildren()`, `getChild(name[, ns])`,
+  `getChildren(name[, ns])`) and the factories; `TextNode` has `getTextLines()`, `setText()`,
+  `setTextLines()`, `addTextLine()`, `clearText()` and nothing else. `Node` keeps what is common:
+  name, canonical name, namespaces, line, parent (typed `InlineNode`), `isTextNode()` and
+  `getText()`. Walking a tree asks for the form (`instanceof InlineNode inline`), as the canonical
+  tree of STXT-TREE-SPEC has `children` only for inline nodes. Both concrete classes are `final`.
 - **Parent links with integrity.** `getParent()`, `addChild(node)`, `addChild(index, node)`,
   `removeChild(node)` and `detach()`. `addChild` links both ends and refuses a node that already
   has a parent (`NODE_ALREADY_ATTACHED`) or that is an ancestor (`NODE_CYCLE`); `removeChild`
@@ -41,9 +43,10 @@ the in-memory model changes: the language, STXT-TREE-SPEC and every error code a
   `ChildDefinition` ("canonical name" is the term of the specifications). The old getters remain
   as `@Deprecated` aliases and will be removed in a later version.
 - **Removed**: the `Node` constructors (use `InlineNode`/`TextNode`), the `level` argument, and
-  `getValue()`/`getTextLines()`/`addTextLine()` on the base class (use `getText()`, or the concrete
-  form). `getTextLines()` and `getChildren()` are now read-only views.
-- New `NodeTest` (19 cases); the historical `docs_json/` fixtures are compared through a
+  `getValue()`/`getTextLines()`/`addTextLine()`/`getChildren()`/`getChild(...)` on the base class
+  (use `getText()`, or the concrete form). `getTextLines()` and `getChildren()` are now read-only
+  views.
+- New `NodeTest` (20 cases); the historical `docs_json/` fixtures are compared through a
   test-side serializer that keeps their pre-0.7 shape.
 
 ## [0.6.1]
