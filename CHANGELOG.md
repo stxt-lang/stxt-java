@@ -6,6 +6,11 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+- `EMAIL` accepts, besides the bare address, a display name followed by the address between angle
+  brackets (`Joan Costa <joan@example.com>`), as STXT-SCHEMA-SPEC 9.4 defines since 2026-08-17.
+  The name is any non-empty text without `<`/`>`; the address is checked the same way in both
+  forms, and unbalanced or trailing brackets are rejected. `EMAILTest` covers both forms.
+
 ## [0.7.0]
 
 **Breaking: a new node model.** `Node` is now a sealed abstract class with two forms,
