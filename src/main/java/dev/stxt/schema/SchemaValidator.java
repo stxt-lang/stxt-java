@@ -145,11 +145,11 @@ public class SchemaValidator implements Validator {
 
 		if (min != null && num < min)
 			errors.add(new ValidationException(node.getLine(), "INVALID_NUMBER",
-					num + " nodes of '" + chNode.getQualifiedName() + " and min is " + min));
+					num + " nodes of '" + chNode.getQualifiedName() + "' and min is " + min));
 
 		if (max != null && num > max)
 			errors.add(new ValidationException(node.getLine(), "INVALID_NUMBER",
-					num + " nodes of '" + chNode.getQualifiedName() + " and max is " + max));
+					num + " nodes of '" + chNode.getQualifiedName() + "' and max is " + max));
 
 		return errors;
 	}

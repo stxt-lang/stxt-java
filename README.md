@@ -39,12 +39,12 @@ Requires **Java 17** or later.
 <dependency>
     <groupId>dev.stxt</groupId>
     <artifactId>stxt-core</artifactId>
-    <version>0.7.0</version>
+    <version>0.7.1</version>
 </dependency>
 ```
 
 ```groovy
-implementation 'dev.stxt:stxt-core:0.7.0'
+implementation 'dev.stxt:stxt-core:0.7.1'
 ```
 
 The library has **no runtime dependencies**. Under JPMS it is an automatic module named `dev.stxt`.
@@ -133,7 +133,7 @@ Overloads with two strings always take the second one as the *content* (value or
 
 ## Validating against a schema
 
-Schemas are themselves STXT documents, written in the reserved `@stxt.schema` namespace (or in the friendlier `@stxt.template` form, which is equivalent sugar). A `ResourcesLoader` says where they live; `STXT.parser(loader)` returns a parser that resolves both kinds, caches them, and validates every node as it is closed.
+Schemas are themselves STXT documents, written in the reserved `@stxt.schema` namespace (or in the friendlier `@stxt.template` form, which is equivalent sugar). A `ResourcesLoader` says where they live; `STXT.parser(loader)` returns a parser that resolves both kinds, caches them, and validates every namespaced node as it is closed — nodes without a namespace are let through by `dev.stxt.runtime.ConditionalValidator`, because a document without a namespace is not wrong, it just cannot be validated. If you register a `SchemaValidator` yourself, wrap it in a `ConditionalValidator` to get the same behaviour.
 
 `ResourcesLoaderDirectory` expects this layout on disk:
 

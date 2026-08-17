@@ -4,7 +4,20 @@ All notable changes to `dev.stxt:stxt-core` are documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
-## [Unreleased]
+## [0.7.2]
+
+- New `dev.stxt.runtime.ConditionalValidator`, the counterpart of the TypeScript and Python
+  classes of the same name: a `Validator` that hands the namespaced nodes over to a
+  `SchemaValidator` and lets the nodes without a namespace through. `STXT.parser(loader)` now
+  registers its schema validator through it, so a document (or a root node) without a namespace
+  is no longer reported — before it produced a `VALIDATION_ERROR` per node ("Namespace is
+  required to load schema"), unlike the CLI, the extension and the other ports. Code that
+  registers a `SchemaValidator` by hand keeps validating every node; wrap it in a
+  `ConditionalValidator` to get the same behaviour. `ConditionalValidatorTest` covers both.
+- The `INVALID_NUMBER` message closes the quote around the qualified child name
+  (`0 nodes of 'ns:child' and min is 1`), as the other ports do.
+
+## [0.7.1]
 
 - `EMAIL` accepts, besides the bare address, a display name followed by the address between angle
   brackets (`Joan Costa <joan@example.com>`), as STXT-SCHEMA-SPEC 9.4 defines since 2026-08-17.
