@@ -36,6 +36,9 @@ class LineIndentParser {
                 level++;
                 spaces = 0;
             } else if (c == COMMENT_CHAR) {
+                // Comment: no node, indentation not validated. Reached only when the line is not
+                // block text (a '#' deeper than an open block is caught as text below, before
+                // getting here), so with an open block the Parser closes it (spec 9.1).
                 return null;
             } else {
                 // First character that is not space/tab/comment => end of indentation

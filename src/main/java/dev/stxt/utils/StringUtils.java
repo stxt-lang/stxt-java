@@ -6,7 +6,10 @@ import java.util.regex.Pattern;
 
 /** String normalization helpers used for names, namespaces and values. */
 public class StringUtils {
-	private static final Pattern NODE_NAME = Pattern.compile("^[\\p{L}\\p{Nd}\\-_ ]+$");
+	// STXT-SPEC 4.2 / 4.3: letters, decimal digits, combining marks (Mn, Mc) and the three
+	// separators, with at least one letter or digit; checked on the NFC form
+	private static final Pattern NODE_NAME = Pattern.compile("^[\\p{L}\\p{Nd}\\p{Mn}\\p{Mc}\\-_ ]+$");
+	private static final Pattern NODE_NAME_LETTER_OR_DIGIT = Pattern.compile("[\\p{L}\\p{Nd}]");
 
 	private StringUtils() {
 	}
@@ -75,7 +78,7 @@ public class StringUtils {
 	 */
 	public static boolean isValidNodeName(String input) {
 		String nfc = Normalizer.normalize(compactSpaces(input), Normalizer.Form.NFC);
-		return NODE_NAME.matcher(nfc).matches() && !normalize(nfc).isEmpty();
+		return NODE_NAME.matcher(nfc).matches() && NODE_NAME_LETTER_OR_DIGIT.matcher(nfc).find();
 	}
 
 	// Used for the normalized name of the nodes (STXT-SPEC 4.3): NFC + lower case,

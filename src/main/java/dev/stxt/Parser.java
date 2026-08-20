@@ -154,8 +154,16 @@ public class Parser {
 
 			// Parse the line
 			LineIndent lineIndent = LineIndentParser.parseLine(line, lastNodeText, lastLevel, lineNumber);
-			if (lineIndent == null)
+			if (lineIndent == null) {
+				// parseLine returns null for comments and for empty lines outside a block; inside an
+				// open block an empty line comes back as text, so a null here with an open block is a
+				// comment at the level of the block node or shallower: it closes the block (spec 6.1
+				// and 9.1, a block is a literal and cannot be commented from inside). Only the block
+				// closes; the comment does not touch the rest of the hierarchy.
+				if (lastNodeText)
+					closeToLevel(stack, stack.size() - 1, result, stopOnFirstError);
 				return;
+			}
 
 			int currentLevel = lineIndent.indentLevel;
 

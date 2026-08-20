@@ -77,6 +77,19 @@ public class SchemaProviderContractTest {
 	}
 
 	@Test
+	public void validatorNeverValidatesTheEmptyNamespaceButDoesValidateANamespacedNodeInsideIt() {
+		// STXT-SCHEMA-SPEC 5
+		SchemaValidator validator = new SchemaValidator(new SchemaProviderMeta(), true);
+
+		assertEquals(0, validator.validate(new Parser().parse("Doc: x\n\tChild: y\n").get(0)).size());
+
+		List<ValidationException> errors = validator.validate(new Parser().parse("Doc: x\n\tFree: y\n\tBound (" + UNKNOWN + "): z\n").get(0));
+		assertEquals(1, errors.size());
+		assertEquals("SCHEMA_NOT_FOUND", errors.get(0).getCode());
+		assertEquals(3, errors.get(0).getLine());
+	}
+
+	@Test
 	public void facadeReportsSchemaNotFoundForAnUnknownNamespace() {
 		ParseResult result = STXT.parser(EMPTY).parseResult("Doc (" + UNKNOWN + "): x\n");
 

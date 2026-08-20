@@ -293,15 +293,13 @@
                                 "",
                                 "Esta es otra linea",
                                 "# Hola",
-                                "Mundo",
-                                "",
-                                ""
+                                "Mundo"
                             ],
                             "line" : 29,
                             "level" : 3,
                             "children" : [ ],
                             "qualified_name" : "com.kocinando.receta:descripción",
-                            "text" : "Hay que vigilar este Paso, ya que\nno se puede garantizar su buen funcionamiento.\nEn caso de error consultar realizar una llamada\nal servicio único.\n\nEsta es otra linea\n# Hola\nMundo\n\n"
+                            "text" : "Hay que vigilar este Paso, ya que\nno se puede garantizar su buen funcionamiento.\nEn caso de error consultar realizar una llamada\nal servicio único.\n\nEsta es otra linea\n# Hola\nMundo"
                         }
                     ],
                     "qualified_name" : "com.kocinando.receta:pasos",

@@ -4,6 +4,31 @@ All notable changes to `dev.stxt:stxt-core` are documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.8.0]
+
+Three language-level changes decided on 2026-08-20 while preparing 1.0, each made in the
+specification first (`Last modif: 2026-08-20`), then in `stxt-impl` and in the three ports at
+once. `@stxt-lang/core` and `stxt` (Python) ship the same scope as 0.8.0.
+
+- **A comment closes a `>>` block** (STXT-SPEC 6.1, 9.1). Any non-empty line with indentation
+  less than or equal to the block node ends the block, comments included; before, a comment was
+  transparent and the block stayed open across it. A block is a literal and cannot be commented
+  from inside; its content is now always contiguous. Blank lines after such a comment are no
+  longer block content, and a text line after it is a parse error instead of a silently lost
+  comment. Conformance pair `conformance/tree/comment-closes-block`; `CommentClosesBlockTest`.
+  The fixtures `docs_json/{client,recetas,types}.json`, `docs_txt/{client,recetas}.txt`,
+  `docs_raw_*/client_raw.*` and `docs/types.stxt` were updated accordingly.
+- **The empty namespace is never validated** (STXT-SCHEMA-SPEC 5). `SchemaValidator` no longer
+  looks up a schema nor reports `SCHEMA_NOT_FOUND` for a node whose effective namespace is `""`;
+  a namespaced node inside such a document is still validated. `ConditionalValidator` is
+  therefore redundant and **deprecated** (to be removed in 1.0); `STXT.parser(loader)` still uses
+  it, harmlessly. `SchemaProviderContractTest` covers the rule; `ConditionalValidatorTest` now
+  checks that a bare `SchemaValidator` lets free nodes through too.
+- **Combining marks in node names** (STXT-SPEC 4.2). Names accept the Unicode categories `Mn`
+  and `Mc` besides `L` and `Nd` (Devanagari vowel signs, accents with no precomposed form...);
+  enclosing marks (`Me`) are not allowed, and a name still needs at least one letter or digit,
+  now checked explicitly. Conformance pair `conformance/tree/marks`; `NodeNameValidationTest`.
+
 ## [0.7.2]
 
 - New `dev.stxt.runtime.ConditionalValidator`, the counterpart of the TypeScript and Python

@@ -40,6 +40,18 @@ public class SchemaValidator implements Validator {
 
 		// Get the namespace
 		String namespace = node.getNamespace();
+
+		// The empty namespace is never validated (STXT-SCHEMA-SPEC 5): a node that neither
+		// declares nor inherits a namespace is valid by definition, no schema is looked up for
+		// it and SCHEMA_NOT_FOUND is never reported for it. Its children are still walked when
+		// recursive, because one of them may declare a namespace of its own.
+		if (namespace.isEmpty()) {
+			if (recursiveValidation && node instanceof InlineNode inline)
+				for (Node n: inline.getChildren())
+					errors.addAll(validate(n));
+			return errors;
+		}
+
 		Schema sch = schemaProvider.getSchema(namespace);
 		if (sch == null) {
 			errors.add(new ValidationException(node.getLine(), "SCHEMA_NOT_FOUND", "Not found schema: " + namespace));

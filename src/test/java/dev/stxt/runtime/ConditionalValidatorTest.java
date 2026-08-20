@@ -88,11 +88,13 @@ public class ConditionalValidatorTest {
 	}
 
 	@Test
-	void bareSchemaValidatorStillValidatesEveryNode() {
+	void bareSchemaValidatorLetsFreeNodesThroughToo() {
 		Parser parser = new Parser();
 		parser.registerValidator(new SchemaValidator(STXT.schemaProvider(LOADER)));
 
-		// Documented behaviour of the bare validator: a free node is a finding
-		assertEquals(2, parser.parseResult(FREE).getErrors().size());
+		// Since STXT-SCHEMA-SPEC 5 (2026-08-20) the empty namespace is never validated by the
+		// validator itself, so the wrapper is redundant: same result with or without it
+		assertTrue(parser.parseResult(FREE).getErrors().isEmpty());
+		assertEquals(1, parser.parseResult(FREE + BOUND_BAD).getErrors().size());
 	}
 }

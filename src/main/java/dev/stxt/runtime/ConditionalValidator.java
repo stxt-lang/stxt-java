@@ -14,7 +14,12 @@ import dev.stxt.schema.SchemaValidator;
  * <p>This is the rule of the language: a document without a namespace is not wrong, it just
  * cannot be validated. {@link STXT#parser(dev.stxt.resources.ResourcesLoader)} registers its
  * schema validator through this wrapper, and so do the command line and the editor extension.
+ *
+ * @deprecated since 0.8.0: {@link SchemaValidator} applies this rule itself (STXT-SCHEMA-SPEC 5,
+ * the empty namespace is never validated), so the wrapper adds nothing. Register the
+ * {@code SchemaValidator} directly. Kept for compatibility; to be removed in 1.0.
  */
+@Deprecated
 public final class ConditionalValidator implements Validator {
 	private final SchemaValidator schemaValidator;
 

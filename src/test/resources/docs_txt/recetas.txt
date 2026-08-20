@@ -29,8 +29,6 @@ Recetario (com.kocinando.recetario):
 				Esta es otra linea
 				# Hola
 				Mundo
-				
-				
 	Receta (com.kocinando.receta):
 		Nombre Receta: Una receta
 		Descripción: Esta es una receta de ejemplo

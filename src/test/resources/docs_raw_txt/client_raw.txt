@@ -70,8 +70,6 @@ Cliente:
 			AjwuaomD+J5OCgNveUckajccWKU0EBdDlQKMIz5c2nbWF6UjoDYwOqZbdhItEChqqitG4IotYG5v
 			6gLpx6Aygad1aqd72qd++qeAGqiCOqiEWqiGeqiImqiKuqiM2qiO+qiQGqlyEAEAOw==
 			
-			
-			
 	Datos Bancarios:
 		Titular cuenta: Joan Costa Mombiela
 		Número cuenta: 0000-0000-00-000000000
