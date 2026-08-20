@@ -23,8 +23,8 @@ public class NormalizeFullTest {
 		checkEquals("   Hólä_Mundo ", "hólä-mundo");
 		checkEquals("Пример 1", "пример-1"); // Пример 1 => пример-1
 
-		// Accent sensitive: 'Año' and 'Ano' are different nodes (spec 4.3)
-		Assertions.assertNotEquals(StringUtils.normalize("Año"), StringUtils.normalize("Ano"));
+		// Accent sensitive: 'Caña' and 'Cana' are different nodes (spec 4.3)
+		Assertions.assertNotEquals(StringUtils.normalize("Caña"), StringUtils.normalize("Cana"));
 	}
 
 	@Test
