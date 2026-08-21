@@ -21,6 +21,7 @@ class LineIndentParser {
         int pointer = 0;
         boolean sawSpace = false;
         boolean sawTab = false;
+        boolean isComment = false;
 
         while (pointer < line.length()) {
             char c = line.charAt(pointer);
@@ -37,10 +38,13 @@ class LineIndentParser {
                 level++;
                 spaces = 0;
             } else if (c == COMMENT_CHAR) {
-                // Comment: no node, indentation not validated. Reached only when the line is not
-                // block text (a '#' deeper than an open block is caught as text below, before
-                // getting here), so with an open block the Parser closes it (spec 9.1).
-                return null;
+                // Comment: produces no node, but its indentation is validated below exactly like a
+                // node's (spec 9, 11). Reached only when the line is not block text (a '#' deeper
+                // than an open block is caught as text below, before getting here), so with an open
+                // block a comment always has indent <= the block node and the Parser closes it
+                // (spec 9.1).
+                isComment = true;
+                break;
             } else {
                 // First character that is not space/tab/comment => end of indentation
                 break;
@@ -75,10 +79,15 @@ class LineIndentParser {
         if (spaces > 0)
             throw new ParseException(numLine, "INVALID_NUMBER_SPACES", "There are " + spaces + " spaces before node");
         
-        // Validate the level
+        // Validate the level progression (no jumps, spec 11.3). Comments included (spec 9):
+        // lastLevel is the level of the last NODE, a comment never becomes the reference.
         if (level > (lastLevel + 1))
             throw new ParseException(numLine, "INDENTATION_LEVEL_NOT_VALID",
-                    "Level of indent incorrect: " + level);            
+                    "Level of indent incorrect: " + level);
+
+        // Comment: validated above, but it yields no line for the Parser
+        if (isComment)
+            return null;
 
         // 4) General case: return the line without the indentation already consumed
         // Blank-only trim (spec 4): an NBSP after the value is part of it

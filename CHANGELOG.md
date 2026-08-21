@@ -4,6 +4,23 @@ All notable changes to `dev.stxt:stxt-core` are documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.9.0] - 2026-08-21
+
+One language-level change decided on 2026-08-21 while preparing 1.0, made in the specification
+first (`Last modif: 2026-08-21`), then in `stxt-impl` and in the three ports at once.
+`@stxt-lang/core` and `stxt` (Python) ship the same scope as 0.9.0.
+
+- **Comment indentation is validated like a node's** (STXT-SPEC 9, 11). A comment line (first
+  non-blank character `#`, outside an open `>>` block) must have homogeneous indentation
+  (`MIXED_INDENTATION` otherwise), a multiple of 4 when it uses spaces (`INVALID_NUMBER_SPACES`)
+  and a level of at most the last node's level + 1 (`INDENTATION_LEVEL_NOT_VALID`); before, a
+  comment accepted any indentation. Same error codes as nodes, no new code. A comment still
+  produces no node and never becomes the reference level: the parser's last level is only updated
+  by nodes, so a node after a deeper comment is checked against the last node, not the comment.
+  Blank lines stay exempt; a `#` deeper than an open block is still block text, and a comment at
+  the block's level or shallower still closes it. Conformance pair `conformance/tree/comment-indent`;
+  `CommentIndentTest`.
+
 ## [0.8.1]
 
 One language-level change decided on 2026-08-21 while preparing 1.0, made in the specification

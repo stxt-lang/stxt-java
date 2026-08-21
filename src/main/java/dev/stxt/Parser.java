@@ -156,11 +156,13 @@ public class Parser {
 			// Parse the line
 			LineIndent lineIndent = LineIndentParser.parseLine(line, lastNodeText, lastLevel, lineNumber);
 			if (lineIndent == null) {
-				// parseLine returns null for comments and for empty lines outside a block; inside an
-				// open block an empty line comes back as text, so a null here with an open block is a
-				// comment at the level of the block node or shallower: it closes the block (spec 6.1
-				// and 9.1, a block is a literal and cannot be commented from inside). Only the block
-				// closes; the comment does not touch the rest of the hierarchy.
+				// parseLine returns null for comments and for empty lines outside a block. A comment's
+				// indentation has already been validated like a node's (spec 9), but it never becomes
+				// the reference level: lastLevel is only updated by nodes. Inside an open block an
+				// empty line comes back as text, so a null here with an open block is a comment at the
+				// level of the block node or shallower: it closes the block (spec 6.1 and 9.1, a block
+				// is a literal and cannot be commented from inside). Only the block closes; the comment
+				// does not touch the rest of the hierarchy.
 				if (lastNodeText)
 					closeToLevel(stack, stack.size() - 1, result, stopOnFirstError);
 				return;
