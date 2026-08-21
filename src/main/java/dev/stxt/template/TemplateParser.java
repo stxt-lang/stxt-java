@@ -4,7 +4,9 @@ import java.util.List;
 
 import dev.stxt.InlineNode;
 import dev.stxt.Node;
+import dev.stxt.NamespaceValidator;
 import dev.stxt.Parser;
+import dev.stxt.exceptions.ParseException;
 import dev.stxt.exceptions.ValidationException;
 import dev.stxt.schema.ChildDefinition;
 import dev.stxt.schema.NodeDefinition;
@@ -14,6 +16,9 @@ import dev.stxt.utils.StringUtils;
 
 /** Turns the tree of an already parsed {@code @stxt.template} document into an equivalent {@link Schema}. */
 public class TemplateParser {
+
+	/** Namespace of the template language, the one the root node of every template declares. */
+	public static final String TEMPLATE_NAMESPACE = "@stxt.template";
 
 	private TemplateParser() {
 	}
@@ -25,12 +30,25 @@ public class TemplateParser {
 	 * @return the resulting {@link Schema}.
 	 */
 	public static Schema transformNodeToSchema(Node node) {
-		
+		// STXT-TEMPLATE-SPEC 14.1: the root must be 'Template (@stxt.template): ns'
+		if (!node.getCanonicalName().equals("template") || !TEMPLATE_NAMESPACE.equals(node.getNamespace())
+				|| !(node instanceof InlineNode root))
+			throw new ValidationException(node.getLine(), "TEMPLATE_ROOT_NOT_VALID",
+					"Expected template(" + TEMPLATE_NAMESPACE + ") but got " + node.getCanonicalName() + "(" + node.getNamespace() + ")");
+		String targetNamespace = root.getValue();
+		if (targetNamespace.isEmpty())
+			throw new ValidationException(root.getLine(), "TEMPLATE_NAMESPACE_EMPTY", "Template root must declare the target namespace");
+		try {
+			NamespaceValidator.validateNamespaceFormat(StringUtils.lowerCase(targetNamespace), root.getLine());
+		} catch (ParseException e) {
+			throw new ValidationException(root.getLine(), "TEMPLATE_ROOT_NOT_VALID", "Template namespace not valid: " + targetNamespace);
+		}
+
 		// Set the namespace
-		Schema result = new Schema(node.getText(), node.getLine());
+		Schema result = new Schema(targetNamespace, root.getLine());
 		
-		// Look for the structure node (a template is an inline root; a text root has none)
-		Node structure = node instanceof InlineNode root ? root.getChild("structure") : null;
+		// Look for the structure node
+		Node structure = root.getChild("structure");
 		if (structure == null) {
 		    throw new ValidationException(node.getLine(), "TEMPLATE_STRUCTURE_REQUIRED",
 		        "Template must define 'Structure >>'");
@@ -47,7 +65,7 @@ public class TemplateParser {
 			addToSchema(result, n, offset);
 		
 		// STXT-TEMPLATE-SPEC 12: per-node descriptions, in a separate block
-		Node description = ((InlineNode) node).getChild("description");
+		Node description = root.getChild("description");
 		if (description != null) {
 			String descriptionText = description.getText();
 			int descriptionOffset = description.getLine();
@@ -63,7 +81,7 @@ public class TemplateParser {
 		// Structure has its own grammar: every non-empty line must use ':'. The core
 		// parser also accepts BLOCK nodes here, so reject that form explicitly.
 		if (!(node instanceof InlineNode inline))
-			throw new ValidationException(node.getLine() + offset, "INVALID_CHILD_LINE", "Template Structure lines must use ':'");
+			throw new ValidationException(node.getLine() + offset, "STRUCTURE_LINE_NOT_VALID", "Template Structure lines must use ':'");
 
 		// Get the qualified name
 		String namespace = node.getNamespace();
@@ -82,7 +100,7 @@ public class TemplateParser {
 			// type, ENUM values and children are not allowed and must be rejected, not ignored
 			String type = cl.getType();
 			if (type != null && !type.trim().isEmpty()) 
-				throw new ValidationException(node.getLine() + offset, "TYPE_DEFINITION_NOT_ALLOWED", "Not allowed type definition in external namespaces");
+				throw new ValidationException(node.getLine() + offset, "TYPE_NOT_ALLOWED_IN_EXTERNAL_NAMESPACE", "Not allowed type definition in external namespaces");
 			
 			if (cl.getValues() != null)
 				throw new ValidationException(node.getLine() + offset, "VALUES_NOT_ALLOWED_IN_EXTERNAL_NAMESPACE", "Not allowed values in external namespaces (node " + node.getName() + ")");
@@ -114,20 +132,20 @@ public class TemplateParser {
             
             // STXT-TEMPLATE-SPEC 9/14.7/14.8: [values] only for ENUM, and ENUM requires non-empty values
             if (values != null && !type.equals("ENUM"))
-                throw new ValidationException(node.getLine() + offset, "VALUES_ONLY_SUPPORTED_BY_ENUM", "Values only supported for type ENUM, not for type " + type);
+                throw new ValidationException(node.getLine() + offset, "VALUES_NOT_ALLOWED_FOR_TYPE", "Values only supported for type ENUM, not for type " + type);
             
             if (values != null)
                 for (String value: values)
                     schemaNode.addValue(value, node.getLine() + offset);
             
             if (type.equals("ENUM") && (values == null || values.length == 0))
-                throw new ValidationException(node.getLine() + offset, "VALUES_EMPTY_FOR_ENUM", "ENUM Type must include values");
+                throw new ValidationException(node.getLine() + offset, "VALUES_REQUIRED", "ENUM Type must include values");
 		} else {
 			String type = cl.getType();
 			// STXT-TEMPLATE-SPEC 6.4: a local reappearance MUST be a '@Name' reference;
 			// if it carries no type (type == null), it is not a valid reference (avoids an NPE)
 			if (type == null || !type.startsWith("@"))
-				throw new ValidationException(node.getLine() + offset, "NODE_DEFINED_MULTIPLE_TIMES", "Multiple node reference must start with @: " + node.getName());				
+				throw new ValidationException(node.getLine() + offset, "REFERENCE_REQUIRED", "Multiple node reference must start with @: " + node.getName());				
 				
 			String reference = type.substring(1).trim();
 
@@ -137,7 +155,7 @@ public class TemplateParser {
 				throw new ValidationException(node.getLine() + offset, "REFERENCE_WITH_TYPE_NOT_ALLOWED", "Reference '@" + node.getName() + "' can not declare a type: " + explicitType);
 
 			if (!StringUtils.normalize(reference).equals(node.getCanonicalName()))
-				throw new ValidationException(node.getLine() + offset, "NODE_REFERENCE_NOT_VALID", "Reference must be '" + "@" + node.getName() + "', not '" + reference + "'");
+				throw new ValidationException(node.getLine() + offset, "REFERENCE_NAME_NOT_VALID", "Reference must be '" + "@" + node.getName() + "', not '" + reference + "'");
 			
 			// STXT-TEMPLATE-SPEC 6.4: a @Node Name reference MUST NOT redefine ENUM values nor children
 			if (cl.getValues() != null)
@@ -203,20 +221,20 @@ public class TemplateParser {
 			
 			// STXT-TEMPLATE-SPEC 14.19: a Description entry cannot declare another namespace
 			if (!namespace.equals(schema.getNamespace()))
-				throw new ValidationException(node.getLine() + offset, "EXTERNAL_DESCRIPTION_NOT_ALLOWED", "Not allowed description in external namespaces");
+				throw new ValidationException(node.getLine() + offset, "DESCRIPTION_NOT_ALLOWED_IN_EXTERNAL_NAMESPACE", "Not allowed description in external namespaces");
 			
 			// STXT-TEMPLATE-SPEC 14.18: a Description entry accepts no structured children
 			if (node instanceof InlineNode inline && !inline.getChildren().isEmpty())
-				throw new ValidationException(node.getLine() + offset, "CHILDREN_DESCRIPTION_NOT_ALLOWED", "Not allowed children in description");
+				throw new ValidationException(node.getLine() + offset, "DESCRIPTION_CHILDREN_NOT_ALLOWED", "Not allowed children in description");
 			
 			// STXT-TEMPLATE-SPEC 14.17: the entry must match a node defined in Structure
 			NodeDefinition nodeDef = schema.getNodeDefinition(node.getName());
 			if (nodeDef == null)
-				throw new ValidationException(node.getLine() + offset, "NODE_NOT_FOUND", "Not found node with name: " + node.getName());
+				throw new ValidationException(node.getLine() + offset, "DESCRIPTION_NODE_NOT_FOUND", "Not found node with name: " + node.getName());
 			
 			// STXT-TEMPLATE-SPEC 14.20: there cannot be more than one entry per node
 			if (nodeDef.getDescription() != null)
-				throw new ValidationException(node.getLine() + offset, "DESCRIPTION_ALREADY_DEFINED", "Exists a previous description for node: " + node.getName());
+				throw new ValidationException(node.getLine() + offset, "DESCRIPTION_DUPLICATED", "Exists a previous description for node: " + node.getName());
 			
 			nodeDef.setDescription(node.getText());
 		}

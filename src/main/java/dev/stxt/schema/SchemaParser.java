@@ -6,11 +6,11 @@ import java.util.Set;
 
 import dev.stxt.NameNamespace;
 import dev.stxt.NameNamespaceParser;
+import dev.stxt.NamespaceValidator;
 import dev.stxt.InlineNode;
 import dev.stxt.Node;
 import dev.stxt.exceptions.ParseException;
-import dev.stxt.exceptions.STXTException;
-import dev.stxt.exceptions.SchemaException;
+import dev.stxt.utils.StringUtils;
 import dev.stxt.exceptions.ValidationException;
 
 /** Turns the tree of an already parsed {@code @stxt.schema} document into a {@link Schema}. */
@@ -32,11 +32,21 @@ public class SchemaParser {
 
 		// Get the name and the namespace
 		if (!nodeName.equals("schema") || !namespaceSchema.equals(Schema.SCHEMA_NAMESPACE)) {
-			throw new SchemaException("NOT_STXT_SCHEMA",
+			throw new ValidationException(node.getLine(), "SCHEMA_ROOT_NOT_VALID",
 					"Expected schema(" + Schema.SCHEMA_NAMESPACE + ") but got " + nodeName + "(" + namespaceSchema + ")");
 		}
 		InlineNode root = inline(node);
-		Schema schema = new Schema(root.getValue(), root.getLine());
+
+		// STXT-SCHEMA-SPEC 13.1: the value of the root is the target namespace, and it must be a valid one
+		String targetNamespace = root.getValue();
+		if (targetNamespace.isEmpty())
+			throw new ValidationException(root.getLine(), "SCHEMA_NAMESPACE_EMPTY", "Schema root must declare the target namespace");
+		try {
+			NamespaceValidator.validateNamespaceFormat(StringUtils.lowerCase(targetNamespace), root.getLine());
+		} catch (ParseException e) {
+			throw new ValidationException(root.getLine(), "SCHEMA_ROOT_NOT_VALID", "Schema namespace not valid: " + targetNamespace);
+		}
+		Schema schema = new Schema(targetNamespace, root.getLine());
 
 		// For validation
 		Set<String> allNames = new HashSet<String>(); // To check that the children exist
@@ -67,7 +77,7 @@ public class SchemaParser {
 	private static InlineNode inline(Node node) {
 		if (node instanceof InlineNode inline)
 			return inline;
-		throw new SchemaException("INVALID_SCHEMA", "Node '" + node.getName() + "' must be inline in a schema (line " + node.getLine() + ")");
+		throw new ValidationException(node.getLine(), "SCHEMA_NODE_NOT_INLINE", "Node '" + node.getName() + "' must be inline in a schema");
 	}
 
 	private static NodeDefinition createFrom(Node node, String namespace) {
@@ -98,10 +108,11 @@ public class SchemaParser {
 		List<Node> values = n.getChildren("values");
 		if (values != null && values.size()>0) {
 		    if (!type.equals("ENUM")) 
-		        throw new ParseException(n.getLine(), "VALUES_ONLY_SUPPORTED_BY_ENUM", "Values only supported for type ENUM, not for type " + type);
+		        throw new ParseException(n.getLine(), "VALUES_NOT_ALLOWED_FOR_TYPE", "Values only supported for type ENUM, not for type " + type);
 		    
+		    // STXT-SCHEMA-SPEC 13.1: a Node carries at most one Values; the error points at the second one
 		    if (values.size()>1)
-		        throw new STXTException("INVALID_SIZE_VALUES", "Unexpected number of values: " + values.size());
+		        throw new ValidationException(values.get(1).getLine(), "VALUES_DUPLICATED", "Values defined " + values.size() + " times for node " + name);
 		    
 		    Node valuesNode = values.get(0);
 		    values = inline(valuesNode).getChildren("value");
@@ -111,7 +122,7 @@ public class SchemaParser {
 		
 		// Look at the enum
 		if (type.equals("ENUM") && (values == null || values.size()==0))
-		    throw new ParseException(n.getLine(), "VALUES_EMPTY_FOR_ENUM", "ENUM Type must include values");
+		    throw new ParseException(n.getLine(), "VALUES_REQUIRED", "ENUM Type must include values");
 		
 		return result;
 	}
@@ -142,7 +153,7 @@ public class SchemaParser {
 		try	{
 			return Integer.parseInt(n.getText());
 		} catch (Exception e) {
-			throw new ParseException(node.getLine(), "INVALID_INTEGER", "Integer not valid: " + n.getText());
+			throw new ParseException(node.getLine(), "CARDINALITY_NOT_VALID", "Integer not valid: " + n.getText());
 		}
 	}
 }

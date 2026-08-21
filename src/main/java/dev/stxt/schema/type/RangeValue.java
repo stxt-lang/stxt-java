@@ -21,14 +21,19 @@ abstract class RangeValue implements Type {
 		this.error = error;
 	}
 
-	/** True if the captured groups of a matching value are in range. */
+	/**
+	 * Range check applied after the pattern matched.
+	 *
+	 * @param m the matcher of the value, with its captured groups.
+	 * @return true if the captured groups are in range.
+	 */
 	protected abstract boolean inRange(Matcher m);
 
 	@Override
 	public void validate(NodeDefinition ndef, Node n) {
 		// INLINE value form (STXT-SCHEMA-SPEC 9.4): the '>>' block is not accepted
 		if (n.isTextNode()) {
-			throw new ValidationException(n.getLine(), "NOT_ALLOWED_TEXT",
+			throw new ValidationException(n.getLine(), "BLOCK_FORM_NOT_ALLOWED",
 					"Not allowed text in node " + n.getQualifiedName());
 		}
 
@@ -39,7 +44,14 @@ abstract class RangeValue implements Type {
 		}
 	}
 
-	/** The integer of a captured group, or {@code fallback} when the group did not match. */
+	/**
+	 * The integer of a captured group.
+	 *
+	 * @param m the matcher of the value.
+	 * @param i index of the group.
+	 * @param fallback value to return when the group did not match (an optional part).
+	 * @return the parsed group, or {@code fallback}.
+	 */
 	protected static int group(Matcher m, int i, int fallback) {
 		return m.group(i) == null ? fallback : Integer.parseInt(m.group(i));
 	}

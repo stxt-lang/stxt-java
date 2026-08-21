@@ -21,7 +21,7 @@ public final class ENUM implements Type {
 	@Override
     public void validate(NodeDefinition ndef, Node n) {
 		if (n.isTextNode()) {
-			throw new ValidationException(n.getLine(), "NOT_ALLOWED_TEXT",
+			throw new ValidationException(n.getLine(), "BLOCK_FORM_NOT_ALLOWED",
 					"Not allowed text in node " + n.getQualifiedName());
 		}
 		

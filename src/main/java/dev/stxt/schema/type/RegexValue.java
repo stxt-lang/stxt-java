@@ -24,7 +24,7 @@ abstract class RegexValue implements Type {
     public void validate(NodeDefinition ndef, Node n) {
 		// INLINE value form (STXT-SCHEMA-SPEC 9.3/9.4): the '>>' block is not accepted
 		if (n.isTextNode()) {
-			throw new ValidationException(n.getLine(), "NOT_ALLOWED_TEXT",
+			throw new ValidationException(n.getLine(), "BLOCK_FORM_NOT_ALLOWED",
 					"Not allowed text in node " + n.getQualifiedName());
 		}
 

@@ -64,6 +64,6 @@ class URLTest {
 	void rejectsTheBlockForm() {
 		Node node = new Parser().parse("Url >>\n\thttps://stxt.dev\n").get(0);
 		ValidationException ex = assertThrows(ValidationException.class, () -> URL.INSTANCE.validate(null, node));
-		assertEquals("NOT_ALLOWED_TEXT", ex.getCode());
+		assertEquals("BLOCK_FORM_NOT_ALLOWED", ex.getCode());
 	}
 }

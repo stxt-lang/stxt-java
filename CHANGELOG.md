@@ -4,6 +4,57 @@ All notable changes to `dev.stxt:stxt-core` are documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.9.1] - 2026-08-21
+
+The last items of the STXT-SCHEMA-SPEC review before 1.0, decided on 2026-08-21 and made in the
+specifications first (`Last modif: 2026-08-21`), then in `stxt-impl` and in the three ports at
+once. `@stxt-lang/core` and `stxt` (Python) ship the same scope as 0.9.1.
+
+- **Error codes renamed** to the normative annex (STXT-SPEC 11.1, STXT-SCHEMA-SPEC 13.1,
+  STXT-TEMPLATE-SPEC 14.1), frozen from 1.0 on. Codes are part of the conformance surface, so
+  this is a behavior change for anyone matching on them. Old -> new:
+  `MIXED_INDENTATION` -> `INDENTATION_MIXED`, `INVALID_NUMBER_SPACES` -> `INDENTATION_SPACES_NOT_VALID`,
+  `INLINE_VALUE_NOT_VALID` -> `BLOCK_VALUE_NOT_ALLOWED`, `NOT_ALLOWED_TEXT` -> `BLOCK_FORM_NOT_ALLOWED`,
+  `NOT_ALLOWED_CHILDREN_TEXT` -> `CHILDREN_NOT_ALLOWED`, `NODE_NOT_EXIST_IN_SCHEMA` -> `NODE_NOT_DEFINED_IN_SCHEMA`,
+  `TYPE_NOT_SUPPORTED` -> `TYPE_NOT_VALID`, `VALIDATION_ERROR` -> `UNEXPECTED_ERROR` (the single wrapper
+  of an unforeseen exception, in the parser and in `SchemaValidator`; the exception subtype is kept),
+  `NOT_STXT_SCHEMA` -> `SCHEMA_ROOT_NOT_VALID`, `NODE_DEF_ALREADY_DEFINED` -> `NODE_DUPLICATED`,
+  `CHILD_DEF_ALREADY_DEFINED` -> `CHILD_DUPLICATED`, `VALUES_ONLY_SUPPORTED_BY_ENUM` -> `VALUES_NOT_ALLOWED_FOR_TYPE`,
+  `VALUES_EMPTY_FOR_ENUM` -> `VALUES_REQUIRED`, `INVALID_INTEGER` and `INVALID_CHILD_COUNT` -> `CARDINALITY_NOT_VALID`,
+  `INVALID_CHILD_LINE` -> `STRUCTURE_LINE_NOT_VALID`, `NODE_DEFINED_MULTIPLE_TIMES` -> `REFERENCE_REQUIRED`,
+  `NODE_REFERENCE_NOT_VALID` -> `REFERENCE_NAME_NOT_VALID`, `NODE_NOT_FOUND` -> `DESCRIPTION_NODE_NOT_FOUND`,
+  `CHILDREN_DESCRIPTION_NOT_ALLOWED` -> `DESCRIPTION_CHILDREN_NOT_ALLOWED`,
+  `EXTERNAL_DESCRIPTION_NOT_ALLOWED` -> `DESCRIPTION_NOT_ALLOWED_IN_EXTERNAL_NAMESPACE`,
+  `DESCRIPTION_ALREADY_DEFINED` -> `DESCRIPTION_DUPLICATED`,
+  `TYPE_DEFINITION_NOT_ALLOWED` -> `TYPE_NOT_ALLOWED_IN_EXTERNAL_NAMESPACE`, `DUPLICATED_TYPE` -> `TYPE_DUPLICATED`.
+  Three codes were split by condition: `INVALID_NUMBER` -> `TOO_FEW_CHILDREN` (count below `Min`) /
+  `TOO_MANY_CHILDREN` (count above `Max`); `INVALID_SCHEMA` -> `SCHEMA_NODE_NOT_INLINE` (a schema node
+  written with `>>`) / `SCHEMA_MULTIPLE_ROOTS` (a schema document with other than one root) /
+  `SCHEMA_NAMESPACE_EMPTY` (root without target namespace), with `TEMPLATE_MULTIPLE_ROOTS` and
+  `TEMPLATE_NAMESPACE_EMPTY` as the template counterparts; and the `INVALID_VALUE` of a `GROUP`
+  carrying a value is now `VALUE_NOT_ALLOWED` (`INVALID_VALUE` stays for every other type).
+  `INVALID_SIZE_VALUES` (a `RuntimeException`) is now `VALUES_DUPLICATED`, a `ValidationException`
+  located at the second `Values` node. New `TEMPLATE_ROOT_NOT_VALID`: a template whose root is not
+  `Template (@stxt.template): ns`, or whose target namespace is malformed or not the requested one,
+  was not checked before; `SCHEMA_ROOT_NOT_VALID` covers the same three cases for a schema. The
+  schema and template load errors (`SCHEMA_*`, `TEMPLATE_*`, `VALUES_DUPLICATED`) are
+  `ValidationException` with a line, where before some were `SchemaException` without one; the
+  Java-only facade codes `NAMESPACE_REQUIRED` and `RESOURCE_DIRECTORY_NOT_VALID` are unchanged.
+  `ErrorCodesTest` covers every new or split code.
+- **`URL` follows its own grammar** (STXT-SCHEMA-SPEC 9.4) instead of `java.net.URI`:
+  `scheme "://" [userinfo "@"] host [":" port] ["/" path] ["?" query] ["#" fragment]`, with a
+  mandatory scheme and non-empty host, so every port accepts exactly the same values; `mailto:`,
+  `urn:`, `file:///`, a missing scheme, inner blanks or a non-numeric port are rejected, and
+  nothing is resolved or normalised. `URLTest`.
+- **`DATE`, `TIME` and `TIMESTAMP` validate the calendar and the clock**, not only the shape: the
+  three extend the new `RangeValue` (regular expression plus an `inRange` check through
+  `DateTime.isValidDate`/`isValidTime`, never `java.time`), so `2026-02-30`, `24:00:00` or an
+  offset of `+25:00` are `INVALID_VALUE`. The fraction of seconds of a `TIMESTAMP` admits one or
+  more digits (before, exactly three). `GrammarTypesTest`.
+- **`NUMBER` is documented as its own grammar, not JSON's**: optional sign, digits with an optional
+  decimal part, and an optional exponent; nothing else (no `Infinity`, `NaN`, hexadecimal or
+  thousands separators), in the javadoc of the type.
+
 ## [0.9.0] - 2026-08-21
 
 One language-level change decided on 2026-08-21 while preparing 1.0, made in the specification

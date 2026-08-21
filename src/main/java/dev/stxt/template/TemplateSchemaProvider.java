@@ -5,7 +5,7 @@ import java.util.List;
 import dev.stxt.Node;
 import dev.stxt.Parser;
 import dev.stxt.exceptions.ResourceNotFoundException;
-import dev.stxt.exceptions.SchemaException;
+import dev.stxt.exceptions.ValidationException;
 import dev.stxt.resources.ResourcesLoader;
 import dev.stxt.schema.Schema;
 import dev.stxt.schema.SchemaProvider;
@@ -41,14 +41,15 @@ public class TemplateSchemaProvider implements SchemaProvider {
 		
 		List<Node> nodes = parser.parse(template);
 		if (nodes.size() != 1)
-			throw new SchemaException("INVALID_SCHEMA", "There are " + nodes.size() + ", and expected is 1");
+			throw new ValidationException(nodes.size() > 1 ? nodes.get(1).getLine() : 0, "TEMPLATE_MULTIPLE_ROOTS",
+					"A template document must have exactly 1 root node, found " + nodes.size());
 
 		// Get the schema
 		Schema sch = TemplateParser.transformNodeToSchema(nodes.get(0)); 
 		
 		// Check the expected namespace
 		if (!sch.getNamespace().equalsIgnoreCase(namespace))
-			throw new SchemaException("INVALID_SCHEMA", "Schema namespace is " + sch.getNamespace() + ", and expected is " + namespace);
+			throw new ValidationException(nodes.get(0).getLine(), "TEMPLATE_ROOT_NOT_VALID", "Template namespace is " + sch.getNamespace() + ", and expected is " + namespace);
 		
 		return sch;
 	}

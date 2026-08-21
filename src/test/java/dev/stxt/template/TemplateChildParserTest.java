@@ -32,26 +32,26 @@ public class TemplateChildParserTest {
 	void testNegativeCountRejected() {
 		// STXT-TEMPLATE-SPEC 7.1: the cardinality numbers must be non-negative integers
 		ParseException ex = Assertions.assertThrows(ParseException.class, () -> ChildLineParser.parse("(-2) TEXT", 5));
-		Assertions.assertEquals("INVALID_CHILD_COUNT", ex.getCode());
+		Assertions.assertEquals("CARDINALITY_NOT_VALID", ex.getCode());
 	}
 
 	@Test
 	void testPlusSuffixNonNumericRejected() {
 		ParseException ex = Assertions.assertThrows(ParseException.class, () -> ChildLineParser.parse("(a+) TEXT", 5));
-		Assertions.assertEquals("INVALID_CHILD_COUNT", ex.getCode());
+		Assertions.assertEquals("CARDINALITY_NOT_VALID", ex.getCode());
 	}
 
 	@Test
 	void testMinusSuffixNonNumericRejected() {
 		ParseException ex = Assertions.assertThrows(ParseException.class, () -> ChildLineParser.parse("(a-) TEXT", 5));
-		Assertions.assertEquals("INVALID_CHILD_COUNT", ex.getCode());
+		Assertions.assertEquals("CARDINALITY_NOT_VALID", ex.getCode());
 	}
 
 	@Test
 	void testCommaCountWithThreePartsRejected() {
 		// STXT-TEMPLATE-SPEC 7.1: (min,max) accepts only two parts
 		ParseException ex = Assertions.assertThrows(ParseException.class, () -> ChildLineParser.parse("(1,2,3) TEXT", 5));
-		Assertions.assertEquals("INVALID_CHILD_COUNT", ex.getCode());
+		Assertions.assertEquals("CARDINALITY_NOT_VALID", ex.getCode());
 	}
 
 	@Test

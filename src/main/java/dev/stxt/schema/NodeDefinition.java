@@ -75,11 +75,11 @@ public class NodeDefinition {
 	 * Adds the definition of an expected child.
 	 *
 	 * @param childDefinition definition of the child to add.
-	 * @throws dev.stxt.exceptions.SchemaException with code {@code CHILD_DEF_ALREADY_DEFINED} if a definition for that child already existed.
+	 * @throws dev.stxt.exceptions.SchemaException with code {@code CHILD_DUPLICATED} if a definition for that child already existed.
 	 */
 	public void addChildDefinition(ChildDefinition childDefinition) {
 		String qname = childDefinition.getQualifiedName();
-		if (children.containsKey(qname)) throw new SchemaException("CHILD_DEF_ALREADY_DEFINED", "Exists a previous node definition with: " + qname);
+		if (children.containsKey(qname)) throw new SchemaException("CHILD_DUPLICATED", "Exists a previous node definition with: " + qname);
 		children.put(qname, childDefinition);
 	}
 	// STXT-SCHEMA-SPEC 13.9 / STXT-TEMPLATE-SPEC 14.14: there can be no duplicated values

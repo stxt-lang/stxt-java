@@ -23,7 +23,7 @@ Template (@stxt.template): test.values.notenum
 """;
 		Node root = new Parser().parse(text).get(0);
 		ParseException ex = assertThrows(ParseException.class, () -> TemplateParser.transformNodeToSchema(root));
-		assertEquals("VALUES_ONLY_SUPPORTED_BY_ENUM", ex.getCode());
+		assertEquals("VALUES_NOT_ALLOWED_FOR_TYPE", ex.getCode());
 	}
 
 	@Test
@@ -36,7 +36,7 @@ Template (@stxt.template): test.enum.empty
 """;
 		Node root = new Parser().parse(text).get(0);
 		ParseException ex = assertThrows(ParseException.class, () -> TemplateParser.transformNodeToSchema(root));
-		assertEquals("VALUES_EMPTY_FOR_ENUM", ex.getCode());
+		assertEquals("VALUES_REQUIRED", ex.getCode());
 	}
 
 	@Test
@@ -91,7 +91,7 @@ Template (@stxt.template): test.desc.notfound
 """;
 		Node root = new Parser().parse(text).get(0);
 		ParseException ex = assertThrows(ParseException.class, () -> TemplateParser.transformNodeToSchema(root));
-		assertEquals("NODE_NOT_FOUND", ex.getCode());
+		assertEquals("DESCRIPTION_NODE_NOT_FOUND", ex.getCode());
 	}
 
 	@Test
@@ -106,7 +106,7 @@ Template (@stxt.template): test.desc.dup
 """;
 		Node root = new Parser().parse(text).get(0);
 		ParseException ex = assertThrows(ParseException.class, () -> TemplateParser.transformNodeToSchema(root));
-		assertEquals("DESCRIPTION_ALREADY_DEFINED", ex.getCode());
+		assertEquals("DESCRIPTION_DUPLICATED", ex.getCode());
 	}
 
 	@Test
@@ -121,7 +121,7 @@ Template (@stxt.template): test.desc.children
 """;
 		Node root = new Parser().parse(text).get(0);
 		ParseException ex = assertThrows(ParseException.class, () -> TemplateParser.transformNodeToSchema(root));
-		assertEquals("CHILDREN_DESCRIPTION_NOT_ALLOWED", ex.getCode());
+		assertEquals("DESCRIPTION_CHILDREN_NOT_ALLOWED", ex.getCode());
 	}
 
 	@Test
@@ -135,7 +135,7 @@ Template (@stxt.template): test.desc.external
 """;
 		Node root = new Parser().parse(text).get(0);
 		ParseException ex = assertThrows(ParseException.class, () -> TemplateParser.transformNodeToSchema(root));
-		assertEquals("EXTERNAL_DESCRIPTION_NOT_ALLOWED", ex.getCode());
+		assertEquals("DESCRIPTION_NOT_ALLOWED_IN_EXTERNAL_NAMESPACE", ex.getCode());
 	}
 
 	@Test
@@ -175,7 +175,7 @@ Template (@stxt.template): test.ref.noat
 """;
 		Node root = new Parser().parse(text).get(0);
 		ParseException ex = assertThrows(ParseException.class, () -> TemplateParser.transformNodeToSchema(root));
-		assertEquals("NODE_DEFINED_MULTIPLE_TIMES", ex.getCode());
+		assertEquals("REFERENCE_REQUIRED", ex.getCode());
 	}
 
 	@Test
@@ -254,7 +254,7 @@ Template (@stxt.template): test.ref.notfound
 	@Test
 	void testReferenceWithTypeRejected() {
 		// STXT-TEMPLATE-SPEC 14.13: a reference and an explicit type on the same line. It used to
-		// be reported as NODE_REFERENCE_NOT_VALID, whose message blamed the name.
+		// be reported as REFERENCE_NAME_NOT_VALID, whose message blamed the name.
 		String text = """
 Template (@stxt.template): test.ref.withtype
     Structure >>
@@ -306,6 +306,6 @@ Template (@stxt.template): test.structure.inline
 """;
 		Node root = new Parser().parse(text).get(0);
 		ParseException ex = assertThrows(ParseException.class, () -> TemplateParser.transformNodeToSchema(root));
-		assertEquals("INVALID_CHILD_LINE", ex.getCode());
+		assertEquals("STRUCTURE_LINE_NOT_VALID", ex.getCode());
 	}
 }

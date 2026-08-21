@@ -1,4 +1,4 @@
 {
-    "code" : "NODE_NOT_EXIST_IN_SCHEMA",
+    "code" : "NODE_NOT_DEFINED_IN_SCHEMA",
     "line" : 5
 }

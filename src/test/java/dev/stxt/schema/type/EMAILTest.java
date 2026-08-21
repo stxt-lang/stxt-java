@@ -60,6 +60,6 @@ class EMAILTest {
 	void rejectsTheBlockForm() {
 		Node node = new Parser().parse("Email >>\n\tana@example.com\n").get(0);
 		ValidationException ex = assertThrows(ValidationException.class, () -> EMAIL.INSTANCE.validate(null, node));
-		assertEquals("NOT_ALLOWED_TEXT", ex.getCode());
+		assertEquals("BLOCK_FORM_NOT_ALLOWED", ex.getCode());
 	}
 }

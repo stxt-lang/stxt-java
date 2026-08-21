@@ -1,4 +1,4 @@
 {
-    "code" : "TYPE_DEFINITION_NOT_ALLOWED",
+    "code" : "TYPE_NOT_ALLOWED_IN_EXTERNAL_NAMESPACE",
     "line" : 4
 }

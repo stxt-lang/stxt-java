@@ -79,7 +79,7 @@ public final class TypeRegistry {
 
 	private static void register(Type instance) {
 		if (REGISTRY.containsKey(instance.getName()))
-			throw new STXTException("DUPLICATED_TYPE", "Type already defined: " + instance.getName());
+			throw new STXTException("TYPE_DUPLICATED", "Type already defined: " + instance.getName());
 		
 		REGISTRY.put(instance.getName(), instance);
 	}

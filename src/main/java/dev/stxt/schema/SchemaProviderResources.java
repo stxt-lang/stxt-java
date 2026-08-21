@@ -7,6 +7,7 @@ import dev.stxt.Node;
 import dev.stxt.Parser;
 import dev.stxt.exceptions.ResourceNotFoundException;
 import dev.stxt.exceptions.SchemaException;
+import dev.stxt.exceptions.ValidationException;
 import dev.stxt.resources.ResourcesLoader;
 
 /** {@link SchemaProvider} that loads an {@code @stxt.schema} document from a {@link ResourcesLoader} and turns it into a {@link Schema}. */
@@ -45,7 +46,8 @@ public final class SchemaProviderResources implements SchemaProvider {
 		List<Node> nodes = parser.parse(textSchema);
 
 		if (nodes.size() != 1)
-			throw new SchemaException("INVALID_SCHEMA", "There are " + nodes.size() + ", and expected is 1");
+			throw new ValidationException(nodes.size() > 1 ? nodes.get(1).getLine() : 0, "SCHEMA_MULTIPLE_ROOTS",
+					"A schema document must have exactly 1 root node, found " + nodes.size());
 
 		// Turn it into a schema
 		Node root = nodes.get(0);
@@ -53,7 +55,7 @@ public final class SchemaProviderResources implements SchemaProvider {
 
 		// Check the expected namespace
 		if (!sch.getNamespace().equalsIgnoreCase(namespace))
-			throw new SchemaException("INVALID_SCHEMA", "Schema namespace is " + sch.getNamespace() + ", and expected is " + namespace);
+			throw new ValidationException(root.getLine(), "SCHEMA_ROOT_NOT_VALID", "Schema namespace is " + sch.getNamespace() + ", and expected is " + namespace);
 
 		// Put it in the cache
 		return sch;

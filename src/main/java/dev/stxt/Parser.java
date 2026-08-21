@@ -237,7 +237,7 @@ public class Parser {
 		}
 
 		if (textNode && !StringUtils.trim(value).isEmpty())
-				throw new ParseException(lineNumber, "INLINE_VALUE_NOT_VALID", "Line not valid: " + line);
+				throw new ParseException(lineNumber, "BLOCK_VALUE_NOT_ALLOWED", "Line not valid: " + line);
 
 		// The namespace the line declares, if any; inheritance from the parent is resolved by
 		// the node itself through its parent link (Node.getNamespace())
@@ -281,7 +281,7 @@ public class Parser {
 	            } catch (ValidationException e) {
 	                result.addError(e);
 	            } catch (RuntimeException e) {
-	                result.addError(new ValidationException(node.getLine(), "VALIDATION_ERROR", e.getMessage()));
+	                result.addError(new ValidationException(node.getLine(), "UNEXPECTED_ERROR", e.getMessage()));
 	            }
 	        }
 	}	

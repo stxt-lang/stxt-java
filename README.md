@@ -39,12 +39,12 @@ Requires **Java 17** or later.
 <dependency>
     <groupId>dev.stxt</groupId>
     <artifactId>stxt-core</artifactId>
-    <version>0.9.0</version>
+    <version>0.9.1</version>
 </dependency>
 ```
 
 ```groovy
-implementation 'dev.stxt:stxt-core:0.9.0'
+implementation 'dev.stxt:stxt-core:0.9.1'
 ```
 
 The library has **no runtime dependencies**. Under JPMS it is an automatic module named `dev.stxt`.
@@ -233,13 +233,13 @@ Writing a tree out and parsing it back yields the same tree, in both indentation
 
 ## Errors
 
-Every failure is an unchecked `dev.stxt.exceptions.STXTException` carrying an uppercase error code (`getCode()`), such as `INVALID_LINE`, `NODE_NOT_EXIST_IN_SCHEMA` or `SCHEMA_NOT_FOUND`:
+Every failure is an unchecked `dev.stxt.exceptions.STXTException` carrying an uppercase error code (`getCode()`), such as `INVALID_LINE`, `NODE_NOT_DEFINED_IN_SCHEMA` or `SCHEMA_NOT_FOUND`:
 
 | Exception | Raised when |
 |---|---|
 | `ParseException` | the syntax is wrong; adds `getLine()` |
 | `ValidationException` | the document breaks its schema (type, cardinality, undeclared child) |
-| `SchemaException` | the schema or template itself is malformed |
+| `SchemaException` | a schema is built inconsistently through the API (`NODE_DUPLICATED`, `CHILD_DUPLICATED`) or a provider is asked for an empty namespace (`NAMESPACE_REQUIRED`); a malformed schema or template document raises a `ValidationException` with its line (`SCHEMA_ROOT_NOT_VALID`, `SCHEMA_MULTIPLE_ROOTS`, `VALUES_DUPLICATED`...) |
 | `ResourceNotFoundException` | a `ResourcesLoader` has no such resource (schema providers turn it into a `SCHEMA_NOT_FOUND` finding) |
 | `STXTException` (base) | tree integrity is broken (`NODE_ALREADY_ATTACHED`, `NODE_CYCLE`), an ambiguous lookup (`AMBIGUOUS_CHILD`), and other runtime failures |
 | `STXTIOException` | reading a file failed |

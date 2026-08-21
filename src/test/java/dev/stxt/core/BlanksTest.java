@@ -35,7 +35,7 @@ class BlanksTest {
 	@Test
 	void aLineHoldingOnlyAnNbspIsNotEmpty() {
 		assertEquals("INVALID_LINE", firstCode(NBSP + "\n"));
-		assertEquals("INLINE_VALUE_NOT_VALID", firstCode("Block >>" + NBSP + "\n"));
+		assertEquals("BLOCK_VALUE_NOT_ALLOWED", firstCode("Block >>" + NBSP + "\n"));
 		assertTrue(new Parser().parseResult("Root: x\n \t\n\n").getErrors().isEmpty());
 		// String.trim() would also eat controls below U+0020; STXT does not
 		assertEquals("INVALID_NODE_NAME", firstCode("Name: x\n"));

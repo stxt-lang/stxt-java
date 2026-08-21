@@ -82,7 +82,7 @@ public class SchemaValidator implements Validator {
 	    NodeDefinition schemaNode = sch.getNodeDefinition(node.getCanonicalName());
 	    if (schemaNode == null) {
 	        String error = "NOT EXIST NODE " + node.getCanonicalName() + " for namespace " + sch.getNamespace();
-	        errors.add(new ValidationException(node.getLine(), "NODE_NOT_EXIST_IN_SCHEMA", error));
+	        errors.add(new ValidationException(node.getLine(), "NODE_NOT_DEFINED_IN_SCHEMA", error));
 	        return errors;
 	    }
 
@@ -118,7 +118,7 @@ public class SchemaValidator implements Validator {
 
 		Type validator = TypeRegistry.get(nodeType);
 		if (validator == null) {
-			errors.add(new ValidationException(n.getLine(), "TYPE_NOT_SUPPORTED", "Node type not supported: " + nodeType));
+			errors.add(new ValidationException(n.getLine(), "TYPE_NOT_VALID", "Node type not supported: " + nodeType));
 			return errors;
 		}
 
@@ -127,7 +127,7 @@ public class SchemaValidator implements Validator {
 		} catch (ValidationException e) {
 			errors.add(e);
 		} catch (RuntimeException e) {
-			errors.add(new ValidationException(n.getLine(), "VALIDATION_ERROR", e.getMessage()));
+			errors.add(new ValidationException(n.getLine(), "UNEXPECTED_ERROR", e.getMessage()));
 		}
 
 		return errors;
@@ -156,11 +156,11 @@ public class SchemaValidator implements Validator {
 		Integer max = chNode.getMax();
 
 		if (min != null && num < min)
-			errors.add(new ValidationException(node.getLine(), "INVALID_NUMBER",
+			errors.add(new ValidationException(node.getLine(), "TOO_FEW_CHILDREN",
 					num + " nodes of '" + chNode.getQualifiedName() + "' and min is " + min));
 
 		if (max != null && num > max)
-			errors.add(new ValidationException(node.getLine(), "INVALID_NUMBER",
+			errors.add(new ValidationException(node.getLine(), "TOO_MANY_CHILDREN",
 					num + " nodes of '" + chNode.getQualifiedName() + "' and max is " + max));
 
 		return errors;

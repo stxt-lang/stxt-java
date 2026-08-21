@@ -54,7 +54,7 @@ class GrammarTypesTest {
 						Stream.of(DynamicTest.dynamicTest(c.type().getName() + " rejects the block form", () -> {
 							Node node = new Parser().parse("Value >>\n\t" + c.good().get(0) + "\n").get(0);
 							ValidationException ex = assertThrows(ValidationException.class, () -> c.type().validate(null, node));
-							assertEquals("NOT_ALLOWED_TEXT", ex.getCode());
+							assertEquals("BLOCK_FORM_NOT_ALLOWED", ex.getCode());
 						})))));
 	}
 }

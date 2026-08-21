@@ -131,7 +131,7 @@ Schema (@stxt.schema): test.values.group
 		Parser parser = new Parser();
 		parser.registerValidator(new SchemaValidator(new SchemaProviderMeta()));
 		ValidationException ex = assertThrows(ValidationException.class, () -> parser.parse(text));
-		assertEquals("INVALID_VALUE", ex.getCode());
+		assertEquals("VALUE_NOT_ALLOWED", ex.getCode());
 	}
 
 	@Test

@@ -22,7 +22,7 @@ public final class TEXT implements Type {
 	@Override
     public void validate(NodeDefinition ndef, Node n) {
 		if (n instanceof InlineNode inline && !inline.getChildren().isEmpty()) {
-			throw new ValidationException(n.getLine(), "NOT_ALLOWED_CHILDREN_TEXT",
+			throw new ValidationException(n.getLine(), "CHILDREN_NOT_ALLOWED",
 					"Not allowed children nodes in node " + n.getQualifiedName());
 		}
 	}

@@ -58,7 +58,7 @@ class LineIndentParser {
                 // The prefix covering the block level must be homogeneous (spec 10.2, rule 2);
                 // empty lines are always preserved and are exempt (spec 10.3)
                 if (sawSpace && sawTab && !text.isEmpty())
-                    throw new ParseException(numLine, "MIXED_INDENTATION", "Mixed tabs and spaces in indentation");
+                    throw new ParseException(numLine, "INDENTATION_MIXED", "Mixed tabs and spaces in indentation");
                 return new LineIndent(level, text);
             }
         }
@@ -73,11 +73,11 @@ class LineIndentParser {
 
         // Spaces and tabs mixed in the indentation (spec 8.1 and 8.3)
         if (sawSpace && sawTab)
-            throw new ParseException(numLine, "MIXED_INDENTATION", "Mixed tabs and spaces in indentation");
+            throw new ParseException(numLine, "INDENTATION_MIXED", "Mixed tabs and spaces in indentation");
 
         // Space indentation is not a multiple of 4
         if (spaces > 0)
-            throw new ParseException(numLine, "INVALID_NUMBER_SPACES", "There are " + spaces + " spaces before node");
+            throw new ParseException(numLine, "INDENTATION_SPACES_NOT_VALID", "There are " + spaces + " spaces before node");
         
         // Validate the level progression (no jumps, spec 11.3). Comments included (spec 9):
         // lastLevel is the level of the last NODE, a comment never becomes the reference.

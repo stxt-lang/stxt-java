@@ -64,7 +64,7 @@ public class ConditionalValidatorTest {
 
 		List<ParseException> errors = parser.parseResult(BOUND_BAD).getErrors();
 		assertEquals(1, errors.size());
-		assertEquals("INVALID_NUMBER", errors.get(0).getCode());
+		assertEquals("TOO_FEW_CHILDREN", errors.get(0).getCode());
 		assertTrue(errors.get(0).getMessage().endsWith("0 nodes of 'com.acme.book:isbn' and min is 1"));
 	}
 

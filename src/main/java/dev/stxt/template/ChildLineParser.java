@@ -27,7 +27,7 @@ public final class ChildLineParser {
      * @param rawLine raw inline value of the child line.
      * @param lineNumber line number, for the error message.
      * @return the parsed child definition.
-     * @throws ValidationException with code {@code INVALID_CHILD_LINE} if the format is not valid.
+     * @throws ValidationException with code {@code STRUCTURE_LINE_NOT_VALID} if the format is not valid.
      */
     public static ChildLine parse(String rawLine, int lineNumber) {
     	if (rawLine.trim().isEmpty())
@@ -35,7 +35,7 @@ public final class ChildLineParser {
     	
         Matcher m = CHILD_LINE_PATTERN.matcher(rawLine);
         if (!m.matches()) {
-            throw new ValidationException(lineNumber, "INVALID_CHILD_LINE", "Line not valid: " + rawLine);
+            throw new ValidationException(lineNumber, "STRUCTURE_LINE_NOT_VALID", "Line not valid: " + rawLine);
         }
 
         String type = m.group("type");
@@ -64,7 +64,7 @@ public final class ChildLineParser {
 		} else if (count.contains(",")) {
             String[] minMax = count.split(",", -1);
             if (minMax.length != 2)
-                throw new ValidationException(lineNumber, "INVALID_CHILD_COUNT", "Invalid count " + count + " in line: " + rawLine);
+                throw new ValidationException(lineNumber, "CARDINALITY_NOT_VALID", "Invalid count " + count + " in line: " + rawLine);
 
             int minValue = parseCount(minMax[0].trim(), count, rawLine, lineNumber);
             int maxValue = parseCount(minMax[1].trim(), count, rawLine, lineNumber);
@@ -108,11 +108,11 @@ public final class ChildLineParser {
     }
 
     // STXT-TEMPLATE-SPEC 7.1: num, min and max must be non-negative integers (no sign, no
-    // leftover text); it throws INVALID_CHILD_COUNT when they are not, instead of letting an
+    // leftover text); it throws CARDINALITY_NOT_VALID when they are not, instead of letting an
     // unwrapped NumberFormatException through
     private static int parseCount(String num, String count, String rawLine, int lineNumber) {
         if (!num.matches("\\d+"))
-            throw new ValidationException(lineNumber, "INVALID_CHILD_COUNT", "Invalid count " + count + " in line: " + rawLine);
+            throw new ValidationException(lineNumber, "CARDINALITY_NOT_VALID", "Invalid count " + count + " in line: " + rawLine);
         return Integer.parseInt(num);
     }
 }

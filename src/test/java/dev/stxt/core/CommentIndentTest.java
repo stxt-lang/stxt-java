@@ -27,14 +27,14 @@ public class CommentIndentTest {
 	@Test
 	void mixedTabsAndSpacesInACommentIsMixedIndentation() {
 		ParseException e = error("Root:\n\tFirst: 1\n\t    # mixed\n");
-		assertEquals("MIXED_INDENTATION", e.getCode());
+		assertEquals("INDENTATION_MIXED", e.getCode());
 		assertEquals(3, e.getLine());
 	}
 
 	@Test
 	void spacesNotMultipleOfFourInACommentIsInvalidNumberSpaces() {
 		ParseException e = error("Root:\n  # two spaces\n    Child: 1\n");
-		assertEquals("INVALID_NUMBER_SPACES", e.getCode());
+		assertEquals("INDENTATION_SPACES_NOT_VALID", e.getCode());
 		assertEquals(2, e.getLine());
 	}
 
