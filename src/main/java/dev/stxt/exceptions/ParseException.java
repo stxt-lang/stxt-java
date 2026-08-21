@@ -12,12 +12,19 @@ public class ParseException extends STXTException {
      *
      * @param line line number where the error was detected.
      * @param code error code in UPPERCASE.
-     * @param message descriptive message.
+     * @param message descriptive message; {@link #getMessage()} returns exactly this string,
+     *        with no code and no line (since 0.10.0).
      */
     public ParseException(int line, String code, String message) {
-        super(code, "Error at line: " + line + ", " + message);
+        super(code, message);
         this.line = line;
     }
     /** {@return the line number of the document where the error was detected} */
     public int getLine() { return line; }
+
+    /** {@return {@code "[CODE] line N: message"}, the framed form of the error} */
+    @Override
+    public String toString() {
+        return "[" + getCode() + "] line " + line + ": " + getMessage();
+    }
 }

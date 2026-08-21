@@ -85,10 +85,16 @@ public final class ChildLineParser {
         String[] values = null;
         String valuesStr = m.group("values");
         if (valuesStr != null) {
-            String[] parts = valuesStr.split(",");
+            // -1 keeps the trailing empty item of "[a, b,]", which Java would otherwise drop
+            String[] parts = valuesStr.split(",", -1);
             List<String> list = new ArrayList<>();
             for (String part: parts) {
                 part = part.trim();
+                // An empty item ("[a, , b]", "[a, b,]") is an error, as an empty Value: is in a
+                // schema (STXT-TEMPLATE-SPEC 14.14). Only the whole list may be empty ("[]"),
+                // which the template parser reports as VALUES_REQUIRED.
+                if (part.isEmpty() && parts.length > 1)
+                    throw new ValidationException(lineNumber, "VALUE_EMPTY", "Empty ENUM value in " + valuesStr);
                 if (!part.isEmpty()) {
                     if (list.contains(part)) 
                         throw new ValidationException(lineNumber, "VALUE_DUPLICATED", "The values " + part + " is duplicated");

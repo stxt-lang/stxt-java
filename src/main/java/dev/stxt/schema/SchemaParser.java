@@ -116,8 +116,12 @@ public class SchemaParser {
 		    
 		    Node valuesNode = values.get(0);
 		    values = inline(valuesNode).getChildren("value");
-		    for (Node value: values)
+		    for (Node value: values) {
+		        // STXT-SCHEMA-SPEC 7.2, condition 14: an empty Value: is a schema error
+		        if (value.getText() == null || value.getText().isEmpty())
+		            throw new ValidationException(value.getLine(), "VALUE_EMPTY", "Value of ENUM cannot be empty");
 		        result.addValue(value.getText(), value.getLine());
+		    }
 		}
 		
 		// Look at the enum

@@ -1,6 +1,14 @@
 package dev.stxt.exceptions;
 
-/** Root of every STXT exception. Every exception carries an UPPERCASE code ({@link #getCode()}). */
+/**
+ * Root of every STXT exception. Every exception carries an UPPERCASE code ({@link #getCode()}).
+ * <p>
+ * Message framing (since 0.10.0, the same in every port): {@link #getMessage()} returns only the
+ * description, with no code and no line; the code and, for {@link ParseException}, the line are
+ * separate fields, and whoever formats the output composes them. The frame lives in
+ * {@link #toString()}: {@code "[CODE] message"} here and {@code "[CODE] line N: message"} in
+ * {@link ParseException}.
+ */
 public class STXTException extends RuntimeException {
 	
 	private static final long serialVersionUID = 1L;
@@ -33,10 +41,9 @@ public class STXTException extends RuntimeException {
     /** {@return the error code in UPPERCASE} */
     public String getCode() { return code; }
     
+    /** {@return {@code "[CODE] message"}, the framed form of the error} */
     @Override
     public String toString() {
-        String className = getClass().getSimpleName();
-        String message = getLocalizedMessage();
-        return (className + "[" + code + "]" + (message != null ? ": " + message : ""));
+        return "[" + code + "] " + getMessage();
     }
 }

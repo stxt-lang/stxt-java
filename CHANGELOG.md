@@ -4,6 +4,33 @@ All notable changes to `dev.stxt:stxt-core` are documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.10.0] - 2026-08-21
+
+The 0.10.0 cycle, decided on 2026-08-21 and made in the specifications first
+(`Last modif: 2026-08-21`), then in `stxt-impl` and in the three ports at once. `@stxt-lang/core`
+and `stxt` (Python) ship the same scope as 0.10.0.
+
+- **Blanks in binary values** (STXT-SCHEMA-SPEC 9.5). `HEXADECIMAL`, `BINARY` and `BASE64` remove
+  every space (U+0020) and tab (U+0009), wherever it is, before applying their grammar, in both
+  the inline and the block form (the block lines are joined first). `DE AD BE EF`, `DE\tAD`,
+  `1010 1010`, `SG Vs bG 8=` and Base64 wrapped at 76 columns now validate; `DE:AD`, `DE-AD`, a
+  value that is empty after removing the blanks, and Base64 with characters outside the standard
+  alphabet are `INVALID_VALUE`. Before, only the leading and trailing blanks of each block line
+  were ignored.
+- **Empty ENUM value** is an error (STXT-SCHEMA-SPEC 7.2, condition 14; STXT-TEMPLATE-SPEC 14.14).
+  An empty `Value:` under `Values:` is `VALUE_EMPTY` at the line of that `Value`; an empty item in
+  the `[...]` list of a template (`[a, , b]`, `[a, b,]`) is `VALUE_EMPTY` at the line of the
+  Structure line. A whole empty list (`[]`) stays `VALUES_REQUIRED`. Before, empty values were
+  silently skipped.
+- **Message framing** (breaking for anyone parsing messages). `getMessage()` of every
+  `ParseException`/`ValidationException` returns only the description, exactly as built (for
+  example `Level of indent incorrect: 2`), with no code and no line: the `Error at line: N, `
+  prefix is gone. The frame moved to `toString()`: `[CODE] line N: message` for
+  `ParseException`/`ValidationException` and `[CODE] message` for the rest of `STXTException`
+  (before, `toString()` was `ClassName[CODE]: message`). `getCode()` and `getLine()` are unchanged.
+- **`Constants.SPEC_VERSION`** (`"1.0"`): the version of the five STXT specifications this library
+  implements, distinct from the artifact version. `dev.stxt.Constants` is public from now on.
+
 ## [0.9.1] - 2026-08-21
 
 The last items of the STXT-SCHEMA-SPEC review before 1.0, decided on 2026-08-21 and made in the
