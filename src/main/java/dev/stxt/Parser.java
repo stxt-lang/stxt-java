@@ -1,5 +1,6 @@
 package dev.stxt;
 
+import dev.stxt.utils.StringUtils;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.StringReader;
@@ -233,7 +234,7 @@ public class Parser {
 			value = line.substring(nodeIndex + 1);
 		}
 
-		if (textNode &&  !value.trim().isEmpty())
+		if (textNode && !StringUtils.trim(value).isEmpty())
 				throw new ParseException(lineNumber, "INLINE_VALUE_NOT_VALID", "Line not valid: " + line);
 
 		// The namespace the line declares, if any; inheritance from the parent is resolved by

@@ -4,6 +4,7 @@ import static dev.stxt.Constants.SPACE;
 import static dev.stxt.Constants.TAB;
 import static dev.stxt.Constants.TAB_SPACES;
 import static dev.stxt.Constants.COMMENT_CHAR;
+import dev.stxt.utils.StringUtils;
 import static dev.stxt.utils.StringUtils.rightTrim;
 
 import dev.stxt.exceptions.ParseException;
@@ -80,6 +81,7 @@ class LineIndentParser {
                     "Level of indent incorrect: " + level);            
 
         // 4) General case: return the line without the indentation already consumed
-        return new LineIndent(level, line.substring(pointer).trim());
+        // Blank-only trim (spec 4): an NBSP after the value is part of it
+        return new LineIndent(level, StringUtils.trim(line.substring(pointer)));
 	}
 }

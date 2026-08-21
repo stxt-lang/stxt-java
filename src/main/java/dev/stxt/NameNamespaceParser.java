@@ -1,5 +1,6 @@
 package dev.stxt;
 
+import dev.stxt.utils.StringUtils;
 import java.util.Locale;
 
 import dev.stxt.exceptions.ParseException;
@@ -25,7 +26,7 @@ public final class NameNamespaceParser {
             throw new ParseException(lineNumber, "INVALID_LINE", "Line not valid: " + fullLine);
         }
 
-        rawName = rawName.trim();
+        rawName = StringUtils.trim(rawName);
         int openIndex  = rawName.indexOf("(");
         int closeIndex = rawName.indexOf(")");
 
@@ -39,7 +40,7 @@ public final class NameNamespaceParser {
         	if (openIndex > closeIndex || closeIndex != rawName.length()-1)
         		throw new ParseException(lineNumber, "INVALID_NAMESPACE", "Line not valid: " + fullLine);
 
-        	name = rawName.substring(0, openIndex).trim();
+        	name = StringUtils.trim(rawName.substring(0, openIndex));
         	// No trim here: the grammar (STXT-SPEC 7/16) allows no spaces inside '( )'
         	namespace = rawName.substring(openIndex+1, closeIndex);
         	

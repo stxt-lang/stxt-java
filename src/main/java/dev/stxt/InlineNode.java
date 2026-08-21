@@ -82,7 +82,7 @@ public final class InlineNode extends Node {
 	 * @param value new value, or {@code null} for none. It is trimmed.
 	 */
 	public void setValue(String value) {
-		this.value = value == null ? "" : value.trim();
+		this.value = StringUtils.trim(value);
 	}
 
 	@Override

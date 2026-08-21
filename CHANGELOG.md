@@ -4,6 +4,22 @@ All notable changes to `dev.stxt:stxt-core` are documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.8.1]
+
+One language-level change decided on 2026-08-21 while preparing 1.0, made in the specification
+first (`Last modif: 2026-08-21`), then in `stxt-impl` and in the three ports at once.
+`@stxt-lang/core` and `stxt` (Python) ship the same scope as 0.8.1.
+
+- **A blank is only U+0020 or U+0009** (STXT-SPEC 4). Every trim of the core —
+  inline values, node names, the "is this line empty?" test and the right trim of `>>` block
+  lines — works on space and tab only, through the new `StringUtils.trim`/`isBlank` and a
+  narrowed `rightTrim`/`compactSpaces`/`normalize`. `String.trim()` (which also removed every
+  control character below U+0020) and `Character.isWhitespace` are no longer used in the core.
+  Any other Unicode space (NBSP, U+3000, U+2028...) is content: it stays in the value, a line
+  holding only an NBSP is not empty (`INVALID_LINE`), `>>` followed by an NBSP is
+  `INLINE_VALUE_NOT_VALID`, and an NBSP in a name makes it `INVALID_NODE_NAME`. Conformance
+  pair `conformance/tree/nbsp`; `BlanksTest`.
+
 ## [0.8.0]
 
 Three language-level changes decided on 2026-08-20 while preparing 1.0, each made in the

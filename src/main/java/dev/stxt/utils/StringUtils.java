@@ -11,21 +11,55 @@ public class StringUtils {
 	private static final Pattern NODE_NAME = Pattern.compile("^[\\p{L}\\p{Nd}\\p{Mn}\\p{Mc}\\-_ ]+$");
 	private static final Pattern NODE_NAME_LETTER_OR_DIGIT = Pattern.compile("[\\p{L}\\p{Nd}]");
 
+	// STXT-SPEC 4: a blank is exactly U+0020 or U+0009. Every trim in the core works on these
+	// two characters only; String.trim() (every code point <= U+0020), String.strip() and
+	// Character.isWhitespace() are deliberately avoided because they are broader or narrower
+	// than that, and STXT treats everything else (NBSP, U+3000, controls...) as content.
+	private static final Pattern BLANK_RUN = Pattern.compile("[ \\t]+");
+
 	private StringUtils() {
+	}
+
+	/**
+	 * Tells whether a character is an STXT blank (STXT-SPEC 4): space or tab.
+	 *
+	 * @param c character.
+	 * @return {@code true} for U+0020 and U+0009 only.
+	 */
+	public static boolean isBlank(char c) {
+		return c == ' ' || c == '\t';
+	}
+
+	/**
+	 * Removes the leading and trailing blanks (space and tab only, STXT-SPEC 4) of a string.
+	 *
+	 * @param s string to trim.
+	 * @return the trimmed string; {@code null} is treated as the empty string.
+	 */
+	public static String trim(String s) {
+		if (s == null)
+			return "";
+		int start = 0;
+		int end = s.length();
+		while (start < end && isBlank(s.charAt(start)))
+			start++;
+		while (end > start && isBlank(s.charAt(end - 1)))
+			end--;
+		return s.substring(start, end);
 	}
 
 	// Used for name>> nodes
 	/**
-	 * Removes the trailing whitespace of a string.
+	 * Removes the trailing blanks (space and tab only, STXT-SPEC 4, 10.2) of a string.
 	 *
-	 * @param s string to strip the trailing spaces from.
-	 * @return the string without trailing whitespace; {@code null} is treated as the empty string.
+	 * @param s string to strip the trailing blanks from.
+	 * @return the string without trailing blanks; {@code null} is treated as the empty string.
 	 */
 	public static String rightTrim(String s) {
 		if (s == null)
 			return "";
 		int i = s.length() - 1;
-		while (i >= 0 && Character.isWhitespace(s.charAt(i))) {
+		while (i >= 0 && isBlank(s.charAt(i))) {
 			i--;
 		}
 		return s.substring(0, i + 1);
@@ -56,15 +90,13 @@ public class StringUtils {
 	
 	// Used for the name of the nodes
 	/**
-	 * Trims a string and collapses its inner whitespace.
+	 * Trims a string and collapses its inner runs of blanks (space and tab only).
 	 *
 	 * @param s string to compact.
-	 * @return the string with the outer spaces trimmed and the inner ones collapsed into a single one; {@code null} is treated as the empty string.
+	 * @return the string with the outer blanks trimmed and the inner runs collapsed into a single space; {@code null} is treated as the empty string.
 	 */
 	public static String compactSpaces(String s) {
-		if (s == null)
-			return "";
-		return s.trim().replaceAll("\\s+", " ");
+		return BLANK_RUN.matcher(trim(s)).replaceAll(" ");
 	}
 
 	/**
@@ -90,15 +122,14 @@ public class StringUtils {
 	 * @return the canonical name of a node: NFC + lower case, with separators collapsed into '-'; {@code null} is treated as the empty string.
 	 */
 	public static String normalize(String input) {
-	    if (input == null) return "";
-	    String s = input.trim();
+	    String s = trim(input);
 	    if (s.isEmpty()) return "";
 
 	    s = Normalizer.normalize(s, Normalizer.Form.NFC);
 	    s = s.toLowerCase(Locale.ROOT);
 
-	    // every run of separators ('-', '_', spaces) => a single '-'
-	    s = s.replaceAll("[-_\\s]+", "-");
+	    // every run of separators ('-', '_', blanks) => a single '-'
+	    s = s.replaceAll("[-_ \\t]+", "-");
 
 	    // trim the '-'
 	    s = s.replaceAll("^-+|-+$", "");
