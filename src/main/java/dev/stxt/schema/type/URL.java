@@ -1,42 +1,30 @@
 package dev.stxt.schema.type;
 
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.util.regex.Pattern;
 
-import dev.stxt.Node;
-import dev.stxt.exceptions.ValidationException;
-import dev.stxt.schema.NodeDefinition;
-import dev.stxt.schema.Type;
+/**
+ * {@code URL} type: an absolute URL with a mandatory scheme and host, following the grammar of
+ * STXT-SCHEMA-SPEC 9.4 — {@code scheme "://" [userinfo "@"] host [":" port] ["/" path]
+ * ["?" query] ["#" fragment]} — and not {@link java.net.URI}, so every port accepts exactly the
+ * same values. Any scheme of the form letter + letters/digits/{@code +}/{@code -}/{@code .} is
+ * accepted; the host is non-empty (no TLD required, IPv6 in brackets, non-ASCII kept as it is);
+ * a value without a scheme, a scheme without {@code //} and host ({@code mailto:}, {@code urn:},
+ * {@code file:///}), inner blanks or a non-numeric port are rejected. Nothing is resolved or
+ * normalised.
+ */
+public final class URL extends RegexValue {
+	private static final Pattern P_URL = Pattern.compile(
+			"^[A-Za-z][A-Za-z0-9+.-]*://(?:[^ \\t/?#@]+@)?(?:\\[[0-9A-Fa-f:.]+\\]|[^ \\t/?#@:\\[\\]]+)(?::[0-9]+)?(?:/[^ \\t?#]*)?(?:\\?[^ \\t#]*)?(?:#[^ \\t]*)?$");
 
-/** {@code URL} type: checks that the value is a syntactically valid URI/URL. */
-public final class URL implements Type {
 	/** Single instance of this type. */
 	public static final URL INSTANCE = new URL();
 
 	private URL() {
+		super(P_URL, "Invalid URL");
 	}
 
-    @Override
-    public String getName() {
-        return INSTANCE.getClass().getSimpleName();
-    }
-    
 	@Override
-    public void validate(NodeDefinition ndef, Node n) {
-		// INLINE value form (STXT-SCHEMA-SPEC 9.4): the '>>' block is not accepted
-		if (n.isTextNode()) {
-			throw new ValidationException(n.getLine(), "NOT_ALLOWED_TEXT",
-					"Not allowed text in node " + n.getQualifiedName());
-		}
-
-		String url = n.getText();
-		try {
-			URI uri = new URI(url);
-			boolean ok = uri.getScheme() != null && uri.getHost() != null;
-			if (!ok)
-				throw new IllegalArgumentException();
-		} catch (URISyntaxException | IllegalArgumentException e) {
-			throw new ValidationException(n.getLine(), "INVALID_VALUE", "Invalid URL: " + url);
-		}
+	public String getName() {
+		return "URL";
 	}
 }
