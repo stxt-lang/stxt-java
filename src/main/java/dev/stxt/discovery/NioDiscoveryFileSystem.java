@@ -10,6 +10,10 @@ import java.util.stream.Stream;
 /** {@link DiscoveryFileSystem} over the real file system ({@code java.nio.file}). */
 public final class NioDiscoveryFileSystem implements DiscoveryFileSystem {
 
+	/** Creates a file system over {@code java.nio.file}; it has no state. */
+	public NioDiscoveryFileSystem() {
+	}
+
 	@Override
 	public boolean isDirectory(Path path) {
 		return Files.isDirectory(path);
