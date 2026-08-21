@@ -4,6 +4,54 @@ All notable changes to `dev.stxt:stxt-core` are documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [1.0.0] - Unreleased
+
+The first stable release. The language (the five specifications, `SPEC_VERSION = "1.0"`), the
+canonical tree and the error codes are frozen for the whole 1.x line, and so is the public API
+of this artifact. Same scope as `@stxt-lang/core` and `stxt` (Python) 1.0.0.
+
+### Removed
+
+- `Node.getNormalizedName()`, `NodeDefinition.getNormalizedName()` and
+  `ChildDefinition.getNormalizedName()`, deprecated since 0.7.0: use `getCanonicalName()`.
+- `dev.stxt.runtime.ConditionalValidator`, deprecated since 0.8.0: `SchemaValidator` already
+  lets the nodes without a namespace through (STXT-SCHEMA-SPEC 5), so register it directly.
+  `STXT.parser(loader)` does so now.
+
+### Added (API parity audit against `@stxt-lang/core` and `stxt`)
+
+- `Observer` gets the two streaming callbacks the other ports had, `onComment(int, String)` and
+  `onTextLine(TextNode, int, String, LineIndent)`, and `onCreate` receives the source line:
+  `onCreate(Node, String)`. **Breaking for implementors of `Observer`** (the interface gains
+  two abstract methods and changes one signature); the only one in the ecosystem was updated.
+- `LineIndent` and `LineIndentParser.parseLine` are public, with the fields of the pseudocode
+  (`indentLevel`, `lineWithoutIndent`, `isComment`, `isBlock`, `indentLength`) and `isEmpty()`.
+  `parseLine` never returns `null` any more: a comment comes back with `isComment`, an empty line
+  with `isEmpty()`.
+- In-memory providers, as in the other ports: `SchemaProviderMemory` (`addSchema`),
+  `TemplateSchemaProviderMemory` (`addTemplate`) and `dev.stxt.runtime.UnifiedSchemaProvider`
+  (`addFile`, either kind), all with `clear()` and `getAllSchemas()`, and all refusing to register
+  a definition that does not validate against its meta-schema.
+- Discovery over an injectable file system: `DiscoveryFileSystem` (`isDirectory`, `listDirectory`,
+  `readFile`), `DiscoveryEntry`, `NioDiscoveryFileSystem` (the default) and the constructor
+  `DiscoveryResolver(fs, env, maxAscent)`; `DiscoveryLevel` and the `DiscoveryResult` constructor
+  are public, so a result can be built from levels held in memory. `STXT_DIR` and
+  `STXT_EXTENSION` are public constants of the resolver.
+- `TreeJson.toCanonicalTree(List<Node>)`: the canonical tree of STXT-TREE-SPEC as plain
+  `java.util` maps and lists, ready for any JSON library; `toCanonicalJson` now serializes that
+  tree (same output as before).
+- `NodeDefinition(name, type, line, description)`; the three-argument constructor and
+  `setDescription` stay.
+- `Schema.getDescription()` and the constructor `Schema(namespace, line, description)`;
+  `SchemaParser` fills it from the `Description` of the root (STXT-SCHEMA-SPEC 6.1). The
+  two-argument constructor stays.
+- `Constants.SEP_TEXT_NODE = ">>"`.
+
+### Tests
+
+- `Constants.SPEC_VERSION` is compared against the `Metadata/Version` that STXT-SPEC declares
+  in `stxt-web/es/stxt-core-ref.stxt`, not only against a literal.
+
 ## [0.10.0] - 2026-08-21
 
 The 0.10.0 cycle, decided on 2026-08-21 and made in the specifications first

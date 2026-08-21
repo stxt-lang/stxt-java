@@ -14,7 +14,7 @@ import dev.stxt.utils.StringUtils;
 /** Definition of a node inside a {@link Schema}: type, expected children, allowed values and description. */
 public class NodeDefinition {
 	private final String name;
-	private final String normalizedName;
+	private final String canonicalName;
 	private final String type;
 	private String description;
 	private final Map<String, ChildDefinition> children = new HashMap<>();
@@ -28,9 +28,22 @@ public class NodeDefinition {
 	 * @param line line number, for the error message.
 	 */
 	public NodeDefinition(String name, String type, int line) {
+		this(name, type, line, null);
+	}
+
+	/**
+	 * Creates the definition of a node, with its description.
+	 *
+	 * @param name name of the node.
+	 * @param type name of the type (see {@link TypeRegistry}).
+	 * @param line line number, for the error message.
+	 * @param description optional description of the node (STXT-SCHEMA-SPEC 7.1), or {@code null}.
+	 */
+	public NodeDefinition(String name, String type, int line, String description) {
 		this.name = StringUtils.compactSpaces(name);
-		this.normalizedName = StringUtils.normalize(name);
+		this.canonicalName = StringUtils.normalize(name);
 		this.type = type;
+		this.description = description;
 		if (!StringUtils.isValidNodeName(this.name)) {
 		    throw new ValidationException(line, "INVALID_NODE_NAME", "Node name not valid: " + name);
 		}
@@ -41,15 +54,7 @@ public class NodeDefinition {
 	}
 	/** {@return the canonical name of the node} */
 	public String getCanonicalName() {
-		return normalizedName;
-	}
-	/**
-	 * @return the canonical name of the node.
-	 * @deprecated since 0.7.0, use {@link #getCanonicalName()}.
-	 */
-	@Deprecated
-	public String getNormalizedName() {
-		return normalizedName;
+		return canonicalName;
 	}
 	/** {@return the name of the value type of this node (see {@link TypeRegistry})} */
 	public String getType() {

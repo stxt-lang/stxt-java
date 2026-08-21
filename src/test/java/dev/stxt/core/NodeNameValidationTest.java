@@ -25,7 +25,7 @@ class NodeNameValidationTest {
 		Node decomposed = new Parser().parse("Cafe\u0301: value\n").get(0);
 		Node precomposed = new Parser().parse("Café: value\n").get(0);
 
-		assertEquals("café", decomposed.getNormalizedName());
-		assertEquals(precomposed.getNormalizedName(), decomposed.getNormalizedName());
+		assertEquals("café", decomposed.getCanonicalName());
+		assertEquals(precomposed.getCanonicalName(), decomposed.getCanonicalName());
 	}
 }

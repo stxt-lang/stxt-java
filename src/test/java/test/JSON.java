@@ -2,7 +2,7 @@ package test;
 
 import java.io.IOException;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -21,6 +21,7 @@ import dev.stxt.Node;
 import dev.stxt.TextNode;
 import dev.stxt.schema.ChildDefinition;
 import dev.stxt.schema.NodeDefinition;
+import dev.stxt.schema.Schema;
 
 public final class JSON {
 	private static final String IDENTER_STRING = "    "; // It could also be "\t"
@@ -32,14 +33,20 @@ public final class JSON {
 		@JsonInclude(JsonInclude.Include.NON_NULL)
 		abstract String getDescription();
 
-		// 0.7.0 added getCanonicalName() next to the deprecated getNormalizedName(); the
-		// fixtures keep the historical 'normalized_name' member only
-		@JsonIgnore
+		// The fixtures predate 1.0 and keep the historical 'normalized_name' member for the
+		// canonical name (the API was renamed getCanonicalName() in 0.7.0, alias removed in 1.0).
+		@JsonProperty("normalized_name")
 		abstract String getCanonicalName();
 	}
 
+	// Same for the description of the Schema itself (1.0): left out when null.
+	private abstract static class SchemaMixin {
+		@JsonInclude(JsonInclude.Include.NON_NULL)
+		abstract String getDescription();
+	}
+
 	private abstract static class ChildDefinitionMixin {
-		@JsonIgnore
+		@JsonProperty("normalized_name")
 		abstract String getCanonicalName();
 	}
 
@@ -83,6 +90,7 @@ public final class JSON {
 				.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
 				.addMixIn(NodeDefinition.class, NodeDefinitionMixin.class)
 				.addMixIn(ChildDefinition.class, ChildDefinitionMixin.class)
+				.addMixIn(Schema.class, SchemaMixin.class)
 				.registerModule(new SimpleModule().addSerializer(Node.class, new LegacyNodeSerializer()));
 	}
 

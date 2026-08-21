@@ -155,27 +155,41 @@ public class Parser {
 
 			// Parse the line
 			LineIndent lineIndent = LineIndentParser.parseLine(line, lastNodeText, lastLevel, lineNumber);
-			if (lineIndent == null) {
-				// parseLine returns null for comments and for empty lines outside a block. A comment's
-				// indentation has already been validated like a node's (spec 9), but it never becomes
-				// the reference level: lastLevel is only updated by nodes. Inside an open block an
-				// empty line comes back as text, so a null here with an open block is a comment at the
-				// level of the block node or shallower: it closes the block (spec 6.1 and 9.1, a block
-				// is a literal and cannot be commented from inside). Only the block closes; the comment
-				// does not touch the rest of the hierarchy.
+
+			if (lineIndent.isComment) {
+				// Its indentation was validated by parseLine like a node's (spec 9), but it never
+				// becomes the reference level: the stack (and so lastLevel) is only moved by nodes.
+				// A comment at the level of an open block node (or shallower) closes the block
+				// (spec 6.1 and 9.1): a block is a literal and cannot be commented from inside.
+				// Only the block closes; the comment does not touch the rest of the hierarchy.
 				if (lastNodeText)
 					closeToLevel(stack, stack.size() - 1, result, stopOnFirstError);
+
+				// Hand it over to the observers
+				if (observers != null)
+					for (Observer o : observers)
+						o.onComment(lineNumber, line);
 				return;
 			}
 
 			int currentLevel = lineIndent.indentLevel;
 
-			// If we are inside a text node, and the level says it is still text,
-			// append a text line instead of creating a node.
-			if (lastNodeText && currentLevel > lastLevel) {
-				((TextNode) lastNode).addTextLine(lineIndent.lineWithoutIndent);
+			// When we are inside a text node and the level says it is still text,
+			// append the text line instead of creating a node.
+			if (lineIndent.isBlock) {
+				TextNode textNode = (TextNode) lastNode;
+				textNode.addTextLine(lineIndent.lineWithoutIndent);
+
+				// Notify the observers about the text line
+				if (observers != null)
+					for (Observer o : observers)
+						o.onTextLine(textNode, lineNumber, line, lineIndent);
 				return;
 			}
+
+			// Empty lines are ignored
+			if (lineIndent.isEmpty())
+				return;
 
 			// Close nodes down to the current level (this "finishes" them: observers and validators run)
 			closeToLevel(stack, currentLevel, result, stopOnFirstError);
@@ -191,7 +205,7 @@ public class Parser {
 			else					((InlineNode) parent).addChild(node);
 
 			// Hand it over to the observers
-			observeNode(node);
+			observeNode(node, line);
 
 			// Push it onto the stack
 			stack.push(node);
@@ -258,11 +272,11 @@ public class Parser {
 	// Validation, transformation, etc. methods
 	// -------------------------------------------
 	
-	private Node observeNode(Node node) {
+	private Node observeNode(Node node, String line) {
 	    if (observers != null)
 	        for (Observer o: observers)
-	            o.onCreate(node);
-	    
+	            o.onCreate(node, line);
+
 		return node;
 	}
 	

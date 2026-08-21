@@ -20,15 +20,15 @@ public final class STXT {
 
     /**
      * Creates a parser with schema and template validation already registered. Only the nodes
-     * with a namespace are validated (see {@link ConditionalValidator}): a document, or a root
-     * node, without a namespace is not wrong, it just cannot be validated.
+     * with a namespace are validated (STXT-SCHEMA-SPEC 5): a document, or a root node, without
+     * a namespace is not wrong, it just cannot be validated.
      *
      * @param loader where to load the schemas/templates from.
      * @return a parser with schema validation already registered.
      */
     public static Parser parser(ResourcesLoader loader) {
         Parser p = new Parser();
-        p.registerValidator(new ConditionalValidator(new SchemaValidator(schemaProvider(loader))));
+        p.registerValidator(new SchemaValidator(schemaProvider(loader)));
         return p;
     }
 

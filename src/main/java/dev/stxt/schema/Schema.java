@@ -15,16 +15,34 @@ public class Schema {
 
 	private Map<String, NodeDefinition> nodes = new LinkedHashMap<String, NodeDefinition>();
 	private final String namespace;
+	private final String description;
 	
 	/**
-	 * Creates an empty schema for a namespace.
+	 * Creates an empty schema for a namespace, with no description.
 	 *
 	 * @param namespace namespace this schema applies to.
 	 * @param line line number, for the error message.
 	 */
 	public Schema(String namespace, int line) {
+		this(namespace, line, null);
+	}
+
+	/**
+	 * Creates an empty schema for a namespace.
+	 *
+	 * @param namespace namespace this schema applies to.
+	 * @param line line number, for the error message.
+	 * @param description optional description of the schema (STXT-SCHEMA-SPEC 6.1), or {@code null}.
+	 */
+	public Schema(String namespace, int line, String description) {
 		this.namespace = StringUtils.lowerCase(namespace);
+		this.description = description;
 		NamespaceValidator.validateNamespaceFormat(this.namespace, line);
+	}
+
+	/** {@return the description of the schema, or {@code null} if it has none} */
+	public String getDescription() {
+		return description;
 	}
 	
 	/** {@return the node definitions, indexed by their canonical name} */

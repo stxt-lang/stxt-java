@@ -39,12 +39,12 @@ Requires **Java 17** or later.
 <dependency>
     <groupId>dev.stxt</groupId>
     <artifactId>stxt-core</artifactId>
-    <version>0.10.0</version>
+    <version>1.0.0</version>
 </dependency>
 ```
 
 ```groovy
-implementation 'dev.stxt:stxt-core:0.10.0'
+implementation 'dev.stxt:stxt-core:1.0.0'
 ```
 
 The library has **no runtime dependencies**. Under JPMS it is an automatic module named `dev.stxt`.
@@ -133,7 +133,7 @@ Overloads with two strings always take the second one as the *content* (value or
 
 ## Validating against a schema
 
-Schemas are themselves STXT documents, written in the reserved `@stxt.schema` namespace (or in the friendlier `@stxt.template` form, which is equivalent sugar). A `ResourcesLoader` says where they live; `STXT.parser(loader)` returns a parser that resolves both kinds, caches them, and validates every namespaced node as it is closed — nodes without a namespace are let through by `dev.stxt.runtime.ConditionalValidator`, because a document without a namespace is not wrong, it just cannot be validated. If you register a `SchemaValidator` yourself, wrap it in a `ConditionalValidator` to get the same behaviour.
+Schemas are themselves STXT documents, written in the reserved `@stxt.schema` namespace (or in the friendlier `@stxt.template` form, which is equivalent sugar). A `ResourcesLoader` says where they live; `STXT.parser(loader)` returns a parser that resolves both kinds, caches them, and validates every namespaced node as it is closed — nodes without a namespace are let through by the `SchemaValidator` itself (STXT-SCHEMA-SPEC §5), because a document without a namespace is not wrong, it just cannot be validated.
 
 `ResourcesLoaderDirectory` expects this layout on disk:
 
@@ -185,6 +185,21 @@ Available value types: `INLINE`, `BLOCK`, `TEXT`, `MARKDOWN`, `BOOLEAN`, `INTEGE
 
 To add your own, implement `dev.stxt.schema.Type` and register it in `TypeRegistry`.
 
+Schemas do not have to live on disk. `dev.stxt.runtime.UnifiedSchemaProvider` takes schema and template documents as text (`addFile`) and serves them by namespace, as do `SchemaProviderMemory` (`addSchema`) and `TemplateSchemaProviderMemory` (`addTemplate`); all three implement `SchemaProvider`, so they go straight into a `SchemaValidator`:
+
+```java
+import dev.stxt.runtime.UnifiedSchemaProvider;
+import dev.stxt.schema.SchemaValidator;
+
+UnifiedSchemaProvider provider = new UnifiedSchemaProvider();
+provider.addFile(schemaText);
+
+Parser parser = new Parser();
+parser.registerValidator(new SchemaValidator(provider));
+```
+
+Discovery (STXT-DISCOVERY-SPEC) is in `dev.stxt.discovery`: `new DiscoveryResolver().resolve(documentDir)` builds the chain of `.stxt` directories and returns a `DiscoveryResult`, itself a `SchemaProvider`. The file system and the environment are injectable (`DiscoveryFileSystem`, `DiscoveryEnvironment`), so the resolver also works over an in-memory tree or a `java.nio.file.FileSystem` over a ZIP.
+
 ## Observing the parse
 
 The parser itself knows nothing about schemas: validation is a decoupled layer plugged in through two hooks. `Observer` receives streaming callbacks while the document is parsed — useful for syntax highlighting, indexes or any per-node bookkeeping.
@@ -192,15 +207,17 @@ The parser itself knows nothing about schemas: validation is a decoupled layer p
 ```java
 import java.util.List;
 
+import dev.stxt.LineIndent;
 import dev.stxt.Node;
 import dev.stxt.Parser;
+import dev.stxt.TextNode;
 import dev.stxt.exceptions.ValidationException;
 import dev.stxt.processors.Observer;
 import dev.stxt.processors.Validator;
 
 parser.registerObserver(new Observer() {
     @Override
-    public void onCreate(Node node) {
+    public void onCreate(Node node, String line) {
         System.out.println("open " + node.getQualifiedName());
     }
 
@@ -208,6 +225,12 @@ parser.registerObserver(new Observer() {
     public void onFinish(Node node) {
         System.out.println("close " + node.getQualifiedName());
     }
+
+    @Override
+    public void onComment(int lineNumber, String line) { }
+
+    @Override
+    public void onTextLine(TextNode node, int lineNumber, String lineString, LineIndent line) { }
 });
 
 // A Validator runs when each node is closed, so documents can be validated

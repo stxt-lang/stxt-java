@@ -27,7 +27,14 @@ public final class DiscoveryResult implements SchemaProvider {
 	private final SchemaProvider templateMeta;
 
 	// Built by DiscoveryResolver; not meant to be constructed directly.
-	DiscoveryResult(List<DiscoveryLevel> levels, SchemaProvider schemaMeta, SchemaProvider templateMeta) {
+	/**
+	 * Creates a result over an already loaded chain.
+	 *
+	 * @param levels loaded levels, highest precedence first.
+	 * @param schemaMeta provider of the {@code @stxt.schema} meta-schema.
+	 * @param templateMeta provider of the {@code @stxt.template} meta-schema.
+	 */
+	public DiscoveryResult(List<DiscoveryLevel> levels, SchemaProvider schemaMeta, SchemaProvider templateMeta) {
 		this.levels = levels;
 		this.schemaMeta = schemaMeta;
 		this.templateMeta = templateMeta;

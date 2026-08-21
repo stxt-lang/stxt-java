@@ -80,16 +80,6 @@ public sealed abstract class Node permits InlineNode, TextNode {
 		return canonicalName;
 	}
 
-	/**
-	 * @return the canonical name of the node.
-	 * @deprecated since 0.7.0, use {@link #getCanonicalName()}; "canonical name" is the term of the
-	 *             specifications. To be removed in a later version.
-	 */
-	@Deprecated
-	public String getNormalizedName() {
-		return canonicalName;
-	}
-
 	/** {@return the canonical name prefixed by the effective namespace ({@code namespace:name}), or just the canonical name when there is no namespace} */
 	public String getQualifiedName() {
 		String namespace = getNamespace();

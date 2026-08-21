@@ -280,11 +280,9 @@ public class NodeTest {
 	}
 
 	@Test
-	@SuppressWarnings("deprecation")
-	void normalizedNameIsTheDeprecatedAliasOfCanonicalName() {
+	void canonicalNameFoldsCaseAndSeparators() {
 		InlineNode n = new InlineNode("Año Nuevo");
 		assertEquals("año-nuevo", n.getCanonicalName());
-		assertEquals(n.getCanonicalName(), n.getNormalizedName());
 	}
 
 	// ---------------------------------------------------------------- lookups

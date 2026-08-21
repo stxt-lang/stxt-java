@@ -1,15 +1,14 @@
 package dev.stxt.discovery;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
-import java.util.stream.Stream;
 
 import dev.stxt.Node;
 import dev.stxt.Parser;
@@ -37,10 +36,10 @@ import dev.stxt.utils.StringUtils;
  */
 public final class DiscoveryResolver {
 	/** Name of the resolution directories (STXT-DISCOVERY-SPEC section 3). */
-	private static final String STXT_DIR = ".stxt";
+	public static final String STXT_DIR = ".stxt";
 
 	/** File extension of STXT documents. */
-	private static final String STXT_EXTENSION = ".stxt";
+	public static final String STXT_EXTENSION = ".stxt";
 
 	/**
 	 * Default maximum number of ancestor directories examined during the project-level
@@ -48,13 +47,14 @@ public final class DiscoveryResolver {
 	 */
 	public static final int DEFAULT_MAX_ASCENT = 32;
 
+	private final DiscoveryFileSystem fs;
 	private final DiscoveryEnvironment env;
 	private final int maxAscent;
 	private final SchemaProvider schemaMeta = new SchemaProviderMeta();
 	private final SchemaProvider templateMeta = new MetaTemplateSchemaProvider();
 	private final Map<Path, DiscoveryLevel> levelCache = new LinkedHashMap<>();
 
-	/** Creates a resolver over the real process environment, with the default ascent limit. */
+	/** Creates a resolver over the real file system and process environment, with the default ascent limit. */
 	public DiscoveryResolver() {
 		this(new SystemDiscoveryEnvironment(), DEFAULT_MAX_ASCENT);
 	}
@@ -76,6 +76,20 @@ public final class DiscoveryResolver {
 	 *        project-level ascent.
 	 */
 	public DiscoveryResolver(DiscoveryEnvironment env, int maxAscent) {
+		this(new NioDiscoveryFileSystem(), env, maxAscent);
+	}
+
+	/**
+	 * Creates a resolver over an arbitrary file system (an in-memory tree, a ZIP, a virtual
+	 * workspace), as in the other ports.
+	 *
+	 * @param fs file-system access (directory checks, listings and file reads).
+	 * @param env environment access ({@code STXT_PATH}, user and system directories).
+	 * @param maxAscent maximum number of ancestor directories examined during the
+	 *        project-level ascent.
+	 */
+	public DiscoveryResolver(DiscoveryFileSystem fs, DiscoveryEnvironment env, int maxAscent) {
+		this.fs = fs;
 		this.env = env;
 		this.maxAscent = maxAscent;
 	}
@@ -106,7 +120,7 @@ public final class DiscoveryResolver {
 			for (int level = 0; level < maxAscent && dir != null; level++) {
 				Path candidate = dir.resolve(STXT_DIR);
 
-				if (Files.isDirectory(candidate)) {
+				if (fs.isDirectory(candidate)) {
 					chain.add(candidate);
 				}
 
@@ -117,7 +131,7 @@ public final class DiscoveryResolver {
 		// User and system levels. The ascent may have reached them already (a document
 		// under the user's home finds $HOME/.stxt as a project candidate): deduplicate.
 		for (Path dir : Arrays.asList(env.getUserLevelDir(), env.getSystemLevelDir())) {
-			if (dir != null && !chain.contains(dir) && Files.isDirectory(dir)) {
+			if (dir != null && !chain.contains(dir) && fs.isDirectory(dir)) {
 				chain.add(dir);
 			}
 		}
@@ -158,7 +172,7 @@ public final class DiscoveryResolver {
 		List<Path> result = new ArrayList<>();
 
 		for (Path dir : dirs) {
-			if (!result.contains(dir) && Files.isDirectory(dir)) {
+			if (!result.contains(dir) && fs.isDirectory(dir)) {
 				result.add(dir);
 			}
 		}
@@ -188,10 +202,23 @@ public final class DiscoveryResolver {
 	// Collects every file under a directory, recursively, sorted by path so that results
 	// and error messages do not depend on the listing order of the file system.
 	private List<Path> collectFiles(Path dir) {
-		try (Stream<Path> stream = Files.walk(dir)) {
-			return stream.filter(Files::isRegularFile).sorted().toList();
+		List<Path> files = new ArrayList<>();
+		collectFiles(dir, files);
+		files.sort(Comparator.naturalOrder());
+		return files;
+	}
+
+	private void collectFiles(Path dir, List<Path> files) {
+		List<DiscoveryEntry> entries;
+		try {
+			entries = fs.listDirectory(dir);
 		} catch (IOException e) {
 			throw new STXTIOException(e);
+		}
+
+		for (DiscoveryEntry entry : entries) {
+			if (entry.isDirectory())	collectFiles(entry.path(), files);
+			else						files.add(entry.path());
 		}
 	}
 
@@ -209,7 +236,7 @@ public final class DiscoveryResolver {
 		String content;
 
 		try {
-			content = Files.readString(file);
+			content = fs.readFile(file);
 		} catch (IOException e) {
 			level.errors.add(new DiscoveryError(
 				DiscoveryError.NOT_PARSEABLE, file.toString(),

@@ -46,7 +46,10 @@ public class SchemaParser {
 		} catch (ParseException e) {
 			throw new ValidationException(root.getLine(), "SCHEMA_ROOT_NOT_VALID", "Schema namespace not valid: " + targetNamespace);
 		}
-		Schema schema = new Schema(targetNamespace, root.getLine());
+		// STXT-SCHEMA-SPEC 6.1: optional description of the schema
+		Node descriptionNode = root.getChild("description");
+		String description = descriptionNode == null ? null : descriptionNode.getText();
+		Schema schema = new Schema(targetNamespace, root.getLine(), description);
 
 		// For validation
 		Set<String> allNames = new HashSet<String>(); // To check that the children exist
@@ -87,12 +90,11 @@ public class SchemaParser {
 		Node typeNode = n.getChild("type");
 		if (typeNode != null) type = typeNode.getText();
 
-		NodeDefinition result = new NodeDefinition(name, type, n.getLine());
-		
 		// STXT-SCHEMA-SPEC 7.1: optional description of the node
 		Node descriptionNode = n.getChild("description");
-		if (descriptionNode != null)
-			result.setDescription(descriptionNode.getText());
+		String description = descriptionNode == null ? null : descriptionNode.getText();
+
+		NodeDefinition result = new NodeDefinition(name, type, n.getLine(), description);
 		
 		Node children = n.getChild("children");
 		if (children != null) {

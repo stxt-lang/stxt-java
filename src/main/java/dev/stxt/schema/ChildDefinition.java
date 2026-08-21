@@ -6,7 +6,7 @@ import dev.stxt.utils.StringUtils;
 
 /** Definition of an expected child inside a {@link NodeDefinition}: name, namespace and min/max cardinality. */
 public class ChildDefinition {
-	private final String normalizedName;
+	private final String canonicalName;
 	private final String name;
 	private final String namespace;
 	private final Integer min;
@@ -23,7 +23,7 @@ public class ChildDefinition {
 	 */
 	public ChildDefinition(String name, String namespace, Integer min, Integer max, int numLine) {
 		this.name = StringUtils.compactSpaces(name);
-		this.normalizedName = StringUtils.normalize(name);
+		this.canonicalName = StringUtils.normalize(name);
 		this.namespace = StringUtils.lowerCase(namespace);
 		this.min = min;
 		this.max = max;
@@ -40,15 +40,7 @@ public class ChildDefinition {
 
 	/** {@return the canonical name of the expected child} */
 	public String getCanonicalName() {
-		return normalizedName;
-	}
-	/**
-	 * @return the canonical name of the expected child.
-	 * @deprecated since 0.7.0, use {@link #getCanonicalName()}.
-	 */
-	@Deprecated
-	public String getNormalizedName() {
-		return normalizedName;
+		return canonicalName;
 	}
 
 	/** {@return the namespace of the expected child, or the empty string if it has none} */
@@ -68,6 +60,6 @@ public class ChildDefinition {
 
 	/** {@return the canonical name prefixed by its namespace, used as the key in {@link NodeDefinition#getChildren()}} */
 	public String getQualifiedName() {
-		return namespace.isEmpty() ? normalizedName : namespace + ":" + normalizedName;
+		return namespace.isEmpty() ? canonicalName : namespace + ":" + canonicalName;
 	}
 }

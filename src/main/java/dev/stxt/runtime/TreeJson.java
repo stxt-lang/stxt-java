@@ -1,20 +1,42 @@
 package dev.stxt.runtime;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import dev.stxt.InlineNode;
 import dev.stxt.Node;
 import dev.stxt.TextNode;
 
 /**
- * Serializes parsed STXT nodes to the canonical JSON tree defined by STXT-TREE-SPEC.
- * This class has no JSON-library dependency: JSON is part of the public representation,
- * while the published core artifact intentionally has no runtime dependencies.
+ * Converts parsed STXT nodes to the canonical tree defined by STXT-TREE-SPEC, as plain
+ * {@code java.util} maps and lists ({@link #toCanonicalTree}), and serializes it as JSON
+ * ({@link #toCanonicalJson}). This class has no JSON-library dependency: JSON is part of the
+ * public representation, while the published core artifact intentionally has no runtime
+ * dependencies. Same contract as {@code toCanonicalTree}/{@code toCanonicalJson} of the other ports.
  */
 public final class TreeJson {
     private static final String INDENT = "  ";
 
     private TreeJson() {
+    }
+
+    /**
+     * Converts every root node of an already parsed document to the logical tree defined by
+     * STXT-TREE-SPEC. Each node is a {@link Map} with insertion order {@code name},
+     * {@code canonicalName}, {@code namespace}, {@code form} and then {@code value} +
+     * {@code children} (a list of nodes) for {@code "inline"} or {@code lines} (a list of
+     * strings) for {@code "block"}. Source positions, indentation style, comments and derived
+     * fields are deliberately absent.
+     *
+     * @param nodes root nodes of an already parsed document.
+     * @return the canonical document tree, ready to be handed to any JSON library.
+     */
+    public static List<Map<String, Object>> toCanonicalTree(List<Node> nodes) {
+        List<Map<String, Object>> result = new ArrayList<>(nodes.size());
+        for (Node node : nodes) result.add(toCanonicalNode(node));
+        return result;
     }
 
     /**
@@ -28,20 +50,37 @@ public final class TreeJson {
     }
 
     /**
-     * Serializes every root node of an already parsed document as canonical JSON.
-     * Source positions, indentation style, comments and derived fields are deliberately
-     * absent; see STXT-TREE-SPEC.
+     * Serializes the canonical tree of an already parsed document as human-readable JSON.
+     * JSON whitespace is not part of STXT-TREE-SPEC; two-space indentation is this
+     * implementation's deterministic presentation.
      *
      * @param nodes root nodes of an already parsed document.
      * @return canonical JSON without a final line break.
      */
     public static String toCanonicalJson(List<Node> nodes) {
         StringBuilder out = new StringBuilder(256);
-        appendNodes(out, nodes, 0);
+        appendNodes(out, toCanonicalTree(nodes), 0);
         return out.toString();
     }
 
-    private static void appendNodes(StringBuilder out, List<Node> nodes, int depth) {
+    private static Map<String, Object> toCanonicalNode(Node node) {
+        Map<String, Object> result = new LinkedHashMap<>();
+        result.put("name", node.getName());
+        result.put("canonicalName", node.getCanonicalName());
+        result.put("namespace", node.getNamespace());
+        if (node instanceof TextNode text) {
+            result.put("form", "block");
+            result.put("lines", new ArrayList<>(text.getTextLines()));
+        } else {
+            InlineNode inline = (InlineNode) node;
+            result.put("form", "inline");
+            result.put("value", inline.getValue());
+            result.put("children", toCanonicalTree(inline.getChildren()));
+        }
+        return result;
+    }
+
+    private static void appendNodes(StringBuilder out, List<Map<String, Object>> nodes, int depth) {
         if (nodes.isEmpty()) {
             out.append("[]");
             return;
@@ -58,17 +97,18 @@ public final class TreeJson {
         out.append(']');
     }
 
-    private static void appendNode(StringBuilder out, Node node, int depth) {
+    @SuppressWarnings("unchecked")
+    private static void appendNode(StringBuilder out, Map<String, Object> node, int depth) {
         out.append("{\n");
-        appendMember(out, depth + 1, "name", node.getName(), true);
-        appendMember(out, depth + 1, "canonicalName", node.getCanonicalName(), true);
-        appendMember(out, depth + 1, "namespace", node.getNamespace(), true);
-        appendMember(out, depth + 1, "form", node.isTextNode() ? "block" : "inline", true);
+        appendMember(out, depth + 1, "name", (String) node.get("name"), true);
+        appendMember(out, depth + 1, "canonicalName", (String) node.get("canonicalName"), true);
+        appendMember(out, depth + 1, "namespace", (String) node.get("namespace"), true);
+        appendMember(out, depth + 1, "form", (String) node.get("form"), true);
 
-        if (node instanceof TextNode text) {
+        if ("block".equals(node.get("form"))) {
             indent(out, depth + 1);
             out.append("\"lines\": ");
-            appendStrings(out, text.getTextLines(), depth + 1);
+            appendStrings(out, (List<String>) node.get("lines"), depth + 1);
             out.append('\n');
             indent(out, depth);
             out.append('}');
@@ -77,13 +117,12 @@ public final class TreeJson {
 
         indent(out, depth + 1);
         out.append("\"value\": ");
-        InlineNode inline = (InlineNode) node;
-        appendString(out, inline.getValue());
+        appendString(out, (String) node.get("value"));
         out.append(",\n");
 
         indent(out, depth + 1);
         out.append("\"children\": ");
-        appendNodes(out, inline.getChildren(), depth + 1);
+        appendNodes(out, (List<Map<String, Object>>) node.get("children"), depth + 1);
         out.append('\n');
         indent(out, depth);
         out.append('}');
