@@ -21,7 +21,7 @@ class LineIndentTest {
 		assertEquals("Name: value", li.lineWithoutIndent);
 		assertFalse(li.isComment);
 		assertFalse(li.isBlock);
-		assertEquals(2, li.indentLength);
+		assertEquals(2, li.contentStart);
 		assertFalse(li.isEmpty());
 	}
 
@@ -39,8 +39,7 @@ class LineIndentTest {
 		assertTrue(text.isBlock);
 		assertFalse(text.isComment);
 		assertEquals("  # not a comment", text.lineWithoutIndent);
-		// Index of the indentation character that crossed the block level, as in the other ports
-		assertEquals(1, text.indentLength);
+		assertEquals(2, text.contentStart);
 	}
 
 	@Test

@@ -4,11 +4,11 @@ All notable changes to `dev.stxt:stxt-core` are documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
-## [1.0.0] - Unreleased
+## [0.11.0] - 2026-08-21
 
-The first stable release. The language (the five specifications, `SPEC_VERSION = "1.0"`), the
-canonical tree and the error codes are frozen for the whole 1.x line, and so is the public API
-of this artifact. Same scope as `@stxt-lang/core` and `stxt` (Python) 1.0.0.
+The preview of 1.0: everything 1.0 will ship, published first as a 0.x so that the consumers can
+move to it and anything left can still be fixed. The public API is the one 1.0 will freeze for
+the whole 1.x line. Same scope as `@stxt-lang/core` and `stxt` (Python) 0.11.0.
 
 ### Removed
 
@@ -25,7 +25,7 @@ of this artifact. Same scope as `@stxt-lang/core` and `stxt` (Python) 1.0.0.
   `onCreate(Node, String)`. **Breaking for implementors of `Observer`** (the interface gains
   two abstract methods and changes one signature); the only one in the ecosystem was updated.
 - `LineIndent` and `LineIndentParser.parseLine` are public, with the fields of the pseudocode
-  (`indentLevel`, `lineWithoutIndent`, `isComment`, `isBlock`, `indentLength`) and `isEmpty()`.
+  (`indentLevel`, `lineWithoutIndent`, `isComment`, `isBlock`, `contentStart`) and `isEmpty()`.
   `parseLine` never returns `null` any more: a comment comes back with `isComment`, an empty line
   with `isEmpty()`.
 - In-memory providers, as in the other ports: `SchemaProviderMemory` (`addSchema`),
@@ -46,6 +46,14 @@ of this artifact. Same scope as `@stxt-lang/core` and `stxt` (Python) 1.0.0.
   `SchemaParser` fills it from the `Description` of the root (STXT-SCHEMA-SPEC 6.1). The
   two-argument constructor stays.
 - `Constants.SEP_TEXT_NODE = ">>"`.
+
+### Fixed
+
+- `LineIndent.indentLength` of a text line of a block was the index of the last indentation
+  character, one less than the number of characters the indentation took (the comment and node
+  cases were right). Fixed in the pseudocode and in the three ports at once, and the field is
+  **renamed `contentStart`** (the index where the content starts) so that the consumers that
+  added `+ 1` to compensate stop compiling instead of silently drifting by one.
 
 ### Tests
 

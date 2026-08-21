@@ -78,7 +78,9 @@ public final class LineIndentParser {
                 // empty lines are always preserved and are exempt (spec 10.3)
                 if (sawSpace && sawTab && !text.isEmpty())
                     throw new ParseException(numLine, "INDENTATION_MIXED", "Mixed tabs and spaces in indentation");
-                return new LineIndent(level, text, false, true, pointer);
+                // pointer is the index of the indentation character that crossed the block
+                // level; the indentation took pointer + 1 characters
+                return new LineIndent(level, text, false, true, pointer + 1);
             }
 
             pointer++;

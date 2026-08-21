@@ -20,8 +20,8 @@ public final class LineIndent {
 	public final boolean isComment;
 	/** True if the line is a text line belonging to an open BLOCK node ({@code >>}). */
 	public final boolean isBlock;
-	/** Number of characters the indentation took up. */
-	public final int indentLength;
+	/** Index of the first character of the content (the number of characters the indentation took up). */
+	public final int contentStart;
 
 	/**
 	 * Creates a line already split into indentation and content.
@@ -30,14 +30,14 @@ public final class LineIndent {
 	 * @param lineWithoutIndent content of the line without its indentation.
 	 * @param isComment true if the line is a comment.
 	 * @param isBlock true if the line belongs to an open text block.
-	 * @param indentLength number of characters the indentation took up.
+	 * @param contentStart index of the first character of the content, i.e. the number of characters the indentation took up.
 	 */
-	public LineIndent(int indentLevel, String lineWithoutIndent, boolean isComment, boolean isBlock, int indentLength) {
+	public LineIndent(int indentLevel, String lineWithoutIndent, boolean isComment, boolean isBlock, int contentStart) {
 		this.indentLevel = indentLevel;
 		this.lineWithoutIndent = lineWithoutIndent;
 		this.isComment = isComment;
 		this.isBlock = isBlock;
-		this.indentLength = indentLength;
+		this.contentStart = contentStart;
 	}
 
 	/** {@return true if the line has no content beyond blanks (space/tab only, spec 4)} */

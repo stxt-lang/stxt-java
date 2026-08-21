@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import dev.stxt.Node;
 import dev.stxt.Parser;
 
-/** {@link TreeJson#toCanonicalTree} (1.0): the canonical tree as plain maps and lists, the source of {@link TreeJson#toCanonicalJson}. */
+/** {@link TreeJson#toCanonicalTree} (0.11.0): the canonical tree as plain maps and lists, the source of {@link TreeJson#toCanonicalJson}. */
 class TreeJsonTest {
 
 	@Test

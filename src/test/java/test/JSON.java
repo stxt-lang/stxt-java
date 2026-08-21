@@ -34,12 +34,12 @@ public final class JSON {
 		abstract String getDescription();
 
 		// The fixtures predate 1.0 and keep the historical 'normalized_name' member for the
-		// canonical name (the API was renamed getCanonicalName() in 0.7.0, alias removed in 1.0).
+		// canonical name (the API was renamed getCanonicalName() in 0.7.0, alias removed in 0.11.0).
 		@JsonProperty("normalized_name")
 		abstract String getCanonicalName();
 	}
 
-	// Same for the description of the Schema itself (1.0): left out when null.
+	// Same for the description of the Schema itself (0.11.0): left out when null.
 	private abstract static class SchemaMixin {
 		@JsonInclude(JsonInclude.Include.NON_NULL)
 		abstract String getDescription();

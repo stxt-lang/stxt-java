@@ -18,7 +18,7 @@ import dev.stxt.schema.SchemaProviderMemory;
 import dev.stxt.schema.SchemaValidator;
 import dev.stxt.template.TemplateSchemaProviderMemory;
 
-/** The three in-memory providers (1.0), same contract as in the other ports. */
+/** The three in-memory providers (0.11.0), same contract as in the other ports. */
 class MemoryProvidersTest {
 
 	private static final String SCHEMA = """

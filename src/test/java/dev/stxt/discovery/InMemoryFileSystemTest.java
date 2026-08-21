@@ -13,7 +13,7 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
-/** {@link DiscoveryFileSystem} (1.0): the resolver works over an injected, in-memory tree, as in the other ports. */
+/** {@link DiscoveryFileSystem} (0.11.0): the resolver works over an injected, in-memory tree, as in the other ports. */
 class InMemoryFileSystemTest {
 
 	/** A tree of files held in a map; directories are the parents of the files. */
