@@ -17,36 +17,36 @@ import dev.stxt.resources.ResourcesLoader;
 import dev.stxt.utils.FileUtils;
 
 /**
- * Helpers for the regression tests against the real corpus of `../stxt-web`.
+ * Helpers for the regression tests against the real corpus of `../stxt-lang`.
  *
- * The corpus is deliberately not copied into this repository: stxt-web is the normative
+ * The corpus is deliberately not copied into this repository: stxt-lang is the normative
  * source of the language and the tests must fail when the implementation drifts away from
  * the real documents, not from a frozen copy.
  *
- * The corpus is mandatory: if the sibling project is missing, {@link #findStxtWeb()} throws
+ * The corpus is mandatory: if the sibling project is missing, {@link #findStxtLang()} throws
  * and every corpus suite fails. They are never skipped: a silently skipped corpus once hid a
  * broken locator for days in a sibling port, so "no corpus" is an error, not an assumption.
  */
 public final class Corpus {
 	private Corpus() {}
 
-	// Folders of stxt-web holding schemas and templates (they get loaded into the loader).
+	// Folders of stxt-lang holding schemas and templates (they get loaded into the loader).
 	public static final List<String> SCHEMA_DIRS = List.of(".stxt");
 
-	// Folders of stxt-web holding documents that must validate against those schemas.
+	// Folders of stxt-lang holding documents that must validate against those schemas.
 	public static final List<String> DOC_DIRS = List.of("docs", "es", "en");
 
 	/**
-	 * Locates `stxt-web`. It can be forced through the STXT_WEB environment variable; by
-	 * default it is looked up as a sibling project (`../stxt-web` from the root of this repo).
+	 * Locates `stxt-lang`. It can be forced through the STXT_LANG environment variable; by
+	 * default it is looked up as a sibling project (`../stxt-lang` from the root of this repo).
 	 *
-	 * @return the root of stxt-web, never null.
+	 * @return the root of stxt-lang, never null.
 	 * @throws IllegalStateException if it cannot be found: the corpus is mandatory.
 	 */
-	public static File findStxtWeb() {
+	public static File findStxtLang() {
 		List<String> candidates = new ArrayList<>();
-		candidates.add(System.getenv("STXT_WEB"));
-		candidates.add(".." + File.separator + "stxt-web");
+		candidates.add(System.getenv("STXT_LANG"));
+		candidates.add(".." + File.separator + "stxt-lang");
 
 		List<String> tried = new ArrayList<>();
 		for (String candidate: candidates) {
@@ -59,8 +59,8 @@ public final class Corpus {
 		}
 
 		throw new IllegalStateException(
-			"The corpus of the sibling project stxt-web is required and was not found. Tried: "
-			+ tried + ". Clone stxt-lang/stxt-web next to this repository or set STXT_WEB=/path/to/stxt-web.");
+			"The corpus of the sibling project stxt-lang is required and was not found. Tried: "
+			+ tried + ". Clone stxt-lang/stxt-lang next to this repository or set STXT_LANG=/path/to/stxt-lang.");
 	}
 
 	// Every .stxt under a directory, recursively and in a stable order.
@@ -84,7 +84,7 @@ public final class Corpus {
 		return result;
 	}
 
-	// The .stxt of the given folders, relative to the root of stxt-web.
+	// The .stxt of the given folders, relative to the root of stxt-lang.
 	public static List<File> corpusFiles(File root, List<String> dirs) {
 		List<File> result = new ArrayList<>();
 		for (String dir: dirs)
@@ -102,7 +102,7 @@ public final class Corpus {
 		}
 	}
 
-	// Readable path for the test names: relative to the root of stxt-web and using '/'.
+	// Readable path for the test names: relative to the root of stxt-lang and using '/'.
 	public static String relative(File root, File file) {
 		String path = file.getAbsolutePath();
 		String prefix = root.getAbsolutePath() + File.separator;
@@ -115,7 +115,7 @@ public final class Corpus {
 	/**
 	 * In-memory `ResourcesLoader` that indexes schemas and templates by the namespace they
 	 * declare, not by their path. That is what makes it possible to load the `.stxt/**` of
-	 * stxt-web, whose layout (`schemas/`, `templates/`, `website/`, ...) is not the
+	 * stxt-lang, whose layout (`schemas/`, `templates/`, `website/`, ...) is not the
 	 * `<ns>/<resource>.stxt` that `ResourcesLoaderDirectory` expects.
 	 */
 	public static final class CorpusLoader implements ResourcesLoader {

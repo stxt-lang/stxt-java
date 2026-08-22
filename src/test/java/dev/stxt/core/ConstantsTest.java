@@ -23,7 +23,7 @@ class ConstantsTest {
 	/** The constant is tied to the version STXT-SPEC declares in its own Metadata (es/stxt-core-ref.stxt). */
 	@Test
 	void specVersionEqualsTheVersionDeclaredBySpec() {
-		File file = new File(new File(Corpus.findStxtWeb(), "es"), "stxt-core-ref.stxt");
+		File file = new File(new File(Corpus.findStxtLang(), "es"), "stxt-core-ref.stxt");
 		InlineNode root = (InlineNode) new Parser().parse(Corpus.read(file)).get(0);
 		InlineNode metadata = (InlineNode) root.getChild("Metadata");
 		InlineNode version = (InlineNode) metadata.getChild("Version");

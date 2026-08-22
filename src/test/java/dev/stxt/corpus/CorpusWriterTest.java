@@ -19,14 +19,14 @@ import test.Corpus;
 
 /**
  * Writer regression: writing a parsed document out and parsing it back must lose nothing and
- * change nothing. It is exercised with both indentation styles over the whole stxt-web corpus,
+ * change nothing. It is exercised with both indentation styles over the whole stxt-lang corpus,
  * schemas and documents alike.
  */
 public class CorpusWriterTest {
 
 	@TestFactory
 	List<DynamicTest> roundTrip() {
-		File root = Corpus.findStxtWeb();
+		File root = Corpus.findStxtLang();
 
 		List<File> files = new ArrayList<>();
 		files.addAll(Corpus.corpusFiles(root, Corpus.SCHEMA_DIRS));

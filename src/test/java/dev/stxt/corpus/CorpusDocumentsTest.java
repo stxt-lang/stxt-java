@@ -21,8 +21,8 @@ import dev.stxt.runtime.STXT;
 import test.Corpus;
 
 /**
- * Validation regression: the real documents of stxt-web must parse and validate without
- * errors against the schemas/templates of stxt-web itself.
+ * Validation regression: the real documents of stxt-lang must parse and validate without
+ * errors against the schemas/templates of stxt-lang itself.
  *
  * It uses the multi-error mode ({@link dev.stxt.Parser#parseResult(String)}) so a failure
  * shows the full list of errors of the document instead of just the first one, like the
@@ -32,7 +32,7 @@ public class CorpusDocumentsTest {
 
 	@TestFactory
 	List<DynamicTest> validatesEachDocument() {
-		File root = Corpus.findStxtWeb();
+		File root = Corpus.findStxtLang();
 
 		Corpus.CorpusLoader loader = Corpus.loadLoader(root);
 		List<File> files = Corpus.corpusFiles(root, Corpus.DOC_DIRS);
@@ -69,14 +69,14 @@ public class CorpusDocumentsTest {
 	}
 
 	/**
-	 * One and the same namespace is described twice in stxt-web: as a schema (`.stxt/schemas/`)
+	 * One and the same namespace is described twice in stxt-lang: as a schema (`.stxt/schemas/`)
 	 * and as a template (`examples/definitions/templates/`). Since the template compiles down to a Schema, both
 	 * must validate the documents exactly alike: not just the same first error, but the same
 	 * full list of errors (code + line, in the same order).
 	 */
 	@TestFactory
 	List<DynamicTest> schemaAndTemplateValidateAlike() {
-		File root = Corpus.findStxtWeb();
+		File root = Corpus.findStxtLang();
 
 		Corpus.CorpusLoader fromSchemas = Corpus.loadLoader(root, List.of(".stxt/schemas"));
 		Corpus.CorpusLoader fromTemplates = Corpus.loadLoader(root, List.of("examples/definitions/templates"));

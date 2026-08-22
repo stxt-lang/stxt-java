@@ -17,7 +17,7 @@ import dev.stxt.schema.SchemaProvider;
 import test.Corpus;
 
 /**
- * Loading regression: every real schema and template of stxt-web must parse, validate against
+ * Loading regression: every real schema and template of stxt-lang must parse, validate against
  * its meta-schema and turn into a Schema without throwing.
  *
  * Each file is loaded into its own loader so a failure points at the guilty file instead of
@@ -27,7 +27,7 @@ public class CorpusSchemasTest {
 
 	@TestFactory
 	List<DynamicTest> loadsEachSchemaAndTemplate() {
-		File root = Corpus.findStxtWeb();
+		File root = Corpus.findStxtLang();
 
 		List<File> files = Corpus.corpusFiles(root, Corpus.SCHEMA_DIRS);
 		assertTrue(files.size() > 0, "no .stxt found in " + Corpus.SCHEMA_DIRS);

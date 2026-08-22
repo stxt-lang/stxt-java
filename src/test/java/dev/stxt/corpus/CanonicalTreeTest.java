@@ -18,12 +18,12 @@ import dev.stxt.runtime.TreeJson;
 import test.Corpus;
 import test.JSON;
 
-/** STXT-TREE-SPEC conformance over the shared tree fixtures in stxt-web. */
+/** STXT-TREE-SPEC conformance over the shared tree fixtures in stxt-lang. */
 public class CanonicalTreeTest {
 
     @TestFactory
     List<DynamicTest> matchesNormativeTreeCorpus() {
-        File root = Corpus.findStxtWeb();
+        File root = Corpus.findStxtLang();
 
         List<File> files = Corpus.corpusFiles(root, List.of("conformance" + File.separator + "tree"));
         List<DynamicTest> tests = new ArrayList<>();
