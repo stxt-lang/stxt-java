@@ -12,8 +12,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
   without `:`, a bad indentation) is now reported at the line of the template, like the other
   template errors and like the TypeScript and Python ports (`stxt-impl` `template_parser`: the
   line is shifted by the block offset). It was reported at the line within the block.
-- Tests: `ConformanceKitTest` runs the `validate`, `validate-error` and `definition-error`
-  categories of the conformance kit (kit 1.1), 226 cases in all.
+- Tests: `ConformanceKitTest` runs the `validate`, `validate-error`, `definition-error` and
+  `discovery` categories of the conformance kit (kit 1.2), 249 cases in all.
 
 ## [0.12.0] - 2026-08-22
 

@@ -9,9 +9,13 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.junit.jupiter.api.DynamicTest;
@@ -21,6 +25,13 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import dev.stxt.Node;
 import dev.stxt.Parser;
+import dev.stxt.discovery.DiscoveryDefinition;
+import dev.stxt.discovery.DiscoveryEntry;
+import dev.stxt.discovery.DiscoveryEnvironment;
+import dev.stxt.discovery.DiscoveryError;
+import dev.stxt.discovery.DiscoveryFileSystem;
+import dev.stxt.discovery.DiscoveryResolver;
+import dev.stxt.discovery.DiscoveryResult;
 import dev.stxt.exceptions.ParseException;
 import dev.stxt.exceptions.STXTException;
 import dev.stxt.exceptions.ValidationException;
@@ -47,11 +58,97 @@ import test.JSON;
  * the expected code and line (STXT-SCHEMA-SPEC 13.1).</li>
  * <li>{@code definition-error}: loading the input as a schema or a template fails with the
  * expected code and line (STXT-SCHEMA-SPEC 13.1, STXT-TEMPLATE-SPEC 14.1).</li>
+ * <li>{@code discovery}: a virtual file system and environment resolve to the expected chain,
+ * active definitions and resolution errors (STXT-DISCOVERY-SPEC).</li>
  * </ul>
  */
 public class ConformanceKitTest {
 
     private static File directory;
+
+    /** In-memory file system rooted at "/" for the discovery cases; paths use '/'. */
+    private static final class MemoryFileSystem implements DiscoveryFileSystem {
+        private final Map<Path, String> files = new LinkedHashMap<>();
+        private final Set<Path> dirs = new HashSet<>();
+
+        MemoryFileSystem() { dirs.add(Path.of("/")); }
+
+        void put(String path, String content) {
+            Path file = Path.of(path);
+            files.put(file, content);
+            addDir(file.getParent());
+        }
+
+        void addDir(Path dir) {
+            while (dir != null) { dirs.add(dir); dir = dir.getParent(); }
+        }
+
+        @Override public boolean isDirectory(Path path) { return dirs.contains(path); }
+
+        @Override public List<DiscoveryEntry> listDirectory(Path path) {
+            List<DiscoveryEntry> entries = new ArrayList<>();
+            Set<Path> seen = new HashSet<>();
+            List<Path> candidates = new ArrayList<>(files.keySet());
+            candidates.addAll(dirs);
+            for (Path candidate: candidates) {
+                if (!candidate.equals(path) && candidate.startsWith(path) && candidate.getNameCount() > path.getNameCount()) {
+                    Path child = path.resolve(candidate.getName(path.getNameCount()).toString());
+                    if (seen.add(child))
+                        entries.add(new DiscoveryEntry(child, child.getFileName().toString(), dirs.contains(child)));
+                }
+            }
+            return entries;
+        }
+
+        @Override public String readFile(Path path) throws IOException {
+            String content = files.get(path);
+            if (content == null) throw new IOException("No such file: " + path);
+            return content;
+        }
+    }
+
+    private static String text(JsonNode node) { return node == null || node.isNull() ? null : node.asText(); }
+
+    private static void discovery(String id, JsonNode c) {
+        MemoryFileSystem fs = new MemoryFileSystem();
+        c.get("files").fields().forEachRemaining(e -> fs.put(e.getKey(), Corpus.read(new File(directory, e.getValue().asText()))));
+        if (c.has("dirs")) c.get("dirs").forEach(d -> fs.addDir(Path.of(d.asText())));
+        JsonNode env = c.get("environment");
+        List<String> stxtPath = env.get("stxtPath").isNull() ? null : new ArrayList<>();
+        if (stxtPath != null) env.get("stxtPath").forEach(p -> stxtPath.add(p.asText()));
+        Path userDir = text(env.get("userDir")) == null ? null : Path.of(text(env.get("userDir")));
+        Path systemDir = text(env.get("systemDir")) == null ? null : Path.of(text(env.get("systemDir")));
+        DiscoveryEnvironment environment = new DiscoveryEnvironment() {
+            @Override public List<String> getStxtPath() { return stxtPath; }
+            @Override public Path getUserLevelDir() { return userDir; }
+            @Override public Path getSystemLevelDir() { return systemDir; }
+        };
+        String documentDir = text(c.get("documentDir"));
+        DiscoveryResult result = new DiscoveryResolver(fs, environment, DiscoveryResolver.DEFAULT_MAX_ASCENT)
+            .resolve(documentDir == null ? null : Path.of(documentDir));
+        JsonNode expected = c.get("expected");
+
+        List<String> chain = new ArrayList<>();
+        expected.get("chain").forEach(p -> chain.add(p.asText()));
+        assertEquals(chain, result.getChain().stream().map(p -> p.toString().replace(File.separatorChar, '/')).toList(), id + ": chain");
+
+        expected.get("active").fields().forEachRemaining(e -> {
+            DiscoveryDefinition definition = result.getDefinition(e.getKey());
+            String file = definition == null ? null : definition.getFile().toString().replace(File.separatorChar, '/');
+            assertEquals(text(e.getValue()), file, id + ": active definition of " + e.getKey());
+            assertEquals(!e.getValue().isNull(), result.getSchema(e.getKey()) != null, id + ": getSchema(" + e.getKey() + ")");
+        });
+
+        List<DiscoveryError> actual = new ArrayList<>(result.getErrors());
+        assertEquals(expected.get("errors").size(), actual.size(), id + ": errors " + actual);
+        for (JsonNode e: expected.get("errors")) {
+            DiscoveryError match = actual.stream().filter(a -> a.getCode().equals(e.get("code").asText())
+                && (!e.has("file") || a.getFile().replace(File.separatorChar, '/').equals(e.get("file").asText()))
+                && (!e.has("namespace") || e.get("namespace").asText().equals(a.getNamespace()))).findFirst().orElse(null);
+            assertNotNull(match, id + ": missing error " + e + " in " + actual);
+            actual.remove(match);
+        }
+    }
 
     /** A provider holding the given definition files: schemas first, templates on top of them. */
     private static SchemaProvider loadDefinitions(List<String> files, String kind) {
@@ -99,7 +196,7 @@ public class ConformanceKitTest {
             Set<String> listed = new HashSet<>();
             for (JsonNode c: cases) {
                 assertTrue(ids.add(c.get("id").asText()), "duplicate case id " + c.get("id").asText());
-                listed.add(c.get("input").asText());
+                if (c.has("input")) listed.add(c.get("input").asText());
             }
             for (String sub: List.of("tree", "parse", "validate", "definition-errors")) {
                 for (File file: Corpus.findStxtFiles(new File(directory, sub))) {
@@ -111,10 +208,13 @@ public class ConformanceKitTest {
         for (JsonNode c: cases) {
             String id = c.get("id").asText();
             String category = c.get("category").asText();
-            String input = Corpus.read(new File(directory, c.get("input").asText()));
+            String input = c.has("input") ? Corpus.read(new File(directory, c.get("input").asText())) : null;
 
             tests.add(dynamicTest(id + ": " + c.get("description").asText(), () -> {
                 switch (category) {
+                    case "discovery":
+                        discovery(id, c);
+                        break;
                     case "tree": {
                         List<Node> nodes = new Parser().parse(input);
                         JsonNode expected = JSON.toJsonTree(Corpus.read(new File(directory, c.get("expected").asText())));
