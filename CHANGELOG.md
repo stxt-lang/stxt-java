@@ -4,7 +4,26 @@ All notable changes to `dev.stxt:stxt-core` are documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
-## [Unreleased]
+## [0.13.0] - 2026-08-23
+
+Same number and scope as `@stxt-lang/core` and `stxt` (Python) 0.13.0: the writing operations of
+STXT-TREE-SPEC §11–12, now normative, in the three ports.
+
+### Added
+
+- `Formatter` (`dev.stxt.runtime`): the reformatting of STXT-TREE-SPEC §12, a replica of the
+  TypeScript `Formatter` of `@stxt-lang/core` 0.11.1. `Formatter.format(text, style)` returns a
+  `FormatResult(text, errors)`: the document rewritten line by line —node lines in canonical
+  form, block lines at the level of the block, comments and blank lines kept with their
+  indentation units converted— plus the syntax errors found; CRLF and the final newline are
+  kept, an initial BOM is removed.
+
+### Changed
+
+- `NodeWriter` writes the canonical text form of STXT-TREE-SPEC §11 (2026-08-23): the
+  namespace is declared only where it changes from the parent's — on a root when not empty, on
+  a child when it differs — wherever the source declared it. A child repeating its parent's
+  namespace used to come out with it; the tree it re-parses to is the same.
 
 ### Fixed
 

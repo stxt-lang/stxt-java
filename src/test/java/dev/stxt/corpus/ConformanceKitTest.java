@@ -35,6 +35,10 @@ import dev.stxt.discovery.DiscoveryResult;
 import dev.stxt.exceptions.ParseException;
 import dev.stxt.exceptions.STXTException;
 import dev.stxt.exceptions.ValidationException;
+import dev.stxt.runtime.FormatResult;
+import dev.stxt.runtime.Formatter;
+import dev.stxt.runtime.NodeWriter;
+import dev.stxt.runtime.NodeWriter.IndentStyle;
 import dev.stxt.runtime.TreeJson;
 import dev.stxt.schema.SchemaProvider;
 import dev.stxt.schema.SchemaProviderMemory;
@@ -60,6 +64,10 @@ import test.JSON;
  * expected code and line (STXT-SCHEMA-SPEC 13.1, STXT-TEMPLATE-SPEC 14.1).</li>
  * <li>{@code discovery}: a virtual file system and environment resolve to the expected chain,
  * active definitions and resolution errors (STXT-DISCOVERY-SPEC).</li>
+ * <li>{@code writer}: the root nodes of the input, written in canonical text form, equal the
+ * expected text in both styles (STXT-TREE-SPEC 11).</li>
+ * <li>{@code format}: the input reformatted equals the expected text in both styles, with the
+ * expected syntax errors (STXT-TREE-SPEC 12).</li>
  * </ul>
  */
 public class ConformanceKitTest {
@@ -210,8 +218,9 @@ public class ConformanceKitTest {
                 assertTrue(ids.add(c.get("id").asText()), "duplicate case id " + c.get("id").asText());
                 if (c.has("input")) listed.add(c.get("input").asText());
             }
-            for (String sub: List.of("tree", "parse", "validate", "definition-errors")) {
+            for (String sub: List.of("tree", "parse", "validate", "definition-errors", "format")) {
                 for (File file: Corpus.findStxtFiles(new File(directory, sub))) {
+                    if (file.getName().endsWith(".tabs.stxt") || file.getName().endsWith(".spaces.stxt")) continue;
                     assertTrue(listed.contains(sub + "/" + file.getName()), sub + "/" + file.getName() + " is not in the manifest");
                 }
             }
@@ -250,6 +259,23 @@ public class ConformanceKitTest {
                             String where = id + " with " + files;
                             if (category.equals("validate")) assertEquals(null, actual, where);
                             else assertEquals(expected(c), actual, where);
+                        }
+                        break;
+                    }
+                    case "writer": {
+                        List<Node> nodes = new Parser().parse(input);
+                        assertEquals(Corpus.read(new File(directory, c.get("expected").get("tabs").asText())), NodeWriter.toSTXT(nodes, IndentStyle.TABS), id + ": tabs");
+                        assertEquals(Corpus.read(new File(directory, c.get("expected").get("spaces").asText())), NodeWriter.toSTXT(nodes, IndentStyle.SPACES_4), id + ": spaces");
+                        break;
+                    }
+                    case "format": {
+                        List<String> expectedErrors = new ArrayList<>();
+                        c.get("errors").forEach(e -> expectedErrors.add(e.get("code").asText() + "@" + e.get("line").asInt()));
+                        for (IndentStyle style: IndentStyle.values()) {
+                            String key = style == IndentStyle.TABS ? "tabs" : "spaces";
+                            FormatResult result = Formatter.format(input, style);
+                            assertEquals(Corpus.read(new File(directory, c.get("expected").get(key).asText())), result.text(), id + ": " + key);
+                            assertEquals(expectedErrors, result.errors().stream().map(e -> e.getCode() + "@" + e.getLine()).toList(), id + ": errors with " + key);
                         }
                         break;
                     }

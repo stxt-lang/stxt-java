@@ -37,7 +37,7 @@ public final class NodeWriter {
      */
     public static String toSTXT(Node node, IndentStyle style) {
         StringBuilder out = new StringBuilder(256);
-        writeNode(out, node, 0, style);
+        writeNode(out, node, 0, style, "");
         return out.toString();
     }
 
@@ -62,20 +62,24 @@ public final class NodeWriter {
         StringBuilder out = new StringBuilder();
         for (int i = 0; i < docs.size(); i++) {
             if (i > 0) out.append('\n');
-            writeNode(out, docs.get(i), 0, style);
+            writeNode(out, docs.get(i), 0, style, "");
         }
         return out.toString();
     }
 
-    private static void writeNode(StringBuilder out, Node n, int depth, IndentStyle style) {
+    /**
+     * Writes one node and, recursively, its children, in the canonical text form of
+     * STXT-TREE-SPEC 11.1. {@code parentNs} is the effective namespace of the parent, "" for a
+     * root: the namespace is declared only where it changes (rule 3), wherever the source
+     * declared it.
+     */
+    private static void writeNode(StringBuilder out, Node n, int depth, IndentStyle style, String parentNs) {
         indent(out, depth, style);
 
-        // The namespace is written where the node declares it; inherited ones are implicit,
-        // exactly as in the source (the effective namespace is the same either way)
-        String ns = n.getDeclaredNamespace();
+        String ns = n.getNamespace();
 
         out.append(n.getName());
-        if (!ns.isEmpty())
+        if (!ns.equals(parentNs))
         	out.append(" (").append(ns).append(')');
 
         if (n instanceof TextNode text) {
@@ -92,7 +96,7 @@ public final class NodeWriter {
             out.append('\n');
 
             for (Node child : inline.getChildren()) {
-                writeNode(out, child, depth + 1, style);
+                writeNode(out, child, depth + 1, style, ns);
             }
         }
     }
