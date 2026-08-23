@@ -191,6 +191,18 @@ public class ConformanceKitTest {
             assertFalse(cases.isEmpty());
         }));
 
+        tests.add(dynamicTest("declares cumulative profiles that cover every category", () -> {
+            JsonNode profiles = manifest.get("profiles");
+            Set<String> covered = new HashSet<>();
+            profiles.fields().forEachRemaining(e -> {
+                JsonNode p = e.getValue();
+                if (p.has("includes")) assertTrue(profiles.has(p.get("includes").asText()), "profile " + e.getKey() + " includes an unknown profile");
+                p.get("specifications").forEach(s -> assertTrue(manifest.get("specifications").has(s.asText()), "profile " + e.getKey() + ": unknown specification " + s.asText()));
+                p.get("categories").forEach(c -> covered.add(c.asText()));
+            });
+            for (JsonNode c: cases) assertTrue(covered.contains(c.get("category").asText()), "category " + c.get("category").asText() + " belongs to no profile");
+        }));
+
         tests.add(dynamicTest("lists every case file, and every case exactly once", () -> {
             Set<String> ids = new HashSet<>();
             Set<String> listed = new HashSet<>();
