@@ -29,7 +29,7 @@ public final class LineIndentParser {
 	 *
 	 * @param line source line, with its indentation.
 	 * @param lastNodeBlock true if the node currently open is a BLOCK text node.
-	 * @param lastLevel indentation level of the node currently open.
+	 * @param lastLevel indentation level of the node currently open, -1 when there is none.
 	 * @param numLine line number, for the error messages.
 	 * @return the line already split into indentation and content, never {@code null}.
 	 * @throws ParseException with code {@code INDENTATION_MIXED}, {@code INDENTATION_SPACES_NOT_VALID}

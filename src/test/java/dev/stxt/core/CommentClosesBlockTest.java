@@ -47,7 +47,7 @@ public class CommentClosesBlockTest {
 	@Test
 	void textAfterAClosingCommentIsAParseErrorInsteadOfALostLine() {
 		assertEquals(List.of("INDENTATION_LEVEL_NOT_VALID"), codes("Root:\n\tBody >>\n\t\tfirst\n\t# oops\n\t\tsecond\n"));
-		assertEquals(List.of("INVALID_LINE"), codes("Body >>\n\tfirst\n# oops\n\tsecond\n"));
+		assertEquals(List.of("INDENTATION_LEVEL_NOT_VALID"), codes("Body >>\n\tfirst\n# oops\n\tsecond\n"));
 	}
 
 	@Test

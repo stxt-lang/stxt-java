@@ -150,7 +150,9 @@ public class Parser {
 		try {
 			Node lastNode            = stack.isEmpty() ? null : stack.peek();
 			// The stack holds the open nodes, one per level: its size is the level of the next line's parent
-			int lastLevel           = lastNode != null ? stack.size() - 1 : 0;
+			// With no open node the reference level is -1 (spec 8.3): the first line of the
+			// document, and the first after every node has been closed, must be at level 0.
+			int lastLevel           = lastNode != null ? stack.size() - 1 : -1;
 			boolean lastNodeText    = lastNode instanceof TextNode;
 
 			// Parse the line

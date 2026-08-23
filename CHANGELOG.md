@@ -4,6 +4,23 @@ All notable changes to `dev.stxt:stxt-core` are documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.12.0] - 2026-08-22
+
+Same number and scope as `@stxt-lang/core` and `stxt` (Python) 0.12.0: the three ports are level again
+(the 0.11.1 of `@stxt-lang/core` was the JS-only `Formatter`).
+
+### Changed
+
+- An indented first line is now a parse error, `INDENTATION_LEVEL_NOT_VALID` (STXT-SPEC §8.3,
+  clarified on 2026-08-22): with no open node the reference level is -1, so the first node or
+  comment of the document, and the first line after every node has been closed, must be at
+  level 0. Until now `\tRoot: x` parsed as a root. As a consequence, a level-1 line after a
+  comment closed a root `>>` block is `INDENTATION_LEVEL_NOT_VALID` instead of `INVALID_LINE`.
+  Conformance kit cases `parse/indentation-first-line`, `parse/comment-first-line` and
+  `parse/comment-closes-root-block-text-after`.
+- Tests: `ConformanceKitTest` runs `stxt-lang/conformance/manifest.json` (the conformance kit,
+  `tree` and `parse-error` categories) and replaces `CanonicalTreeTest`.
+
 ## [0.11.0] - 2026-08-21
 
 The preview of 1.0: everything 1.0 will ship, published first as a 0.x so that the consumers can
