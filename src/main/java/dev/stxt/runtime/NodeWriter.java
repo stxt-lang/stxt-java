@@ -70,7 +70,7 @@ public final class NodeWriter {
     /**
      * Writes one node and, recursively, its children, in the canonical text form of
      * STXT-TREE-SPEC 11.1. {@code parentNs} is the effective namespace of the parent, "" for a
-     * root: the namespace is declared only where it changes (rule 3), wherever the source
+     * root: the namespace is written only where it changes (rule 3), regardless of where the source
      * declared it.
      */
     private static void writeNode(StringBuilder out, Node n, int depth, IndentStyle style, String parentNs) {

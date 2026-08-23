@@ -254,6 +254,22 @@ String docs = NodeWriter.toSTXT(result.getNodes(), IndentStyle.SPACES_4);
 
 Writing a tree out and parsing it back yields the same tree, in both indentation styles.
 
+`NodeWriter` re-serializes the tree, so comments and blank lines are gone. To reformat a document
+**keeping everything the author wrote**, use `Formatter`: it rewrites the original text line by
+line — node lines in canonical form, block lines re-indented to their block, comments and blank
+lines kept with their indentation units converted — and reports the syntax errors it met, so the
+caller decides what to do with a document that does not parse.
+
+```java
+import dev.stxt.runtime.Formatter;
+import dev.stxt.runtime.FormatResult;
+
+FormatResult formatted = Formatter.format(source, IndentStyle.TABS);
+if (formatted.errors().isEmpty()) {
+    Files.writeString(path, formatted.text());
+}
+```
+
 ## Errors
 
 Every failure is an unchecked `dev.stxt.exceptions.STXTException` carrying an uppercase error code (`getCode()`), such as `INVALID_LINE`, `NODE_NOT_DEFINED_IN_SCHEMA` or `SCHEMA_NOT_FOUND`:
@@ -266,6 +282,10 @@ Every failure is an unchecked `dev.stxt.exceptions.STXTException` carrying an up
 | `ResourceNotFoundException` | a `ResourcesLoader` has no such resource (schema providers turn it into a `SCHEMA_NOT_FOUND` finding) |
 | `STXTException` (base) | tree integrity is broken (`NODE_ALREADY_ATTACHED`, `NODE_CYCLE`), an ambiguous lookup (`AMBIGUOUS_CHILD`), and other runtime failures |
 | `STXTIOException` | reading a file failed |
+
+## Conformance
+
+`dev.stxt:stxt-core` implements the five STXT specifications at `SPEC_VERSION` (exposed by the package; the package version is independent) and passes every case of the official conformance kit, [`stxt-lang/conformance`](https://github.com/stxt-lang/stxt-lang/tree/master/conformance), across all its profiles: `core`, `schema`, `template`, `discovery` and `text`. The kit is the same one any other implementation can run, which is what makes the three ports interchangeable. What the 1.0 line freezes, and what it does not, is stated at <https://stxt.dev/lang-stability>.
 
 ## License
 
