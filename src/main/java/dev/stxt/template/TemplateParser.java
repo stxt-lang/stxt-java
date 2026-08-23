@@ -57,8 +57,9 @@ public class TemplateParser {
 		String text = structure.getText();
 		int offset = structure.getLine();
 		
-		// Parse it to get the nodes
-		List<Node> nodes = new Parser().parse(text);
+		// Parse it to get the nodes; a parse error of the block is reported at the line of the
+		// original document (stxt-impl template_parser: the line is shifted by the block offset)
+		List<Node> nodes = parseBlock(text, offset);
 		
 		// Walk every node adding it in
 		for (Node n: nodes)
@@ -69,12 +70,29 @@ public class TemplateParser {
 		if (description != null) {
 			String descriptionText = description.getText();
 			int descriptionOffset = description.getLine();
-			List<Node> descriptionNodes = new Parser().parse(descriptionText);
+			List<Node> descriptionNodes = parseBlock(descriptionText, descriptionOffset);
 			addDescriptions(result, descriptionNodes, descriptionOffset);
 		}
 		
 		// Return the result
 		return result;
+	}
+
+	/**
+	 * Parses the text of a {@code >>} block of the template as an STXT document. Its parse
+	 * errors are re-thrown with the line shifted by the block offset, so they point at the
+	 * real line of the template; a {@link ValidationException} keeps its subtype.
+	 */
+	private static List<Node> parseBlock(String text, int offset) {
+		try {
+			return new Parser().parse(text);
+		}
+		catch (ValidationException e) {
+			throw new ValidationException(e.getLine() + offset, e.getCode(), e.getMessage());
+		}
+		catch (ParseException e) {
+			throw new ParseException(e.getLine() + offset, e.getCode(), e.getMessage());
+		}
 	}
 
 	private static void addToSchema(Schema schema, Node node, int offset) {

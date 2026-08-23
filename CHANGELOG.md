@@ -4,6 +4,17 @@ All notable changes to `dev.stxt:stxt-core` are documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [Unreleased]
+
+### Fixed
+
+- `TemplateParser`: a parse error inside a `Structure >>` or `Description >>` block (a line
+  without `:`, a bad indentation) is now reported at the line of the template, like the other
+  template errors and like the TypeScript and Python ports (`stxt-impl` `template_parser`: the
+  line is shifted by the block offset). It was reported at the line within the block.
+- Tests: `ConformanceKitTest` runs the `validate`, `validate-error` and `definition-error`
+  categories of the conformance kit (kit 1.1), 226 cases in all.
+
 ## [0.12.0] - 2026-08-22
 
 Same number and scope as `@stxt-lang/core` and `stxt` (Python) 0.12.0: the three ports are level again
