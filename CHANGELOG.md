@@ -32,7 +32,7 @@ STXT-TREE-SPEC §11–12, now normative, in the three ports.
   template errors and like the TypeScript and Python ports (`stxt-impl` `template_parser`: the
   line is shifted by the block offset). It was reported at the line within the block.
 - Tests: `ConformanceKitTest` runs the `validate`, `validate-error`, `definition-error` and
-  `discovery` categories of the conformance kit (kit 1.2), 249 cases in all.
+  `discovery` categories of the conformance kit (kit 1.0, 276 cases in all).
 
 ## [0.12.0] - 2026-08-22
 
