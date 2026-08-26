@@ -26,6 +26,23 @@ public final class Constants {
 	public static final String EMPTY_NAMESPACE = "";
 
 	/**
+	 * Default maximum open nesting levels (STXT-SPEC 11.2); level 0 is the first. Configure it
+	 * per parser with {@link dev.stxt.Parser#setMaxNesting(int)}; -1 disables the limit.
+	 */
+	public static final int DEFAULT_MAX_NESTING = 100;
+	/**
+	 * Default maximum length of one input line, indentation included (STXT-SPEC 11.2).
+	 * Configure it per parser with {@link dev.stxt.Parser#setMaxLineLength(int)}; -1 disables
+	 * the limit.
+	 */
+	public static final int DEFAULT_MAX_LINE_LENGTH = 10000;
+	/**
+	 * Default maximum total input consumed (STXT-SPEC 11.2). Configure it per parser with
+	 * {@link dev.stxt.Parser#setMaxInputSize(int)}; -1 disables the limit.
+	 */
+	public static final int DEFAULT_MAX_INPUT_SIZE = 10000000;
+
+	/**
 	 * Version of STXT-SPEC (the base syntax) this library implements; "STXT 1.0" on its own means
 	 * this number (STXT-SPEC §1.1). Each specification is versioned independently, so the schema,
 	 * template, tree and discovery specs may carry other numbers. It is distinct from the

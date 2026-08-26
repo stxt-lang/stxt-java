@@ -39,12 +39,12 @@ Requires **Java 17** or later.
 <dependency>
     <groupId>dev.stxt</groupId>
     <artifactId>stxt-core</artifactId>
-    <version>0.13.0</version>
+    <version>0.14.0</version>
 </dependency>
 ```
 
 ```groovy
-implementation 'dev.stxt:stxt-core:0.13.0'
+implementation 'dev.stxt:stxt-core:0.14.0'
 ```
 
 The library has **no runtime dependencies**. Under JPMS it is an automatic module named `dev.stxt`.
@@ -238,6 +238,50 @@ parser.registerObserver(new Observer() {
 parser.registerValidator(node -> List.<ValidationException>of());
 ```
 
+`StreamObserver` watches the results instead of the process: each completed root node and each
+error, in every mode. With `parseStream` the parser retains nothing — no nodes, no errors — so a
+file larger than memory can be processed one root tree at a time:
+
+```java
+import java.io.FileReader;
+
+import dev.stxt.Constants;
+import dev.stxt.Node;
+import dev.stxt.Parser;
+import dev.stxt.exceptions.ParseException;
+import dev.stxt.processors.StreamObserver;
+
+Parser parser = new Parser();
+parser.registerStreamObserver(new StreamObserver() {
+    @Override
+    public void onRootNode(Node node) {
+        System.out.println("root " + node.getQualifiedName());  // one complete root at a time
+    }
+
+    @Override
+    public void onError(ParseException error) {
+        System.out.println(error.toString());   // "[CODE] line N: message"
+    }
+});
+try (FileReader reader = new FileReader("data.stxt", Constants.ENCODING)) {
+    parser.parseStream(reader);
+}
+```
+
+## Parser limits
+
+The parser rejects hostile or runaway inputs by default (STXT-SPEC §11.2): documents nesting
+more than 100 levels, lines longer than 10 000 characters, or inputs over 10 000 000
+characters. A limit error is a `LimitException` (`LIMIT_NESTING_EXCEEDED`,
+`LIMIT_LINE_LENGTH_EXCEEDED`, `LIMIT_INPUT_SIZE_EXCEEDED`) and aborts the parse: it is always
+the last error reported. Each limit is configurable per parser; `-1` disables it:
+
+```java
+Parser parser = new Parser();
+parser.setMaxNesting(500);
+parser.setMaxInputSize(-1);
+```
+
 ## Writing STXT back out
 
 ```java
@@ -278,6 +322,7 @@ Every failure is an unchecked `dev.stxt.exceptions.STXTException` carrying an up
 |---|---|
 | `ParseException` | the syntax is wrong; adds `getLine()` |
 | `ValidationException` | the document breaks its schema (type, cardinality, undeclared child) |
+| `LimitException` | a parser limit was exceeded (`LIMIT_NESTING_EXCEEDED`, `LIMIT_LINE_LENGTH_EXCEEDED`, `LIMIT_INPUT_SIZE_EXCEEDED`); the parse aborts |
 | `SchemaException` | a schema is built inconsistently through the API (`NODE_DUPLICATED`, `CHILD_DUPLICATED`) or a provider is asked for an empty namespace (`NAMESPACE_REQUIRED`); a malformed schema or template document raises a `ValidationException` with its line (`SCHEMA_ROOT_NOT_VALID`, `SCHEMA_MULTIPLE_ROOTS`, `VALUES_DUPLICATED`...) |
 | `ResourceNotFoundException` | a `ResourcesLoader` has no such resource (schema providers turn it into a `SCHEMA_NOT_FOUND` finding) |
 | `STXTException` (base) | tree integrity is broken (`NODE_ALREADY_ATTACHED`, `NODE_CYCLE`), an ambiguous lookup (`AMBIGUOUS_CHILD`), and other runtime failures |

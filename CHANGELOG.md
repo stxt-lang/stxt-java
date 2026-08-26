@@ -4,6 +4,34 @@ All notable changes to `dev.stxt:stxt-core` are documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.14.0] - 2026-08-26
+
+Same number and scope as `@stxt-lang/core` and `stxt` (Python) 0.14.0: the parser limits of
+STXT-SPEC §11.2 in the three ports, plus the streaming API.
+
+### Added
+
+- Parser limits (STXT-SPEC §11.2): the parser aborts on inputs that exceed its nesting depth
+  (default 100 levels), line length (default 10 000 characters) or total input size (default
+  10 000 000 characters). Each limit is configurable per parser (`setMaxNesting`,
+  `setMaxLineLength`, `setMaxInputSize`; -1 disables one) and its error is a `LimitException`
+  (codes `LIMIT_NESTING_EXCEEDED`, `LIMIT_LINE_LENGTH_EXCEEDED`, `LIMIT_INPUT_SIZE_EXCEEDED`),
+  in every case the last one emitted: after it, no further input is processed and the nodes
+  still open are not closed.
+- `StreamObserver` (`dev.stxt.processors`), registered with `registerStreamObserver`: notified
+  with each completed root node (`onRootNode`) and every error (`onError`), in every mode.
+- `Parser.parseStream(Reader)` and `parseStream(Iterable<String>)`: streaming mode. The input
+  is read line by line and nothing is retained — no nodes, no errors —; the results reach the
+  program only through the registered `StreamObserver`s, so memory holds one root tree at a
+  time. Made for files that do not fit in memory.
+
+### Changed
+
+- A document that exceeds a default limit — deeper than 100 levels, a line longer than 10 000
+  characters, or more than 10 000 000 characters in total — no longer parses unless the limit
+  is raised or disabled. This is the language change of the 0.14.0 cycle (STXT-SPEC §11.2,
+  `Last modif: 2026-08-26`).
+
 ## [0.13.0] - 2026-08-23
 
 Same number and scope as `@stxt-lang/core` and `stxt` (Python) 0.13.0: the writing operations of
