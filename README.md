@@ -7,7 +7,7 @@ STXT is a plain-text format for writing structured, semantic documents: no brace
 - Website and language reference: <https://stxt.dev>
 - JavaScript/TypeScript implementation: [@stxt-lang/core](https://www.npmjs.com/package/@stxt-lang/core)
 - Python implementation: [stxt](https://pypi.org/project/stxt/) on PyPI
-- VSCode extension: [STXT - Semantic Text](https://marketplace.visualstudio.com/items?itemName=stxt-lang.stxt)
+- VSCode extension: [STXT Language](https://marketplace.visualstudio.com/items?itemName=stxt-lang.stxt)
 
 ## What STXT looks like
 
