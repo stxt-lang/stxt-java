@@ -158,4 +158,24 @@ public class FormatterTest {
 		assertEquals(1, still.errors().size());
 		assertEquals("Doc: x\n\tHijo: y\n\t\t\t\tJump: z", still.text());
 	}
+
+	@Test
+	public void parserLimitsReachTheInternalParser() {
+		String longLine = "Name: " + "x".repeat(10000) + "\n";
+
+		// Default limits apply
+		FormatResult limited = Formatter.format(longLine, TABS);
+		assertEquals(1, limited.errors().size());
+		assertEquals("LIMIT_LINE_LENGTH_EXCEEDED", limited.errors().get(0).getCode());
+
+		// -1 disables the limit and the long line formats
+		FormatResult unlimited = Formatter.format(longLine, TABS, 100, -1, 10000000);
+		assertEquals(0, unlimited.errors().size());
+		assertEquals(longLine, unlimited.text());
+
+		// After an abort, undescribed lines are unit-converted only
+		FormatResult aborted = Formatter.format("A: 1\n    B: " + "y".repeat(30) + "\n    C: 3\n", TABS, 100, 20, 10000000);
+		assertEquals(1, aborted.errors().size());
+		assertEquals("A: 1\n\tB: " + "y".repeat(30) + "\n\tC: 3\n", aborted.text());
+	}
 }

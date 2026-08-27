@@ -39,12 +39,12 @@ Requires **Java 17** or later.
 <dependency>
     <groupId>dev.stxt</groupId>
     <artifactId>stxt-core</artifactId>
-    <version>0.14.0</version>
+    <version>0.14.1</version>
 </dependency>
 ```
 
 ```groovy
-implementation 'dev.stxt:stxt-core:0.14.0'
+implementation 'dev.stxt:stxt-core:0.14.1'
 ```
 
 The library has **no runtime dependencies**. Under JPMS it is an automatic module named `dev.stxt`.
@@ -313,6 +313,10 @@ if (formatted.errors().isEmpty()) {
     Files.writeString(path, formatted.text());
 }
 ```
+
+An overload takes the parser limits, since formatting parses the document with them
+(STXT-SPEC §11.2; `-1` disables one):
+`Formatter.format(source, IndentStyle.TABS, 100, 10000, -1)`.
 
 ## Errors
 

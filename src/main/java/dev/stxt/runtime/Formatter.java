@@ -68,12 +68,35 @@ public final class Formatter {
 	 * @return the formatted text and the syntax errors found; see {@link FormatResult}.
 	 */
 	public static FormatResult format(String text, IndentStyle style) {
+		return format(text, style,
+				dev.stxt.Constants.DEFAULT_MAX_NESTING,
+				dev.stxt.Constants.DEFAULT_MAX_LINE_LENGTH,
+				dev.stxt.Constants.DEFAULT_MAX_INPUT_SIZE);
+	}
+
+	/**
+	 * Formats a document, with the limits for the internal parser (STXT-SPEC 11.2); -1 disables
+	 * one. A limit exceeded shows up in the errors like any other syntax error, and the lines
+	 * the aborted parse never described are converted as "other lines" (indentation units only).
+	 *
+	 * @param text          the document.
+	 * @param style         indentation style to format with.
+	 * @param maxNesting    maximum open nesting levels; see {@link dev.stxt.Parser#setMaxNesting(int)}.
+	 * @param maxLineLength maximum length of one line; see {@link dev.stxt.Parser#setMaxLineLength(int)}.
+	 * @param maxInputSize  maximum total input; see {@link dev.stxt.Parser#setMaxInputSize(int)}.
+	 * @return the formatted text and the syntax errors found; see {@link FormatResult}.
+	 */
+	public static FormatResult format(String text, IndentStyle style,
+			int maxNesting, int maxLineLength, int maxInputSize) {
 		// STXT-TREE-SPEC 12.1: an initial BOM is not kept
 		if (text.startsWith("﻿"))
 			text = text.substring(1);
 
 		SourceLines sourceLines = new SourceLines();
 		Parser parser = new Parser();
+		parser.setMaxNesting(maxNesting);
+		parser.setMaxLineLength(maxLineLength);
+		parser.setMaxInputSize(maxInputSize);
 		parser.registerObserver(sourceLines);
 		ParseResult result = parser.parseResult(text);
 
