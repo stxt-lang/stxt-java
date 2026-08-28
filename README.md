@@ -1,8 +1,8 @@
 # dev.stxt:stxt-core
 
-Parser and schema validator for **STXT**, an indentation-based structured-text format.
+Parser and schema validator for **STXT**, an indentation-based structured-text language.
 
-STXT is a plain-text format for writing structured, semantic documents: no braces, no closing tags, just indentation. It is designed to be equally readable by humans and by machines, and it comes with an optional schema layer so documents can be validated.
+STXT is a plain-text language for writing structured, semantic documents: no braces, no closing tags, just indentation. It is designed to be equally readable by humans and by machines, and it comes with an optional schema layer so documents can be validated.
 
 - Website and language reference: <https://stxt.dev>
 - JavaScript/TypeScript implementation: [@stxt-lang/core](https://www.npmjs.com/package/@stxt-lang/core)

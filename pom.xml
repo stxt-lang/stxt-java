@@ -12,7 +12,7 @@
     <!-- Metadatos exigidos por Maven Central (name, description, url, licencia,
          desarrolladores y scm). El artefacto equivalente en npm es @stxt-lang/core. -->
     <name>STXT Core</name>
-    <description>Parser and schema validator for STXT, an indentation-based structured-text format.</description>
+    <description>Parser and schema validator for STXT, an indentation-based structured-text language.</description>
     <url>https://stxt.dev</url>
     <inceptionYear>2025</inceptionYear>
 
