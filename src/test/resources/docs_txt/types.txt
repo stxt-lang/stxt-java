@@ -13,8 +13,6 @@ Type List (dev.stxt.check):
 		Y esto otra....
 			* Hola 1
 			* Hola 2
-		
-		
 	natural: 134242342
 	integer: 442424242234234
 	integer: +43242423424242

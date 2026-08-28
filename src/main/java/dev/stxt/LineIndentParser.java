@@ -75,7 +75,7 @@ public final class LineIndentParser {
             if (lastNodeBlock && level > lastLevel) {
                 String text = rightTrim(line.substring(pointer + 1));
                 // The prefix covering the block level must be homogeneous (spec 10.2, rule 2);
-                // empty lines are always preserved and are exempt (spec 10.3)
+                // empty lines are never an error and are exempt (spec 10.3)
                 if (sawSpace && sawTab && !text.isEmpty())
                     throw new ParseException(numLine, "INDENTATION_MIXED", "Mixed tabs and spaces in indentation");
                 // pointer is the index of the indentation character that crossed the block

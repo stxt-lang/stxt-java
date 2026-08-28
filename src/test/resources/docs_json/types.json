@@ -39,15 +39,13 @@
                 "Esto es otra linea",
                 "Y esto otra....",
                 "\t* Hola 1",
-                "\t* Hola 2",
-                "",
-                ""
+                "\t* Hola 2"
             ],
             "line" : 3,
             "level" : 1,
             "children" : [ ],
             "qualified_name" : "dev.stxt.check:text",
-            "text" : "Esto es un texto\nque pasa varias lineas.\n\nNo hay problema.\n\n\n# Hola\n\nEsto es otra linea\nY esto otra....\n\t* Hola 1\n\t* Hola 2\n\n"
+            "text" : "Esto es un texto\nque pasa varias lineas.\n\nNo hay problema.\n\n\n# Hola\n\nEsto es otra linea\nY esto otra....\n\t* Hola 1\n\t* Hola 2"
         },
         {
             "name" : "natural",

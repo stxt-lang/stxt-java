@@ -80,6 +80,21 @@ public class NodeTest {
 	}
 
 	@Test
+	void removeTrailingEmptyLinesDropsTheFinalEmptyLinesAndNothingElse() {
+		TextNode text = new TextNode("Body", null, List.of("", "a", "", "b", "", ""), Node.NO_LINE);
+		text.removeTrailingEmptyLines();
+		assertEquals(List.of("", "a", "", "b"), text.getTextLines());
+
+		TextNode blank = new TextNode("Blank", null, List.of("", ""), Node.NO_LINE);
+		blank.removeTrailingEmptyLines();
+		assertEquals(List.of(), blank.getTextLines());
+
+		TextNode empty = new TextNode("Empty");
+		empty.removeTrailingEmptyLines();
+		assertEquals(List.of(), empty.getTextLines());
+	}
+
+	@Test
 	void textLinesAndChildrenAreReadOnlyViews() {
 		TextNode text = new TextNode("Body", "a");
 		assertThrows(UnsupportedOperationException.class, () -> text.getTextLines().add("b"));
@@ -310,7 +325,7 @@ public class NodeTest {
 		doc.addInlineNode("From", "ana@example.com");
 		InlineNode to = doc.addInlineNode("To");
 		to.addInlineNode("Address", "bob@example.com");
-		doc.addTextNode("Body", "Hi Bob,\n\nSee attached.\n");
+		doc.addTextNode("Body", "Hi Bob,\n\nSee attached.");
 		doc.addInlineNode("Cc", "org.other.ns", "x");
 
 		String written = NodeWriter.toSTXT(doc);

@@ -34,11 +34,11 @@ public class FormatterTest {
 
 	private static final String MESSY_TABS = String.join("\n",
 		"# top comment", "Documento (test.fmt):", "\t# indented comment", "\tTitulo: Hello", "",
-		"\tCuerpo >>", "\t\tfirst line", "\t\t", "\t\t    indented content", "\t\t", "\tAfter (test.fmt): block", "");
+		"\tCuerpo >>", "\t\tfirst line", "\t\t", "\t\t    indented content", "", "\tAfter (test.fmt): block", "");
 
 	private static final String MESSY_SPACES = String.join("\n",
 		"# top comment", "Documento (test.fmt):", "    # indented comment", "    Titulo: Hello", "",
-		"    Cuerpo >>", "        first line", "        ", "            indented content", "        ", "    After (test.fmt): block", "");
+		"    Cuerpo >>", "        first line", "        ", "            indented content", "", "    After (test.fmt): block", "");
 
 	@Test
 	void rewritesTheIndentationAccordingToTheLevelOfTheNode() {
@@ -80,17 +80,20 @@ public class FormatterTest {
 	}
 
 	@Test
-	void indentsTheBlankLinesOfABlockToTheLevelOfTheBlock() {
+	void indentsTheBlankLinesOfABlockBeforeMoreTextFinalOnesStayPlain() {
+		// STXT-SPEC 10.3: a blank line before more block text gets the block's indentation;
+		// the final blank lines of a block are not content and stay plain.
 		assertEquals("Doc >>\n\tuna\n\t\n\t\n\totra", format("Doc >>\n\tuna\n\n\t\t\t\n\totra"));
 		assertEquals("Doc >>\n    una\n    \n    otra", format("Doc >>\n\tuna\n\n\totra", SPACES_4));
-		assertEquals("Doc >>\n\tuna\n\t", format("Doc >>\n\tuna\n\t\t\t"));
+		assertEquals("Doc >>\n\tuna\n", format("Doc >>\n\tuna\n\t\t\t"));
+		assertEquals("Doc >>\n\tuna\n\nOtro: x", format("Doc >>\n\tuna\n\t\t\t\nOtro: x"));
 		assertEquals("Padre:\n\tHijo: v\n\n\tOtro: w", format("Padre:\n\tHijo: v\n\t\n\tOtro: w"));
 	}
 
 	@Test
 	void keepsTheTextOfTheBlockByteIdentical() {
 		String text = "Doc >>\n\tuna\n\n\t\t  dos\n\t\t\t";
-		assertEquals("una\n\n\t  dos\n", new Parser().parse(text).get(0).getText());
+		assertEquals("una\n\n\t  dos", new Parser().parse(text).get(0).getText());
 		assertEquals(new Parser().parse(text).get(0).getText(), new Parser().parse(format(text)).get(0).getText());
 		assertEquals(new Parser().parse(text).get(0).getText(), new Parser().parse(format(text, SPACES_4)).get(0).getText());
 	}

@@ -85,9 +85,17 @@ public final class NodeWriter {
         if (n instanceof TextNode text) {
             out.append(" >>\n");
 
-            for (String line : text.getTextLines()) {
+            // Final empty lines are not emitted (STXT-TREE-SPEC 11.1 rule 6): parsing never
+            // produces them (STXT-SPEC 10.3), and on a programmatically built node they would
+            // not survive the round trip.
+            List<String> lines = text.getTextLines();
+            int last = lines.size();
+            while (last > 0 && lines.get(last - 1).isEmpty())
+                last--;
+
+            for (int i = 0; i < last; i++) {
                 indent(out, depth + 1, style);
-                out.append(line).append('\n');
+                out.append(lines.get(i)).append('\n');
             }
         } else if (n instanceof InlineNode inline) {
             out.append(":");

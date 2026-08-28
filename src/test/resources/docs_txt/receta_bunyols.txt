@@ -5,7 +5,6 @@ Receta (com.kocinando.receta1):
 		también como Buñuelos del Empordà. Normalmente son servidos
 		como postre, y hay cantidad suficiente hasta para 12 personas. Es una receta
 		fácil de hacer.
-		
 	Ingredientes >>
 		1Kg harina
 		8 huevos
@@ -18,7 +17,6 @@ Receta (com.kocinando.receta1):
 		matalauva (anís)
 		una pizca de sal
 		un poquito de canela molida
-		
 	Preparación >>
 		En un recipiente pondremos la harina y el resto de ingredientes.
 		La mantequilla se funde con un poco de leche, al igual que la levadura.

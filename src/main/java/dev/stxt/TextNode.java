@@ -117,6 +117,17 @@ public final class TextNode extends Node {
 		lines.clear();
 	}
 
+	/**
+	 * Removes the final empty lines ({@code ""} elements at the end of the lines). The
+	 * {@link Parser} calls it when the block closes (STXT-SPEC §10.3: the final empty lines of a
+	 * block are not content); it is public because a programmatically built node may want the
+	 * same normalization before writing.
+	 */
+	public void removeTrailingEmptyLines() {
+		while (!lines.isEmpty() && lines.get(lines.size() - 1).isEmpty())
+			lines.remove(lines.size() - 1);
+	}
+
 	@Override
 	public String getText() {
 		return String.join("\n", lines);

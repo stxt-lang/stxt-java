@@ -353,6 +353,14 @@ public class Parser {
 	private void closeToLevel(ArrayDeque<Node> stack, int targetLevel, ParseResult result, boolean stopOnFirstError) {
 		while (stack.size() > targetLevel) {
 			Node completed = stack.pop();
+
+			// A closing block node drops its final empty lines (STXT-SPEC §10.3): they are not
+			// content, only visual separation or an editor's final line breaks. The validators
+			// and observers already see the trimmed node; onTextLine did fire for these lines
+			// while the block was open, as process observation of the source.
+			if (completed instanceof TextNode text)
+				text.removeTrailingEmptyLines();
+
 			finishNode(completed, result);
 
 			// A closed root: the stream observers receive it, the result collects it

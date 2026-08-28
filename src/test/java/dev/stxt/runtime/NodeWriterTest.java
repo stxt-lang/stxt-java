@@ -31,7 +31,16 @@ public class NodeWriterTest {
 	@Test
 	void writesAnEmptyBlockLineAsTheIndentationAlone() {
 		List<Node> nodes = new Parser().parse("Doc:\n\tBody >>\n\t\tfirst\n\n\t\tlast\n\t\t\n");
-		assertEquals("Doc:\n    Body >>\n        first\n        \n        last\n        \n",
+		assertEquals("Doc:\n    Body >>\n        first\n        \n        last\n",
 			NodeWriter.toSTXT(nodes, NodeWriter.IndentStyle.SPACES_4));
+	}
+
+	@Test
+	void doesNotWriteTheFinalEmptyLinesOfAProgrammaticallyBuiltBlock() {
+		// Parsing never produces them (STXT-SPEC 10.3); on a built node they would not
+		// survive the round trip, so the writer drops them (STXT-TREE-SPEC 11.1 rule 6).
+		InlineNode doc = new InlineNode("Doc");
+		doc.addTextNode("Body", "first\n\nlast\n\n");
+		assertEquals("Doc:\n\tBody >>\n\t\tfirst\n\t\t\n\t\tlast\n", NodeWriter.toSTXT(doc));
 	}
 }

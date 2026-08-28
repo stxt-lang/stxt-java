@@ -31,8 +31,10 @@ import dev.stxt.utils.StringUtils;
  * is no value — or {@code  >>} for a block.</li>
  * <li>A <b>text line of a block</b> gets the indentation of the block (its level plus one) in
  * the requested style, followed by its content; any indentation the line had beyond the block's
- * is content (STXT-SPEC 10.2) and is kept exactly. A blank line of the block is {@code ""} in the
- * content (STXT-SPEC 10.3), so it is written with the indentation of the block too.</li>
+ * is content (STXT-SPEC 10.2) and is kept exactly. A blank line that precedes more block text is
+ * {@code ""} in the content (STXT-SPEC 10.3), so it is written with the indentation of the block
+ * too. The final blank lines of a block are not content (STXT-SPEC 10.3: the parser drops them
+ * when the block closes) and fall under the next rule.</li>
  * <li>Every <b>other line</b> — a comment, a blank line outside a block, or a line the parse
  * tree does not describe because of a syntax error — is kept as the author wrote it, except that
  * its trailing blanks are removed and the whole indentation units at its start are converted one
@@ -112,8 +114,11 @@ public final class Formatter {
 		Node node = sourceLines.nodeAt(lineNumber);
 		if (node != null)
 			return renderNode(node, line, style);
+		// A final empty line of a block is not content (STXT-SPEC §10.3): the parser removed it
+		// from the node when the block closed, so its index falls beyond the logical lines. It
+		// is kept as any other line: blank, unindented.
 		SourceLines.TextLine text = sourceLines.textAt(lineNumber);
-		if (text != null)
+		if (text != null && text.index() < text.node().getTextLines().size())
 			return indent(text.node().getLevel() + 1, style) + text.line().lineWithoutIndent;
 		return convertUnits(StringUtils.rightTrim(line), style);
 	}
@@ -155,7 +160,7 @@ public final class Formatter {
 
 	/** The parse of a document seen as source lines: which line opened which node, and which line is text of which block. */
 	private static final class SourceLines implements Observer {
-		record TextLine(TextNode node, LineIndent line) {
+		record TextLine(TextNode node, LineIndent line, int index) {
 		}
 
 		private final Map<Integer, Node> nodeByLine = new HashMap<>();
@@ -178,7 +183,10 @@ public final class Formatter {
 
 		@Override
 		public void onTextLine(TextNode node, int lineNumber, String lineString, LineIndent line) {
-			textByLine.put(lineNumber, new TextLine(node, line));
+			// The line was just appended: its 0-based index in the block is the current last.
+			// After the block closes and drops its final empty lines (STXT-SPEC §10.3), an
+			// index beyond getTextLines() marks the line as a final empty line, not content.
+			textByLine.put(lineNumber, new TextLine(node, line, node.getTextLines().size() - 1));
 		}
 
 		Node nodeAt(int lineNumber) {
