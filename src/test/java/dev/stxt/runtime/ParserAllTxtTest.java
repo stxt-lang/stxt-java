@@ -11,7 +11,7 @@ import dev.stxt.Parser;
 import dev.stxt.exceptions.ParseException;
 import dev.stxt.resources.ResourcesLoaderDirectory;
 import test.FileChecks;
-import test.FileTestLoction;
+import test.FileTestLocation;
 
 public class ParserAllTxtTest {
 	public static void main(String[] args) throws IOException, ParseException {
@@ -23,8 +23,8 @@ public class ParserAllTxtTest {
 		System.out.println("Inici");
 
 		// Create parser
-		Parser parser = STXT.parser(new ResourcesLoaderDirectory(FileTestLoction.getFile("")));
-		File docsDir = FileTestLoction.getFile("docs_txt");
+		Parser parser = STXT.parser(new ResourcesLoaderDirectory(FileTestLocation.getFile("")));
+		File docsDir = FileTestLocation.getFile("docs_txt");
 		for (File file : docsDir.listFiles()) {
 			validateFile(parser, file);
 		}

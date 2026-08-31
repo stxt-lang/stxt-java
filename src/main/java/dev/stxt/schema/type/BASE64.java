@@ -21,7 +21,7 @@ public final class BASE64 implements Type {
 
     @Override
     public String getName() {
-        return INSTANCE.getClass().getSimpleName();
+        return "BASE64";
     }
     
 	@Override

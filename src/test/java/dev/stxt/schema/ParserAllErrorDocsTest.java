@@ -15,7 +15,7 @@ import dev.stxt.exceptions.ParseException;
 import dev.stxt.resources.ResourcesLoader;
 import dev.stxt.resources.ResourcesLoaderDirectory;
 import test.FileUtils;
-import test.FileTestLoction;
+import test.FileTestLocation;
 import test.FileChecks;
 
 public class ParserAllErrorDocsTest {
@@ -29,7 +29,7 @@ public class ParserAllErrorDocsTest {
 
 		// Create parser
 		Parser parser = getParser();
-		File docsDir = FileTestLoction.getFile("error_schema");
+		File docsDir = FileTestLocation.getFile("error_schema");
 
 		List<File> stxtFiles = FileUtils.getStxtFiles(docsDir);
 
@@ -56,7 +56,7 @@ public class ParserAllErrorDocsTest {
 	{
 		Parser result = new Parser();
 		// Path
-		ResourcesLoader resourcesLoader = new ResourcesLoaderDirectory(FileTestLoction.getFile(""));
+		ResourcesLoader resourcesLoader = new ResourcesLoaderDirectory(FileTestLocation.getFile(""));
 		SchemaValidator schemaValidator = new SchemaValidator(new SchemaProviderResources(resourcesLoader));
 
 		result.registerValidator(schemaValidator);

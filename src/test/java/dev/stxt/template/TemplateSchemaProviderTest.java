@@ -9,13 +9,13 @@ import org.junit.jupiter.api.Test;
 import dev.stxt.resources.ResourcesLoaderDirectory;
 import dev.stxt.schema.Schema;
 import dev.stxt.schema.SchemaProvider;
-import test.FileTestLoction;
+import test.FileTestLocation;
 import test.FileChecks;
 
 public class TemplateSchemaProviderTest {
 	@Test
 	void testRetrieveAll() throws IOException {
-		File mainDir = FileTestLoction.getFile("");
+		File mainDir = FileTestLocation.getFile("");
 		SchemaProvider schemaProvider = new TemplateSchemaProvider(new ResourcesLoaderDirectory(mainDir));
 		
 		for (File f: new File(mainDir, "@stxt.template").listFiles()) {

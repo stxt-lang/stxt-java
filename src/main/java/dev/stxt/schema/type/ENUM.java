@@ -15,7 +15,7 @@ public final class ENUM implements Type {
 
     @Override
     public String getName() {
-        return INSTANCE.getClass().getSimpleName();
+        return "ENUM";
     }
     
 	@Override

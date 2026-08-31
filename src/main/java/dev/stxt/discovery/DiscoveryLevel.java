@@ -16,12 +16,12 @@ import java.util.Set;
  * in-memory chain.
  */
 public final class DiscoveryLevel {
-	final Path dir;
+	private final Path dir;
 	/** Definitions of the level by lowercased target namespace, conflicts excluded. */
-	final Map<String, DiscoveryDefinition> definitions = new HashMap<>();
+	private final Map<String, DiscoveryDefinition> definitions = new HashMap<>();
 	/** Namespaces with a same-level conflict; they block fallback to farther levels. */
-	final Set<String> conflictedNamespaces = new HashSet<>();
-	final List<DiscoveryError> errors = new ArrayList<>();
+	private final Set<String> conflictedNamespaces = new HashSet<>();
+	private final List<DiscoveryError> errors = new ArrayList<>();
 
 	/**
 	 * Creates an empty level.

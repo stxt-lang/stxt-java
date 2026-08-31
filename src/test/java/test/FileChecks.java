@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 public class FileChecks {
 
 	public static void checkContentWithJsonFile(Object node, String directory, String name) throws IOException {
-		File jsonFile = FileTestLoction.getFile(directory + "/" + name + ".json");
+		File jsonFile = FileTestLocation.getFile(directory + "/" + name + ".json");
 		if (!jsonFile.exists()) {
 			System.out.println("Writting json..." + jsonFile.getAbsolutePath());
 			String json = JSON.toJsonPretty(node);
@@ -24,7 +24,7 @@ public class FileChecks {
 		}
 	}
 	public static void checkContentWithTextFile(String content, String directory, String name) throws IOException {
-		File textFile = FileTestLoction.getFile(directory + "/" + name + ".txt");
+		File textFile = FileTestLocation.getFile(directory + "/" + name + ".txt");
 		if (!textFile.exists()) {
 			System.out.println("Writting text..." + textFile.getAbsolutePath());
 			System.out.println(content);

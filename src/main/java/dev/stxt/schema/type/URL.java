@@ -23,8 +23,4 @@ public final class URL extends RegexValue {
 		super(P_URL, "Invalid URL");
 	}
 
-	@Override
-	public String getName() {
-		return "URL";
-	}
 }

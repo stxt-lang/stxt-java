@@ -14,7 +14,7 @@ import dev.stxt.Parser;
 import dev.stxt.exceptions.ParseException;
 import dev.stxt.resources.ResourcesLoaderDirectory;
 import test.FileUtils;
-import test.FileTestLoction;
+import test.FileTestLocation;
 import test.FileChecks;
 
 public class ParserAllErrorDocsTest {
@@ -27,8 +27,8 @@ public class ParserAllErrorDocsTest {
 		System.out.println("Inici");
 
 		// Create parser
-		Parser parser = STXT.parser(new ResourcesLoaderDirectory(FileTestLoction.getFile("")));
-		File docsDir = FileTestLoction.getFile("error_schema");
+		Parser parser = STXT.parser(new ResourcesLoaderDirectory(FileTestLocation.getFile("")));
+		File docsDir = FileTestLocation.getFile("error_schema");
 
 		List<File> stxtFiles = FileUtils.getStxtFiles(docsDir);
 

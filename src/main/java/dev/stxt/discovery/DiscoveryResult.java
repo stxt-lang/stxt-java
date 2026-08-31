@@ -75,11 +75,11 @@ public final class DiscoveryResult implements SchemaProvider {
 		for (DiscoveryLevel level : levels) {
 			// STXT-DISCOVERY-SPEC section 8: a closer conflict leaves the namespace
 			// without an active definition instead of falling back to a farther level.
-			if (level.conflictedNamespaces.contains(key)) {
+			if (level.getConflictedNamespaces().contains(key)) {
 				return null;
 			}
 
-			DiscoveryDefinition definition = level.definitions.get(key);
+			DiscoveryDefinition definition = level.getDefinitions().get(key);
 
 			if (definition != null) {
 				return definition;
@@ -102,9 +102,9 @@ public final class DiscoveryResult implements SchemaProvider {
 		for (DiscoveryLevel level : levels) {
 			// Mark conflicts as seen so getActiveDefinitions() has the same semantics
 			// as getDefinition(): they block definitions in farther levels.
-			seen.addAll(level.conflictedNamespaces);
+			seen.addAll(level.getConflictedNamespaces());
 
-			for (Map.Entry<String, DiscoveryDefinition> entry : level.definitions.entrySet()) {
+			for (Map.Entry<String, DiscoveryDefinition> entry : level.getDefinitions().entrySet()) {
 				if (seen.add(entry.getKey())) {
 					result.add(entry.getValue());
 				}
@@ -130,7 +130,7 @@ public final class DiscoveryResult implements SchemaProvider {
 		List<Path> result = new ArrayList<>();
 
 		for (DiscoveryLevel level : levels) {
-			result.add(level.dir);
+			result.add(level.getDir());
 		}
 
 		return result;
@@ -141,7 +141,7 @@ public final class DiscoveryResult implements SchemaProvider {
 		List<DiscoveryError> result = new ArrayList<>();
 
 		for (DiscoveryLevel level : levels) {
-			result.addAll(level.errors);
+			result.addAll(level.getErrors());
 		}
 
 		return result;

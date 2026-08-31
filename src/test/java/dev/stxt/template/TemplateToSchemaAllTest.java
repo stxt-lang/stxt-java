@@ -10,17 +10,17 @@ import dev.stxt.Parser;
 import dev.stxt.resources.ResourcesLoader;
 import dev.stxt.resources.ResourcesLoaderDirectory;
 import dev.stxt.schema.Schema;
-import test.FileTestLoction;
+import test.FileTestLocation;
 import test.JSON;
 import test.FileChecks;
 
 public class TemplateToSchemaAllTest {
 	@Test
 	void testReadSchema() throws Exception {
-		ResourcesLoader resourcesLoader = new ResourcesLoaderDirectory(FileTestLoction.getFile(""));
+		ResourcesLoader resourcesLoader = new ResourcesLoaderDirectory(FileTestLocation.getFile(""));
 
 		// Miramos todos
-		File f = FileTestLoction.getFile("@stxt.template");
+		File f = FileTestLocation.getFile("@stxt.template");
 		String[] namespaces = f.list();
 		for (String namespace : namespaces) {
 			checkPrint(namespace, resourcesLoader);

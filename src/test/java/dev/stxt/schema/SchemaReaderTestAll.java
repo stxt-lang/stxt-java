@@ -9,17 +9,17 @@ import dev.stxt.Node;
 import dev.stxt.Parser;
 import dev.stxt.resources.ResourcesLoader;
 import dev.stxt.resources.ResourcesLoaderDirectory;
-import test.FileTestLoction;
+import test.FileTestLocation;
 import test.JSON;
 import test.FileChecks;
 
 public class SchemaReaderTestAll {
 	@Test
 	void testReadSchema() throws Exception {
-		ResourcesLoader resourcesLoader = new ResourcesLoaderDirectory(FileTestLoction.getFile(""));
+		ResourcesLoader resourcesLoader = new ResourcesLoaderDirectory(FileTestLocation.getFile(""));
 
 		// Miramos todos
-		File f = FileTestLoction.getFile("@stxt.schema");
+		File f = FileTestLocation.getFile("@stxt.schema");
 		String[] namespaces = f.list();
 		for (String namespace : namespaces) {
 			checkPrint(namespace, resourcesLoader);

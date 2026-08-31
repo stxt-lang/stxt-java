@@ -13,7 +13,7 @@ public class AllFilesDelete {
 	}
 
 	private static void delete(String dir) {
-		File dirDelete = FileTestLoction.getFile(dir);
+		File dirDelete = FileTestLocation.getFile(dir);
 		for (File f: dirDelete.listFiles()) {
 			System.out.println("Delete: " + f.getAbsolutePath());
 			f.delete();

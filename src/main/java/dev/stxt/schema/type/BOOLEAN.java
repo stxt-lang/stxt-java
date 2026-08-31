@@ -12,8 +12,4 @@ public final class BOOLEAN extends RegexValue {
 		super(P_BOOLEAN, "Invalid boolean");
 	}
 	
-    @Override
-    public String getName() {
-        return INSTANCE.getClass().getSimpleName();
-    }    
 }

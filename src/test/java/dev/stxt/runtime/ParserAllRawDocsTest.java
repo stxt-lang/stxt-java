@@ -10,7 +10,7 @@ import dev.stxt.Node;
 import dev.stxt.Parser;
 import dev.stxt.exceptions.ParseException;
 import test.FileChecks;
-import test.FileTestLoction;
+import test.FileTestLocation;
 import test.FileUtils;
 
 /**
@@ -30,7 +30,7 @@ public class ParserAllRawDocsTest {
 
 		// Create parser (without schema validation)
 		Parser parser = STXT.rawParser();
-		File docsDir = FileTestLoction.getFile("docs_raw");
+		File docsDir = FileTestLocation.getFile("docs_raw");
 
 		List<File> stxtFiles = FileUtils.getStxtFiles(docsDir);
 

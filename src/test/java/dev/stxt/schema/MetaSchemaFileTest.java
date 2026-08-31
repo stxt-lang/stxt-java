@@ -9,29 +9,20 @@ import org.junit.jupiter.api.Test;
 import dev.stxt.Node;
 import dev.stxt.Parser;
 import dev.stxt.utils.FileUtils;
-import test.FileTestLoction;
-import test.JSON;
+import test.FileTestLocation;
 import test.FileChecks;
 
-public class MetaSchemaTileTest {
+public class MetaSchemaFileTest {
 	@Test
 	void testReadSchema() throws IOException {
-		// Validator
-		File metaSchemaTest = FileTestLoction.getFile("@stxt.schema.stxt");
-		String schema = FileUtils.readFileContent(metaSchemaTest);
+		File metaSchemaFile = FileTestLocation.getFile("@stxt.schema.stxt");
+		String schema = FileUtils.readFileContent(metaSchemaFile);
 
 		Parser parser = new Parser();
 		List<Node> nodes = parser.parse(schema);
 		for (Node node : nodes) {
-			System.out.println(JSON.toJson(node));
 			Schema sch = SchemaParser.transformNodeToSchema(node);
-			showSchema(sch);
 			FileChecks.checkContentWithJsonFile(sch, "schema_json", "@stxt.schema");
 		}
 	}
-
-	private void showSchema(Schema sch) {
-		System.out.println("SCH => " + JSON.toJsonPretty(sch));
-	}
-
 }

@@ -14,7 +14,7 @@ import dev.stxt.exceptions.ParseException;
 import dev.stxt.exceptions.ValidationException;
 import dev.stxt.resources.ResourcesLoader;
 import dev.stxt.resources.ResourcesLoaderDirectory;
-import test.FileTestLoction;
+import test.FileTestLocation;
 import test.JSON;
 import test.FileChecks;
 
@@ -22,7 +22,7 @@ public class SchemaParserTest {
 	@Test
 	void testReadSchema() throws IOException {
 		// Validator
-		ResourcesLoader resourcesLoader = new ResourcesLoaderDirectory(FileTestLoction.getFile(""));
+		ResourcesLoader resourcesLoader = new ResourcesLoaderDirectory(FileTestLocation.getFile(""));
 		String schema = resourcesLoader.retrieve("@stxt.schema", "com.example.docs");
 		System.out.println("exists: " + schema);
 

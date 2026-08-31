@@ -19,8 +19,4 @@ public final class DATE extends RangeValue {
 		return DateTime.isValidDate(group(m, 1, 0), group(m, 2, 0), group(m, 3, 0));
 	}
 
-	@Override
-	public String getName() {
-		return "DATE";
-	}
 }

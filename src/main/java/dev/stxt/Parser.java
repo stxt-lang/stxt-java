@@ -360,12 +360,8 @@ public class Parser {
 				return;
 			}
 
-			try {
-				processLine(line, lineNumber, stack, result, stopOnFirstError);
-			} catch (LimitException e) {
-				emitError(e, result);
-				return;
-			}
+			if (!processLine(line, lineNumber, stack, result, stopOnFirstError))
+				return; // a limit aborted the parse; its error is already emitted
 
 			if (stopOnFirstError && result.hasErrors())
 				return;
@@ -375,7 +371,12 @@ public class Parser {
 		closeToLevel(stack, 0, result, stopOnFirstError);
 	}
 
-	private void processLine(String line, int lineNumber, ArrayDeque<Node> stack, ParseResult result, boolean stopOnFirstError) {
+	/**
+	 * Processes one source line. Errors of this line are collected into the result and the
+	 * traversal continues with the next line: returns true to keep going, false when a limit
+	 * aborted the parse (its error is already emitted) — parseLines stops on it.
+	 */
+	private boolean processLine(String line, int lineNumber, ArrayDeque<Node> stack, ParseResult result, boolean stopOnFirstError) {
 		try {
 			Node lastNode            = stack.isEmpty() ? null : stack.peek();
 			// The stack holds the open nodes, one per level: its size is the level of the next line's parent
@@ -400,7 +401,7 @@ public class Parser {
 				if (observers != null)
 					for (Observer o : observers)
 						o.onComment(lineNumber, line);
-				return;
+				return true;
 			}
 
 			int currentLevel = lineIndent.indentLevel;
@@ -415,24 +416,26 @@ public class Parser {
 				if (observers != null)
 					for (Observer o : observers)
 						o.onTextLine(textNode, lineNumber, line, lineIndent);
-				return;
+				return true;
 			}
 
 			// Empty lines are ignored
 			if (lineIndent.isEmpty())
-				return;
+				return true;
 
 			// Nesting limit (spec 11.2): only a node line can open a new level. Comment and
 			// block text lines returned above; with the consecutive-level rule this triggers
 			// exactly when the first node at level maxNesting opens.
-			if (maxNesting != -1 && currentLevel >= maxNesting)
-				throw new LimitException(lineNumber, "LIMIT_NESTING_EXCEEDED",
-						"Nesting deeper than " + maxNesting + " levels");
+			if (maxNesting != -1 && currentLevel >= maxNesting) {
+				emitError(new LimitException(lineNumber, "LIMIT_NESTING_EXCEEDED",
+						"Nesting deeper than " + maxNesting + " levels"), result);
+				return false;
+			}
 
 			// Close nodes down to the current level (this "finishes" them: observers and validators run)
 			closeToLevel(stack, currentLevel, result, stopOnFirstError);
 			if (stopOnFirstError && result.hasErrors())
-				return;
+				return true;
 
 			// Create the new node, attach it to its parent (or keep it as a root if the stack is
 			// empty) and leave it "open" on the stack. Attaching links both ends: the node already
@@ -448,13 +451,13 @@ public class Parser {
 
 			// Push it onto the stack
 			stack.push(node);
-		} catch (LimitException e) {
-			throw e;
 		} catch (ParseException e) {
 			emitError(e, result);
 		} catch (RuntimeException e) {
 			emitError(new ParseException(lineNumber, "UNEXPECTED_ERROR", e.getMessage()), result);
 		}
+
+		return true;
 	}
 
 	private void closeToLevel(ArrayDeque<Node> stack, int targetLevel, ParseResult result, boolean stopOnFirstError) {

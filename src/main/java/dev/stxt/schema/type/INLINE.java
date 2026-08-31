@@ -15,7 +15,7 @@ public final class INLINE implements Type {
 
     @Override
     public String getName() {
-        return INSTANCE.getClass().getSimpleName();
+        return "INLINE";
     }   
 
     @Override

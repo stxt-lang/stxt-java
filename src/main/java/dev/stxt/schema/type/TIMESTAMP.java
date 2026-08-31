@@ -26,8 +26,4 @@ public final class TIMESTAMP extends RangeValue {
 				&& (m.group(7) == null || DateTime.isValidTime(group(m, 7, 0), group(m, 8, 0), 0));
 	}
 
-	@Override
-	public String getName() {
-		return "TIMESTAMP";
-	}
 }

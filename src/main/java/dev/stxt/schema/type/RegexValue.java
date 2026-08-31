@@ -12,12 +12,19 @@ import dev.stxt.schema.Type;
  * Base validator for simple regex-based value checks.
  */
 abstract class RegexValue implements Type {
+	// The subclasses are named exactly after the type name they implement (a contract)
+	private final String name = getClass().getSimpleName();
 	private final Pattern pattern;
 	private final String error;
 
 	protected RegexValue(Pattern pattern, String error) {
 		this.pattern = pattern;
 		this.error = error;
+	}
+
+	@Override
+	public String getName() {
+		return name;
 	}
 
 	@Override

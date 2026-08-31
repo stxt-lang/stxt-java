@@ -15,7 +15,7 @@ public final class BLOCK implements Type {
 
     @Override
     public String getName() {
-        return INSTANCE.getClass().getSimpleName();
+        return "BLOCK";
     }
     
 	@Override

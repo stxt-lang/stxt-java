@@ -52,19 +52,14 @@ public final class ChildLineParser {
         Integer max = null;
         
 		if (count == null || count.isEmpty() || count.equals("*")) {
-			min = null;
-			max = null;
+			// min and max stay null: no bounds
 		} else if (count.equals("?")) {
-			min = null;
 			max = 1;
 		} else if (count.equals("+")) {
 			min = 1;
-			max = null;
 		} else if (count.endsWith("+")) {
 			min = parseCount(count.substring(0, count.length() - 1), count, rawLine, lineNumber);
-			max = null;
 		} else if (count.endsWith("-")) {
-			min = null;
 			max = parseCount(count.substring(0, count.length() - 1), count, rawLine, lineNumber);
 		} else if (count.contains(",")) {
             String[] minMax = count.split(",", -1);

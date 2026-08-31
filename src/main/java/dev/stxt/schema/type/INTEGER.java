@@ -12,8 +12,4 @@ public final class INTEGER extends RegexValue {
 		super(P_INTEGER, "Invalid integer");
 	}
 	
-    @Override
-    public String getName() {
-        return INSTANCE.getClass().getSimpleName();
-    }   
 }

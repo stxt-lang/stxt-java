@@ -16,7 +16,7 @@ public final class TEXT implements Type {
 
     @Override
     public String getName() {
-        return INSTANCE.getClass().getSimpleName();
+        return "TEXT";
     }   
     
 	@Override

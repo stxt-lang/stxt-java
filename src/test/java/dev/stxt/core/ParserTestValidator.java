@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import dev.stxt.Node;
 import dev.stxt.Parser;
 import dev.stxt.exceptions.ParseException;
-import test.FileTestLoction;
+import test.FileTestLocation;
 import test.JSON;
 
 public class ParserTestValidator {
@@ -28,7 +28,7 @@ public class ParserTestValidator {
 		ValidatorCountTest validator = new ValidatorCountTest();
 		parser.registerValidator(validator);
 
-		File f = FileTestLoction.getFile("docs/client.stxt");
+		File f = FileTestLocation.getFile("docs/client.stxt");
 		System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 		System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 		System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");

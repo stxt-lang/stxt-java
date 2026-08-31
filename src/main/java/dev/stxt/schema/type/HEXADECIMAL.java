@@ -20,7 +20,7 @@ public final class HEXADECIMAL implements Type {
 
     @Override
     public String getName() {
-        return INSTANCE.getClass().getSimpleName();
+        return "HEXADECIMAL";
     }
     
 	@Override

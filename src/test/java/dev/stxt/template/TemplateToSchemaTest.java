@@ -10,7 +10,7 @@ import dev.stxt.Parser;
 import dev.stxt.resources.ResourcesLoader;
 import dev.stxt.resources.ResourcesLoaderDirectory;
 import dev.stxt.schema.Schema;
-import test.FileTestLoction;
+import test.FileTestLocation;
 import test.JSON;
 import test.FileChecks;
 
@@ -19,7 +19,7 @@ public class TemplateToSchemaTest {
 	void testReadSchema() throws IOException {
 		// Validator
 		String ns = "com.example.docs";
-		ResourcesLoader resourcesLoader = new ResourcesLoaderDirectory(FileTestLoction.getFile(""));
+		ResourcesLoader resourcesLoader = new ResourcesLoaderDirectory(FileTestLocation.getFile(""));
 		String schema = resourcesLoader.retrieve("@stxt.template", ns);
 		System.out.println("exists: " + schema);
 		System.out.println("==========================================================");

@@ -13,8 +13,4 @@ public final class UUID extends RegexValue {
 		super(P_UUID, "Invalid UUID");
 	}
 
-    @Override
-    public String getName() {
-        return INSTANCE.getClass().getSimpleName();
-    }
 }

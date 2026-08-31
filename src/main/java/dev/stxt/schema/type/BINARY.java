@@ -20,7 +20,7 @@ public final class BINARY implements Type {
 
     @Override
     public String getName() {
-        return INSTANCE.getClass().getSimpleName();
+        return "BINARY";
     }
 
 	@Override

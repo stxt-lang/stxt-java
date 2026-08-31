@@ -8,17 +8,17 @@ import java.util.Base64;
 
 import org.junit.jupiter.api.Test;
 
-import test.FileTestLoction;
+import test.FileTestLocation;
 
 public class Base64ReadTest {
 	@Test
 	public void mainTest() throws IOException {
-		String text = FileUtils.readFileContent(FileTestLoction.getFile("foto.base64.txt"));
+		String text = FileUtils.readFileContent(FileTestLocation.getFile("foto.base64.txt"));
 		System.out.println(text.substring(0, 200) + "...");
 		byte[] fotoBytes = Base64.getDecoder().decode(text.replaceAll("\\s+", ""));
 		System.out.println(fotoBytes.length);
 
-		byte[] fotoBytesReal = FileUtils.readFile(FileTestLoction.getFile("foto.gif"));
+		byte[] fotoBytesReal = FileUtils.readFile(FileTestLocation.getFile("foto.gif"));
 		assertTrue(Arrays.equals(fotoBytes, fotoBytesReal));
 	}
 }

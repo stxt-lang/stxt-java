@@ -18,7 +18,7 @@ public final class MARKDOWN implements Type {
 
     @Override
     public String getName() {
-        return INSTANCE.getClass().getSimpleName();
+        return "MARKDOWN";
     }
 
 	@Override

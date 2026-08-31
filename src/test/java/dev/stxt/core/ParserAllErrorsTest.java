@@ -17,7 +17,7 @@ import dev.stxt.Node;
 import dev.stxt.Parser;
 import dev.stxt.exceptions.ParseException;
 import test.FileChecks;
-import test.FileTestLoction;
+import test.FileTestLocation;
 import test.JSON;
 
 public class ParserAllErrorsTest {
@@ -31,7 +31,7 @@ public class ParserAllErrorsTest {
 
 		// Create parser
 		Parser parser = new Parser();
-		File docsDir = FileTestLoction.getFile("error_docs");
+		File docsDir = FileTestLocation.getFile("error_docs");
 
 		List<File> stxtFiles;
 		try (Stream<Path> stream = Files.walk(docsDir.toPath())) {

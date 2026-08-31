@@ -15,7 +15,7 @@ import dev.stxt.Parser;
 import dev.stxt.exceptions.ParseException;
 import dev.stxt.schema.Schema;
 import test.FileUtils;
-import test.FileTestLoction;
+import test.FileTestLocation;
 import test.JSON;
 import test.FileChecks;
 
@@ -30,7 +30,7 @@ public class TemplateParserAllError {
 
 		// Create parser
 		Parser parser = getParser();
-		File docsDir = FileTestLoction.getFile("error_template");
+		File docsDir = FileTestLocation.getFile("error_template");
 
 		List<File> stxtFiles = FileUtils.getStxtFiles(docsDir);
 

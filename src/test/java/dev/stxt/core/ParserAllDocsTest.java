@@ -10,34 +10,24 @@ import dev.stxt.Node;
 import dev.stxt.Parser;
 import dev.stxt.exceptions.ParseException;
 import test.FileChecks;
-import test.FileTestLoction;
+import test.FileTestLocation;
 import test.FileUtils;
 
 public class ParserAllDocsTest {
-	public static void main(String[] args) throws IOException, ParseException {
-		new ParserAllDocsTest().mainTest();
-	}
 
 	@Test
 	public void mainTest() throws IOException, ParseException {
-		System.out.println("Inici");
-
-		// Create parser
 		Parser parser = new Parser();
-		File docsDir = FileTestLoction.getFile("docs");
+		File docsDir = FileTestLocation.getFile("docs");
 
 		List<File> stxtFiles = FileUtils.getStxtFiles(docsDir);
 
 		for (File file : stxtFiles) {
 			validateFile(parser, file);
 		}
-
-		System.out.println("End");
 	}
 
 	private void validateFile(Parser parser, File file) throws IOException, ParseException {
-		System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-		System.out.println(file.getAbsolutePath());
 		List<Node> docs = parser.parseFile(file);
 		for (Node node : docs) {
 			FileChecks.checkContentWithJsonFile(node, "docs_json/", file.getName().substring(0, file.getName().length() - 5));

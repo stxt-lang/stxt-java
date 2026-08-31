@@ -15,7 +15,7 @@ public final class GROUP implements Type {
 
     @Override
     public String getName() {
-        return INSTANCE.getClass().getSimpleName();
+        return "GROUP";
     }
     
 	@Override

@@ -1,8 +1,8 @@
 package dev.stxt.schema;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -16,7 +16,8 @@ public class NodeDefinition {
 	private final String canonicalName;
 	private final String type;
 	private String description;
-	private final Map<String, ChildDefinition> children = new HashMap<>();
+	// Declaration order, like Schema.nodes: the TOO_FEW/TOO_MANY_CHILDREN messages follow it
+	private final Map<String, ChildDefinition> children = new LinkedHashMap<>();
 	private final Set<String> values = new HashSet<String>();
 	
 	/**

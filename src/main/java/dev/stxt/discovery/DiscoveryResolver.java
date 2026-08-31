@@ -244,7 +244,7 @@ public final class DiscoveryResolver {
 	private void loadFile(Path file, DiscoveryLevel level) {
 		// Spec section 3: every file under a resolution directory must be a definition.
 		if (!file.toString().endsWith(STXT_EXTENSION)) {
-			level.errors.add(new DiscoveryError(
+			level.addError(new DiscoveryError(
 				DiscoveryError.NOT_A_DEFINITION, file.toString(),
 				"Not an STXT definition file: " + file));
 			return;
@@ -255,7 +255,7 @@ public final class DiscoveryResolver {
 		try {
 			content = fs.readFile(file);
 		} catch (IOException e) {
-			level.errors.add(new DiscoveryError(
+			level.addError(new DiscoveryError(
 				DiscoveryError.NOT_PARSEABLE, file.toString(),
 				"Cannot read " + file + ": " + e.getMessage()));
 			return;
@@ -266,14 +266,14 @@ public final class DiscoveryResolver {
 		try {
 			nodes = new Parser().parse(content);
 		} catch (RuntimeException e) {
-			level.errors.add(new DiscoveryError(
+			level.addError(new DiscoveryError(
 				DiscoveryError.NOT_PARSEABLE, file.toString(),
 				"Cannot parse " + file + ": " + e.getMessage()));
 			return;
 		}
 
 		if (nodes.isEmpty()) {
-			level.errors.add(new DiscoveryError(
+			level.addError(new DiscoveryError(
 				DiscoveryError.NOT_A_DEFINITION, file.toString(),
 				"Empty document, not a definition: " + file));
 			return;
@@ -296,40 +296,37 @@ public final class DiscoveryResolver {
 			} else if (Schema.SCHEMA_NAMESPACE.equals(namespace)) {
 				schema = DefinitionCompiler.compileNode(node, schemaMeta, SchemaParser::transformNodeToSchema);
 			} else {
-				level.errors.add(new DiscoveryError(
+				level.addError(new DiscoveryError(
 					DiscoveryError.NOT_A_DEFINITION, file.toString(),
 					"Root node belongs to '" + namespace + "', not to @stxt.schema or @stxt.template: " + file));
 				return;
 			}
 		} catch (RuntimeException e) {
 			String message = e instanceof ParseException pe ? "[" + pe.getCode() + "] " + pe.getMessage() : String.valueOf(e.getMessage());
-			level.errors.add(new DiscoveryError(
+			level.addError(new DiscoveryError(
 				DiscoveryError.INVALID_DEFINITION, file.toString(),
 				"Invalid definition in " + file + ": " + message));
 			return;
 		}
 
 		String key = StringUtils.lowerCase(schema.getNamespace());
-		DiscoveryDefinition existing = level.definitions.get(key);
+		DiscoveryDefinition existing = level.getDefinitions().get(key);
 
 		// Spec section 8: on a same-level duplicate, never silently pick one of the
 		// definitions — the namespace has no active definition while the conflict exists.
-		if (level.conflictedNamespaces.contains(key) || existing != null) {
-			if (existing != null) {
-				level.definitions.remove(key);
-				level.conflictedNamespaces.add(key);
-			}
+		if (level.getConflictedNamespaces().contains(key) || existing != null) {
+			level.addConflict(schema.getNamespace());
 
 			String firstFile = existing != null ? existing.getFile().toString() : "another file of this level";
-			level.errors.add(new DiscoveryError(
+			level.addError(new DiscoveryError(
 				DiscoveryError.DUPLICATE_NAMESPACE, file.toString(),
-				"Duplicate definition for namespace '" + schema.getNamespace() + "' at level " + level.dir + ": " +
+				"Duplicate definition for namespace '" + schema.getNamespace() + "' at level " + level.getDir() + ": " +
 				"already defined in " + firstFile,
 				schema.getNamespace()));
 			return;
 		}
 
-		level.definitions.put(key, new DiscoveryDefinition(schema.getNamespace(), schema, file, level.dir));
+		level.addDefinition(new DiscoveryDefinition(schema.getNamespace(), schema, file, level.getDir()));
 	}
 
 	// Compilation itself is the shared pipeline of DefinitionCompiler (compileNode):

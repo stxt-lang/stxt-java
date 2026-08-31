@@ -10,45 +10,33 @@ import dev.stxt.Parser;
 import dev.stxt.resources.ResourcesLoader;
 import dev.stxt.resources.ResourcesLoaderDirectory;
 import test.FileUtils;
-import test.FileTestLoction;
+import test.FileTestLocation;
 
-public class ParserAllDocsTest {
+public class SchemaValidatorAllDocsTest {
 
 	@Test
 	public void mainTest() throws IOException {
-		System.out.println("Inici");
-
-		// Create parser
 		Parser parser = getParser();
-		File docsDir = FileTestLoction.getFile("docs");
+		File docsDir = FileTestLocation.getFile("docs");
 
 		List<File> stxtFiles = FileUtils.getStxtFiles(docsDir);
 
 		for (File file : stxtFiles) {
 			try {
-				System.out.println("***************************************************");
-				System.out.println("FILE: " + file.getAbsolutePath());
 				parser.parseFile(file);
 			} catch (Exception e) {
-				e.printStackTrace();
-				System.out.println("ERROR: " + file.getName() + " => " + e.getMessage());
-				throw e;
+				throw new AssertionError("Error validating " + file.getName() + ": " + e.getMessage(), e);
 			}
 		}
-
-		System.out.println("End");
 	}
-	private Parser getParser()
-	{
+
+	private Parser getParser() {
 		Parser result = new Parser();
-		// Path
-		ResourcesLoader resourcesLoader = new ResourcesLoaderDirectory(FileTestLoction.getFile(""));
+		ResourcesLoader resourcesLoader = new ResourcesLoaderDirectory(FileTestLocation.getFile(""));
 		SchemaValidator schemaValidator = new SchemaValidator(new SchemaProviderResources(resourcesLoader));
 
 		result.registerValidator(schemaValidator);
-		
+
 		return result;
 	}
-	
-
 }
