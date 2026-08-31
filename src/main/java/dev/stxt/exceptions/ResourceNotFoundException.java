@@ -4,16 +4,16 @@ package dev.stxt.exceptions;
 public class ResourceNotFoundException extends STXTException {
 	private static final long serialVersionUID = 1L;
 
-	/** Namespace the resource was being looked up for. */
+	/** Namespace of the definition language the resource was looked up in (e.g. {@code @stxt.schema}). */
 	private final String namespace;
-	/** Name of the resource looked up (e.g. {@code schema} or {@code template}). */
+	/** Name of the resource looked up: the namespace whose definition was wanted (e.g. {@code com.example.docs}). */
 	private final String resource;
 
 	/**
 	 * Creates the exception for a resource that could not be found.
 	 *
-	 * @param namespace namespace the resource was being looked up for.
-	 * @param resource name of the resource looked up.
+	 * @param namespace namespace of the definition language the resource was looked up in.
+	 * @param resource name of the resource looked up (the namespace whose definition was wanted).
 	 */
 	public ResourceNotFoundException(String namespace, String resource) {
 		super("RESOURCE_NOT_FOUND", "Not found '" + resource + "' in namespace: " + namespace);
@@ -21,12 +21,12 @@ public class ResourceNotFoundException extends STXTException {
 		this.resource = resource;
 	}
 
-	/** {@return the namespace the resource was being looked up for} */
+	/** {@return the namespace of the definition language the resource was looked up in} */
 	public String getNamespace() {
 		return namespace;
 	}
 
-	/** {@return the name of the resource looked up} */
+	/** {@return the name of the resource looked up: the namespace whose definition was wanted} */
 	public String getResource() {
 		return resource;
 	}

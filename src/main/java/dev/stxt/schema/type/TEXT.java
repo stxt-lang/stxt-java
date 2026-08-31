@@ -6,7 +6,7 @@ import dev.stxt.exceptions.ValidationException;
 import dev.stxt.schema.NodeDefinition;
 import dev.stxt.schema.Type;
 
-/** {@code TEXT} type: free text block node, with no children allowed. */
+/** {@code TEXT} type: free text, in inline or block form; only children are forbidden. */
 public final class TEXT implements Type {
 	/** Single instance of this type. */
 	public static final TEXT INSTANCE = new TEXT();

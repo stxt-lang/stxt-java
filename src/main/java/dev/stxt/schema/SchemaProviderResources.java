@@ -27,7 +27,6 @@ public final class SchemaProviderResources implements SchemaProvider {
 
 	/** {@return the schema loaded and validated against the meta-schema, or {@code null} if the resource does not exist} */
 	public Schema getSchema(String namespace) {
-		// Return from the cache
 		if (namespace == null || namespace.isEmpty())
 		    throw new SchemaException("NAMESPACE_REQUIRED", "Namespace is required to load schema");
 
@@ -57,7 +56,6 @@ public final class SchemaProviderResources implements SchemaProvider {
 		if (!sch.getNamespace().equalsIgnoreCase(namespace))
 			throw new ValidationException(root.getLine(), "SCHEMA_ROOT_NOT_VALID", "Schema namespace is " + sch.getNamespace() + ", and expected is " + namespace);
 
-		// Put it in the cache
 		return sch;
 	}
 }
