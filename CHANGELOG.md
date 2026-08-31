@@ -4,6 +4,19 @@ All notable changes to `dev.stxt:stxt-core` are documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [1.0.0] - 2026-08-31
+
+**First stable release.** Functionally identical to 0.17.0: the number is the promise, not a
+change. Same number and scope as `@stxt-lang/core` and `stxt` (Python) 1.0.0.
+
+From this release on, the 1.x line freezes what
+[stxt.dev/lang-stability](https://stxt.dev/lang-stability) states: the language (STXT-SPEC 1.0,
+exposed as `Constants.SPEC_VERSION`), the canonical tree, the stable error codes and the public
+in-memory API of this library. Error message texts and convenience facades may still evolve.
+The library passes every case of the official conformance kit
+([stxt-lang/conformance](https://github.com/stxt-lang/stxt-lang/tree/master/conformance)) in
+all five profiles.
+
 ## [0.17.0] - 2026-08-31
 
 Same number and scope as `@stxt-lang/core` and `stxt` (Python) 0.17.0: the parity fixes of the
