@@ -9,8 +9,10 @@ public class ChildDefinition {
 	private final String canonicalName;
 	private final String name;
 	private final String namespace;
-	private final Integer min;
-	private final Integer max;
+	// Long, not Integer: the bound of a cardinality is 2^32 - 1 (STXT-SCHEMA-SPEC 10),
+	// which does not fit a signed int
+	private final Long min;
+	private final Long max;
 
 	/**
 	 * Creates the definition of an expected child.
@@ -21,7 +23,7 @@ public class ChildDefinition {
 	 * @param max maximum cardinality, or {@code null} if there is no maximum.
 	 * @param numLine line number, for the error messages.
 	 */
-	public ChildDefinition(String name, String namespace, Integer min, Integer max, int numLine) {
+	public ChildDefinition(String name, String namespace, Long min, Long max, int numLine) {
 		this.name = StringUtils.compactSpaces(name);
 		this.canonicalName = StringUtils.normalize(name);
 		this.namespace = StringUtils.lowerCase(namespace);
@@ -49,12 +51,12 @@ public class ChildDefinition {
 	}
 
 	/** {@return the minimum cardinality, or {@code null} if there is no minimum} */
-	public Integer getMin() {
+	public Long getMin() {
 		return min;
 	}
 
 	/** {@return the maximum cardinality, or {@code null} if there is no maximum} */
-	public Integer getMax() {
+	public Long getMax() {
 		return max;
 	}
 

@@ -152,8 +152,8 @@ public class SchemaValidator implements Validator {
 
 	private static List<ValidationException> validateCount(ChildDefinition chNode, int num, Node node) {
 		List<ValidationException> errors = new ArrayList<>();
-		Integer min = chNode.getMin();
-		Integer max = chNode.getMax();
+		Long min = chNode.getMin();
+		Long max = chNode.getMax();
 
 		if (min != null && num < min)
 			errors.add(new ValidationException(node.getLine(), "TOO_FEW_CHILDREN",

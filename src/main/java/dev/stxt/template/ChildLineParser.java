@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import dev.stxt.Constants;
 import dev.stxt.exceptions.ValidationException;
 import dev.stxt.utils.StringUtils;
 
@@ -48,15 +49,15 @@ public final class ChildLineParser {
         if (type == null || type.isEmpty()) type = null;
 
         String count = m.group("count");
-        Integer min = null;
-        Integer max = null;
-        
+        Long min = null;
+        Long max = null;
+
 		if (count == null || count.isEmpty() || count.equals("*")) {
 			// min and max stay null: no bounds
 		} else if (count.equals("?")) {
-			max = 1;
+			max = 1L;
 		} else if (count.equals("+")) {
-			min = 1;
+			min = 1L;
 		} else if (count.endsWith("+")) {
 			min = parseCount(count.substring(0, count.length() - 1), count, rawLine, lineNumber);
 		} else if (count.endsWith("-")) {
@@ -66,8 +67,8 @@ public final class ChildLineParser {
             if (minMax.length != 2)
                 throw new ValidationException(lineNumber, "CARDINALITY_NOT_VALID", "Invalid count " + count + " in line: " + rawLine);
 
-            int minValue = parseCount(StringUtils.trim(minMax[0]), count, rawLine, lineNumber);
-            int maxValue = parseCount(StringUtils.trim(minMax[1]), count, rawLine, lineNumber);
+            long minValue = parseCount(StringUtils.trim(minMax[0]), count, rawLine, lineNumber);
+            long maxValue = parseCount(StringUtils.trim(minMax[1]), count, rawLine, lineNumber);
 
             // STXT-TEMPLATE-SPEC 7.1: in (min,max) it must hold that min <= max
             if (minValue > maxValue)
@@ -77,7 +78,7 @@ public final class ChildLineParser {
             min = minValue;
             max = maxValue;
 		} else {
-            int expectedNum = parseCount(count, count, rawLine, lineNumber);
+            long expectedNum = parseCount(count, count, rawLine, lineNumber);
 			min = expectedNum;
 			max = expectedNum;
 		}
@@ -114,11 +115,21 @@ public final class ChildLineParser {
     }
 
     // STXT-TEMPLATE-SPEC 7.1: num, min and max must be non-negative integers (no sign, no
-    // leftover text); it throws CARDINALITY_NOT_VALID when they are not, instead of letting an
-    // unwrapped NumberFormatException through
-    private static int parseCount(String num, String count, String rawLine, int lineNumber) {
+    // leftover text) bounded to 2^32 - 1 like Min/Max in a schema; it throws
+    // CARDINALITY_NOT_VALID when they are not, instead of letting an unwrapped
+    // NumberFormatException through (a literal too big for a long overflows, which implies
+    // exceeding the bound)
+    private static long parseCount(String num, String count, String rawLine, int lineNumber) {
         if (!num.matches("\\d+"))
             throw new ValidationException(lineNumber, "CARDINALITY_NOT_VALID", "Invalid count " + count + " in line: " + rawLine);
-        return Integer.parseInt(num);
+        long value;
+        try {
+            value = Long.parseLong(num);
+        } catch (NumberFormatException e) {
+            throw new ValidationException(lineNumber, "CARDINALITY_NOT_VALID", "Invalid count " + count + " in line: " + rawLine);
+        }
+        if (value > Constants.MAX_CARDINALITY)
+            throw new ValidationException(lineNumber, "CARDINALITY_NOT_VALID", "Invalid count " + count + " in line: " + rawLine);
+        return value;
     }
 }

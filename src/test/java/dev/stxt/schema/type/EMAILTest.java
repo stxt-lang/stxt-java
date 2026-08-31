@@ -23,6 +23,10 @@ class EMAILTest {
 	@ValueSource(strings = {
 			"ana@example.com",
 			"a.b+c@sub.example.org",
+			// permissive dots: the full RFC 5322 dot-atom is not replicated (STXT-SCHEMA-SPEC 9.4)
+			"a..b@example.com",
+			".ana@example.com",
+			"a!#$%&'*+/=?^_`{|}~-@x.co",
 			// STXT-SCHEMA-SPEC 9.4: display name followed by the address between angle brackets
 			"Ana García <ana@example.com>",
 			"Ana<ana@example.com>",
@@ -39,6 +43,9 @@ class EMAILTest {
 			"@example.com",
 			"ana@localhost",
 			"a b@example.com",
+			// ASCII only: no EAI addresses, no digits in the TLD
+			"josé@example.com",
+			"ana@example.c0m",
 			// the bracketed form needs a name, balanced brackets, a valid address and nothing after
 			"<ana@example.com>",
 			"   <ana@example.com>",
@@ -50,10 +57,30 @@ class EMAILTest {
 			"Ana <ana@example.com> extra",
 			"Ana <ana@example.com> <ana@example.com>",
 			"Ana <<ana@example.com>>",
+			"Ana < ana@example.com >",
 	})
 	void rejectsInvalidAddresses(String value) {
 		ValidationException ex = assertThrows(ValidationException.class, () -> EMAIL.INSTANCE.validate(null, inline(value)));
 		assertEquals("INVALID_VALUE", ex.getCode());
+	}
+
+	@Test
+	void lengthLimitsAreTheRFC5321PracticalOnes() {
+		String local64 = "a".repeat(64);
+		// the limits themselves are legal: local of 64, TLD of 63, address of 254
+		assertDoesNotThrow(() -> EMAIL.INSTANCE.validate(null, inline(local64 + "@example.com")));
+		assertDoesNotThrow(() -> EMAIL.INSTANCE.validate(null, inline("ana@example." + "a".repeat(63))));
+		String addr254 = local64 + "@" + "a".repeat(254 - 64 - 1 - ".example.com".length()) + ".example.com";
+		assertEquals(254, addr254.length());
+		assertDoesNotThrow(() -> EMAIL.INSTANCE.validate(null, inline(addr254)));
+		// one over each limit is INVALID_VALUE
+		for (String value : new String[] {
+				"a".repeat(65) + "@example.com",
+				"ana@example." + "a".repeat(64),
+				local64 + "@" + "a".repeat(255 - 64 - 1 - ".example.com".length()) + ".example.com" }) {
+			ValidationException ex = assertThrows(ValidationException.class, () -> EMAIL.INSTANCE.validate(null, inline(value)));
+			assertEquals("INVALID_VALUE", ex.getCode());
+		}
 	}
 
 	@Test

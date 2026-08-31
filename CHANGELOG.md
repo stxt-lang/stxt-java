@@ -4,6 +4,33 @@ All notable changes to `dev.stxt:stxt-core` are documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.17.0] - 2026-08-31
+
+Same number and scope as `@stxt-lang/core` and `stxt` (Python) 0.17.0: the parity fixes of the
+external spec review (IANA/media-type pass). The specifications stay at 1.0 — they gained a
+normative `EMAIL` grammar, a cardinality bound and a strict-UTF-8 read rule without changing
+the meaning of any valid document.
+
+### Changed
+
+- **`EMAIL` follows the normative grammar of STXT-SCHEMA-SPEC §9.4**, now spelled out in the
+  specification instead of implied by the implementations: ASCII only (no EAI), permissive
+  dots (no RFC 5322 dot-atom), local part 1–64 characters, whole address at most 254, TLD
+  2–63 letters, and the display-name form separated by STXT blanks only (`[ \t]`, never
+  `\s`). The previous regex enforced ad-hoc limits (256 total, a 63/63 domain split) that no
+  spec text backed.
+- **Cardinalities are bounded to `4294967295` (2^32 − 1)** (STXT-SCHEMA-SPEC §10,
+  STXT-TEMPLATE-SPEC §7.1): a `Min`/`Max` or template number above the bound is
+  `CARDINALITY_NOT_VALID` in every port. Before, this port rejected anything above 2^31 − 1
+  (an `Integer.parseInt` accident) while JS and Python accepted arbitrary values — the same
+  schema loaded in one port and failed in another. New `Constants.MAX_CARDINALITY`.
+  **API change:** `ChildDefinition` and `ChildLine` carry `Min`/`Max` as `Long` (was
+  `Integer`), because the bound does not fit a signed `int`.
+- **File reads decode UTF-8 strictly** (STXT-SPEC §3): `FileUtils.readFileContent` and
+  `newFileReader` now reject invalid UTF-8 with an `IOException` instead of silently
+  substituting U+FFFD (`NioDiscoveryFileSystem.readFile` already did, via
+  `Files.readString`). Two tools must never see different documents from the same bytes.
+
 ## [0.16.0] - 2026-08-31
 
 Same number and scope as `@stxt-lang/core` and `stxt` (Python) 0.16.0: the fixes of the ports

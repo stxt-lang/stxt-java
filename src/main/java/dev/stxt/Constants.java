@@ -43,6 +43,13 @@ public final class Constants {
 	public static final int DEFAULT_MAX_INPUT_SIZE = 10000000;
 
 	/**
+	 * Upper bound of {@code Min}/{@code Max} in a schema and of the numbers of a template
+	 * cardinality: 2^32 - 1 (STXT-SCHEMA-SPEC 10, STXT-TEMPLATE-SPEC 7.1). A greater value is
+	 * {@code CARDINALITY_NOT_VALID}; "no maximum" is said by omitting {@code Max}.
+	 */
+	public static final long MAX_CARDINALITY = 4294967295L;
+
+	/**
 	 * Version of STXT-SPEC (the base syntax) this library implements; "STXT 1.0" on its own means
 	 * this number (STXT-SPEC §1.1). Each specification is versioned independently, so the schema,
 	 * template, tree and discovery specs may carry other numbers. It is distinct from the

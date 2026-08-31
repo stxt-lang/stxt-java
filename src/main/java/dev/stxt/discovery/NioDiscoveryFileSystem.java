@@ -42,6 +42,8 @@ public final class NioDiscoveryFileSystem implements DiscoveryFileSystem {
 
 	@Override
 	public String readFile(Path path) throws IOException {
+		// Files.readString is a strict UTF-8 decode (STXT-SPEC 3): invalid bytes raise an
+		// IOException instead of being silently substituted with U+FFFD.
 		return Files.readString(path);
 	}
 }

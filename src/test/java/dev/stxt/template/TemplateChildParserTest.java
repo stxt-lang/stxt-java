@@ -9,16 +9,16 @@ import dev.stxt.exceptions.ValidationException;
 public class TemplateChildParserTest {
 	@Test
 	void test1(){
-		checkLine("(1) TEXT", 1, 1, "TEXT", 0);
-		checkLine("(1) @Ingrediente", 1, 1, "@Ingrediente",0);
+		checkLine("(1) TEXT", 1L, 1L, "TEXT", 0);
+		checkLine("(1) @Ingrediente", 1L, 1L, "@Ingrediente",0);
 		checkLine("(*) @Ingrediente", null, null, "@Ingrediente",0);
-		checkLine("(+) @Ingrediente", 1, null, "@Ingrediente",0);
-		checkLine("(?) @Ingrediente", null, 1, "@Ingrediente",0);
-		checkLine("(?) ENUM [high, medium, low]",null,1,"ENUM",3);
-		checkLine("(2,3) TEXT", 2, 3, "TEXT", 0);
+		checkLine("(+) @Ingrediente", 1L, null, "@Ingrediente",0);
+		checkLine("(?) @Ingrediente", null, 1L, "@Ingrediente",0);
+		checkLine("(?) ENUM [high, medium, low]",null,1L,"ENUM",3);
+		checkLine("(2,3) TEXT", 2L, 3L, "TEXT", 0);
 	}
 
-	private void checkLine(String string, Integer min, Integer max, String type, int valuesSize) {
+	private void checkLine(String string, Long min, Long max, String type, int valuesSize) {
 		ChildLine cl = ChildLineParser.parse(string, 0);
 		System.out.println("cl = " + cl);
 		Assertions.assertEquals(min, cl.getMin());
@@ -59,6 +59,17 @@ public class TemplateChildParserTest {
 		// STXT-TEMPLATE-SPEC 7.1: in (min,max) it must hold that min <= max
 		ValidationException ex = Assertions.assertThrows(ValidationException.class, () -> ChildLineParser.parse("(3,1) TEXT", 5));
 		Assertions.assertEquals("MIN_GREATER_THAN_MAX", ex.getCode());
+	}
+
+	@Test
+	void testCardinalityBound() {
+		// STXT-TEMPLATE-SPEC 7.1: bounded to 2^32 - 1; the bound itself is legal
+		checkLine("(4294967295) TEXT", 4294967295L, 4294967295L, "TEXT", 0);
+		for (String count : new String[] { "(4294967296)", "(0,4294967296)", "(4294967296+)",
+				"(4294967296-)", "(99999999999999999999999999)" }) {
+			ParseException ex = Assertions.assertThrows(ParseException.class, () -> ChildLineParser.parse(count + " TEXT", 5));
+			Assertions.assertEquals("CARDINALITY_NOT_VALID", ex.getCode());
+		}
 	}
 }
 

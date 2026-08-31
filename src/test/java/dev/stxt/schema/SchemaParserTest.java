@@ -104,6 +104,28 @@ Schema (@stxt.schema): test.min.max
 	}
 
 	@Test
+	void testCardinalityBound() {
+		// STXT-SCHEMA-SPEC 10: Min/Max are bounded to 2^32 - 1; the bound itself is legal
+		String ok = """
+Schema (@stxt.schema): test.card.bound
+    Node: Foo
+        Children:
+            Child: Bar
+                Max: 4294967295
+    Node: Bar
+""";
+		SchemaParser.transformNodeToSchema(new Parser().parse(ok).get(0));
+
+		// one over the bound, and a literal too big even for a long, are CARDINALITY_NOT_VALID
+		for (String max : new String[] { "4294967296", "99999999999999999999999999" }) {
+			String bad = ok.replace("4294967295", max);
+			Node root = new Parser().parse(bad).get(0);
+			ParseException ex = assertThrows(ParseException.class, () -> SchemaParser.transformNodeToSchema(root));
+			assertEquals("CARDINALITY_NOT_VALID", ex.getCode());
+		}
+	}
+
+	@Test
 	void testMetaSchemaRejectsUnknownTypeAtLoad() {
 		// STXT-SCHEMA-SPEC 13.4/15.2: an unknown Type must fail when the schema is loaded,
 		// not only when validating documents against it

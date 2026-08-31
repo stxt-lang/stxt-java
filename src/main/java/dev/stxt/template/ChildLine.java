@@ -5,8 +5,10 @@ import java.util.Arrays;
 /** A child definition line inside an {@code @stxt.template}: type, cardinality and allowed values. */
 public class ChildLine {
     private final String type;
-    private final Integer min;
-    private final Integer max;
+    // Long, not Integer: the bound of a cardinality is 2^32 - 1 (STXT-TEMPLATE-SPEC 7.1),
+    // which does not fit a signed int
+    private final Long min;
+    private final Long max;
     private final String[] values;
 
     /**
@@ -17,7 +19,7 @@ public class ChildLine {
      * @param max maximum cardinality, or {@code null}.
      * @param values allowed values (ENUM), or {@code null} if they are not restricted.
      */
-    public ChildLine(String type, Integer min, Integer max, String[] values) {
+    public ChildLine(String type, Long min, Long max, String[] values) {
 		super();
 		this.type = type;
 		this.min = min;
@@ -30,11 +32,11 @@ public class ChildLine {
         return type;
     }
     /** {@return the minimum cardinality, or {@code null} if there is no minimum} */
-    public Integer getMin() {
+    public Long getMin() {
     	return min;
     }
     /** {@return the maximum cardinality, or {@code null} if there is no maximum} */
-    public Integer getMax() {
+    public Long getMax() {
     	return max;
     }
     /** {@return the allowed values (ENUM), or {@code null} if they are not restricted} */

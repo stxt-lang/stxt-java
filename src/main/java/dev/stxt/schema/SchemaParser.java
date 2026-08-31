@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import dev.stxt.Constants;
 import dev.stxt.NameNamespace;
 import dev.stxt.NameNamespaceParser;
 import dev.stxt.NamespaceValidator;
@@ -141,8 +142,8 @@ public class SchemaParser {
 		String name = ns.getName();
 		String namespace = ns.getNamespace();
 		
-		Integer min = getInteger(child, "min");
-		Integer max = getInteger(child, "max");
+		Long min = getInteger(child, "min");
+		Long max = getInteger(child, "max");
 		// STXT-SCHEMA-SPEC 10/13.7: the cardinality is invalid when Min > Max
 		if (min != null && max != null && min > max)
 			throw new ValidationException(child.getLine(), "MIN_GREATER_THAN_MAX",
@@ -152,14 +153,21 @@ public class SchemaParser {
 		schemaNode.addChildDefinition(schemaChild);
 	}
 
-	private static Integer getInteger(InlineNode node, String name) {
+	private static Long getInteger(InlineNode node, String name) {
 		Node n = node.getChild(name);
 		if (n == null) return null;
-		
+
+		long value;
 		try	{
-			return Integer.parseInt(n.getText());
+			value = Long.parseLong(n.getText());
 		} catch (Exception e) {
+			// Also a literal too big for a long: overflowing implies exceeding the bound below
 			throw new ParseException(node.getLine(), "CARDINALITY_NOT_VALID", "Integer not valid: " + n.getText());
 		}
+		// Cardinalities are bounded to 2^32 - 1 (STXT-SCHEMA-SPEC 10)
+		if (value > Constants.MAX_CARDINALITY)
+			throw new ParseException(node.getLine(), "CARDINALITY_NOT_VALID",
+					"Cardinality above " + Constants.MAX_CARDINALITY + ": " + n.getText());
+		return value;
 	}
 }
