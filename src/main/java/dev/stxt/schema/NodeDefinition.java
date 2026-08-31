@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Set;
 
 import dev.stxt.exceptions.ParseException;
-import dev.stxt.exceptions.SchemaException;
 import dev.stxt.exceptions.ValidationException;
 import dev.stxt.utils.StringUtils;
 
@@ -80,11 +79,12 @@ public class NodeDefinition {
 	 * Adds the definition of an expected child.
 	 *
 	 * @param childDefinition definition of the child to add.
-	 * @throws dev.stxt.exceptions.SchemaException with code {@code CHILD_DUPLICATED} if a definition for that child already existed.
+	 * @throws ValidationException with code {@code CHILD_DUPLICATED} if a definition for that child already existed.
 	 */
 	public void addChildDefinition(ChildDefinition childDefinition) {
 		String qname = childDefinition.getQualifiedName();
-		if (children.containsKey(qname)) throw new SchemaException("CHILD_DUPLICATED", "Exists a previous node definition with: " + qname);
+		if (children.containsKey(qname))
+			throw new ValidationException(ParseException.NO_LINE, "CHILD_DUPLICATED", "A child declaration with the same name already exists: " + qname);
 		children.put(qname, childDefinition);
 	}
 	// STXT-SCHEMA-SPEC 13.9 / STXT-TEMPLATE-SPEC 14.14: there can be no duplicated values
@@ -95,12 +95,13 @@ public class NodeDefinition {
 	 *
 	 * @param value value to add to the list of allowed values.
 	 * @param line line number, for the error message.
-	 * @throws ParseException with code {@code VALUE_DUPLICATED} if the value (once trimmed) had already been added.
+	 * @throws ValidationException with code {@code VALUE_DUPLICATED} if the value (once trimmed) had already been added.
 	 */
 	public void addValue(String value, int line) {
-	    String trimmed = value == null? "": value.trim();
+	    // Language blanks only (U+0020/U+0009): any other whitespace (NBSP...) is part of the value
+	    String trimmed = StringUtils.trim(value);
 	    if (!this.values.add(trimmed))
-	        throw new ParseException(line, "VALUE_DUPLICATED", "The values " + trimmed + " is duplicated");
+	        throw new ValidationException(line, "VALUE_DUPLICATED", "The value " + trimmed + " is duplicated");
 	}
     /**
      * Tells whether a value is allowed for this node.

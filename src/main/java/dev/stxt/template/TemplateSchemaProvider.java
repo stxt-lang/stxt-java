@@ -1,15 +1,12 @@
 package dev.stxt.template;
 
-import java.util.List;
-
-import dev.stxt.Node;
-import dev.stxt.Parser;
+import dev.stxt.exceptions.ParseException;
 import dev.stxt.exceptions.ResourceNotFoundException;
 import dev.stxt.exceptions.ValidationException;
 import dev.stxt.resources.ResourcesLoader;
+import dev.stxt.schema.DefinitionCompiler;
 import dev.stxt.schema.Schema;
 import dev.stxt.schema.SchemaProvider;
-import dev.stxt.schema.SchemaValidator;
 
 /** {@link SchemaProvider} that loads an {@code @stxt.template} document from a {@link ResourcesLoader} and turns it into a {@link Schema}. */
 public class TemplateSchemaProvider implements SchemaProvider {
@@ -29,28 +26,21 @@ public class TemplateSchemaProvider implements SchemaProvider {
 		// A missing resource is "no template for this namespace", not an error (SchemaProvider contract)
 		String template;
 		try {
-			template = loader.retrieve("@stxt.template", namespace);
+			template = loader.retrieve(Schema.TEMPLATE_NAMESPACE, namespace);
 		}
 		catch (ResourceNotFoundException e) {
 			return null;
 		}
 
-		// Create the parser
-		Parser parser = new Parser();
-		parser.registerValidator(new SchemaValidator(new MetaTemplateSchemaProvider()));
-		
-		List<Node> nodes = parser.parse(template);
-		if (nodes.size() != 1)
-			throw new ValidationException(nodes.size() > 1 ? nodes.get(1).getLine() : 0, "TEMPLATE_MULTIPLE_ROOTS",
-					"A template document must have exactly 1 root node, found " + nodes.size());
+		// The whole load pipeline is the shared one of DefinitionCompiler
+		Schema sch = DefinitionCompiler.compileDocument(template, new MetaTemplateSchemaProvider(),
+				TemplateParser::transformNodeToSchema, "TEMPLATE_MULTIPLE_ROOTS", "template");
 
-		// Get the schema
-		Schema sch = TemplateParser.transformNodeToSchema(nodes.get(0)); 
-		
-		// Check the expected namespace
+		// Facade check, outside the normative scope: the document must define the requested namespace
 		if (!sch.getNamespace().equalsIgnoreCase(namespace))
-			throw new ValidationException(nodes.get(0).getLine(), "TEMPLATE_ROOT_NOT_VALID", "Template namespace is " + sch.getNamespace() + ", and expected is " + namespace);
-		
+			throw new ValidationException(ParseException.NO_LINE, "TEMPLATE_ROOT_NOT_VALID",
+					"Template namespace is " + sch.getNamespace() + ", and expected is " + namespace);
+
 		return sch;
 	}
 }

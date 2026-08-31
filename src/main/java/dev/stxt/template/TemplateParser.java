@@ -17,8 +17,8 @@ import dev.stxt.utils.StringUtils;
 /** Turns the tree of an already parsed {@code @stxt.template} document into an equivalent {@link Schema}. */
 public class TemplateParser {
 
-	/** Namespace of the template language, the one the root node of every template declares. */
-	public static final String TEMPLATE_NAMESPACE = "@stxt.template";
+	/** Namespace of the template language; the canonical constant is {@link Schema#TEMPLATE_NAMESPACE}. */
+	public static final String TEMPLATE_NAMESPACE = Schema.TEMPLATE_NAMESPACE;
 
 	private TemplateParser() {
 	}
@@ -95,116 +95,160 @@ public class TemplateParser {
 		}
 	}
 
+	/**
+	 * Adds to the schema the definition a Structure node declares, along with its children.
+	 *
+	 * Only the orchestration lives here; each of the three shapes a Structure line can take has
+	 * its own helper below: a node of an external namespace ({@link #validateExternalNode}, nothing
+	 * is created), a name seen for the first time ({@link #createDefinition}) or a reappearance
+	 * ({@link #validateReference}, nothing is created). The children of a definition are declared
+	 * and recursed by {@link #addChildren}.
+	 */
 	private static void addToSchema(Schema schema, Node node, int offset) {
-		// Structure has its own grammar: every non-empty line must use ':'. The core
-		// parser also accepts BLOCK nodes here, so reject that form explicitly.
+		// A Structure line belongs to the template grammar, not merely to the core one: every
+		// non-empty line must use ':'. The core parser also accepts BLOCK nodes here, so reject
+		// that form explicitly (STXT-TEMPLATE-SPEC 6.3).
 		if (!(node instanceof InlineNode inline))
 			throw new ValidationException(node.getLine() + offset, "STRUCTURE_LINE_NOT_VALID", "Template Structure lines must use ':'");
 
-		// Get the qualified name
-		String namespace = node.getNamespace();
-		String name = node.getName();
+		// Parse the RuleSpec (cardinality / type / values) from the inline value
+		ChildLine cl = ChildLineParser.parse(node.getText(), node.getLine() + offset);
 
-		// When empty it will be the schema's one
+		// No explicit namespace => the target namespace of the template
+		String namespace = node.getNamespace();
         if (namespace.isEmpty()) {
             namespace = schema.getNamespace();
-        }           
-        
-		// Look at the data
-		ChildLine cl = ChildLineParser.parse(node.getText(), node.getLine() + offset);
-		
-		if (!namespace.equals(schema.getNamespace())) { 
-			// STXT-TEMPLATE-SPEC 14.15: a cross-namespace node may only declare cardinality;
-			// type, ENUM values and children are not allowed and must be rejected, not ignored
-			String type = cl.getType();
-			if (type != null && !StringUtils.trim(type).isEmpty())
-				throw new ValidationException(node.getLine() + offset, "TYPE_NOT_ALLOWED_IN_EXTERNAL_NAMESPACE", "Not allowed type definition in external namespaces");
-			
-			if (cl.getValues() != null)
-				throw new ValidationException(node.getLine() + offset, "VALUES_NOT_ALLOWED_IN_EXTERNAL_NAMESPACE", "Not allowed values in external namespaces (node " + node.getName() + ")");
-			
-			if (!inline.getChildren().isEmpty())
-				throw new ValidationException(node.getLine() + offset, "CHILDREN_NOT_ALLOWED_IN_EXTERNAL_NAMESPACE", "Not allowed children in external namespaces");
-			
-			return; // We do not create nodes that do not belong to @stxt.template!!
+        }
+
+		if (!namespace.equals(schema.getNamespace())) {
+			validateExternalNode(inline, cl, offset);
+			return; // no definitions are created for nodes of other namespaces
 		}
-		
-		// Check whether it is new and add it to the list
-		NodeDefinition schemaNode = schema.getNodeDefinition(name);
-		if (schemaNode == null) {	// New
-			String type = cl.getType() == null? "INLINE": cl.getType();
 
-			// At this point the schema already holds both the previous definitions, already
-			// closed, and the open ancestors, so a reference that does not resolve here does
-			// not resolve at all (STXT-TEMPLATE-SPEC 6.4 and 14.11)
-			if (type.startsWith("@"))
-				throw new ValidationException(node.getLine() + offset, "REFERENCE_NOT_FOUND", "Reference '" + type + "' does not point to a previous definition or an open ancestor");
+		// New definition or a reappearance (reference)?
+		NodeDefinition schemaNode = schema.getNodeDefinition(node.getName());
 
-			// STXT-TEMPLATE-SPEC 14.6: the type must be one of the supported ones
-			if (TypeRegistry.get(type) == null)
-				throw new ValidationException(node.getLine() + offset, "TYPE_NOT_VALID", "Type not valid: " + type);
-
-			schemaNode = new NodeDefinition(node.getName(), type, node.getLine() + offset);
-			schema.addNodeDefinition(schemaNode);
-            String[] values = cl.getValues();
-            
-            // STXT-TEMPLATE-SPEC 9/14.7/14.8: [values] only for ENUM, and ENUM requires non-empty values
-            if (values != null && !type.equals("ENUM"))
-                throw new ValidationException(node.getLine() + offset, "VALUES_NOT_ALLOWED_FOR_TYPE", "Values only supported for type ENUM, not for type " + type);
-            
-            if (values != null)
-                for (String value: values)
-                    schemaNode.addValue(value, node.getLine() + offset);
-            
-            if (type.equals("ENUM") && (values == null || values.length == 0))
-                throw new ValidationException(node.getLine() + offset, "VALUES_REQUIRED", "ENUM Type must include values");
-		} else {
-			String type = cl.getType();
-			// STXT-TEMPLATE-SPEC 6.4: a local reappearance MUST be a '@Name' reference;
-			// if it carries no type (type == null), it is not a valid reference (avoids an NPE)
-			if (type == null || !type.startsWith("@"))
-				throw new ValidationException(node.getLine() + offset, "REFERENCE_REQUIRED", "Multiple node reference must start with @: " + node.getName());				
-				
-			String reference = StringUtils.trim(type.substring(1));
-
-			// STXT-TEMPLATE-SPEC 14.13: a reference and an explicit type cannot be declared at once
-			String explicitType = referenceType(reference, node.getCanonicalName());
-			if (explicitType != null)
-				throw new ValidationException(node.getLine() + offset, "REFERENCE_WITH_TYPE_NOT_ALLOWED", "Reference '@" + node.getName() + "' can not declare a type: " + explicitType);
-
-			if (!StringUtils.normalize(reference).equals(node.getCanonicalName()))
-				throw new ValidationException(node.getLine() + offset, "REFERENCE_NAME_NOT_VALID", "Reference must be '" + "@" + node.getName() + "', not '" + reference + "'");
-			
-			// STXT-TEMPLATE-SPEC 6.4: a @Node Name reference MUST NOT redefine ENUM values nor children
-			if (cl.getValues() != null)
-				throw new ValidationException(node.getLine() + offset, "VALUES_NOT_ALLOWED_IN_REFERENCE", "Reference '@" + node.getName() + "' can not redefine ENUM values");
-
-			if (!inline.getChildren().isEmpty())
-				throw new ValidationException(node.getLine() + offset, "CHILDREN_NOT_ALLOWED_IN_REFERENCE", "Reference '@" + node.getName() + "' can not redefine children");
-			
-			return; // OK Definition (reference): it only overrides the cardinality of the parent's Child
+		if (schemaNode != null) {
+			validateReference(inline, cl, offset);
+			return; // valid reference: nothing is redefined, no children are processed
 		}
-		
-		// Once it exists, if it has children we try to create them.
-		List<Node> childrenNode = inline.getChildren();
-		
+
+		schemaNode = createDefinition(schema, inline, cl, offset);
+		addChildren(schema, schemaNode, inline, offset);
+	}
+
+	/**
+	 * Cross-namespace node (STXT-TEMPLATE-SPEC 6.4, 10 and 14.15): not defined locally; it may
+	 * only declare cardinality — no type, no ENUM values and no children.
+	 */
+	private static void validateExternalNode(InlineNode node, ChildLine cl, int offset) {
+		String type = cl.getType();
+		if (type != null && !StringUtils.trim(type).isEmpty())
+			throw new ValidationException(node.getLine() + offset, "TYPE_NOT_ALLOWED_IN_EXTERNAL_NAMESPACE", "Not allowed type definition in external namespaces");
+
+		if (cl.getValues() != null)
+			throw new ValidationException(node.getLine() + offset, "VALUES_NOT_ALLOWED_IN_EXTERNAL_NAMESPACE", "Not allowed values in external namespaces (node " + node.getName() + ")");
+
+		if (!node.getChildren().isEmpty())
+			throw new ValidationException(node.getLine() + offset, "CHILDREN_NOT_ALLOWED_IN_EXTERNAL_NAMESPACE", "Not allowed children in external namespaces");
+	}
+
+	/**
+	 * First appearance of a name: creates its {@link NodeDefinition} (with its type and its ENUM
+	 * values, when it has them) and registers it in the schema.
+	 */
+	private static NodeDefinition createDefinition(Schema schema, InlineNode node, ChildLine cl, int offset) {
+		String type = cl.getType() == null? "INLINE": cl.getType();
+
+		// At this point the schema already holds both the previous definitions, already
+		// closed, and the open ancestors, so a reference that does not resolve here does
+		// not resolve at all (STXT-TEMPLATE-SPEC 6.4 and 14.11)
+		if (type.startsWith("@"))
+			throw new ValidationException(node.getLine() + offset, "REFERENCE_NOT_FOUND", "Reference '" + type + "' does not point to a previous definition or an open ancestor");
+
+		NodeDefinition schemaNode = new NodeDefinition(node.getName(), type, node.getLine() + offset);
+		schema.addNodeDefinition(schemaNode);
+
+		// STXT-TEMPLATE-SPEC 14.6: the type must be one of the supported ones
+		if (TypeRegistry.get(type) == null)
+			throw new ValidationException(node.getLine() + offset, "TYPE_NOT_VALID", "Type not valid: " + type);
+
+		String[] values = cl.getValues();
+
+		// STXT-TEMPLATE-SPEC 9/14.7/14.8: [values] only for ENUM, and ENUM requires non-empty values
+		if (values != null && !type.equals("ENUM"))
+			// Same code as SchemaParser: a template is sugar equivalent to a schema
+			// (STXT-TEMPLATE-SPEC 13), so the same condition must not change its code
+			// depending on the entry point
+			throw new ValidationException(node.getLine() + offset, "VALUES_NOT_ALLOWED_FOR_TYPE", "Values only supported for type ENUM, not for type " + type);
+
+		if (values != null)
+			for (String value: values)
+				schemaNode.addValue(value, node.getLine() + offset);
+
+		// An ENUM with no list of values is an invalid template (STXT-TEMPLATE-SPEC 9 and 13.7)
+		if (type.equals("ENUM") && (values == null || values.length == 0))
+			throw new ValidationException(node.getLine() + offset, "VALUES_REQUIRED", "ENUM Type must include values");
+
+		return schemaNode;
+	}
+
+	/**
+	 * Reappearance of an already defined name: it must be a {@code @Node Name} reference, and a
+	 * reference may override the cardinality but may redefine neither the ENUM values nor the
+	 * children (STXT-TEMPLATE-SPEC 6.4, 14.12 and 14.13).
+	 */
+	private static void validateReference(InlineNode node, ChildLine cl, int offset) {
+		String type = cl.getType();
+
+		// A reappearance without "@" would redefine an existing node: error
+		// (if it carries no type at all, it is not a valid reference either — avoids an NPE)
+		if (type == null || !type.startsWith("@"))
+			throw new ValidationException(node.getLine() + offset, "REFERENCE_REQUIRED", "Multiple node reference must start with @: " + node.getName());
+
+		String reference = StringUtils.trim(type.substring(1));
+
+		// STXT-TEMPLATE-SPEC 14.13: a reference and an explicit type cannot be declared at once
+		String explicitType = referenceType(reference, node.getCanonicalName());
+		if (explicitType != null)
+			throw new ValidationException(node.getLine() + offset, "REFERENCE_WITH_TYPE_NOT_ALLOWED", "Reference '@" + node.getName() + "' can not declare a type: " + explicitType);
+
+		// The name of the reference must match (canonically) the one of the line (14.12)
+		if (!StringUtils.normalize(reference).equals(node.getCanonicalName()))
+			throw new ValidationException(node.getLine() + offset, "REFERENCE_NAME_NOT_VALID", "Reference must be '" + "@" + node.getName() + "', not '" + reference + "'");
+
+		// STXT-TEMPLATE-SPEC 6.4: a @Node Name reference MUST NOT redefine ENUM values nor children
+		if (cl.getValues() != null)
+			throw new ValidationException(node.getLine() + offset, "VALUES_NOT_ALLOWED_IN_REFERENCE", "Reference '@" + node.getName() + "' can not redefine ENUM values");
+
+		if (!node.getChildren().isEmpty())
+			throw new ValidationException(node.getLine() + offset, "CHILDREN_NOT_ALLOWED_IN_REFERENCE", "Reference '@" + node.getName() + "' can not redefine children");
+	}
+
+	/**
+	 * Declares every direct child of a definition as a {@link ChildDefinition} (with its
+	 * cardinality) and recurses into each one as a definition/reference of its own.
+	 */
+	private static void addChildren(Schema schema, NodeDefinition schemaNode, InlineNode node, int offset) {
+		List<Node> children = node.getChildren();
+
 		// STXT-TEMPLATE-SPEC 8.2/14.9: only INLINE and GROUP accept children
-		if (!childrenNode.isEmpty() && !TypeRegistry.admitsChildren(schemaNode.getType()))
+		if (!children.isEmpty() && !TypeRegistry.admitsChildren(schemaNode.getType()))
 			throw new ValidationException(node.getLine() + offset, "CHILDREN_NOT_ALLOWED_FOR_TYPE", "Type " + schemaNode.getType() + " does not allow children (node " + node.getName() + ")");
-		
-		// Add the children
-		for (Node child: childrenNode) {
-			cl = ChildLineParser.parse(child.getText(), child.getLine() + offset);
-			
-			String childName = child.getName();
+
+		for (Node child: children) {
+			ChildLine childCl = ChildLineParser.parse(child.getText(), child.getLine() + offset);
+
 			String childNamespace = child.getNamespace();
 	        if (childNamespace.isEmpty()) {
 	            childNamespace = schema.getNamespace();
-	        }           
-			
-			ChildDefinition schChild = new ChildDefinition(childName, childNamespace, cl.getMin(), cl.getMax(), child.getLine() + offset);
+	        }
+
+			// The child is declared as a Child (with its cardinality) in the current definition
+			ChildDefinition schChild = new ChildDefinition(child.getName(), childNamespace, childCl.getMin(), childCl.getMax(), child.getLine() + offset);
 			schemaNode.addChildDefinition(schChild);
-			
+
+			// And processed recursively as a definition/reference
 			addToSchema(schema, child, offset);
 		}
 	}

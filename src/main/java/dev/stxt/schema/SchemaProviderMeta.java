@@ -4,7 +4,8 @@ import java.util.List;
 
 import dev.stxt.Node;
 import dev.stxt.Parser;
-import dev.stxt.exceptions.SchemaException;
+import dev.stxt.exceptions.ParseException;
+import dev.stxt.exceptions.ValidationException;
 
 /**
  * {@link SchemaProvider} that defines in code the meta-schema of the schema language itself
@@ -76,17 +77,32 @@ Schema (@stxt.schema): @stxt.schema
     Node: Value
 """;
 	
+	/**
+	 * The meta-schema is immutable, so it is compiled once per process, lazily, and every
+	 * instance serves this same schema (constructing these providers is common: every
+	 * {@code addSchema()} and every discovery compilation builds one).
+	 */
+	private static Schema compiledMeta;
+
 	private final Schema meta;
 
-	/** Builds the meta-schema by parsing and validating {@code META_TEXT} against itself. */
+	/** Compiles the meta-schema the first time and keeps it ready to be served. */
 	public SchemaProviderMeta() {
-		Schema metaSchema = null;
-		Parser parser = new Parser();
-		List<Node> nodes = parser.parse(META_TEXT);
-		if (nodes.size() != 1)
-		    throw new SchemaException("META_SCHEMA_INVALID", "Meta schema must produce exactly 1 document, got " + nodes.size());
-		metaSchema = SchemaParser.transformNodeToSchema(nodes.get(0));
-		meta = metaSchema;
+		meta = compiledMeta();
+	}
+
+	// Lazy, thread-safe compilation of META_TEXT, shared by every instance.
+	private static synchronized Schema compiledMeta() {
+		if (compiledMeta == null) {
+			Parser parser = new Parser();
+			List<Node> nodes = parser.parse(META_TEXT);
+			if (nodes.size() != 1)
+				throw new ValidationException(ParseException.NO_LINE, "META_SCHEMA_INVALID",
+						"Meta schema must produce exactly 1 document, got " + nodes.size());
+
+			compiledMeta = SchemaParser.transformNodeToSchema(nodes.get(0));
+		}
+		return compiledMeta;
 	}
 
 	/**
@@ -99,9 +115,6 @@ Schema (@stxt.schema): @stxt.schema
 	public Schema getSchema(String namespace) {
 	    if (!Schema.SCHEMA_NAMESPACE.equals(namespace))
 	        return null;
-
-	    if (meta == null)
-	        throw new SchemaException("META_SCHEMA_NOT_AVAILABLE", "Meta schema not available");
 
 	    return meta;
 	}

@@ -112,10 +112,12 @@ public class ErrorCodesTest {
 
 	@Test
 	void schemaMultipleRoots() {
-		// Two well-formed schema roots: the meta-schema accepts each one, the loader rejects the pair
+		// Two well-formed schema roots: the meta-schema accepts each one, the loader rejects the pair.
+		// A document-level condition carries no single line: ParseException.NO_LINE (0), like the
+		// other ports and the conformance kit.
 		ValidationException ex = schemaError(SCHEMA + SCHEMA.replace("com.acme.book", "com.acme.other"));
 		assertEquals("SCHEMA_MULTIPLE_ROOTS", ex.getCode());
-		assertEquals(11, ex.getLine());
+		assertEquals(ParseException.NO_LINE, ex.getLine());
 	}
 
 	@Test
@@ -141,9 +143,11 @@ public class ErrorCodesTest {
 
 	@Test
 	void schemaRootNotValidWhenTheTargetNamespaceIsNotTheRequestedOne() {
+		// A facade check of the whole document against the requested namespace: no single line
+		// to point at, so ParseException.NO_LINE (0) since the shared DefinitionCompiler pipeline.
 		ValidationException ex = schemaError(SCHEMA.replace("com.acme.book", "com.acme.other"));
 		assertEquals("SCHEMA_ROOT_NOT_VALID", ex.getCode());
-		assertEquals(1, ex.getLine());
+		assertEquals(ParseException.NO_LINE, ex.getLine());
 	}
 
 	@Test
@@ -179,9 +183,10 @@ public class ErrorCodesTest {
 
 	@Test
 	void templateMultipleRoots() {
+		// Same document-level rule as SCHEMA_MULTIPLE_ROOTS: ParseException.NO_LINE (0)
 		String one = "Template (@stxt.template): com.acme.book\n\tStructure >>\n\t\tBook:\n";
 		ValidationException ex = templateError(one + one);
 		assertEquals("TEMPLATE_MULTIPLE_ROOTS", ex.getCode());
-		assertEquals(4, ex.getLine());
+		assertEquals(ParseException.NO_LINE, ex.getLine());
 	}
 }

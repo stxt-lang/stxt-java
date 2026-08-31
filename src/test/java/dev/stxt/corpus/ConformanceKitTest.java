@@ -280,9 +280,9 @@ public class ConformanceKitTest {
                         break;
                     }
                     case "definition-error": {
-                        // Java reports the schema-structure errors as SchemaException, which
-                        // carries no line (the kit expects line 0 for them); the rest are
-                        // ParseException / ValidationException with their line.
+                        // Definition-load errors are ParseException / ValidationException with
+                        // their line (ParseException.NO_LINE = 0 for the document-level ones,
+                        // which is what the kit asserts); any other STXTException maps to 0.
                         STXTException error = assertThrows(STXTException.class,
                             () -> loadDefinitions(List.of(c.get("input").asText()), c.get("kind").asText()),
                             id + ": loaded without errors, expected " + expected(c));

@@ -4,7 +4,8 @@ import java.util.List;
 
 import dev.stxt.Node;
 import dev.stxt.Parser;
-import dev.stxt.exceptions.SchemaException;
+import dev.stxt.exceptions.ParseException;
+import dev.stxt.exceptions.ValidationException;
 import dev.stxt.schema.Schema;
 import dev.stxt.schema.SchemaProvider;
 
@@ -22,20 +23,34 @@ Template (@stxt.template): @stxt.template
 			Structure: (1) BLOCK
 """;
 			
+	/**
+	 * Compiled once per process and shared between instances, exactly like the meta field of
+	 * {@link dev.stxt.schema.SchemaProviderMeta}.
+	 */
+	private static Schema compiledMeta;
+
 	private final Schema meta;
-	
-	/** Builds the template meta-schema by parsing and validating {@code META_TEXT}. */
+
+	/** Compiles the meta-template the first time and keeps the schema it produces ready to be served. */
 	public MetaTemplateSchemaProvider() {
-		Schema metaSchema = null;
-		Parser parser = new Parser();
-		List<Node> nodes = parser.parse(META_TEXT);
-		if (nodes.size() != 1)
-		    throw new SchemaException("META_SCHEMA_INVALID", "Meta schema must produce exactly 1 document, got " + nodes.size());
-		
-		metaSchema = TemplateParser.transformNodeToSchema(nodes.get(0));
-		meta = metaSchema;
+		meta = compiledMeta();
 	}
-	
+
+	// Lazy, thread-safe compilation of META_TEXT, shared by every instance.
+	private static synchronized Schema compiledMeta() {
+		if (compiledMeta == null) {
+			Parser parser = new Parser();
+			List<Node> nodes = parser.parse(META_TEXT);
+			if (nodes.size() != 1)
+				throw new ValidationException(ParseException.NO_LINE, "META_SCHEMA_INVALID",
+						"Meta schema must produce exactly 1 document, got " + nodes.size());
+
+			// The meta-template itself is compiled with the TemplateParser
+			compiledMeta = TemplateParser.transformNodeToSchema(nodes.get(0));
+		}
+		return compiledMeta;
+	}
+
 	/**
 	 * Serves the meta-template. Follows the {@link SchemaProvider} contract: providers never throw
 	 * "not found", so any namespace other than {@code @stxt.template} yields {@code null}.
@@ -44,11 +59,8 @@ Template (@stxt.template): @stxt.template
 	 */
 	@Override
 	public Schema getSchema(String namespace) {
-		if (!"@stxt.template".equals(namespace))
+		if (!Schema.TEMPLATE_NAMESPACE.equals(namespace))
 			return null;
-
-	    if (meta == null)
-	        throw new SchemaException("META_SCHEMA_NOT_AVAILABLE", "Meta schema not available");
 
 	    return meta;
 	}

@@ -8,18 +8,16 @@ import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
 import dev.stxt.Node;
 import dev.stxt.Parser;
 import dev.stxt.exceptions.ParseException;
 import dev.stxt.exceptions.STXTIOException;
-import dev.stxt.exceptions.ValidationException;
+import dev.stxt.schema.DefinitionCompiler;
 import dev.stxt.schema.Schema;
 import dev.stxt.schema.SchemaParser;
 import dev.stxt.schema.SchemaProvider;
 import dev.stxt.schema.SchemaProviderMeta;
-import dev.stxt.schema.SchemaValidator;
 import dev.stxt.template.MetaTemplateSchemaProvider;
 import dev.stxt.template.TemplateParser;
 import dev.stxt.utils.StringUtils;
@@ -293,10 +291,10 @@ public final class DiscoveryResolver {
 		Schema schema;
 
 		try {
-			if ("@stxt.template".equals(namespace)) {
-				schema = compile(node, templateMeta, TemplateParser::transformNodeToSchema);
+			if (Schema.TEMPLATE_NAMESPACE.equals(namespace)) {
+				schema = DefinitionCompiler.compileNode(node, templateMeta, TemplateParser::transformNodeToSchema);
 			} else if (Schema.SCHEMA_NAMESPACE.equals(namespace)) {
-				schema = compile(node, schemaMeta, SchemaParser::transformNodeToSchema);
+				schema = DefinitionCompiler.compileNode(node, schemaMeta, SchemaParser::transformNodeToSchema);
 			} else {
 				level.errors.add(new DiscoveryError(
 					DiscoveryError.NOT_A_DEFINITION, file.toString(),
@@ -334,15 +332,6 @@ public final class DiscoveryResolver {
 		level.definitions.put(key, new DiscoveryDefinition(schema.getNamespace(), schema, file, level.dir));
 	}
 
-	// Validates a root node against a meta-schema and transforms it into a Schema,
-	// throwing the first validation error (same policy as SchemaProviderCache).
-	private Schema compile(Node node, SchemaProvider meta, Function<Node, Schema> transform) {
-		List<ValidationException> errors = new SchemaValidator(meta, true).validate(node);
-
-		if (!errors.isEmpty()) {
-			throw errors.get(0);
-		}
-
-		return transform.apply(node);
-	}
+	// Compilation itself is the shared pipeline of DefinitionCompiler (compileNode):
+	// validate against the meta of the kind, throw the first error, transform.
 }

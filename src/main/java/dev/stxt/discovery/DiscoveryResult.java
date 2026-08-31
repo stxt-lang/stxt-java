@@ -49,11 +49,13 @@ public final class DiscoveryResult implements SchemaProvider {
 	 */
 	@Override
 	public Schema getSchema(String namespace) {
-		if (Schema.SCHEMA_NAMESPACE.equals(namespace)) {
-			return schemaMeta.getSchema(namespace);
+		String key = StringUtils.lowerCase(namespace);
+
+		if (Schema.SCHEMA_NAMESPACE.equals(key)) {
+			return schemaMeta.getSchema(key);
 		}
-		if ("@stxt.template".equals(namespace)) {
-			return templateMeta.getSchema(namespace);
+		if (Schema.TEMPLATE_NAMESPACE.equals(key)) {
+			return templateMeta.getSchema(key);
 		}
 
 		DiscoveryDefinition definition = getDefinition(namespace);

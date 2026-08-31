@@ -67,7 +67,7 @@ public class SchemaParser {
 				if (schChild.getNamespace().equals(schema.getNamespace())) // We only check the ones in the same namespace
 				{
 					if (!allNames.contains(schChild.getCanonicalName()))
-						throw new ValidationException(0, "CHILD_NOT_DEFINED",
+						throw new ValidationException(ParseException.NO_LINE, "CHILD_NOT_DEFINED",
 								"Child " + schChild.getCanonicalName() + " not defined in " + schema.getNamespace());
 				}
 			}
@@ -106,29 +106,29 @@ public class SchemaParser {
 				putChildToSchemaNode(result, child, namespace);
 		}
 		
-		// Look at the values
-		List<Node> values = n.getChildren("values");
-		if (values != null && values.size()>0) {
-		    if (!type.equals("ENUM")) 
-		        throw new ParseException(n.getLine(), "VALUES_NOT_ALLOWED_FOR_TYPE", "Values only supported for type ENUM, not for type " + type);
-		    
+		// Allowed values: only valid for the ENUM type
+		List<Node> valuesNodes = n.getChildren("values"); // the "Values:" containers
+		List<Node> valueEntries = List.of();              // the "Value:" entries inside
+		if (valuesNodes != null && valuesNodes.size()>0) {
+		    if (!type.equals("ENUM"))
+		        throw new ValidationException(n.getLine(), "VALUES_NOT_ALLOWED_FOR_TYPE", "Values only supported for type ENUM, not for type " + type);
+
 		    // STXT-SCHEMA-SPEC 13.1: a Node carries at most one Values; the error points at the second one
-		    if (values.size()>1)
-		        throw new ValidationException(values.get(1).getLine(), "VALUES_DUPLICATED", "Values defined " + values.size() + " times for node " + name);
-		    
-		    Node valuesNode = values.get(0);
-		    values = inline(valuesNode).getChildren("value");
-		    for (Node value: values) {
+		    if (valuesNodes.size()>1)
+		        throw new ValidationException(valuesNodes.get(1).getLine(), "VALUES_DUPLICATED", "Values defined " + valuesNodes.size() + " times for node " + name);
+
+		    valueEntries = inline(valuesNodes.get(0)).getChildren("value");
+		    for (Node value: valueEntries) {
 		        // STXT-SCHEMA-SPEC 7.2, condition 14: an empty Value: is a schema error
 		        if (value.getText() == null || value.getText().isEmpty())
 		            throw new ValidationException(value.getLine(), "VALUE_EMPTY", "Value of ENUM cannot be empty");
 		        result.addValue(value.getText(), value.getLine());
 		    }
 		}
-		
-		// Look at the enum
-		if (type.equals("ENUM") && (values == null || values.size()==0))
-		    throw new ParseException(n.getLine(), "VALUES_REQUIRED", "ENUM Type must include values");
+
+		// An ENUM must declare at least one value (a "Values:" with no entries included)
+		if (type.equals("ENUM") && valueEntries.isEmpty())
+		    throw new ValidationException(n.getLine(), "VALUES_REQUIRED", "ENUM Type must include values");
 		
 		return result;
 	}

@@ -5,13 +5,17 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import dev.stxt.NamespaceValidator;
-import dev.stxt.exceptions.SchemaException;
+import dev.stxt.exceptions.ParseException;
+import dev.stxt.exceptions.ValidationException;
 import dev.stxt.utils.StringUtils;
 
 /** Schema of a namespace: the set of {@link NodeDefinition} valid for the nodes of that namespace. */
 public class Schema {
 	/** Namespace of the schema language itself, {@code @stxt.schema}. */
 	public static final String SCHEMA_NAMESPACE = "@stxt.schema";
+
+	/** Namespace of the template language, {@code @stxt.template}. */
+	public static final String TEMPLATE_NAMESPACE = "@stxt.template";
 
 	private Map<String, NodeDefinition> nodes = new LinkedHashMap<String, NodeDefinition>();
 	private final String namespace;
@@ -64,12 +68,13 @@ public class Schema {
 	 * Adds the definition of a node to this schema.
 	 *
 	 * @param nodeDefinition node definition to add.
-	 * @throws dev.stxt.exceptions.SchemaException if there already was a node definition with the same name.
+	 * @throws ValidationException with code {@code NODE_DUPLICATED} if there already was a node definition with the same name.
 	 */
 	public void addNodeDefinition(NodeDefinition nodeDefinition) {
-		String qname = nodeDefinition.getCanonicalName();
-		if (nodes.containsKey(qname)) throw new SchemaException("NODE_DUPLICATED", "Exists a previous node definition with: " + qname);
-		nodes.put(qname, nodeDefinition);
+		String canonicalName = nodeDefinition.getCanonicalName();
+		if (nodes.containsKey(canonicalName))
+			throw new ValidationException(ParseException.NO_LINE, "NODE_DUPLICATED", "A node definition with the same name already exists: " + canonicalName);
+		nodes.put(canonicalName, nodeDefinition);
 	}
 	
 	/** {@return the namespace this schema applies to} */

@@ -91,7 +91,7 @@ public final class Formatter {
 	public static FormatResult format(String text, IndentStyle style,
 			int maxNesting, int maxLineLength, int maxInputSize) {
 		// STXT-TREE-SPEC 12.1: an initial BOM is not kept
-		if (text.startsWith("﻿"))
+		if (text.startsWith("\uFEFF"))
 			text = text.substring(1);
 
 		SourceLines sourceLines = new SourceLines();

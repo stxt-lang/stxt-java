@@ -5,15 +5,15 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import dev.stxt.Node;
 import dev.stxt.Parser;
-import dev.stxt.exceptions.ValidationException;
+import dev.stxt.schema.DefinitionCompiler;
 import dev.stxt.schema.Schema;
 import dev.stxt.schema.SchemaParser;
 import dev.stxt.schema.SchemaProvider;
 import dev.stxt.schema.SchemaProviderMeta;
-import dev.stxt.schema.SchemaValidator;
 import dev.stxt.template.MetaTemplateSchemaProvider;
 import dev.stxt.template.TemplateParser;
 import dev.stxt.utils.StringUtils;
@@ -42,9 +42,9 @@ public final class UnifiedSchemaProvider implements SchemaProvider {
 	@Override
 	public Schema getSchema(String namespace) {
 		String key = StringUtils.lowerCase(namespace);
-		if (TemplateParser.TEMPLATE_NAMESPACE.equals(namespace))
+		if (Schema.TEMPLATE_NAMESPACE.equals(key))
 			return templateMeta.getSchema(key);
-		if (Schema.SCHEMA_NAMESPACE.equals(namespace))
+		if (Schema.SCHEMA_NAMESPACE.equals(key))
 			return schemaMeta.getSchema(key);
 		return schemas.get(key);
 	}
@@ -55,35 +55,25 @@ public final class UnifiedSchemaProvider implements SchemaProvider {
 	 *
 	 * @param text text of the document to load.
 	 * @throws dev.stxt.exceptions.ParseException if the document cannot be parsed.
-	 * @throws ValidationException the first one, if a schema or a template does not validate
-	 *         against its meta-schema.
+	 * @throws dev.stxt.exceptions.ValidationException the first one, if a schema or a template
+	 *         does not validate against its meta-schema.
 	 */
 	public void addFile(String text) {
 		for (Node node : new Parser().parse(text)) {
 			String namespace = node.getNamespace();
-			if (TemplateParser.TEMPLATE_NAMESPACE.equals(namespace))
-				addTemplateNode(node);
+			if (Schema.TEMPLATE_NAMESPACE.equals(namespace))
+				addNode(node, templateMeta, TemplateParser::transformNodeToSchema);
 			else if (Schema.SCHEMA_NAMESPACE.equals(namespace))
-				addSchemaNode(node);
+				addNode(node, schemaMeta, SchemaParser::transformNodeToSchema);
 		}
 	}
 
-	private void addTemplateNode(Node node) {
-		throwIfInvalid(new SchemaValidator(templateMeta, true).validate(node));
-		Schema schema = TemplateParser.transformNodeToSchema(node);
-		schemas.put(StringUtils.lowerCase(schema.getNamespace()), schema);
-	}
+	// Compiles a definition root through the shared pipeline (see DefinitionCompiler)
+	// and registers it; a definition that does not validate is never registered.
+	private void addNode(Node node, SchemaProvider meta, Function<Node, Schema> transform) {
+		Schema schema = DefinitionCompiler.compileNode(node, meta, transform);
 
-	private void addSchemaNode(Node node) {
-		throwIfInvalid(new SchemaValidator(schemaMeta, true).validate(node));
-		Schema schema = SchemaParser.transformNodeToSchema(node);
 		schemas.put(StringUtils.lowerCase(schema.getNamespace()), schema);
-	}
-
-	// A schema/template that does not validate against its meta-schema must not be loaded
-	private static void throwIfInvalid(List<ValidationException> errors) {
-		if (!errors.isEmpty())
-			throw errors.get(0);
 	}
 
 	/** Removes every schema and template registered in this provider. */

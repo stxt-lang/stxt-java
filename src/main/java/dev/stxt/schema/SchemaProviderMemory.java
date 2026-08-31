@@ -6,8 +6,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import dev.stxt.Node;
-import dev.stxt.Parser;
 import dev.stxt.exceptions.ValidationException;
 import dev.stxt.utils.StringUtils;
 
@@ -51,7 +49,8 @@ public class SchemaProviderMemory implements SchemaProvider {
 
 	/**
 	 * Parses a schema document, validates it against the meta-schema and registers it under its
-	 * own namespace.
+	 * own namespace. The whole pipeline is the shared one of {@link DefinitionCompiler}; an empty
+	 * target namespace is rejected by {@link SchemaParser} ({@code SCHEMA_NAMESPACE_EMPTY}).
 	 *
 	 * @param text text of the {@code @stxt.schema} document.
 	 * @throws dev.stxt.exceptions.ParseException if the document cannot be parsed.
@@ -59,17 +58,9 @@ public class SchemaProviderMemory implements SchemaProvider {
 	 *         root node, or the first error if it does not validate against the meta-schema.
 	 */
 	public void addSchema(String text) {
-		List<Node> nodes = new Parser().parse(text);
-		if (nodes.size() != 1)
-			throw new ValidationException(0, "SCHEMA_MULTIPLE_ROOTS", "A schema document must hold exactly 1 root node, got " + nodes.size());
-		Node node = nodes.get(0);
+		Schema schema = DefinitionCompiler.compileDocument(text, new SchemaProviderMeta(),
+				SchemaParser::transformNodeToSchema, "SCHEMA_MULTIPLE_ROOTS", "schema");
 
-		// A schema that does not validate against its meta-schema must not be registered
-		List<ValidationException> errors = new SchemaValidator(new SchemaProviderMeta(), true).validate(node);
-		if (!errors.isEmpty())
-			throw errors.get(0);
-
-		Schema schema = SchemaParser.transformNodeToSchema(node);
 		schemas.put(schema.getNamespace(), schema);
 	}
 
