@@ -4,9 +4,13 @@ All notable changes to `dev.stxt:stxt-core` are documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
-## [Unreleased]
+## [0.16.0] - 2026-08-31
 
-### Fixed
+Same number and scope as `@stxt-lang/core` and `stxt` (Python) 0.16.0: the fixes of the ports
+security audit, one shared definition-loading pipeline, and error parity between the ports. No
+language changes.
+
+### Security
 
 - **Discovery descent hardened against symlink loops and pathological trees**
   (STXT-DISCOVERY-SPEC §3, §10). The recursive descent inside a resolution directory is now
@@ -24,6 +28,39 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
   would exceed `maxLineLength`, and tracks the running total for `maxInputSize`, so a single
   line with no line break aborts with `LIMIT_LINE_LENGTH_EXCEEDED` instead of exhausting
   memory. With both limits disabled (`-1`) whole lines are read, as before.
+
+### Changed
+
+- Every definition-loading pipeline (the in-memory providers, the resource facades,
+  `runtime.UnifiedSchemaProvider` and discovery) now validates against the meta-schema and
+  transforms through one internal `DefinitionCompiler`, and each meta-schema is compiled once
+  per process. No API change.
+- Six definition-loading error codes (`NODE_DUPLICATED`, `CHILD_DUPLICATED`,
+  `VALUE_DUPLICATED`, `VALUES_NOT_ALLOWED_FOR_TYPE`, `VALUES_REQUIRED`,
+  `META_SCHEMA_INVALID`) are thrown as `ValidationException`, the type the other ports use;
+  the codes and messages do not change.
+- An error that does not belong to one source line (a definition duplicated across roots, for
+  example) reports line 0, now named by the new `ParseException.NO_LINE`; some reported the
+  line of the second root before. (`Node.NO_LINE`, -1, is unrelated: it marks nodes built
+  programmatically, never errors.)
+- `NodeDefinition` keeps its children in declaration order, so a `TOO_FEW_CHILDREN`/
+  `TOO_MANY_CHILDREN` report follows the schema, not a hash.
+- Template `Structure` lines spell the language's blanks out (`[ \t]` in the pattern plus
+  `StringUtils.trim`) instead of relying on `\s` being ASCII in Java. Behaviour does not
+  change; the new NBSP tests pin it, equal in the three ports (TEMPLATE-SPEC §6.2/§9).
+
+### Fixed
+
+- `NodeDefinition.addValue` trims with the language's blanks only (`StringUtils.trim`) instead
+  of `String.trim()`, which also removed every control character below U+0020: an ENUM value
+  is now compared exactly as the other ports compare it (new kit case
+  `validate/enum-nbsp-value`).
+
+### Removed
+
+- The `META_SCHEMA_NOT_AVAILABLE` error code: it guarded a state that cannot be reached.
+- `StringUtils.cleanSpaces`, dead code built on `\s` (the broad whitespace class the language
+  deliberately avoids).
 
 ## [0.15.0] - 2026-08-27
 
