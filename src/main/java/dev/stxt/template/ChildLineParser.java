@@ -6,16 +6,21 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import dev.stxt.exceptions.ValidationException;
+import dev.stxt.utils.StringUtils;
 
 /** Parses the inline value of a child node inside an {@code @stxt.template}, shaped as {@code (min,max) TYPE [values]}. */
 public final class ChildLineParser {
 
+    // STXT-TEMPLATE-SPEC 6.2/9: a blank in a Structure line is only U+0020 or U+0009. The pattern
+    // uses [ \t] (never \s, which in Java is ASCII but Unicode in js/python) and the trims below
+    // use StringUtils.trim, so the three ports accept/reject exactly the same lines (e.g. NBSP is
+    // content, not a separator).
     private static final Pattern CHILD_LINE_PATTERN = Pattern.compile(
-            "^\\s*" +
-            "(?:\\(\\s*(?<count>[^()\\s][^)]*?)\\s*\\)\\s*)?" +
+            "^[ \\t]*" +
+            "(?:\\([ \\t]*(?<count>[^() \\t][^)]*?)[ \\t]*\\)[ \\t]*)?" +
             "(?<type>[^\\[\\]()]*)?" +
-            "(?:\\[\\s*(?<values>[^]]*?)\\s*\\]\\s*)?" +
-            "\\s*$"
+            "(?:\\[[ \\t]*(?<values>[^]]*?)[ \\t]*\\][ \\t]*)?" +
+            "[ \\t]*$"
         );
     
     private ChildLineParser() {
@@ -30,7 +35,7 @@ public final class ChildLineParser {
      * @throws ValidationException with code {@code STRUCTURE_LINE_NOT_VALID} if the format is not valid.
      */
     public static ChildLine parse(String rawLine, int lineNumber) {
-    	if (rawLine.trim().isEmpty())
+    	if (StringUtils.trim(rawLine).isEmpty())
     		return new ChildLine(null, null, null, null);
     	
         Matcher m = CHILD_LINE_PATTERN.matcher(rawLine);
@@ -39,7 +44,7 @@ public final class ChildLineParser {
         }
 
         String type = m.group("type");
-        if (type != null) type = type.trim();
+        if (type != null) type = StringUtils.trim(type);
         if (type == null || type.isEmpty()) type = null;
 
         String count = m.group("count");
@@ -66,8 +71,8 @@ public final class ChildLineParser {
             if (minMax.length != 2)
                 throw new ValidationException(lineNumber, "CARDINALITY_NOT_VALID", "Invalid count " + count + " in line: " + rawLine);
 
-            int minValue = parseCount(minMax[0].trim(), count, rawLine, lineNumber);
-            int maxValue = parseCount(minMax[1].trim(), count, rawLine, lineNumber);
+            int minValue = parseCount(StringUtils.trim(minMax[0]), count, rawLine, lineNumber);
+            int maxValue = parseCount(StringUtils.trim(minMax[1]), count, rawLine, lineNumber);
 
             // STXT-TEMPLATE-SPEC 7.1: in (min,max) it must hold that min <= max
             if (minValue > maxValue)
@@ -89,7 +94,7 @@ public final class ChildLineParser {
             String[] parts = valuesStr.split(",", -1);
             List<String> list = new ArrayList<>();
             for (String part: parts) {
-                part = part.trim();
+                part = StringUtils.trim(part);
                 // An empty item ("[a, , b]", "[a, b,]") is an error, as an empty Value: is in a
                 // schema (STXT-TEMPLATE-SPEC 14.14). Only the whole list may be empty ("[]"),
                 // which the template parser reports as VALUES_REQUIRED.

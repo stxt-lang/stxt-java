@@ -298,6 +298,36 @@ Template (@stxt.template): test.ref.spaces
 	}
 
 	@Test
+	void testNonAsciiBlankAroundTypeIsNotABlank() {
+		// STXT-TEMPLATE-SPEC 6.2/9: a blank is only U+0020 or U+0009. A NBSP (U+00A0) around the
+		// type is content, not a separator, so the type becomes " TEXT" (unknown) and is
+		// rejected as TYPE_NOT_VALID. Java's \s was already ASCII; this test pins that behaviour
+		// so the three ports (js/python use Unicode \s and .trim()) accept/reject the same lines.
+		String text = """
+Template (@stxt.template): test.blank.nbsp.type
+    Structure >>
+        Foo: (1) TEXT
+""";
+		Node root = new Parser().parse(text).get(0);
+		ParseException ex = assertThrows(ParseException.class, () -> TemplateParser.transformNodeToSchema(root));
+		assertEquals("TYPE_NOT_VALID", ex.getCode());
+	}
+
+	@Test
+	void testNonAsciiBlankInsideCardinalityIsNotABlank() {
+		// A NBSP inside the cardinality is not a blank either: the count reads as " 1",
+		// which is not a non-negative integer, so it is rejected as CARDINALITY_NOT_VALID.
+		String text = """
+Template (@stxt.template): test.blank.nbsp.count
+    Structure >>
+        Foo: ( 1) TEXT
+""";
+		Node root = new Parser().parse(text).get(0);
+		ParseException ex = assertThrows(ParseException.class, () -> TemplateParser.transformNodeToSchema(root));
+		assertEquals("CARDINALITY_NOT_VALID", ex.getCode());
+	}
+
+	@Test
 	void testStructureLineMustUseInlineForm() {
 		String text = """
 Template (@stxt.template): test.structure.inline

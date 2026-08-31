@@ -117,7 +117,7 @@ public class TemplateParser {
 			// STXT-TEMPLATE-SPEC 14.15: a cross-namespace node may only declare cardinality;
 			// type, ENUM values and children are not allowed and must be rejected, not ignored
 			String type = cl.getType();
-			if (type != null && !type.trim().isEmpty()) 
+			if (type != null && !StringUtils.trim(type).isEmpty())
 				throw new ValidationException(node.getLine() + offset, "TYPE_NOT_ALLOWED_IN_EXTERNAL_NAMESPACE", "Not allowed type definition in external namespaces");
 			
 			if (cl.getValues() != null)
@@ -165,7 +165,7 @@ public class TemplateParser {
 			if (type == null || !type.startsWith("@"))
 				throw new ValidationException(node.getLine() + offset, "REFERENCE_REQUIRED", "Multiple node reference must start with @: " + node.getName());				
 				
-			String reference = type.substring(1).trim();
+			String reference = StringUtils.trim(type.substring(1));
 
 			// STXT-TEMPLATE-SPEC 14.13: a reference and an explicit type cannot be declared at once
 			String explicitType = referenceType(reference, node.getCanonicalName());
@@ -221,7 +221,7 @@ public class TemplateParser {
 		if (cut < 0)
 			return null;
 
-		String candidate = reference.substring(cut + 1).trim();
+		String candidate = StringUtils.trim(reference.substring(cut + 1));
 		String rest = reference.substring(0, cut);
 
 		if (TypeRegistry.get(candidate) != null && StringUtils.normalize(rest).equals(normalizedName))
