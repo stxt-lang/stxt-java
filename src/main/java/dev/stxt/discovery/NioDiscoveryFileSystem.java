@@ -25,19 +25,16 @@ public final class NioDiscoveryFileSystem implements DiscoveryFileSystem {
 		List<DiscoveryEntry> entries = new ArrayList<>();
 		try (Stream<Path> stream = Files.list(path)) {
 			for (Path child : stream.toList()) {
-				// Do not follow directory symbolic links (STXT-DISCOVERY-SPEC section 3 and
-				// section 10): a symlink whose target is a directory is omitted from the
-				// listing entirely, so the resolver's recursive descent cannot be lured into
-				// a symlink loop (e.g. .stxt/loop -> ..) or into an unrelated tree. A symlink
-				// to a regular file still lists as a file; a real directory lists as one.
-				if (Files.isSymbolicLink(child)) {
-					if (Files.isDirectory(child))	// follows the link: target is a directory
-						continue;
-					entries.add(new DiscoveryEntry(child, child.getFileName().toString(), false));
-				} else {
-					entries.add(new DiscoveryEntry(child, child.getFileName().toString(),
-							Files.isDirectory(child, LinkOption.NOFOLLOW_LINKS)));
-				}
+				// Do not follow symbolic links at all (STXT-DISCOVERY-SPEC section 3 and
+				// section 10): every symlink is omitted from the listing, so a resolution
+				// directory loads only the real files it contains. A directory link could lure
+				// the recursive descent into a loop (e.g. .stxt/loop -> ..) or into an unrelated
+				// tree; a file link could read a file from outside the .stxt/ and leak its
+				// content through a resolution error.
+				if (Files.isSymbolicLink(child))
+					continue;
+				entries.add(new DiscoveryEntry(child, child.getFileName().toString(),
+						Files.isDirectory(child, LinkOption.NOFOLLOW_LINKS)));
 			}
 		}
 		return entries;

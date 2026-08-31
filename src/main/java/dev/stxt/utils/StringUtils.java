@@ -65,17 +65,6 @@ public class StringUtils {
 		return s.substring(0, i + 1);
 	}
 
-	// Used for Base64 and Hex typed nodes
-	/**
-	 * Removes every whitespace character of a string.
-	 *
-	 * @param input string to remove the spaces from.
-	 * @return the string without any whitespace at all.
-	 */
-	public static String cleanSpaces(String input) {
-		return input.replaceAll("\\s+", "");
-	}
-
 	// Used to normalize namespaces
 	/**
 	 * Lower-cases a string.

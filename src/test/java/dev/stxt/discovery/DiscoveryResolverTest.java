@@ -372,6 +372,29 @@ class DiscoveryResolverTest {
 		assertEquals(0, result.getErrors().size());
 	}
 
+	@Test
+	void aFileSymlinkInsideAStxtDirIsNotLoaded() {
+		write(dir("repo", ".stxt", "good.stxt"), template("com.acme.doc", "Doc"));
+		// A file outside the .stxt/, and a .stxt entry symlinked to it: it must never be read.
+		Path secret = dir("repo", "secret.stxt");
+		write(secret, "SECRET-CONTENT-that-must-never-be-read");
+		Path link = dir("repo", ".stxt", "leak.stxt");
+
+		try {
+			Files.createSymbolicLink(link, secret);	// .stxt/leak.stxt -> ../secret.stxt
+		} catch (UnsupportedOperationException | IOException e) {
+			assumeTrue(false, "the environment does not allow creating symbolic links: " + e);
+		}
+
+		DiscoveryResolver resolver = new DiscoveryResolver(new TestEnvironment());
+		DiscoveryResult result = resolver.resolve(dir("repo"));
+
+		// The file symlink is omitted: the outside file is never read, so no error references it
+		// and only the real definition is loaded.
+		assertNotNull(result.getSchema("com.acme.doc"));
+		assertEquals(0, result.getErrors().size());
+	}
+
 	// --- DiscoveryResult as SchemaProvider -----------------------------------------------
 
 	@Test
