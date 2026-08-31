@@ -5,12 +5,18 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.IOException;
+import java.io.Reader;
 import java.io.StringReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import dev.stxt.InlineNode;
 import dev.stxt.Node;
@@ -23,6 +29,9 @@ import dev.stxt.processors.StreamObserver;
 
 /** Parser limits (STXT-SPEC 11.2) and the StreamObserver / parseStream pair. */
 public class LimitsTest {
+
+	@TempDir
+	Path tempDir;
 
 	/** A document nesting the given number of levels (level 0 is the first), one node per level. */
 	private static String nested(int levels) {
@@ -147,6 +156,98 @@ public class LimitsTest {
 	public void parseThrowsTheLimitErrorAsALimitException() {
 		LimitException error = assertThrows(LimitException.class, () -> new Parser().parse(nested(101)));
 		assertEquals("LIMIT_NESTING_EXCEEDED", error.getCode());
+	}
+
+	// ------------------------------------------------------------------
+	// File and Reader entry points enforce the limits incrementally
+	// ------------------------------------------------------------------
+
+	@Test
+	public void aFileLargerThanMaxInputSizeAbortsIncrementally() throws IOException {
+		StringBuilder content = new StringBuilder();
+		for (int i = 0; i < 100; i++)
+			content.append("Node").append(i).append(": value\n");
+		Path file = tempDir.resolve("big.stxt");
+		Files.writeString(file, content.toString());
+
+		Parser parser = new Parser();
+		parser.setMaxInputSize(50);	// far below the file size: the read must abort early
+		ParseResult result = parser.parseResultFile(file.toFile());
+
+		assertEquals(1, result.getErrors().size());
+		assertEquals("LIMIT_INPUT_SIZE_EXCEEDED", result.getErrors().get(0).getCode());
+	}
+
+	@Test
+	public void parseStreamOverAnEndlessLineWithNoBreakAbortsOnLineLength() {
+		// A Reader that yields 'x' forever and never a line break: readLine() on it would loop
+		// building an unbounded string; the incremental cut must abort before that.
+		Reader endless = new Reader() {
+			@Override
+			public int read(char[] cbuf, int off, int len) {
+				Arrays.fill(cbuf, off, off + len, 'x');
+				return len;
+			}
+
+			@Override
+			public void close() {
+			}
+		};
+
+		CollectingStreamObserver collector = new CollectingStreamObserver();
+		Parser parser = new Parser();
+		parser.setMaxLineLength(50);
+		parser.setMaxInputSize(-1);
+		parser.registerStreamObserver(collector);
+		parser.parseStream(endless);
+
+		assertEquals(1, collector.errors.size());
+		assertEquals("LIMIT_LINE_LENGTH_EXCEEDED", collector.errors.get(0).getCode());
+		assertEquals(0, collector.roots.size());
+	}
+
+	@Test
+	public void parseFileMatchesParseForANormalFile() throws IOException {
+		String content = "One: 1\nTwo: 2\n\tChild: c\n";
+		Path file = tempDir.resolve("ok.stxt");
+		Files.writeString(file, content);
+
+		List<Node> fromFile = new Parser().parseFile(file.toFile());
+		List<Node> fromString = new Parser().parse(content);
+
+		assertEquals(fromString.size(), fromFile.size());
+		assertEquals(2, fromFile.size());
+		assertEquals("One", fromFile.get(0).getName());
+		assertEquals("Two", fromFile.get(1).getName());
+		assertEquals(1, ((InlineNode) fromFile.get(1)).getChildren().size());
+	}
+
+	@Test
+	public void parseFileThrowsTheFirstErrorWhileParseResultFileCollectsThemAll() throws IOException {
+		String content = "bad one\nbad two\n";
+		Path file = tempDir.resolve("bad.stxt");
+		Files.writeString(file, content);
+
+		assertThrows(ParseException.class, () -> new Parser().parseFile(file.toFile()));
+
+		ParseResult result = new Parser().parseResultFile(file.toFile());
+		assertEquals(2, result.getErrors().size());
+		assertEquals("INVALID_LINE", result.getErrors().get(0).getCode());
+		assertEquals("INVALID_LINE", result.getErrors().get(1).getCode());
+	}
+
+	@Test
+	public void parseFileSplitsCrLfAndCrLinesLikeTheStringPath() throws IOException {
+		// \r\n and a lone \r both terminate a line, as in the whole-string path (BufferedReader).
+		String content = "One: 1\r\nTwo: 2\rThree: 3\n";
+		Path file = tempDir.resolve("crlf.stxt");
+		Files.writeString(file, content);
+
+		List<Node> nodes = new Parser().parseFile(file.toFile());
+		assertEquals(3, nodes.size());
+		assertEquals("One", nodes.get(0).getName());
+		assertEquals("Two", nodes.get(1).getName());
+		assertEquals("Three", nodes.get(2).getName());
 	}
 
 	// ------------------------------------------------------------------

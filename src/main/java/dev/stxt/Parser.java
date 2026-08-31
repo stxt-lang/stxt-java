@@ -114,30 +114,41 @@ public class Parser {
 	}
 
 	/**
-	 * Same as {@link #parse(String)} but reading the content from a file.
+	 * Same as {@link #parse(String)} but reading the content from a file. The file is read line
+	 * by line (streaming), so the size and line-length limits (STXT-SPEC 11.2) apply
+	 * incrementally and a pathologically large file aborts with {@code LIMIT_INPUT_SIZE_EXCEEDED}
+	 * or {@code LIMIT_LINE_LENGTH_EXCEEDED} at bounded memory instead of being loaded whole.
 	 *
 	 * @param srcFile file holding the STXT document.
 	 * @return the root nodes of the parsed document.
 	 * @throws STXTIOException if the file cannot be read.
 	 */
 	public List<Node> parseFile(File srcFile) {
-		try {
-			return parse(FileUtils.readFileContent(srcFile));
+		try (Reader reader = FileUtils.newFileReader(srcFile)) {
+			ParseResult result = new ParseResult();
+			parseReaderLines(reader, result, true);
+			if (result.hasErrors())
+				throw result.getErrors().get(0);
+			return result.getNodes();
 		} catch (java.io.IOException e) {
 			throw new STXTIOException(e);
 		}
 	}
 
 	/**
-	 * Same as {@link #parseResult(String)} but reading the content from a file.
+	 * Same as {@link #parseResult(String)} but reading the content from a file. The file is read
+	 * line by line (streaming), so the size and line-length limits (STXT-SPEC 11.2) apply
+	 * incrementally, aborting a pathologically large file at bounded memory.
 	 *
 	 * @param srcFile file holding the STXT document.
 	 * @return the result of parsing in multi-error mode.
 	 * @throws STXTIOException if the file cannot be read.
 	 */
 	public ParseResult parseResultFile(File srcFile) {
-		try {
-			return parseResult(FileUtils.readFileContent(srcFile));
+		try (Reader reader = FileUtils.newFileReader(srcFile)) {
+			ParseResult result = new ParseResult();
+			parseReaderLines(reader, result, false);
+			return result;
 		} catch (java.io.IOException e) {
 			throw new STXTIOException(e);
 		}
@@ -182,11 +193,107 @@ public class Parser {
 	 * @throws STXTIOException if the reader cannot be read.
 	 */
 	public void parseStream(Reader reader) {
-		BufferedReader in = reader instanceof BufferedReader buffered ? buffered : new BufferedReader(reader);
+		parseReaderLines(reader, null, false);
+	}
+
+	/**
+	 * Shared reader traversal for the file and {@link Reader} entry points. It feeds
+	 * {@link #parseLines} a {@link LimitedLineReader}, which reads the input incrementally and
+	 * cuts a line as soon as it would exceed {@code maxLineLength} or {@code maxInputSize}, so
+	 * the limits (STXT-SPEC 11.2) abort at bounded memory even on a single line with no line
+	 * break. When both limits are disabled ({@code -1}) it reads whole lines, as the caller has
+	 * opted out of protection.
+	 */
+	private void parseReaderLines(Reader reader, ParseResult result, boolean stopOnFirstError) {
 		try {
-			parseLines(in.lines().iterator(), null, false);
+			parseLines(new LimitedLineReader(reader, maxLineLength, maxInputSize), result, stopOnFirstError);
 		} catch (UncheckedIOException e) {
 			throw new STXTIOException(e.getCause());
+		}
+	}
+
+	/**
+	 * A line iterator over a {@link Reader} that enforces the parser's size limits as it reads,
+	 * never buffering much more than one line's limit. It splits lines like {@link BufferedReader}
+	 * ({@code \n}, {@code \r} and {@code \r\n} all terminate a line and are stripped) so the
+	 * observable result matches the old whole-string path for normal input, but it force-cuts a
+	 * line once its length would exceed {@code maxLineLength}, or once the total consumed would
+	 * exceed {@code maxInputSize}, and returns the partial line. {@link #parseLines} then sees a
+	 * line longer than the limit (or a running total over the limit) and aborts with the matching
+	 * {@code LIMIT_*} code before the rest of the input is ever read. With both limits disabled
+	 * ({@code -1}) it never force-cuts and returns whole lines.
+	 */
+	private static final class LimitedLineReader implements Iterator<String> {
+		private final Reader in;
+		private final int maxLineLength;	// -1 disables the per-line cut
+		private final int maxInputSize;		// -1 disables the total-size cut
+		private String pending;				// the next line, once read; null until read or at EOF
+		private boolean eof;
+		private long emitted;				// chars plus one separator per line already returned
+		private int pushback = -1;			// a lookahead char kept for the \r\n split
+
+		LimitedLineReader(Reader reader, int maxLineLength, int maxInputSize) {
+			this.in = reader instanceof BufferedReader ? reader : new BufferedReader(reader);
+			this.maxLineLength = maxLineLength;
+			this.maxInputSize = maxInputSize;
+		}
+
+		@Override
+		public boolean hasNext() {
+			if (pending == null && !eof)
+				pending = readLine();
+			return pending != null;
+		}
+
+		@Override
+		public String next() {
+			if (!hasNext())
+				throw new java.util.NoSuchElementException();
+			String line = pending;
+			pending = null;
+			// Mirror parseLines' own accounting (line length plus one for the separator), so the
+			// total-size cut lines up with the LIMIT_INPUT_SIZE_EXCEEDED check there.
+			emitted += line.length() + 1L;
+			return line;
+		}
+
+		private String readLine() {
+			StringBuilder sb = new StringBuilder();
+			while (true) {
+				int c = read();
+				if (c == -1) {
+					eof = true;
+					return sb.length() == 0 ? null : sb.toString();
+				}
+				if (c == '\n')
+					return sb.toString();
+				if (c == '\r') {
+					int next = read();		// swallow the \n of a \r\n; keep any other char
+					if (next != '\n' && next != -1)
+						pushback = next;
+					return sb.toString();
+				}
+				sb.append((char) c);
+				// Force-cut so the buffered line never grows past its limit; the returned partial
+				// line is over the limit, so parseLines aborts and never asks for another line.
+				if (maxLineLength != -1 && sb.length() > maxLineLength)
+					return sb.toString();
+				if (maxInputSize != -1 && emitted + sb.length() > maxInputSize)
+					return sb.toString();
+			}
+		}
+
+		private int read() {
+			try {
+				if (pushback != -1) {
+					int c = pushback;
+					pushback = -1;
+					return c;
+				}
+				return in.read();
+			} catch (java.io.IOException e) {
+				throw new UncheckedIOException(e);
+			}
 		}
 	}
 

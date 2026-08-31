@@ -2,6 +2,7 @@ package dev.stxt.discovery;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +25,19 @@ public final class NioDiscoveryFileSystem implements DiscoveryFileSystem {
 		List<DiscoveryEntry> entries = new ArrayList<>();
 		try (Stream<Path> stream = Files.list(path)) {
 			for (Path child : stream.toList()) {
-				entries.add(new DiscoveryEntry(child, child.getFileName().toString(), Files.isDirectory(child)));
+				// Do not follow directory symbolic links (STXT-DISCOVERY-SPEC section 3 and
+				// section 10): a symlink whose target is a directory is omitted from the
+				// listing entirely, so the resolver's recursive descent cannot be lured into
+				// a symlink loop (e.g. .stxt/loop -> ..) or into an unrelated tree. A symlink
+				// to a regular file still lists as a file; a real directory lists as one.
+				if (Files.isSymbolicLink(child)) {
+					if (Files.isDirectory(child))	// follows the link: target is a directory
+						continue;
+					entries.add(new DiscoveryEntry(child, child.getFileName().toString(), false));
+				} else {
+					entries.add(new DiscoveryEntry(child, child.getFileName().toString(),
+							Files.isDirectory(child, LinkOption.NOFOLLOW_LINKS)));
+				}
 			}
 		}
 		return entries;

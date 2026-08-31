@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -346,6 +347,29 @@ class DiscoveryResolverTest {
 
 		assertEquals(1, errors.size());
 		assertEquals(DiscoveryError.INVALID_DEFINITION, errors.get(0).getCode());
+	}
+
+	// --- symlink loops in the descent (spec section 3, section 10) -----------------------
+
+	@Test
+	void aRealDirectorySymlinkLoopInsideAStxtDirIsNotFollowed() {
+		write(dir("repo", ".stxt", "good.stxt"), template("com.acme.doc", "Doc"));
+		Path stxt = dir("repo", ".stxt");
+		Path loop = stxt.resolve("loop");
+
+		try {
+			Files.createSymbolicLink(loop, stxt);	// .stxt/loop -> .stxt : a real directory loop
+		} catch (UnsupportedOperationException | IOException e) {
+			assumeTrue(false, "the environment does not allow creating symbolic links: " + e);
+		}
+
+		DiscoveryResolver resolver = new DiscoveryResolver(new TestEnvironment());
+		DiscoveryResult result = resolver.resolve(dir("repo"));	// terminates, does not follow the link
+
+		// The link is omitted, so good.stxt is seen once: were it followed, good.stxt would also
+		// appear under .stxt/loop at the same level and collide as a DUPLICATE_NAMESPACE.
+		assertNotNull(result.getSchema("com.acme.doc"));
+		assertEquals(0, result.getErrors().size());
 	}
 
 	// --- DiscoveryResult as SchemaProvider -----------------------------------------------

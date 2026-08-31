@@ -47,6 +47,14 @@ public final class DiscoveryResolver {
 	 */
 	public static final int DEFAULT_MAX_ASCENT = 32;
 
+	/**
+	 * Maximum depth of the recursive descent inside a resolution directory. A safeguard
+	 * against symlink loops and pathological trees, analogous to the ascent limit
+	 * (STXT-DISCOVERY-SPEC section 3 and section 10): the descent stops at this depth instead
+	 * of recursing without bound. Internal, deliberately not exposed through the constructors.
+	 */
+	private static final int DEFAULT_MAX_DESCENT = 32;
+
 	private final DiscoveryFileSystem fs;
 	private final DiscoveryEnvironment env;
 	private final int maxAscent;
@@ -200,24 +208,35 @@ public final class DiscoveryResolver {
 	}
 
 	// Collects every file under a directory, recursively, sorted by path so that results
-	// and error messages do not depend on the listing order of the file system.
+	// and error messages do not depend on the listing order of the file system. The descent
+	// is bounded by DEFAULT_MAX_DESCENT and tolerant of listing failures (STXT-DISCOVERY-SPEC
+	// section 3 and section 10): a subdirectory that reaches the depth limit or cannot be
+	// listed simply contributes no files, never an exception. Together with adapters that do
+	// not follow directory symlinks, this stops symlink loops and pathological trees from
+	// turning resolution into unbounded recursion.
 	private List<Path> collectFiles(Path dir) {
 		List<Path> files = new ArrayList<>();
-		collectFiles(dir, files);
+		collectFiles(dir, files, 0);
 		files.sort(Comparator.naturalOrder());
 		return files;
 	}
 
-	private void collectFiles(Path dir, List<Path> files) {
+	private void collectFiles(Path dir, List<Path> files, int depth) {
+		// Safeguard against symlink loops and pathological trees: stop descending.
+		if (depth >= DEFAULT_MAX_DESCENT)
+			return;
+
 		List<DiscoveryEntry> entries;
 		try {
 			entries = fs.listDirectory(dir);
-		} catch (IOException e) {
-			throw new STXTIOException(e);
+		} catch (IOException | STXTIOException e) {
+			// A directory that cannot be listed contributes no files (section 3); it does not
+			// stop the resolution of the rest of the level, and the error does not escape.
+			return;
 		}
 
 		for (DiscoveryEntry entry : entries) {
-			if (entry.isDirectory())	collectFiles(entry.path(), files);
+			if (entry.isDirectory())	collectFiles(entry.path(), files, depth + 1);
 			else						files.add(entry.path());
 		}
 	}

@@ -88,6 +88,72 @@ class InMemoryFileSystemTest {
 	}
 
 	@Test
+	void aDirectoryCycleTerminatesInsteadOfOverflowing() {
+		// Pathological fs (DISCOVERY-SPEC section 10): /repo/.stxt and every "loop" subdirectory
+		// list a single child "loop" that is again a directory — an unbounded chain the bounded
+		// descent must not follow forever. Without the depth limit this is a StackOverflowError.
+		DiscoveryFileSystem cyclic = new DiscoveryFileSystem() {
+			@Override
+			public boolean isDirectory(Path path) {
+				return path.toString().equals("/repo/.stxt") || path.getFileName().toString().equals("loop");
+			}
+
+			@Override
+			public List<DiscoveryEntry> listDirectory(Path path) {
+				Path loop = path.resolve("loop");
+				return List.of(new DiscoveryEntry(loop, "loop", true));
+			}
+
+			@Override
+			public String readFile(Path path) {
+				return "";
+			}
+		};
+
+		DiscoveryResolver resolver = new DiscoveryResolver(cyclic, NO_ENV, DiscoveryResolver.DEFAULT_MAX_ASCENT);
+		DiscoveryResult result = resolver.resolve(Path.of("/repo"));	// terminates, no StackOverflowError
+
+		assertEquals(List.of(Path.of("/repo/.stxt")), result.getChain());
+		assertEquals(0, result.getAllSchemas().size());
+		assertEquals(0, result.getErrors().size());
+	}
+
+	@Test
+	void aSubdirectoryThatCannotBeListedIsToleratedAndTheRestLoads() {
+		// A listDirectory that throws IOException for one subdirectory must not escape or stop
+		// the rest of the level (DISCOVERY-SPEC section 3, section 8): the sibling still loads.
+		DiscoveryFileSystem partial = new DiscoveryFileSystem() {
+			@Override
+			public boolean isDirectory(Path path) {
+				String s = path.toString();
+				return s.equals("/repo/.stxt") || s.equals("/repo/.stxt/bad");
+			}
+
+			@Override
+			public List<DiscoveryEntry> listDirectory(Path path) throws IOException {
+				String s = path.toString();
+				if (s.equals("/repo/.stxt"))
+					return List.of(
+						new DiscoveryEntry(Path.of("/repo/.stxt/good.stxt"), "good.stxt", false),
+						new DiscoveryEntry(Path.of("/repo/.stxt/bad"), "bad", true));
+				if (s.equals("/repo/.stxt/bad"))
+					throw new IOException("cannot list this directory");
+				return List.of();
+			}
+
+			@Override
+			public String readFile(Path path) {
+				return "Template (@stxt.template): com.acme.ok\n\tStructure >>\n\t\tOk (com.acme.ok):\n\t\t\tTitle: (1)\n";
+			}
+		};
+
+		DiscoveryResolver resolver = new DiscoveryResolver(partial, NO_ENV, DiscoveryResolver.DEFAULT_MAX_ASCENT);
+		DiscoveryResult result = resolver.resolve(Path.of("/repo"));	// does not throw
+
+		assertNotNull(result.getSchema("com.acme.ok"), "the listable sibling still loads");
+	}
+
+	@Test
 	void aResultCanBeBuiltFromLevelsDirectly() {
 		DiscoveryLevel level = new DiscoveryLevel(Path.of("/mem/.stxt"));
 		assertEquals(Path.of("/mem/.stxt"), level.getDir());

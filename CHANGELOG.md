@@ -4,6 +4,27 @@ All notable changes to `dev.stxt:stxt-core` are documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [Unreleased]
+
+### Fixed
+
+- **Discovery descent hardened against symlink loops and pathological trees**
+  (STXT-DISCOVERY-SPEC §3, §10). The recursive descent inside a resolution directory is now
+  bounded by an internal depth limit (32) instead of recursing without bound, and a
+  subdirectory that cannot be listed is tolerated per-directory — its I/O error no longer
+  escapes `resolve()` but simply contributes no files. `NioDiscoveryFileSystem.listDirectory`
+  no longer follows directory symbolic links: a symlink whose target is a directory is omitted
+  from the listing, so a loop such as `.stxt/loop -> ..` can no longer turn resolution into a
+  `StackOverflowError`. A symlink to a regular file still lists as a file.
+- **File and `Reader` parsing enforce the size limits incrementally** (STXT-SPEC §11.2).
+  `parseFile`/`parseResultFile` now read the file line by line instead of loading it whole
+  into memory before the parser sees a line, so a pathologically large file aborts with
+  `LIMIT_INPUT_SIZE_EXCEEDED` at bounded memory. `parseStream(Reader)` no longer relies on
+  `BufferedReader.readLine()` (which materialises a whole line): it cuts a line as soon as it
+  would exceed `maxLineLength`, and tracks the running total for `maxInputSize`, so a single
+  line with no line break aborts with `LIMIT_LINE_LENGTH_EXCEEDED` instead of exhausting
+  memory. With both limits disabled (`-1`) whole lines are read, as before.
+
 ## [0.15.0] - 2026-08-27
 
 Same number and scope as `@stxt-lang/core` and `stxt` (Python) 0.15.0: the final empty lines

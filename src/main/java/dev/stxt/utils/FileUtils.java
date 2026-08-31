@@ -1,8 +1,12 @@
 package dev.stxt.utils;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
+import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 
 /** File reading helpers used by the parser. */
@@ -55,6 +59,19 @@ public class FileUtils {
 	 */
 	public static String readFileContent(File file) throws IOException {
 		return new String(readFile(file), StandardCharsets.UTF_8);
+	}
+
+	/**
+	 * Opens a buffered UTF-8 reader over a file, for streaming line-by-line consumption so
+	 * that the parser can apply its size and line-length limits incrementally instead of
+	 * holding the whole file in memory (STXT-SPEC 11.2). The caller closes it.
+	 *
+	 * @param file file to read.
+	 * @return a buffered {@link Reader} decoding the file as UTF-8.
+	 * @throws IOException if the file cannot be opened.
+	 */
+	public static Reader newFileReader(File file) throws IOException {
+		return new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
 	}
 
 }
