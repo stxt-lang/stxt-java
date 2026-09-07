@@ -58,7 +58,7 @@ public final class DiscoveryLevel {
 	 * @param definition definition to add.
 	 */
 	public void addDefinition(DiscoveryDefinition definition) {
-		definitions.put(definition.getNamespace().toLowerCase(java.util.Locale.ROOT), definition);
+		definitions.put(dev.stxt.utils.StringUtils.lowerCase(definition.getNamespace()), definition);
 	}
 
 	/**
@@ -68,7 +68,7 @@ public final class DiscoveryLevel {
 	 * @param namespace namespace in conflict.
 	 */
 	public void addConflict(String namespace) {
-		String key = namespace.toLowerCase(java.util.Locale.ROOT);
+		String key = dev.stxt.utils.StringUtils.lowerCase(namespace);
 		definitions.remove(key);
 		conflictedNamespaces.add(key);
 	}

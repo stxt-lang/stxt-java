@@ -193,7 +193,7 @@ public class ConformanceKitTest {
         List<DynamicTest> tests = new ArrayList<>();
 
         tests.add(dynamicTest("declares a kit version and the specifications it covers", () -> {
-            assertTrue(manifest.get("kit").asText().matches("\\d+\\.\\d+"));
+            assertTrue(manifest.get("kit").asText().matches("\\d+\\.\\d+(\\.\\d+)?"));
             assertEquals("1.0", manifest.get("specifications").get("STXT-SPEC").asText());
             assertEquals("1.0", manifest.get("specifications").get("STXT-TREE-SPEC").asText());
             assertFalse(cases.isEmpty());

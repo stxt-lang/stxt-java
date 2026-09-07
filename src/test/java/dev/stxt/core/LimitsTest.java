@@ -238,16 +238,18 @@ public class LimitsTest {
 
 	@Test
 	public void parseFileSplitsCrLfAndCrLinesLikeTheStringPath() throws IOException {
-		// \r\n and a lone \r both terminate a line, as in the whole-string path (BufferedReader).
+		// \r\n terminates a line; a lone \r is content (STXT-SPEC 3), in the file path as in the
+		// whole-string path. Until 2026-09-06 both paths split at a lone \r too (BufferedReader).
 		String content = "One: 1\r\nTwo: 2\rThree: 3\n";
 		Path file = tempDir.resolve("crlf.stxt");
 		Files.writeString(file, content);
 
-		List<Node> nodes = new Parser().parseFile(file.toFile());
-		assertEquals(3, nodes.size());
-		assertEquals("One", nodes.get(0).getName());
-		assertEquals("Two", nodes.get(1).getName());
-		assertEquals("Three", nodes.get(2).getName());
+		for (List<Node> nodes : List.of(new Parser().parseFile(file.toFile()), new Parser().parse(content))) {
+			assertEquals(2, nodes.size());
+			assertEquals("One", nodes.get(0).getName());
+			assertEquals("Two", nodes.get(1).getName());
+			assertEquals("2\rThree: 3", ((InlineNode) nodes.get(1)).getValue());
+		}
 	}
 
 	// ------------------------------------------------------------------

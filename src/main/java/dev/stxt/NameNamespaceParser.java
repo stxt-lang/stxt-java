@@ -56,6 +56,6 @@ public final class NameNamespaceParser {
         	throw new ParseException(lineNumber, "INVALID_NAMESPACE", "Line not valid: " + fullLine);
         }
         
-        return new NameNamespace(name, namespace.toLowerCase(Locale.ROOT));
+        return new NameNamespace(name, StringUtils.lowerCase(namespace));
     }
 }

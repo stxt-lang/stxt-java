@@ -1,5 +1,6 @@
 package dev.stxt;
 
+import dev.stxt.exceptions.STXTException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -68,8 +69,7 @@ public final class TextNode extends Node {
 	 */
 	public TextNode(String name, String namespace, List<String> lines, int line) {
 		super(name, namespace, line);
-		if (lines != null)
-			this.lines.addAll(lines);
+		setTextLines(lines);
 	}
 
 	// ----------------------------------------------------------------
@@ -98,6 +98,10 @@ public final class TextNode extends Node {
 	 * @param newLines new text lines; {@code null} empties the node.
 	 */
 	public void setTextLines(List<String> newLines) {
+		// Validated before clearing, so a rejected list leaves the node as it was
+		if (newLines != null)
+			for (String line : newLines)
+				checkLine(line);
 		lines.clear();
 		if (newLines != null)
 			lines.addAll(newLines);
@@ -109,7 +113,17 @@ public final class TextNode extends Node {
 	 * @param line text line to append.
 	 */
 	public void addTextLine(String line) {
-		lines.add(line);
+		lines.add(checkLine(line));
+	}
+
+	// A text line is one source line (STXT-SPEC 6): a line break inside it has no
+	// representation, and written out the part after it would land at level 0 and re-parse as
+	// another node (structure injected through data). A multi-line text goes through
+	// setText(String), which splits it. A lone CR is content (STXT-SPEC 3) and is accepted.
+	private static String checkLine(String line) {
+		if (line != null && line.indexOf('\n') != -1)
+			throw new STXTException("LINE_BREAK_NOT_ALLOWED", "A text line cannot contain a line break");
+		return line;
 	}
 
 	/** Removes every text line. */

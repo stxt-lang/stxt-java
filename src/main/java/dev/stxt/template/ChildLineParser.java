@@ -2,8 +2,6 @@ package dev.stxt.template;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import dev.stxt.Constants;
 import dev.stxt.exceptions.ValidationException;
@@ -12,19 +10,58 @@ import dev.stxt.utils.StringUtils;
 /** Parses the inline value of a child node inside an {@code @stxt.template}, shaped as {@code (min,max) TYPE [values]}. */
 public final class ChildLineParser {
 
-    // STXT-TEMPLATE-SPEC 6.2/9: a blank in a Structure line is only U+0020 or U+0009. The pattern
-    // uses [ \t] (never \s, which in Java is ASCII but Unicode in js/python) and the trims below
-    // use StringUtils.trim, so the three ports accept/reject exactly the same lines (e.g. NBSP is
-    // content, not a separator).
-    private static final Pattern CHILD_LINE_PATTERN = Pattern.compile(
-            "^[ \\t]*" +
-            "(?:\\([ \\t]*(?<count>[^() \\t][^)]*?)[ \\t]*\\)[ \\t]*)?" +
-            "(?<type>[^\\[\\]()]*)?" +
-            "(?:\\[[ \\t]*(?<values>[^]]*?)[ \\t]*\\][ \\t]*)?" +
-            "[ \\t]*$"
-        );
-    
     private ChildLineParser() {
+    }
+
+    /**
+     * Splits a RuleSpec {@code (count) TYPE [values]} into its three optional parts by a
+     * hand-written scan, not a regular expression: the pattern used until 2026-09-06 backtracked
+     * in O(n³) on a line without the closing {@code ]} (a 10 000-character Structure line took
+     * minutes, with no timeout possible in java.util.regex). Blanks are U+0020/U+0009 only
+     * (STXT-TEMPLATE-SPEC 6.2/9), and the rules the pattern enforced are kept exactly: the count
+     * runs to the first {@code )} and, trimmed, is neither empty nor starts with {@code (}; the
+     * type may not contain {@code (}, {@code )} or {@code ]}; the values run from the first
+     * {@code [} to the first {@code ]} after it, and only blanks may follow that {@code ]}.
+     *
+     * @return the trimmed parts (null each when absent), or null if the line has not that shape.
+     */
+    private static String[] splitRuleSpec(String rawLine) {
+        int n = rawLine.length();
+        int i = 0;
+        while (i < n && StringUtils.isBlank(rawLine.charAt(i)))
+            i++;
+
+        String count = null;
+        if (i < n && rawLine.charAt(i) == '(') {
+            int close = rawLine.indexOf(')', i + 1);
+            if (close == -1)
+                return null;
+            count = StringUtils.trim(rawLine.substring(i + 1, close));
+            if (count.isEmpty() || count.charAt(0) == '(')
+                return null;
+            i = close + 1;
+        }
+
+        int open = rawLine.indexOf('[', i);
+        String type = rawLine.substring(i, open == -1 ? n : open);
+        if (type.indexOf('(') != -1 || type.indexOf(')') != -1 || type.indexOf(']') != -1)
+            return null;
+        type = StringUtils.trim(type);
+        if (type.isEmpty())
+            type = null;
+
+        String values = null;
+        if (open != -1) {
+            int close = rawLine.indexOf(']', open + 1);
+            if (close == -1)
+                return null;
+            values = StringUtils.trim(rawLine.substring(open + 1, close));
+            for (int j = close + 1; j < n; j++)
+                if (!StringUtils.isBlank(rawLine.charAt(j)))
+                    return null;
+        }
+
+        return new String[] { count, type, values };
     }
 
     /**
@@ -39,16 +76,14 @@ public final class ChildLineParser {
     	if (StringUtils.trim(rawLine).isEmpty())
     		return new ChildLine(null, null, null, null);
     	
-        Matcher m = CHILD_LINE_PATTERN.matcher(rawLine);
-        if (!m.matches()) {
+        String[] rule = splitRuleSpec(rawLine);
+        if (rule == null) {
             throw new ValidationException(lineNumber, "STRUCTURE_LINE_NOT_VALID", "Line not valid: " + rawLine);
         }
 
-        String type = m.group("type");
-        if (type != null) type = StringUtils.trim(type);
-        if (type == null || type.isEmpty()) type = null;
-
-        String count = m.group("count");
+        String count = rule[0];
+        String type = rule[1];
+        String valuesStr = rule[2];
         Long min = null;
         Long max = null;
 
@@ -84,7 +119,6 @@ public final class ChildLineParser {
 		}
  
         String[] values = null;
-        String valuesStr = m.group("values");
         if (valuesStr != null) {
             // -1 keeps the trailing empty item of "[a, b,]", which Java would otherwise drop
             String[] parts = valuesStr.split(",", -1);

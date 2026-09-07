@@ -43,6 +43,12 @@ public class ResourcesLoaderDirectory implements ResourcesLoader {
 		if (!file.exists() || !file.isFile())
 			throw new ResourceNotFoundException(namespace, resource);
 
+		// A resource is parsed with the default limits (Constants.DEFAULT_MAX_INPUT_SIZE
+		// characters, at most 4 bytes each in UTF-8): a bigger file cannot be within them and is
+		// rejected by size, instead of read whole into memory
+		if (file.length() > 4L * dev.stxt.Constants.DEFAULT_MAX_INPUT_SIZE)
+			throw new STXTIOException(new java.io.IOException("Resource larger than " + (4L * dev.stxt.Constants.DEFAULT_MAX_INPUT_SIZE) + " bytes: " + file));
+
 		// Return its value
 		try {
 			return FileUtils.readFileContent(file);

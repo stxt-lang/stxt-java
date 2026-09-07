@@ -27,6 +27,10 @@ public final class ENUM implements Type {
 		
 		String value = n.getText();
 		if (!ndef.getValues().contains(value))
-		    throw new ValidationException(n.getLine(), "INVALID_VALUE", "The value '" + value + "' not allowed. Only: " + ndef.getValues());
+			// The message deliberately does not list the allowed values: every invalid node
+			// would carry a copy of the whole set, and a large ENUM times a document with many
+			// invalid nodes multiplies memory (1 836 values × 50 000 nodes gave 600 MB of
+			// messages). The set stays available through NodeDefinition.getValues().
+		    throw new ValidationException(n.getLine(), "INVALID_VALUE", "The value '" + value + "' is not one of the allowed values of " + ndef.getName());
 	}
 }

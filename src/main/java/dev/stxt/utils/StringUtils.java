@@ -73,8 +73,21 @@ public class StringUtils {
 	 * @return the lower-cased string; {@code null} is treated as the empty string.
 	 */
 	public static String lowerCase(String input) {
+		// ASCII lower case: maps A-Z to a-z and leaves every other character as it is. Namespaces
+		// are ASCII by definition (STXT-SPEC 7.1), so this must not be the Unicode lower case:
+		// toLowerCase(Locale.ROOT) maps U+212A KELVIN SIGN to 'k', which made "(\u212Aelvin.x)" the
+		// valid namespace "kelvin.x" until 2026-09-06, the very homograph 7.1 rules out. With an
+		// ASCII map the sign reaches the NamespaceValidator unchanged and is rejected.
 		if (input == null) return "";
-		return input.toLowerCase(Locale.ROOT);
+		char[] chars = null;
+		for (int i = 0; i < input.length(); i++) {
+			char c = input.charAt(i);
+			if (c >= 'A' && c <= 'Z') {
+				if (chars == null) chars = input.toCharArray();
+				chars[i] = (char) (c + ('a' - 'A'));
+			}
+		}
+		return chars == null ? input : new String(chars);
 	}
 	
 	// Used for the name of the nodes

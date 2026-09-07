@@ -1,5 +1,6 @@
 package dev.stxt.schema;
 
+import dev.stxt.utils.StringUtils;
 import java.util.Locale;
 
 import dev.stxt.exceptions.ParseException;
@@ -26,7 +27,7 @@ public final class SchemaProviderResources implements SchemaProvider {
 		if (namespace == null || namespace.isEmpty())
 		    throw new SchemaException("NAMESPACE_REQUIRED", "Namespace is required to load schema");
 
-		namespace = namespace.toLowerCase(Locale.ROOT);
+		namespace = StringUtils.lowerCase(namespace);
 
 		// Load the schema; a missing resource is "no schema for this namespace", not an error
 		String textSchema;

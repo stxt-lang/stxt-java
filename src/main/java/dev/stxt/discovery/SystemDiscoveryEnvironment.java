@@ -26,7 +26,10 @@ public final class SystemDiscoveryEnvironment implements DiscoveryEnvironment {
 		if (value.isEmpty()) {
 			return List.of();
 		}
-		return Arrays.asList(value.split(File.pathSeparator, -1));
+		// An empty entry (a leading, trailing or doubled separator, as in ":/opt/defs" when the
+		// variable is extended from an undefined value) is dropped (spec section 6): Path.of("")
+		// is the working directory, which would silently become the level of highest precedence.
+		return Arrays.stream(value.split(File.pathSeparator, -1)).filter(entry -> !entry.isEmpty()).toList();
 	}
 
 	@Override

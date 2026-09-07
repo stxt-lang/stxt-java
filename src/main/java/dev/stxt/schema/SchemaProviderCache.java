@@ -1,5 +1,6 @@
 package dev.stxt.schema;
 
+import dev.stxt.utils.StringUtils;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -26,7 +27,7 @@ public final class SchemaProviderCache implements SchemaProvider {
 		if (namespace == null || namespace.isEmpty())
 		    throw new SchemaException("NAMESPACE_REQUIRED", "Namespace is required to load schema");
 
-		namespace = namespace.toLowerCase(Locale.ROOT);
+		namespace = StringUtils.lowerCase(namespace);
 		Schema cached = cache.get(namespace);
 		if (cached != null)
 			return cached;

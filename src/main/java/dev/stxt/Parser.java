@@ -56,7 +56,7 @@ public class Parser {
 	 * @param maxNesting the limit, or -1 to disable it. Default {@link Constants#DEFAULT_MAX_NESTING}.
 	 */
 	public void setMaxNesting(int maxNesting) {
-		this.maxNesting = maxNesting;
+		this.maxNesting = limit("maxNesting", maxNesting);
 	}
 
 	/**
@@ -65,7 +65,7 @@ public class Parser {
 	 * @param maxLineLength the limit, or -1 to disable it. Default {@link Constants#DEFAULT_MAX_LINE_LENGTH}.
 	 */
 	public void setMaxLineLength(int maxLineLength) {
-		this.maxLineLength = maxLineLength;
+		this.maxLineLength = limit("maxLineLength", maxLineLength);
 	}
 
 	/**
@@ -74,7 +74,15 @@ public class Parser {
 	 * @param maxInputSize the limit, or -1 to disable it. Default {@link Constants#DEFAULT_MAX_INPUT_SIZE}.
 	 */
 	public void setMaxInputSize(int maxInputSize) {
-		this.maxInputSize = maxInputSize;
+		this.maxInputSize = limit("maxInputSize", maxInputSize);
+	}
+
+	// A limit is an integer >= 0 or -1 (STXT-SPEC 11.2): -2 would reject every line, so
+	// anything else is rejected here.
+	private static int limit(String name, int value) {
+		if (value < -1)
+			throw new IllegalArgumentException(name + " must be >= 0, or -1 to disable it, got " + value);
+		return value;
 	}
 
 	/**
@@ -229,6 +237,7 @@ public class Parser {
 		private final int maxInputSize;		// -1 disables the total-size cut
 		private String pending;				// the next line, once read; null until read or at EOF
 		private boolean eof;
+		private boolean atStart = true;		// before the first character: where a BOM may sit
 		private long emitted;				// chars plus one separator per line already returned
 		private int pushback = -1;			// a lookahead char kept for the \r\n split
 
@@ -261,6 +270,16 @@ public class Parser {
 			StringBuilder sb = new StringBuilder();
 			while (true) {
 				int c = read();
+				if (atStart) {
+					// A UTF-8 BOM only means anything at the very start of the input (spec 3):
+					// dropped here, before it is counted, so that the line-length cut below sees
+					// the same first line as the String path (a BOM counted and removed later
+					// let a line one character over the limit through, truncated, and pushed
+					// its tail into a line of its own).
+					atStart = false;
+					if (c == '\uFEFF')
+						continue;
+				}
 				if (c == -1) {
 					eof = true;
 					return sb.length() == 0 ? null : sb.toString();
@@ -268,10 +287,11 @@ public class Parser {
 				if (c == '\n')
 					return sb.toString();
 				if (c == '\r') {
-					int next = read();		// swallow the \n of a \r\n; keep any other char
-					if (next != '\n' && next != -1)
-						pushback = next;
-					return sb.toString();
+					int next = read();
+					if (next == '\n')
+						return sb.toString();	// CRLF
+					if (next != -1)
+						pushback = next;		// a lone CR is content (spec 3), not a line break
 				}
 				sb.append((char) c);
 				// Force-cut so the buffered line never grows past its limit; the returned partial
@@ -316,13 +336,11 @@ public class Parser {
 	private ParseResult doParse(String content, boolean stopOnFirstError) {
 		ParseResult result = new ParseResult();
 
-		try (BufferedReader in = new BufferedReader(new StringReader(content))) {
-			parseLines(in.lines().iterator(), result, stopOnFirstError);
-		} catch (UncheckedIOException e) {
-			throw new STXTIOException(e.getCause());
-		} catch (java.io.IOException e) {
-			throw new STXTIOException(e);
-		}
+		// The same incremental reader as the file path, over the string: it splits at LF and
+		// CRLF only — BufferedReader.lines(), used until 2026-09-06, also split at a lone CR,
+		// which STXT-SPEC 3 says is content (js and python keep it) — and it applies the line
+		// and size limits as the input is consumed (11.2). A StringReader does not throw.
+		parseLines(new LimitedLineReader(new StringReader(content), maxLineLength, maxInputSize), result, stopOnFirstError);
 
 		return result;
 	}

@@ -4,6 +4,61 @@ All notable changes to `dev.stxt:stxt-core` are documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [1.0.1] - 2026-09-06
+
+**Security review of the three ports** (js, java, python), same scope as `@stxt-lang/core`
+1.0.1 and `stxt` (Python) 1.0.2 (whose 1.0.1 was a packaging release). A patch: fixes only,
+no new feature. No language change: STXT-SPEC stays at 1.0 and
+`Constants.SPEC_VERSION` too; STXT-DISCOVERY-SPEC gained one clarifying sentence (an empty
+`STXT_PATH` entry is ignored). The library passes the conformance kit 1.0.1 (one new case).
+
+### Fixed
+
+- `NamespaceValidator` no longer uses a regex with a repeated group: `java.util.regex`
+  implements it by recursion and a namespace of ~2 000 labels (a 4 000-character line, well
+  within the line limit) made a `StackOverflowError` escape from every entry point, discovery
+  included. The format is now checked by a linear scan, identical in the three ports.
+- `ChildLineParser` (the `(count) TYPE [values]` of a template `Structure` line) no longer
+  uses a regex either: its blank runs around lazy groups backtracked in O(n³) on a line
+  without the closing `]`, and a 10 000-character line took hours. A hand-written scan keeps
+  the same grammar exactly.
+- A lone CR is content, not a line break (STXT-SPEC §3), in every entry point: `parse` and
+  `parseResult` used `BufferedReader.lines()` and the file/`Reader` paths a reader that also
+  split at CR, unlike the other two ports; `Formatter` lost nodes on such input.
+- On the file/`Reader` paths a leading BOM is dropped before the line-length cut counts the
+  first line, so a line one character over the limit is no longer accepted truncated with its
+  tail pushed into a line of its own.
+- Namespaces are lower-cased ASCII-only (`StringUtils.lowerCase`): the Unicode lower case
+  turned U+212A KELVIN SIGN into `k`, so `(Kelvin.x)` with that sign was accepted as
+  `kelvin.x`, the homograph STXT-SPEC §7.1 rules out. Conformance case
+  `parse/namespace-kelvin-sign`.
+- `SystemDiscoveryEnvironment.getStxtPath()` drops empty entries (`:/opt/defs`, a trailing
+  `:`): `Path.of("")` is the working directory, which silently became the level of highest
+  precedence.
+- `DiscoveryResolver`: each directory of a level is visited once (a cycle of breadth 2 in an
+  injected file system was entered 2³² times); `isDirectory` failures and unchecked I/O
+  exceptions (`DirectoryIteratorException`, `UncheckedIOException`) no longer escape
+  `resolve()`; `maxAscent` must be ≥ 0.
+- `NioDiscoveryFileSystem` lists only regular files and directories (a FIFO blocked the
+  resolution forever) and rejects a definition file above
+  `MAX_DEFINITION_FILE_BYTES` (4 × the default input limit) before reading it whole, which
+  was an `OutOfMemoryError` escaping from `resolve()`; `ResourcesLoaderDirectory` applies the
+  same bound.
+- `ENUM` `INVALID_VALUE` messages no longer list the allowed values: every invalid node
+  carried a copy of the whole set (50 000 nodes against a 1 836-value ENUM gave 600 MB of
+  messages).
+- `Node.getNamespace()` is iterative; `InlineNode.addChild` skips the ancestor walk for a
+  childless node (a chain of 100 000 nodes was quadratic).
+
+### Added
+
+- `LINE_BREAK_NOT_ALLOWED` (`STXTException`): `InlineNode.setValue`, `TextNode.addTextLine`,
+  `setTextLines` and the list constructor reject a value or a text line holding a LF. Such a
+  value has no representation: `NodeWriter` wrote it as a new line, which re-parsed as another
+  node — structure injected through data. A multi-line text goes through `setText(String)`.
+- `Parser.setMax*` reject a value below -1 (`IllegalArgumentException`).
+- `NamespaceValidator.isValid(String)`.
+
 ## [1.0.0] - 2026-08-31
 
 **First stable release.** Functionally identical to 0.17.0: the number is the promise, not a

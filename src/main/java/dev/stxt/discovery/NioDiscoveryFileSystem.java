@@ -8,8 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+import dev.stxt.Constants;
+
 /** {@link DiscoveryFileSystem} over the real file system ({@code java.nio.file}). */
 public final class NioDiscoveryFileSystem implements DiscoveryFileSystem {
+
+	/**
+	 * Largest definition file a resolution directory loads: the parser's default input limit
+	 * in characters, times the 4 bytes a character takes at most in UTF-8.
+	 */
+	public static final long MAX_DEFINITION_FILE_BYTES = 4L * Constants.DEFAULT_MAX_INPUT_SIZE;
 
 	/** Creates a file system over {@code java.nio.file}; it has no state. */
 	public NioDiscoveryFileSystem() {
@@ -33,8 +41,11 @@ public final class NioDiscoveryFileSystem implements DiscoveryFileSystem {
 				// content through a resolution error.
 				if (Files.isSymbolicLink(child))
 					continue;
-				entries.add(new DiscoveryEntry(child, child.getFileName().toString(),
-						Files.isDirectory(child, LinkOption.NOFOLLOW_LINKS)));
+				boolean directory = Files.isDirectory(child, LinkOption.NOFOLLOW_LINKS);
+				// A FIFO, socket or device is neither: reading it could block forever
+				if (!directory && !Files.isRegularFile(child, LinkOption.NOFOLLOW_LINKS))
+					continue;
+				entries.add(new DiscoveryEntry(child, child.getFileName().toString(), directory));
 			}
 		}
 		return entries;
@@ -42,6 +53,14 @@ public final class NioDiscoveryFileSystem implements DiscoveryFileSystem {
 
 	@Override
 	public String readFile(Path path) throws IOException {
+		// A definition is parsed with the default limits (DEFAULT_MAX_INPUT_SIZE characters, at
+		// most 4 bytes each in UTF-8), so a bigger file cannot be within them: rejected by size
+		// before it is read whole, which kept the memory of a load proportional to the file
+		// instead of to the limit (a 40 MB definition was an OutOfMemoryError escaping from
+		// resolve()). The IOException becomes a DISCOVERY_NOT_PARSEABLE error.
+		long size = Files.size(path);
+		if (size > MAX_DEFINITION_FILE_BYTES)
+			throw new IOException("Definition file larger than " + MAX_DEFINITION_FILE_BYTES + " bytes: " + path);
 		// Files.readString is a strict UTF-8 decode (STXT-SPEC 3): invalid bytes raise an
 		// IOException instead of being silently substituted with U+FFFD.
 		return Files.readString(path);

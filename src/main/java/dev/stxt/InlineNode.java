@@ -82,6 +82,11 @@ public final class InlineNode extends Node {
 	 * @param value new value, or {@code null} for none. It is trimmed.
 	 */
 	public void setValue(String value) {
+		// A value is one source line (STXT-SPEC 5): a line break inside it has no representation,
+		// and the NodeWriter would emit it as a new line, which re-parses as another node
+		// (structure injected through data). A lone CR is content (STXT-SPEC 3) and is accepted.
+		if (value != null && value.indexOf('\n') != -1)
+			throw new STXTException("LINE_BREAK_NOT_ALLOWED", "A node value cannot contain a line break");
 		this.value = StringUtils.trim(value);
 	}
 
@@ -190,9 +195,16 @@ public final class InlineNode extends Node {
 		if (child.getParent() != null)
 			throw new STXTException("NODE_ALREADY_ATTACHED", "Node '" + child.getName() + "' already has a parent: detach it first");
 
-		for (Node p = this; p != null; p = p.getParent())
-			if (p == child)
-				throw new STXTException("NODE_CYCLE", "Node '" + child.getName() + "' cannot be a child of itself or of one of its descendants");
+		// The child has no parent, so it can only be an ancestor of this node if it is this node
+		// itself or if this node hangs below it, which needs the child to have children. A
+		// childless child (every node the parser attaches) skips the O(depth) walk: a chain of
+		// n nodes is built in O(n) instead of O(n²).
+		if (child == this)
+			throw new STXTException("NODE_CYCLE", "Node '" + child.getName() + "' cannot be a child of itself or of one of its descendants");
+		if (child instanceof InlineNode inline && !inline.children.isEmpty())
+			for (Node p = getParent(); p != null; p = p.getParent())
+				if (p == child)
+					throw new STXTException("NODE_CYCLE", "Node '" + child.getName() + "' cannot be a child of itself or of one of its descendants");
 
 		children.add(index, child);
 		child.setParent(this);

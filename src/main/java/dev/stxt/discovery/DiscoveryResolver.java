@@ -1,6 +1,9 @@
 package dev.stxt.discovery;
 
 import java.io.IOException;
+import java.util.Set;
+import java.util.HashSet;
+import java.io.UncheckedIOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -95,9 +98,21 @@ public final class DiscoveryResolver {
 	 *        project-level ascent.
 	 */
 	public DiscoveryResolver(DiscoveryFileSystem fs, DiscoveryEnvironment env, int maxAscent) {
+		if (maxAscent < 0)
+			throw new IllegalArgumentException("maxAscent must be >= 0, got " + maxAscent);
 		this.fs = fs;
 		this.env = env;
 		this.maxAscent = maxAscent;
+	}
+
+	// isDirectory is not supposed to throw (DiscoveryFileSystem contract), but nothing an
+	// adapter throws may escape resolve() (spec section 8): a failure means "not a directory".
+	private boolean isDirectory(Path path) {
+		try {
+			return fs.isDirectory(path);
+		} catch (RuntimeException e) {
+			return false;
+		}
 	}
 
 	/**
@@ -126,7 +141,7 @@ public final class DiscoveryResolver {
 			for (int level = 0; level < maxAscent && dir != null; level++) {
 				Path candidate = dir.resolve(STXT_DIR);
 
-				if (fs.isDirectory(candidate)) {
+				if (isDirectory(candidate)) {
 					chain.add(candidate);
 				}
 
@@ -137,7 +152,7 @@ public final class DiscoveryResolver {
 		// User and system levels. The ascent may have reached them already (a document
 		// under the user's home finds $HOME/.stxt as a project candidate): deduplicate.
 		for (Path dir : Arrays.asList(env.getUserLevelDir(), env.getSystemLevelDir())) {
-			if (dir != null && !chain.contains(dir) && fs.isDirectory(dir)) {
+			if (dir != null && !chain.contains(dir) && isDirectory(dir)) {
 				chain.add(dir);
 			}
 		}
@@ -178,7 +193,7 @@ public final class DiscoveryResolver {
 		List<Path> result = new ArrayList<>();
 
 		for (Path dir : dirs) {
-			if (!result.contains(dir) && fs.isDirectory(dir)) {
+			if (!result.contains(dir) && isDirectory(dir)) {
 				result.add(dir);
 			}
 		}
@@ -214,27 +229,35 @@ public final class DiscoveryResolver {
 	// turning resolution into unbounded recursion.
 	private List<Path> collectFiles(Path dir) {
 		List<Path> files = new ArrayList<>();
-		collectFiles(dir, files, 0);
+		collectFiles(dir, files, 0, new HashSet<>());
 		files.sort(Comparator.naturalOrder());
 		return files;
 	}
 
-	private void collectFiles(Path dir, List<Path> files, int depth) {
+	private void collectFiles(Path dir, List<Path> files, int depth, Set<Path> visited) {
 		// Safeguard against symlink loops and pathological trees: stop descending.
 		if (depth >= DEFAULT_MAX_DESCENT)
+			return;
+
+		// A directory already visited in this level (a cycle the adapter did not cut, or two
+		// entries for one directory) is not descended again: the depth limit bounds the depth,
+		// not the work, and a cycle of breadth 2 would otherwise be entered 2^32 times.
+		if (!visited.add(dir))
 			return;
 
 		List<DiscoveryEntry> entries;
 		try {
 			entries = fs.listDirectory(dir);
-		} catch (IOException | STXTIOException e) {
+		} catch (IOException | UncheckedIOException | STXTIOException e) {
+			// UncheckedIOException covers DirectoryIteratorException: an I/O failure in the
+			// middle of a Files.list iteration.
 			// A directory that cannot be listed contributes no files (section 3); it does not
 			// stop the resolution of the rest of the level, and the error does not escape.
 			return;
 		}
 
 		for (DiscoveryEntry entry : entries) {
-			if (entry.isDirectory())	collectFiles(entry.path(), files, depth + 1);
+			if (entry.isDirectory())	collectFiles(entry.path(), files, depth + 1, visited);
 			else						files.add(entry.path());
 		}
 	}
@@ -254,7 +277,7 @@ public final class DiscoveryResolver {
 
 		try {
 			content = fs.readFile(file);
-		} catch (IOException e) {
+		} catch (IOException | UncheckedIOException e) {
 			level.addError(new DiscoveryError(
 				DiscoveryError.NOT_PARSEABLE, file.toString(),
 				"Cannot read " + file + ": " + e.getMessage()));

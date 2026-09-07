@@ -110,9 +110,12 @@ public sealed abstract class Node permits InlineNode, TextNode {
 
 	/** {@return the effective namespace of the node: the one it declares or, failing that, the effective namespace of its parent; the empty string if there is none} */
 	public String getNamespace() {
-		if (!declaredNamespace.isEmpty())
-			return declaredNamespace;
-		return parent != null ? parent.getNamespace() : "";
+		// Iterative, like getLevel(): a tree built by a program has no nesting limit, and the
+		// recursive walk overflowed the stack at a depth of some thousands.
+		for (Node n = this; n != null; n = n.parent)
+			if (!n.declaredNamespace.isEmpty())
+				return n.declaredNamespace;
+		return "";
 	}
 
 	// ----------------------------------------------------------------
