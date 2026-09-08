@@ -50,11 +50,12 @@ public final class Constants {
 	public static final long MAX_CARDINALITY = 4294967295L;
 
 	/**
-	 * Version of STXT-SPEC (the base syntax) this library implements; "STXT 1.0" on its own means
-	 * this number (STXT-SPEC §1.1). Each specification is versioned independently, so the schema,
-	 * template, tree and discovery specs may carry other numbers. It is distinct from the
-	 * version of the artifact: the library version changes with every release, this one only
-	 * when STXT-SPEC does.
+	 * Date of the STXT-SPEC text (the base syntax) this library implements, {@code YYYY-MM-DD}.
+	 * The specifications carry no version number: each one has a date and a status (STXT-SPEC
+	 * §1.1), and the date pinned here is the one the conformance kit certifies for STXT-SPEC, not
+	 * the {@code Last modif} of the specification, so an editorial change of the text does not
+	 * move it. It is distinct from the version of the artifact: the library version changes with
+	 * every release, this one only when the kit pins a new text.
 	 */
-	public static final String SPEC_VERSION = "1.0";
+	public static final String SPEC_VERSION = "2026-09-07";
 }

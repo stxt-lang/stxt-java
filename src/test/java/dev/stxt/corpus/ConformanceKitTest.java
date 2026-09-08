@@ -192,10 +192,12 @@ public class ConformanceKitTest {
         JsonNode cases = manifest.get("cases");
         List<DynamicTest> tests = new ArrayList<>();
 
-        tests.add(dynamicTest("declares a kit version and the specifications it covers", () -> {
-            assertTrue(manifest.get("kit").asText().matches("\\d+\\.\\d+(\\.\\d+)?"));
-            assertEquals("1.0", manifest.get("specifications").get("STXT-SPEC").asText());
-            assertEquals("1.0", manifest.get("specifications").get("STXT-TREE-SPEC").asText());
+        tests.add(dynamicTest("declares a kit date and the dated specifications it covers", () -> {
+            String date = "\\d{4}-\\d{2}-\\d{2}";
+            assertTrue(manifest.get("kit").asText().matches(date));
+            for (String s : List.of("STXT-SPEC", "STXT-TREE-SPEC", "STXT-SCHEMA-SPEC", "STXT-TEMPLATE-SPEC", "STXT-DISCOVERY-SPEC")) {
+                assertTrue(manifest.get("specifications").get(s).asText().matches(date), s);
+            }
             assertFalse(cases.isEmpty());
         }));
 

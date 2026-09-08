@@ -1,34 +1,37 @@
 package dev.stxt.core;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 
 import org.junit.jupiter.api.Test;
 
-import dev.stxt.Constants;
-import dev.stxt.InlineNode;
-import dev.stxt.Parser;
-import test.Corpus;
+import com.fasterxml.jackson.databind.JsonNode;
 
-/** {@link Constants#SPEC_VERSION}: the version of the specifications, not of the artifact. */
+import dev.stxt.Constants;
+import test.Corpus;
+import test.JSON;
+
+/** {@link Constants#SPEC_VERSION}: the date of the STXT-SPEC text implemented, not the artifact version. */
 class ConstantsTest {
 
 	@Test
-	void specVersionIsOneDotZero() {
-		assertEquals("1.0", Constants.SPEC_VERSION);
+	void specVersionIsADate() {
+		assertTrue(Constants.SPEC_VERSION.matches("\\d{4}-\\d{2}-\\d{2}"), Constants.SPEC_VERSION);
 	}
 
-	/** The constant is tied to the version STXT-SPEC declares in its own Metadata (es/stxt-core-ref.stxt). */
+	/**
+	 * The specifications carry a date and a status, not a version number (STXT-SPEC §1.1), and
+	 * conformance is declared against the kit: the constant is the date the kit pins for STXT-SPEC
+	 * (conformance/manifest.json), not the Last modif of the specification, so an editorial change
+	 * of the text does not touch the library.
+	 */
 	@Test
-	void specVersionEqualsTheVersionDeclaredBySpec() {
-		File file = new File(new File(Corpus.findStxtLang(), "es"), "stxt-core-ref.stxt");
-		InlineNode root = (InlineNode) new Parser().parse(Corpus.read(file)).get(0);
-		InlineNode metadata = (InlineNode) root.getChild("Metadata");
-		InlineNode version = (InlineNode) metadata.getChild("Version");
+	void specVersionEqualsTheDateTheConformanceKitPins() {
+		File file = new File(new File(Corpus.findStxtLang(), "conformance"), "manifest.json");
+		JsonNode manifest = JSON.toJsonTree(Corpus.read(file));
 
-		assertNotNull(version, "STXT-SPEC has no Metadata/Version");
-		assertEquals(version.getValue(), Constants.SPEC_VERSION);
+		assertEquals(manifest.get("specifications").get("STXT-SPEC").asText(), Constants.SPEC_VERSION);
 	}
 }

@@ -39,12 +39,12 @@ Requires **Java 17** or later.
 <dependency>
     <groupId>dev.stxt</groupId>
     <artifactId>stxt-core</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
 </dependency>
 ```
 
 ```groovy
-implementation 'dev.stxt:stxt-core:1.0.1'
+implementation 'dev.stxt:stxt-core:1.0.2'
 ```
 
 The library has **no runtime dependencies**. Under JPMS it is an automatic module named `dev.stxt`.
@@ -334,7 +334,7 @@ Every failure is an unchecked `dev.stxt.exceptions.STXTException` carrying an up
 
 ## Conformance
 
-`dev.stxt:stxt-core` implements the five STXT specifications at `SPEC_VERSION` (exposed by the package; the package version is independent) and passes every case of the official conformance kit, [`stxt-lang/conformance`](https://github.com/stxt-lang/stxt-lang/tree/master/conformance), across all its profiles: `core`, `schema`, `template`, `discovery` and `text`. The kit is the same one any other implementation can run, which is what makes the three ports interchangeable. What the 1.0 line freezes, and what it does not, is stated at <https://stxt.dev/stability>.
+`dev.stxt:stxt-core` implements the five STXT specifications as of `SPEC_VERSION` (the date of the STXT-SPEC text it implements, exposed by the package; the package version is independent) and passes every case of the official conformance kit, [`stxt-lang/conformance`](https://github.com/stxt-lang/stxt-lang/tree/master/conformance), across all its profiles: `core`, `schema`, `template`, `discovery` and `text`. The kit is the same one any other implementation can run, which is what makes the three ports interchangeable. What is frozen, and what is not, is stated at <https://stxt.dev/stability>: the specifications carry a date and a status instead of a version number.
 
 ## License
 

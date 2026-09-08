@@ -4,6 +4,25 @@ All notable changes to `dev.stxt:stxt-core` are documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [1.0.2] - 2026-09-07
+
+**Date and status instead of a version number for the specifications** (STXT-SPEC §1.1). The
+five specifications no longer carry a version number: each one carries the date of its current
+text (`Last modif`) and a status that says how much stability it promises and only moves
+forward — `Genesis` → `Aurora` → `Zenith` → `Twilight`. STXT-SPEC and STXT-TREE-SPEC are in
+Zenith (what is valid stays valid forever, the specification may only add); STXT-SCHEMA-SPEC,
+STXT-TEMPLATE-SPEC and STXT-DISCOVERY-SPEC are in Aurora (usable; an incompatible change is
+possible, rare, and announced). No language change: a patch. Same scope as `@stxt-lang/core`
+1.0.2 and `stxt` (Python) 1.0.3.
+
+### Changed
+
+- `Constants.SPEC_VERSION` is now the date of the STXT-SPEC text the library implements,
+  `2026-09-07`, as pinned by the conformance kit (itself dated `2026-09-07`), instead of `1.0`. The
+  constant keeps its name and type. `ConstantsTest` ties it to the kit's manifest rather than
+  to the `Metadata` of the specification, so an editorial change of the specification does not
+  affect the library; `ConformanceKitTest` expects a dated kit.
+
 ## [1.0.1] - 2026-09-06
 
 **Security review of the three ports** (js, java, python), same scope as `@stxt-lang/core`
