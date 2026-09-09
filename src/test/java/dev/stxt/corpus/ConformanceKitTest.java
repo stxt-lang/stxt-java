@@ -201,6 +201,16 @@ public class ConformanceKitTest {
             assertFalse(cases.isEmpty());
         }));
 
+        // The official ports run every case, whatever its level; the level only has to be well formed.
+        tests.add(dynamicTest("marks the optional cases with a requirement level of SHOULD or MAY", () -> {
+            for (JsonNode c : cases) {
+                if (c.has("requirement")) {
+                    String level = c.get("requirement").asText();
+                    assertTrue(level.equals("SHOULD") || level.equals("MAY"), c.get("id").asText() + ": requirement " + level);
+                }
+            }
+        }));
+
         tests.add(dynamicTest("declares cumulative profiles that cover every category", () -> {
             JsonNode profiles = manifest.get("profiles");
             Set<String> covered = new HashSet<>();
