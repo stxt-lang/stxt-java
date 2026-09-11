@@ -4,6 +4,31 @@ All notable changes to `dev.stxt:stxt-core` are documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [1.0.3] - 2026-09-10
+
+**A project-level `.stxt` that is a symbolic link forms no level** (STXT-DISCOVERY-SPEC §4.1,
+§10, text of 2026-09-10). The ancestors of a document are written by whoever created the
+project — a cloned repository — and a `.stxt -> /` or `.stxt -> $HOME` made the resolver walk
+that whole tree, parsing every file as a definition and leaking the first line that failed to
+parse through the error message. Links inside a resolution directory were already omitted
+(1.0.0); the level itself was still followed. The user level, the system level and the
+`STXT_PATH` entries are still followed when they are links (§4.2, §6): the user chooses them,
+and `$HOME/.stxt` linked to a dotfiles repository is an intended use. Same scope as
+`@stxt-lang/core` 1.0.3 and `stxt` (Python) 1.0.4. No syntax change: a patch.
+
+### Added
+
+- `DiscoveryFileSystem.isSymbolicLink(Path)`, a `default` method that answers false, so every
+  existing implementation keeps compiling and behaving as before; `NioDiscoveryFileSystem`
+  implements it with `Files.isSymbolicLink`. The resolver consults it only during the
+  project-level ascent, before `isDirectory`, and treats an implementation that throws as
+  "a link" (the candidate is skipped).
+
+### Changed
+
+- `DiscoveryResolver.resolveChain` skips an ancestor `.stxt` that is a symbolic link. A document
+  under the home whose `$HOME/.stxt` is a link gets it as the user level, not as a project level.
+
 ## [1.0.2] - 2026-09-07
 
 **Date and status instead of a version number for the specifications** (STXT-SPEC §1.1). The

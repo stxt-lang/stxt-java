@@ -395,6 +395,67 @@ class DiscoveryResolverTest {
 		assertEquals(0, result.getErrors().size());
 	}
 
+	// --- symbolic links at the level itself (spec sections 4.1, 4.2, 6 and 10) -----------
+
+	private void link(Path link, Path target) {
+		try {
+			Files.createDirectories(link.getParent());
+			Files.createSymbolicLink(link, target);
+		} catch (UnsupportedOperationException | IOException e) {
+			assumeTrue(false, "the environment does not allow creating symbolic links: " + e);
+		}
+	}
+
+	@Test
+	void anAncestorStxtThatIsASymbolicLinkFormsNoProjectLevel() {
+		// repo/.stxt -> outside/defs, a directory outside the repository holding a valid
+		// definition, as a cloned repository could carry; repo/web/.stxt is real.
+		Path outside = dir("outside", "defs");
+		write(outside.resolve("a.stxt"), template("com.acme.a", "A"));
+		write(dir("repo", "web", ".stxt", "b.stxt"), template("com.acme.b", "B"));
+		link(dir("repo", ".stxt"), outside);
+
+		DiscoveryResolver resolver = new DiscoveryResolver(new TestEnvironment());
+		Path documentDir = dir("repo", "web", "docs");
+
+		assertEquals(List.of(dir("repo", "web", ".stxt")), resolver.resolveChain(documentDir));
+
+		DiscoveryResult result = resolver.resolve(documentDir);
+
+		assertNotNull(result.getSchema("com.acme.b"), "the real level loads");
+		assertNull(result.getSchema("com.acme.a"), "the linked level is not loaded");
+		assertEquals(0, result.getErrors().size());
+	}
+
+	@Test
+	void theUserLevelIsFollowedWhenItIsASymbolicLink() {
+		// $HOME/.stxt -> dotfiles/stxt, the intended use; the document lives under the home,
+		// so the ascent meets the link first and skips it: the user level takes it.
+		Path dotfiles = dir("dotfiles", "stxt");
+		write(dotfiles.resolve("b.stxt"), template("org.ana.b", "B"));
+		Path userLevel = dir("home", "ana", ".stxt");
+		link(userLevel, dotfiles);
+
+		DiscoveryResolver resolver = new DiscoveryResolver(new TestEnvironment(null, userLevel, null));
+		Path documentDir = dir("home", "ana", "notes");
+
+		assertEquals(List.of(userLevel), resolver.resolveChain(documentDir));
+		assertNotNull(resolver.resolve(documentDir).getSchema("org.ana.b"));
+	}
+
+	@Test
+	void anStxtPathEntryIsFollowedWhenItIsASymbolicLink() {
+		Path defs = dir("opt", "defs");
+		write(defs.resolve("a.stxt"), template("com.acme.a", "A"));
+		Path entry = dir("opt", "link");
+		link(entry, defs);
+
+		DiscoveryResolver resolver = new DiscoveryResolver(new TestEnvironment(List.of(entry.toString()), null, null));
+
+		assertEquals(List.of(entry), resolver.resolveChain(dir("repo")));
+		assertNotNull(resolver.resolve(dir("repo")).getSchema("com.acme.a"));
+	}
+
 	// --- DiscoveryResult as SchemaProvider -----------------------------------------------
 
 	@Test

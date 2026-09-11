@@ -29,6 +29,14 @@ public final class NioDiscoveryFileSystem implements DiscoveryFileSystem {
 	}
 
 	@Override
+	public boolean isSymbolicLink(Path path) {
+		// The link itself, whatever it points to (STXT-DISCOVERY-SPEC section 4.1: a linked
+		// ancestor .stxt forms no level). Files.isSymbolicLink answers false for a path that
+		// does not exist or cannot be examined, as the contract asks.
+		return Files.isSymbolicLink(path);
+	}
+
+	@Override
 	public List<DiscoveryEntry> listDirectory(Path path) throws IOException {
 		List<DiscoveryEntry> entries = new ArrayList<>();
 		try (Stream<Path> stream = Files.list(path)) {

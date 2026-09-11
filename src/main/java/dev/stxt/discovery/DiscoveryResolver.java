@@ -115,6 +115,17 @@ public final class DiscoveryResolver {
 		}
 	}
 
+	// A candidate .stxt that is itself a symbolic link forms no project level (spec sections
+	// 4.1 and 10). Guarded like isDirectory, but an adapter that throws here is treated as
+	// "a link" — the conservative answer: the candidate is skipped.
+	private boolean isSymbolicLink(Path path) {
+		try {
+			return fs.isSymbolicLink(path);
+		} catch (RuntimeException e) {
+			return true;
+		}
+	}
+
 	/**
 	 * Builds the resolution chain of a document (STXT-DISCOVERY-SPEC sections 4 and 6)
 	 * without loading any definition.
@@ -141,7 +152,11 @@ public final class DiscoveryResolver {
 			for (int level = 0; level < maxAscent && dir != null; level++) {
 				Path candidate = dir.resolve(STXT_DIR);
 
-				if (isDirectory(candidate)) {
+				// A linked .stxt forms no level (spec sections 4.1 and 10): the ancestors are
+				// written by whoever created the project, and a link would take the resolution
+				// into a foreign tree. Asked before isDirectory, which follows links. The user
+				// and system levels below, and STXT_PATH, are followed: the user chooses them.
+				if (!isSymbolicLink(candidate) && isDirectory(candidate)) {
 					chain.add(candidate);
 				}
 
