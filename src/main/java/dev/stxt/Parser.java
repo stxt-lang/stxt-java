@@ -180,7 +180,7 @@ public class Parser {
 
 	/**
 	 * Multi-error mode: parses the whole content collecting every error found (both syntax and
-	 * validation) without bailing out on the first one — except a {@link LimitException}, which
+	 * validation) without bailing out on the first one, except a {@link LimitException}, which
 	 * aborts and is in every case the last error collected. See {@link ParseResult}.
 	 *
 	 * @param content the whole STXT document to parse.
@@ -337,8 +337,8 @@ public class Parser {
 		ParseResult result = new ParseResult();
 
 		// The same incremental reader as the file path, over the string: it splits at LF and
-		// CRLF only — BufferedReader.lines(), used until 2026-09-06, also split at a lone CR,
-		// which STXT-SPEC 3 says is content (js and python keep it) — and it applies the line
+		// CRLF only, BufferedReader.lines(), used until 2026-09-06, also split at a lone CR,
+		// which STXT-SPEC 3 says is content (js and python keep it), and it applies the line
 		// and size limits as the input is consumed (11.2). A StringReader does not throw.
 		parseLines(new LimitedLineReader(new StringReader(content), maxLineLength, maxInputSize), result, stopOnFirstError);
 
@@ -392,7 +392,7 @@ public class Parser {
 	/**
 	 * Processes one source line. Errors of this line are collected into the result and the
 	 * traversal continues with the next line: returns true to keep going, false when a limit
-	 * aborted the parse (its error is already emitted) — parseLines stops on it.
+	 * aborted the parse (its error is already emitted), parseLines stops on it.
 	 */
 	private boolean processLine(String line, int lineNumber, ArrayDeque<Node> stack, ParseResult result, boolean stopOnFirstError) {
 		try {

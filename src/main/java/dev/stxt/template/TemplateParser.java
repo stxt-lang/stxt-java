@@ -139,7 +139,7 @@ public class TemplateParser {
 
 	/**
 	 * Cross-namespace node (STXT-TEMPLATE-SPEC 6.4, 10 and 14.15): not defined locally; it may
-	 * only declare cardinality — no type, no ENUM values and no children.
+	 * only declare cardinality, no type, no ENUM values and no children.
 	 */
 	private static void validateExternalNode(InlineNode node, ChildLine cl, int offset) {
 		String type = cl.getType();
@@ -202,7 +202,7 @@ public class TemplateParser {
 		String type = cl.getType();
 
 		// A reappearance without "@" would redefine an existing node: error
-		// (if it carries no type at all, it is not a valid reference either — avoids an NPE)
+		// (if it carries no type at all, it is not a valid reference either, avoids an NPE)
 		if (type == null || !type.startsWith("@"))
 			throw new ValidationException(node.getLine() + offset, "REFERENCE_REQUIRED", "Multiple node reference must start with @: " + node.getName());
 

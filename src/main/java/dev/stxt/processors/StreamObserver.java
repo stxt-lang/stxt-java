@@ -11,15 +11,15 @@ import dev.stxt.exceptions.ParseException;
  * Register it with {@link dev.stxt.Parser#registerStreamObserver(StreamObserver)}; a class may
  * implement {@link Observer}, StreamObserver or both.
  *
- * <p>It fires in every entry point — {@code parse()}, {@code parseResult()} and
- * {@code parseStream()} — the same way; what {@code parseStream()} adds is that the parser
+ * <p>It fires in every entry point, {@code parse()}, {@code parseResult()} and
+ * {@code parseStream()}, the same way; what {@code parseStream()} adds is that the parser
  * retains nothing, so there these callbacks are the only way to get the results.
  * StreamObservers must not modify the nodes they receive.
  */
 public interface StreamObserver {
 	/**
-	 * Called when a root (level 0) node is closed, with its whole subtree already complete —
-	 * children, values, text lines — and its validators already run. In
+	 * Called when a root (level 0) node is closed, with its whole subtree already complete,
+	 * children, values, text lines, and its validators already run. In
 	 * {@link dev.stxt.Parser#parseStream(Iterable)} the parser releases the node right after
 	 * this call, so the memory in use is one root tree at a time.
 	 *

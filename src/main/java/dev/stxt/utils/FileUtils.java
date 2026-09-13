@@ -55,8 +55,8 @@ public class FileUtils {
 
 	/**
 	 * Reads a whole file as UTF-8 text. The decode is strict (STXT-SPEC 3): a file that is
-	 * not valid UTF-8 is rejected with an {@link IOException} — an I/O-level error, like a
-	 * missing file — never decoded by silently substituting the invalid sequences with
+	 * not valid UTF-8 is rejected with an {@link IOException}, an I/O-level error, like a
+	 * missing file, never decoded by silently substituting the invalid sequences with
 	 * U+FFFD, which would make two tools see different documents from the same bytes.
 	 *
 	 * @param file file to read.

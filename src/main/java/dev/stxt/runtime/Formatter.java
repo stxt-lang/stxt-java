@@ -17,7 +17,7 @@ import dev.stxt.utils.StringUtils;
 
 /**
  * Reformats an STXT document <b>line by line, over the original text</b>, so that nothing the
- * parse tree does not hold — comments, blank lines, the exact content of text blocks — is lost.
+ * parse tree does not hold, comments, blank lines, the exact content of text blocks, is lost.
  * This is what distinguishes it from {@link NodeWriter}, which writes the canonical text form
  * of the tree and therefore drops comments and blank lines.
  *
@@ -27,16 +27,16 @@ import dev.stxt.utils.StringUtils;
  * <li>A line that <b>opens a node</b> is rendered in canonical form: the indentation of its
  * level in the requested style, the name as parsed, the namespace only where the source wrote it
  * (a child repeating its parent's namespace is redundant but legal, and dropping it would be an
- * edit, not a reformat), {@code : value} with exactly one space — or a bare {@code :} when there
- * is no value — or {@code  >>} for a block.</li>
+ * edit, not a reformat), {@code : value} with exactly one space, or a bare {@code :} when there
+ * is no value, or {@code  >>} for a block.</li>
  * <li>A <b>text line of a block</b> gets the indentation of the block (its level plus one) in
  * the requested style, followed by its content; any indentation the line had beyond the block's
  * is content (STXT-SPEC 10.2) and is kept exactly. A blank line that precedes more block text is
  * {@code ""} in the content (STXT-SPEC 10.3), so it is written with the indentation of the block
  * too. The final blank lines of a block are not content (STXT-SPEC 10.3: the parser drops them
  * when the block closes) and fall under the next rule.</li>
- * <li>Every <b>other line</b> — a comment, a blank line outside a block, or a line the parse
- * tree does not describe because of a syntax error — is kept as the author wrote it, except that
+ * <li>Every <b>other line</b>, a comment, a blank line outside a block, or a line the parse
+ * tree does not describe because of a syntax error, is kept as the author wrote it, except that
  * its trailing blanks are removed and the whole indentation units at its start are converted one
  * for one to the requested style (a tab or four spaces in either style count as a unit; whatever
  * follows the last whole unit, a remainder included, is kept as it is).</li>
@@ -147,7 +147,7 @@ public final class Formatter {
 		return units == 0 ? line : indent(units, style) + line.substring(consumed);
 	}
 
-	/** Length of the whole indentation unit — a tab or four spaces — starting at position, or 0. */
+	/** Length of the whole indentation unit, a tab or four spaces, starting at position, or 0. */
 	private static int unitAt(String line, int position) {
 		if (line.startsWith("\t", position))
 			return 1;

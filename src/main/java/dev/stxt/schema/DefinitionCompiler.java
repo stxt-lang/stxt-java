@@ -13,7 +13,7 @@ import dev.stxt.exceptions.ValidationException;
  * providers (a document each), {@link dev.stxt.runtime.UnifiedSchemaProvider} (several
  * roots per file), the resource loaders and discovery. A definition node is validated
  * against the meta-schema of its kind and, only when valid, transformed into a
- * {@link Schema}; a definition that does not validate is never registered anywhere —
+ * {@link Schema}; a definition that does not validate is never registered anywhere,
  * the first validation finding is thrown instead.
  * Mirrors {@code stxt-impl/schema/definition_compiler.txt}.
  */

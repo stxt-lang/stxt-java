@@ -90,7 +90,7 @@ class InMemoryFileSystemTest {
 	@Test
 	void aDirectoryCycleTerminatesInsteadOfOverflowing() {
 		// Pathological fs (DISCOVERY-SPEC section 10): /repo/.stxt and every "loop" subdirectory
-		// list a single child "loop" that is again a directory — an unbounded chain the bounded
+		// list a single child "loop" that is again a directory, an unbounded chain the bounded
 		// descent must not follow forever. Without the depth limit this is a StackOverflowError.
 		DiscoveryFileSystem cyclic = new DiscoveryFileSystem() {
 			@Override

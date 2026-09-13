@@ -8,7 +8,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 **A project-level `.stxt` that is a symbolic link forms no level** (STXT-DISCOVERY-SPEC §4.1,
 §10, text of 2026-09-10). The ancestors of a document are written by whoever created the
-project — a cloned repository — and a `.stxt -> /` or `.stxt -> $HOME` made the resolver walk
+project (a cloned repository), and a `.stxt -> /` or `.stxt -> $HOME` made the resolver walk
 that whole tree, parsing every file as a definition and leaking the first line that failed to
 parse through the error message. Links inside a resolution directory were already omitted
 (1.0.0); the level itself was still followed. The user level, the system level and the
@@ -34,7 +34,7 @@ and `$HOME/.stxt` linked to a dotfiles repository is an intended use. Same scope
 **Date and status instead of a version number for the specifications** (STXT-SPEC §1.1). The
 five specifications no longer carry a version number: each one carries the date of its current
 text (`Last modif`) and a status that says how much stability it promises and only moves
-forward — `Genesis` → `Aurora` → `Zenith` → `Twilight`. STXT-SPEC and STXT-TREE-SPEC are in
+forward: `Genesis` → `Aurora` → `Zenith` → `Twilight`. STXT-SPEC and STXT-TREE-SPEC are in
 Zenith (what is valid stays valid forever, the specification may only add); STXT-SCHEMA-SPEC,
 STXT-TEMPLATE-SPEC and STXT-DISCOVERY-SPEC are in Aurora (usable; an incompatible change is
 possible, rare, and announced). No language change: a patch. Same scope as `@stxt-lang/core`
@@ -99,7 +99,7 @@ no new feature. No language change: STXT-SPEC stays at 1.0 and
 - `LINE_BREAK_NOT_ALLOWED` (`STXTException`): `InlineNode.setValue`, `TextNode.addTextLine`,
   `setTextLines` and the list constructor reject a value or a text line holding a LF. Such a
   value has no representation: `NodeWriter` wrote it as a new line, which re-parsed as another
-  node — structure injected through data. A multi-line text goes through `setText(String)`.
+  node, structure injected through data. A multi-line text goes through `setText(String)`.
 - `Parser.setMax*` reject a value below -1 (`IllegalArgumentException`).
 - `NamespaceValidator.isValid(String)`.
 
@@ -119,7 +119,7 @@ all five profiles.
 ## [0.17.0] - 2026-08-31
 
 Same number and scope as `@stxt-lang/core` and `stxt` (Python) 0.17.0: the parity fixes of the
-external spec review (IANA/media-type pass). The specifications stay at 1.0 — they gained a
+external spec review (IANA/media-type pass). The specifications stay at 1.0: they gained a
 normative `EMAIL` grammar, a cardinality bound and a strict-UTF-8 read rule without changing
 the meaning of any valid document.
 
@@ -127,14 +127,14 @@ the meaning of any valid document.
 
 - **`EMAIL` follows the normative grammar of STXT-SCHEMA-SPEC §9.4**, now spelled out in the
   specification instead of implied by the implementations: ASCII only (no EAI), permissive
-  dots (no RFC 5322 dot-atom), local part 1–64 characters, whole address at most 254, TLD
-  2–63 letters, and the display-name form separated by STXT blanks only (`[ \t]`, never
+  dots (no RFC 5322 dot-atom), local part 1-64 characters, whole address at most 254, TLD
+  2-63 letters, and the display-name form separated by STXT blanks only (`[ \t]`, never
   `\s`). The previous regex enforced ad-hoc limits (256 total, a 63/63 domain split) that no
   spec text backed.
 - **Cardinalities are bounded to `4294967295` (2^32 − 1)** (STXT-SCHEMA-SPEC §10,
   STXT-TEMPLATE-SPEC §7.1): a `Min`/`Max` or template number above the bound is
   `CARDINALITY_NOT_VALID` in every port. Before, this port rejected anything above 2^31 − 1
-  (an `Integer.parseInt` accident) while JS and Python accepted arbitrary values — the same
+  (an `Integer.parseInt` accident) while JS and Python accepted arbitrary values, the same
   schema loaded in one port and failed in another. New `Constants.MAX_CARDINALITY`.
   **API change:** `ChildDefinition` and `ChildLine` carry `Min`/`Max` as `Long` (was
   `Integer`), because the bound does not fit a signed `int`.
@@ -154,7 +154,7 @@ language changes.
 - **Discovery descent hardened against symlink loops and pathological trees**
   (STXT-DISCOVERY-SPEC §3, §10). The recursive descent inside a resolution directory is now
   bounded by an internal depth limit (32) instead of recursing without bound, and a
-  subdirectory that cannot be listed is tolerated per-directory — its I/O error no longer
+  subdirectory that cannot be listed is tolerated per-directory, its I/O error no longer
   escapes `resolve()` but simply contributes no files. `NioDiscoveryFileSystem.listDirectory`
   no longer follows directory symbolic links: a symlink whose target is a directory is omitted
   from the listing, so a loop such as `.stxt/loop -> ..` can no longer turn resolution into a
@@ -208,8 +208,8 @@ of a block are no longer content (STXT-SPEC §10.3).
 
 ### Changed
 
-- **Language change (STXT-SPEC §10.3).** The final empty lines of a `>>` block — the sequence
-  of empty lines after its last non-empty line — are discarded when the block closes, whether
+- **Language change (STXT-SPEC §10.3).** The final empty lines of a `>>` block, the sequence
+  of empty lines after its last non-empty line, are discarded when the block closes, whether
   a shallower line closes it or the document ends. They were visual separation (or an editor's
   final line breaks), not content: two visually identical documents now produce the same tree.
   Leading and intermediate empty lines are kept, and an empty line still never closes a block.
@@ -256,36 +256,36 @@ STXT-SPEC §11.2 in the three ports, plus the streaming API.
 - `StreamObserver` (`dev.stxt.processors`), registered with `registerStreamObserver`: notified
   with each completed root node (`onRootNode`) and every error (`onError`), in every mode.
 - `Parser.parseStream(Reader)` and `parseStream(Iterable<String>)`: streaming mode. The input
-  is read line by line and nothing is retained — no nodes, no errors —; the results reach the
+  is read line by line and nothing is retained (no nodes, no errors); the results reach the
   program only through the registered `StreamObserver`s, so memory holds one root tree at a
   time. Made for files that do not fit in memory.
 
 ### Changed
 
-- A document that exceeds a default limit — deeper than 100 levels, a line longer than 10 000
-  characters, or more than 10 000 000 characters in total — no longer parses unless the limit
+- A document that exceeds a default limit, deeper than 100 levels, a line longer than 10 000
+  characters, or more than 10 000 000 characters in total, no longer parses unless the limit
   is raised or disabled. This is the language change of the 0.14.0 cycle (STXT-SPEC §11.2,
   `Last modif: 2026-08-26`).
 
 ## [0.13.0] - 2026-08-23
 
 Same number and scope as `@stxt-lang/core` and `stxt` (Python) 0.13.0: the writing operations of
-STXT-TREE-SPEC §11–12, now normative, in the three ports.
+STXT-TREE-SPEC §11-12, now normative, in the three ports.
 
 ### Added
 
 - `Formatter` (`dev.stxt.runtime`): the reformatting of STXT-TREE-SPEC §12, a replica of the
   TypeScript `Formatter` of `@stxt-lang/core` 0.11.1. `Formatter.format(text, style)` returns a
-  `FormatResult(text, errors)`: the document rewritten line by line —node lines in canonical
+  `FormatResult(text, errors)`: the document rewritten line by line, node lines in canonical
   form, block lines at the level of the block, comments and blank lines kept with their
-  indentation units converted— plus the syntax errors found; CRLF and the final newline are
+  indentation units converted, plus the syntax errors found; CRLF and the final newline are
   kept, an initial BOM is removed.
 
 ### Changed
 
 - `NodeWriter` writes the canonical text form of STXT-TREE-SPEC §11 (2026-08-23): the
-  namespace is declared only where it changes from the parent's — on a root when not empty, on
-  a child when it differs — wherever the source declared it. A child repeating its parent's
+  namespace is declared only where it changes from the parent's, on a root when not empty, on
+  a child when it differs, wherever the source declared it. A child repeating its parent's
   namespace used to come out with it; the tree it re-parses to is the same.
 
 ### Fixed
@@ -471,9 +471,9 @@ One language-level change decided on 2026-08-21 while preparing 1.0, made in the
 first (`Last modif: 2026-08-21`), then in `stxt-impl` and in the three ports at once.
 `@stxt-lang/core` and `stxt` (Python) ship the same scope as 0.8.1.
 
-- **A blank is only U+0020 or U+0009** (STXT-SPEC 4). Every trim of the core —
-  inline values, node names, the "is this line empty?" test and the right trim of `>>` block
-  lines — works on space and tab only, through the new `StringUtils.trim`/`isBlank` and a
+- **A blank is only U+0020 or U+0009** (STXT-SPEC 4). Every trim of the core
+  (inline values, node names, the "is this line empty?" test and the right trim of `>>` block
+  lines) works on space and tab only, through the new `StringUtils.trim`/`isBlank` and a
   narrowed `rightTrim`/`compactSpaces`/`normalize`. `String.trim()` (which also removed every
   control character below U+0020) and `Character.isWhitespace` are no longer used in the core.
   Any other Unicode space (NBSP, U+3000, U+2028...) is content: it stays in the value, a line
@@ -512,7 +512,7 @@ once. `@stxt-lang/core` and `stxt` (Python) ship the same scope as 0.8.0.
   classes of the same name: a `Validator` that hands the namespaced nodes over to a
   `SchemaValidator` and lets the nodes without a namespace through. `STXT.parser(loader)` now
   registers its schema validator through it, so a document (or a root node) without a namespace
-  is no longer reported — before it produced a `VALIDATION_ERROR` per node ("Namespace is
+  is no longer reported, before it produced a `VALIDATION_ERROR` per node ("Namespace is
   required to load schema"), unlike the CLI, the extension and the other ports. Code that
   registers a `SchemaValidator` by hand keeps validating every node; wrap it in a
   `ConditionalValidator` to get the same behaviour. `ConditionalValidatorTest` covers both.
@@ -626,7 +626,7 @@ schema or template behaviour changed.
   references to the normative specs.
 - **Every documented member now has a main description.** 100 doc comments carried block tags only,
   with no summary sentence, which left their row empty in the *Method Summary* tables of the
-  generated documentation — the first thing anyone reading the API on javadoc.io sees. Simple
+  generated documentation, the first thing anyone reading the API on javadoc.io sees. Simple
   accessors use the `{@return ...}` inline tag; the rest gained a summary line. `mvn javadoc:jar`
   went from **106 warnings to none**.
 - `Parser` and `ParseResult` now declare their no-argument constructor explicitly, with javadoc.
@@ -642,7 +642,7 @@ schema or template behaviour changed.
   the generated documentation.
 - The renames that came with the translation are local variables and test method names only:
   `NameNamespaceParser` now uses `openIndex`/`closeIndex`, and the corpus `@TestFactory` methods are
-  named in English. The Spanish text kept on purpose is test data — node names with accents
+  named in English. The Spanish text kept on purpose is test data, node names with accents
   (`Título`, `Año`, `café`) exercise the canonical-name rules of STXT-SPEC 4.3.
 
 ## [0.5.2]

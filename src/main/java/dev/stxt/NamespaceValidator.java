@@ -24,8 +24,8 @@ public class NamespaceValidator {
 	 * only; an optional leading {@code @} (reserved namespaces); two or more domain-style labels
 	 * {@code [a-z0-9]+} separated by {@code .}. Checked by a hand-written scan rather than the
 	 * regex {@code ^@?[a-z0-9]+(\.[a-z0-9]+)+$} used until 2026-09-06: java.util.regex implements
-	 * a repeated group by recursion and overflowed the stack with ~2 000 labels — a 4 000-character
-	 * line, well within the line limit — and a {@link StackOverflowError} is not an exception the
+	 * a repeated group by recursion and overflowed the stack with ~2 000 labels, a 4 000-character
+	 * line, well within the line limit, and a {@link StackOverflowError} is not an exception the
 	 * parser can turn into an error. The scan is linear and identical in every port.
 	 *
 	 * @param namespace already normalized namespace to check.

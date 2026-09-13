@@ -11,8 +11,8 @@ import dev.stxt.utils.StringUtils;
 
 /**
  * INLINE node of the STXT tree ({@code Name: value}): an optional inline value and an ordered
- * list of children. It is the only form that has children — and so the only one with child
- * lookups ({@link #getChild(String)}, {@link #getChildren(String)}) — and the only one that can
+ * list of children. It is the only form that has children, and so the only one with child
+ * lookups ({@link #getChild(String)}, {@link #getChildren(String)}), and the only one that can
  * create them ({@link #addInlineNode(String)}, {@link #addTextNode(String)}).
  *
  * <p>Overloads with two strings always take the second one as the <em>content</em> (the value);

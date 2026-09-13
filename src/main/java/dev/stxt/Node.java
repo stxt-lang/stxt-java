@@ -6,7 +6,7 @@ import dev.stxt.utils.StringUtils;
 /**
  * Node of the STXT tree: what INLINE nodes ({@link InlineNode}) and BLOCK text nodes
  * ({@link TextNode}) have in common. The hierarchy is sealed: those two are the only forms, and
- * each one owns what is really its own — only an {@link InlineNode} has a value and children (and
+ * each one owns what is really its own, only an {@link InlineNode} has a value and children (and
  * so the child lookups); only a {@link TextNode} has text lines. Code that walks a tree asks for
  * the form ({@code instanceof InlineNode inline}), the same way the canonical tree of
  * STXT-TREE-SPEC has {@code children} only for inline nodes.

@@ -31,7 +31,7 @@ import dev.stxt.utils.StringUtils;
  * loads every definition of every level and applies the per-namespace precedence.
  *
  * Loaded levels are cached by directory: resolving many documents that share levels loads
- * each directory once, which is the sharing that STXT-DISCOVERY-SPEC section 7 allows — a
+ * each directory once, which is the sharing that STXT-DISCOVERY-SPEC section 7 allows, a
  * level's content does not depend on which document is being resolved. Call
  * {@link #clearCache()} when the underlying files may have changed.
  */
@@ -117,7 +117,7 @@ public final class DiscoveryResolver {
 
 	// A candidate .stxt that is itself a symbolic link forms no project level (spec sections
 	// 4.1 and 10). Guarded like isDirectory, but an adapter that throws here is treated as
-	// "a link" — the conservative answer: the candidate is skipped.
+	// "a link", the conservative answer: the candidate is skipped.
 	private boolean isSymbolicLink(Path path) {
 		try {
 			return fs.isSymbolicLink(path);
@@ -351,7 +351,7 @@ public final class DiscoveryResolver {
 		DiscoveryDefinition existing = level.getDefinitions().get(key);
 
 		// Spec section 8: on a same-level duplicate, never silently pick one of the
-		// definitions — the namespace has no active definition while the conflict exists.
+		// definitions, the namespace has no active definition while the conflict exists.
 		if (level.getConflictedNamespaces().contains(key) || existing != null) {
 			level.addConflict(schema.getNamespace());
 
