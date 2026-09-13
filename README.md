@@ -95,7 +95,7 @@ A document may have **several root nodes**, which is why both entry points retur
 
 ## Working with the tree
 
-`Node` is a sealed class with exactly two forms, and each one owns only what is really its own: `InlineNode` (`Name: value`) has the optional value, the children and the child lookups (`getChildren()`, `getChild(name)`, `getChildren(name)`); `TextNode` (`Name >>`) has the literal text lines and nothing else. What they share lives in `Node`: name and canonical name, declared and effective namespace, source line, parent (always an `InlineNode`) and `getText()` — the value of an inline node or the joined lines of a text node. Walking a tree therefore asks for the form (`instanceof InlineNode inline`), the same way the canonical tree of STXT-TREE-SPEC has `children` only for inline nodes.
+`Node` is a sealed class with exactly two forms, and each one owns only what is really its own: `InlineNode` (`Name: value`) has the optional value, the children and the child lookups (`getChildren()`, `getChild(name)`, `getChildren(name)`); `TextNode` (`Name >>`) has the literal text lines and nothing else. What they share lives in `Node`: name and canonical name, declared and effective namespace, source line, parent (always an `InlineNode`) and `getText()`, the value of an inline node or the joined lines of a text node. Walking a tree therefore asks for the form (`instanceof InlineNode inline`), the same way the canonical tree of STXT-TREE-SPEC has `children` only for inline nodes.
 
 Trees are mutable and keep their own integrity: every node knows its parent, `addChild` links both ends and refuses a node that already has one, and `removeChild` / `detach()` undo it. Levels are derived from the chain of parents; the source line is only set by the parser.
 
@@ -113,7 +113,7 @@ TextNode body = email.addTextNode("Body", "Hi Bob,\n\nSee attached.");
 body.getParent() == email;          // true
 body.getLevel();                    // 1
 to.getNamespace();                  // "com.example.docs", inherited
-to.getDeclaredNamespace();          // "" — it declares none
+to.getDeclaredNamespace();          // "": it declares none
 
 // Reorganise: move "To" to the front
 to.detach();
@@ -133,7 +133,7 @@ Overloads with two strings always take the second one as the *content* (value or
 
 ## Validating against a schema
 
-Schemas are themselves STXT documents, written in the reserved `@stxt.schema` namespace (or in the friendlier `@stxt.template` form, which is equivalent sugar). A `ResourcesLoader` says where they live; `STXT.parser(loader)` returns a parser that resolves both kinds, caches them, and validates every namespaced node as it is closed — nodes without a namespace are let through by the `SchemaValidator` itself (STXT-SCHEMA-SPEC §5), because a document without a namespace is not wrong, it just cannot be validated.
+Schemas are themselves STXT documents, written in the reserved `@stxt.schema` namespace (or in the `@stxt.template` form, which compiles to a schema). A `ResourcesLoader` says where they live; `STXT.parser(loader)` returns a parser that resolves both kinds, caches them, and validates every namespaced node as it is closed. Nodes without a namespace are let through by the `SchemaValidator` itself (STXT-SCHEMA-SPEC §5): a document without a namespace is not wrong, it just cannot be validated.
 
 `ResourcesLoaderDirectory` expects this layout on disk:
 
@@ -202,7 +202,7 @@ Discovery (STXT-DISCOVERY-SPEC) is in `dev.stxt.discovery`: `new DiscoveryResolv
 
 ## Observing the parse
 
-The parser itself knows nothing about schemas: validation is a decoupled layer plugged in through two hooks. `Observer` receives streaming callbacks while the document is parsed — useful for syntax highlighting, indexes or any per-node bookkeeping.
+The parser itself knows nothing about schemas: validation is a decoupled layer plugged in through two hooks. `Observer` receives streaming callbacks while the document is parsed, which is useful for syntax highlighting, indexes or any per-node bookkeeping.
 
 ```java
 import java.util.List;
@@ -239,7 +239,7 @@ parser.registerValidator(node -> List.<ValidationException>of());
 ```
 
 `StreamObserver` watches the results instead of the process: each completed root node and each
-error, in every mode. With `parseStream` the parser retains nothing — no nodes, no errors — so a
+error, in every mode. With `parseStream` the parser retains nothing (no nodes, no errors), so a
 file larger than memory can be processed one root tree at a time:
 
 ```java
@@ -300,8 +300,8 @@ Writing a tree out and parsing it back yields the same tree, in both indentation
 
 `NodeWriter` re-serializes the tree, so comments and blank lines are gone. To reformat a document
 **keeping everything the author wrote**, use `Formatter`: it rewrites the original text line by
-line — node lines in canonical form, block lines re-indented to their block, comments and blank
-lines kept with their indentation units converted — and reports the syntax errors it met, so the
+line (node lines in canonical form, block lines re-indented to their block, comments and blank
+lines kept with their indentation units converted) and reports the syntax errors it met, so the
 caller decides what to do with a document that does not parse.
 
 ```java
@@ -338,4 +338,4 @@ Every failure is an unchecked `dev.stxt.exceptions.STXTException` carrying an up
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT, see [LICENSE](LICENSE).
