@@ -1,15 +1,9 @@
 # dev.stxt:stxt-core
 
-Parser and schema validator for **STXT**, an indentation-based structured-text language.
+Parser and schema validator for **STXT**, in Java.
 
-STXT is a plain-text language for writing structured, semantic documents: no braces, no closing tags, just indentation. It is designed to be equally readable by humans and by machines, and it comes with an optional schema layer so documents can be validated.
-
-- Website and language reference: <https://stxt.dev>
-- JavaScript/TypeScript implementation: [@stxt-lang/core](https://www.npmjs.com/package/@stxt-lang/core)
-- Python implementation: [stxt](https://pypi.org/project/stxt/) on PyPI
-- VSCode extension: [STXT Language](https://marketplace.visualstudio.com/items?itemName=stxt-lang.stxt)
-
-## What STXT looks like
+STXT is a **Human-First** language, designed for documents and structured data: indentation is
+the structure, free text is literal, and schemas are written in STXT itself.
 
 ```stxt
 # A line starting with '#' is a comment
@@ -26,10 +20,17 @@ Article (blog.post):
         as a block of text lines.
 ```
 
-- `Name: value` declares an **inline node**.
-- `Name >>` opens a **text block**; every deeper-indented line belongs to it.
+- `Name: value` is an **inline node**.
+- `Name >>` opens a **text block**. Every deeper-indented line belongs to it.
 - Indentation is **one level per tab or per 4 spaces**.
-- `Name (a.b.c):` attaches a **namespace** to a node; children inherit it unless they declare their own.
+- `Name (a.b.c):` attaches a **namespace** to a node. Children inherit it unless they declare their own.
+
+Links:
+
+- The language: <https://stxt.dev>
+- The full guide of this library: <https://stxt.dev/tools-java>
+- The other implementations: [`@stxt-lang/core`](https://www.npmjs.com/package/@stxt-lang/core) (TypeScript) and [`stxt`](https://pypi.org/project/stxt/) (Python)
+- The tools: the [`stxt` command](https://www.npmjs.com/package/@stxt-lang/cli), the [VS Code extension](https://marketplace.visualstudio.com/items?itemName=stxt-lang.stxt) and the [playground](https://play.stxt.dev)
 
 ## Install
 
@@ -87,17 +88,30 @@ if (article instanceof InlineNode inline)
     System.out.println(inline.getChild("Title").getText()); // "Getting started with STXT"
 ```
 
-Use `parser.parse(text)` instead if you prefer an exception (`ParseException`) on the first error. Both have a file-based counterpart: `parseFile(File)` and `parseResultFile(File)`.
+| Entry point | Behaviour |
+|---|---|
+| `parseResult(text)`, `parseResultFile(File)` | Collects every error, and also returns the nodes it managed to build |
+| `parse(text)`, `parseFile(File)` | Throws a `ParseException` on the first error |
+| `parseStream(reader)` | Retains no nodes or errors (see *Observing the parse*) |
 
-A document may have **several root nodes**, which is why both entry points return a list.
-
-`getChild(String)` returns `null` when there is no such child, and node lookup is by **canonical name**: `getChild("Título")` and `getChild("titulo")` find the same node.
+- A document may have **several root nodes**, so the entry points return a list.
+- `getChild(String)` returns `null` when there is no such child.
+- Children are looked up by **canonical name**: `getChild("Title")` and `getChild("title")` find the same node.
 
 ## Working with the tree
 
-`Node` is a sealed class with exactly two forms, and each one owns only what is really its own: `InlineNode` (`Name: value`) has the optional value, the children and the child lookups (`getChildren()`, `getChild(name)`, `getChildren(name)`); `TextNode` (`Name >>`) has the literal text lines and nothing else. What they share lives in `Node`: name and canonical name, declared and effective namespace, source line, parent (always an `InlineNode`) and `getText()`, the value of an inline node or the joined lines of a text node. Walking a tree therefore asks for the form (`instanceof InlineNode inline`), the same way the canonical tree of STXT-TREE-SPEC has `children` only for inline nodes.
+`Node` is a sealed class with two forms:
 
-Trees are mutable and keep their own integrity: every node knows its parent, `addChild` links both ends and refuses a node that already has one, and `removeChild` / `detach()` undo it. Levels are derived from the chain of parents; the source line is only set by the parser.
+| Class | Syntax | What it has |
+|---|---|---|
+| `InlineNode` | `Name: value` | The optional value, the children and the child lookups: `getChildren()`, `getChild(name)`, `getChildren(name)` |
+| `TextNode` | `Name >>` | The literal text lines |
+
+Both share what is in `Node`: the name and the canonical name, the declared and the effective
+namespace, the source line, the parent (always an `InlineNode`) and `getText()`.
+The form of a node is told apart with `instanceof`.
+
+Trees are mutable, and every node knows its parent:
 
 ```java
 import dev.stxt.InlineNode;
@@ -129,11 +143,18 @@ for (Node child : email.getChildren()) {
 }
 ```
 
-Overloads with two strings always take the second one as the *content* (value or text); the namespace only appears in the three-argument forms. Adding a node that already has a parent throws `NODE_ALREADY_ATTACHED`; adding an ancestor throws `NODE_CYCLE`.
+- In the overloads with two strings, the second one is the *content* (value or text). The namespace only appears in the three-argument forms.
+- Adding a node that already has a parent throws `NODE_ALREADY_ATTACHED`. Adding an ancestor throws `NODE_CYCLE`.
+- The level is derived from the chain of parents. The source line is only set by the parser.
 
 ## Validating against a schema
 
-Schemas are themselves STXT documents, written in the reserved `@stxt.schema` namespace (or in the `@stxt.template` form, which compiles to a schema). A `ResourcesLoader` says where they live; `STXT.parser(loader)` returns a parser that resolves both kinds, caches them, and validates every namespaced node as it is closed. Nodes without a namespace are let through by the `SchemaValidator` itself (STXT-SCHEMA-SPEC §5): a document without a namespace is not wrong, it just cannot be validated.
+Schemas are STXT documents, written in the `@stxt.schema` namespace, or in the shorter
+`@stxt.template` form, which compiles to a schema.
+
+A `ResourcesLoader` says where they live. `STXT.parser(loader)` returns a parser that resolves
+both kinds, caches them, and validates every node with a namespace as it is closed. Nodes
+without a namespace are not validated (STXT-SCHEMA-SPEC §5).
 
 `ResourcesLoaderDirectory` expects this layout on disk:
 
@@ -181,11 +202,17 @@ Schema (@stxt.schema): blog.post
     Node: Author
 ```
 
-Available value types: `INLINE`, `BLOCK`, `TEXT`, `MARKDOWN`, `BOOLEAN`, `INTEGER`, `NATURAL`, `NUMBER`, `DATE`, `TIME`, `TIMESTAMP`, `UUID`, `EMAIL`, `URL`, `HEXADECIMAL`, `BINARY`, `BASE64`, `GROUP`, `ENUM`.
+The value types are those of [STXT-SCHEMA-SPEC §9](https://stxt.dev/stxt-schema-ref#s9): `INLINE`, `BLOCK`, `TEXT`, `MARKDOWN`, `BOOLEAN`, `INTEGER`, `NATURAL`, `NUMBER`, `DATE`, `TIME`, `TIMESTAMP`, `UUID`, `EMAIL`, `URL`, `HEXADECIMAL`, `BINARY`, `BASE64`, `GROUP`, `ENUM`.
 
-To add your own, implement `dev.stxt.schema.Type` and register it in `TypeRegistry`.
+Schemas do not have to live on disk. Three providers take them as text, and all three implement
+`SchemaProvider`, so they go straight into a `SchemaValidator`:
 
-Schemas do not have to live on disk. `dev.stxt.runtime.UnifiedSchemaProvider` takes schema and template documents as text (`addFile`) and serves them by namespace, as do `SchemaProviderMemory` (`addSchema`) and `TemplateSchemaProviderMemory` (`addTemplate`); all three implement `SchemaProvider`, so they go straight into a `SchemaValidator`:
+| Provider | Method | Takes |
+|---|---|---|
+| `dev.stxt.runtime.UnifiedSchemaProvider` | `addFile` | Schema and template documents |
+| `SchemaProviderMemory` | `addSchema` | Schemas |
+| `TemplateSchemaProviderMemory` | `addTemplate` | Templates |
+
 
 ```java
 import dev.stxt.runtime.UnifiedSchemaProvider;
@@ -198,11 +225,27 @@ Parser parser = new Parser();
 parser.registerValidator(new SchemaValidator(provider));
 ```
 
-Discovery (STXT-DISCOVERY-SPEC) is in `dev.stxt.discovery`: `new DiscoveryResolver().resolve(documentDir)` builds the chain of `.stxt` directories and returns a `DiscoveryResult`, itself a `SchemaProvider`. The file system and the environment are injectable (`DiscoveryFileSystem`, `DiscoveryEnvironment`), so the resolver also works over an in-memory tree or a `java.nio.file.FileSystem` over a ZIP.
+## Finding the schemas: discovery
+
+Discovery (STXT-DISCOVERY-SPEC) is in `dev.stxt.discovery`. Given the directory of a document,
+it builds the chain of `.stxt` directories and returns a `DiscoveryResult`, which is also a
+`SchemaProvider`:
+
+```java
+DiscoveryResult result = new DiscoveryResolver().resolve(documentDir);
+```
+
+The file system and the environment can be replaced (`DiscoveryFileSystem`,
+`DiscoveryEnvironment`), so the resolver also works over an in-memory tree, or over a
+`java.nio.file.FileSystem` on a ZIP.
 
 ## Observing the parse
 
-The parser itself knows nothing about schemas: validation is a decoupled layer plugged in through two hooks. `Observer` receives streaming callbacks while the document is parsed, which is useful for syntax highlighting, indexes or any per-node bookkeeping.
+The parser knows nothing about schemas. Validation is a separate layer, plugged in through two
+extension points: `Observer` and `Validator`.
+
+An `Observer` receives calls while the document is parsed. It is useful for syntax highlighting
+or for indexes.
 
 ```java
 import java.util.List;
@@ -238,9 +281,9 @@ parser.registerObserver(new Observer() {
 parser.registerValidator(node -> List.<ValidationException>of());
 ```
 
-`StreamObserver` watches the results instead of the process: each completed root node and each
-error, in every mode. With `parseStream` the parser retains nothing (no nodes, no errors), so a
-file larger than memory can be processed one root tree at a time:
+A `StreamObserver` receives the results: each completed root node and each error. With
+`parseStream` the parser retains no nodes or errors, so a file larger than memory can be
+processed one root tree at a time:
 
 ```java
 import java.io.FileReader;
@@ -270,11 +313,16 @@ try (FileReader reader = new FileReader("data.stxt", Constants.ENCODING)) {
 
 ## Parser limits
 
-The parser rejects hostile or runaway inputs by default (STXT-SPEC §11.2): documents nesting
-more than 100 levels, lines longer than 10 000 characters, or inputs over 10 000 000
-characters. A limit error is a `LimitException` (`LIMIT_NESTING_EXCEEDED`,
-`LIMIT_LINE_LENGTH_EXCEEDED`, `LIMIT_INPUT_SIZE_EXCEEDED`) and aborts the parse: it is always
-the last error reported. Each limit is configurable per parser; `-1` disables it:
+The parser applies three limits by default (STXT-SPEC §11.2):
+
+| Limit | Default | Error code |
+|---|---|---|
+| Nesting depth | 100 levels | `LIMIT_NESTING_EXCEEDED` |
+| Line length | 10 000 characters | `LIMIT_LINE_LENGTH_EXCEEDED` |
+| Input size | 10 000 000 characters | `LIMIT_INPUT_SIZE_EXCEEDED` |
+
+A limit error is a `LimitException`, and it aborts the parse: it is always the last error
+reported. Each limit is configurable per parser, and `-1` disables it:
 
 ```java
 Parser parser = new Parser();
@@ -298,11 +346,10 @@ String docs = NodeWriter.toSTXT(result.getNodes(), IndentStyle.SPACES_4);
 
 Writing a tree out and parsing it back yields the same tree, in both indentation styles.
 
-`NodeWriter` re-serializes the tree, so comments and blank lines are gone. To reformat a document
-**keeping everything the author wrote**, use `Formatter`: it rewrites the original text line by
-line (node lines in canonical form, block lines re-indented to their block, comments and blank
-lines kept with their indentation units converted) and reports the syntax errors it met, so the
-caller decides what to do with a document that does not parse.
+`NodeWriter` writes the tree, so comments and blank lines are lost.
+
+`Formatter` reformats a document **keeping the comments and the blank lines**. It rewrites the
+original text line by line, and returns the text together with the syntax errors it found.
 
 ```java
 import dev.stxt.runtime.Formatter;
@@ -314,8 +361,7 @@ if (formatted.errors().isEmpty()) {
 }
 ```
 
-An overload takes the parser limits, since formatting parses the document with them
-(STXT-SPEC §11.2; `-1` disables one):
+Formatting parses the document, so an overload takes the limits of the parser:
 `Formatter.format(source, IndentStyle.TABS, 100, 10000, -1)`.
 
 ## Errors
@@ -334,7 +380,14 @@ Every failure is an unchecked `dev.stxt.exceptions.STXTException` carrying an up
 
 ## Conformance
 
-`dev.stxt:stxt-core` implements the five STXT specifications as of `SPEC_VERSION` (the date of the STXT-SPEC text it implements, exposed by the package; the package version is independent) and passes every case of the official conformance kit, [`stxt-lang/conformance`](https://github.com/stxt-lang/stxt-lang/tree/master/conformance), across all its profiles: `core`, `schema`, `template`, `discovery` and `text`. The kit is the same one any other implementation can run, which is what makes the three ports interchangeable. What is frozen, and what is not, is stated at <https://stxt.dev/stability>: the specifications carry a date and a status instead of a version number.
+`dev.stxt:stxt-core` implements the five STXT specifications, and passes every case of the
+[conformance kit](https://github.com/stxt-lang/stxt-lang/tree/master/conformance) in all its
+profiles: `core`, `schema`, `template`, `discovery` and `text`. It is the same kit the other
+implementations run.
+
+`SPEC_VERSION` is the date of the STXT-SPEC text the library implements. The library version is
+independent, and follows semver. The specifications carry a date and a status, not a version
+number: see <https://stxt.dev/stability>.
 
 ## License
 
