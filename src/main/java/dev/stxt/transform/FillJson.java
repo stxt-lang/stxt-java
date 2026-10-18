@@ -11,6 +11,7 @@ import dev.stxt.Node;
 import dev.stxt.TextNode;
 import dev.stxt.exceptions.LimitException;
 import dev.stxt.exceptions.TransformException;
+import dev.stxt.utils.StringUtils;
 
 /**
  * The fill of Slots of STXT-TRANSFORM-SPEC with JSON data. The specification is in
@@ -33,6 +34,8 @@ import dev.stxt.exceptions.TransformException;
  *     nothing but that navigation: no more navigation, no text, no children, no more lines.
  * <li>The filled node keeps the form it has: a value with line breaks is an error inline, and
  *     several lines in a block.
+ * <li>The filled document has the tree its text would give: an inline value without blanks at
+ *     either end, and a block without trailing blanks in its lines nor final empty lines.
  * <li>Blanks are allowed between the navigation Slots and before the text.
  * </ul>
  *
@@ -193,13 +196,18 @@ public final class FillJson {
 		return filled;
 	}
 
-	// The node in the form it has in the document with Slots
+	// The node in the form it has in the document with Slots, normalized as the parser would
+	// read its text: the lines of a block without trailing blanks (STXT-SPEC 10.2) nor final empty
+	// lines (10.3), and an inline value without blanks at either end (5.1, done by InlineNode)
 	private static Node newNode(Node node, List<String> text) {
 		if (node instanceof TextNode) {
 			List<String> lines = new ArrayList<>();
 			for (String t : text)
-				lines.addAll(List.of(t.split("\n", -1)));
-			return new TextNode(node.getName(), node.getDeclaredNamespace(), lines);
+				for (String line : t.split("\n", -1))
+					lines.add(StringUtils.rightTrim(line));
+			TextNode block = new TextNode(node.getName(), node.getDeclaredNamespace(), lines);
+			block.removeTrailingEmptyLines();
+			return block;
 		}
 		String value = text.get(0);
 		if (value.indexOf('\n') >= 0)

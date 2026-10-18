@@ -4,9 +4,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 
 import dev.stxt.Parser;
+import dev.stxt.TextNode;
 import dev.stxt.exceptions.TransformException;
 import dev.stxt.runtime.TreeJson;
 
@@ -369,6 +372,28 @@ public class FillJsonTest {
 	void dataWithLineBreaksIsAnErrorInlineAndSeveralLinesInABlock() {
 		assertFails("SLOT_DATA_MISMATCH", "An inline value cannot have line breaks", doc("Nota: <t>"), "{'t': 'uno\\ndos'}");
 		assertFills(doc("Nota >>", "\tA: uno", "\tdos."), doc("Nota >>", "\tA: <t>."), "{'t': 'uno\\ndos'}");
+	}
+
+	@Test
+	void theFilledDocumentHasTheTreeItsTextWouldGive() {
+		// Inline: no blanks at either end (STXT-SPEC 5.1); inside the text, they stay
+		assertFills(doc("Nota: hola"), doc("Nota: <t>"), "{'t': '  hola \\t'}");
+		assertFills(doc("Nota: [ a  ]"), doc("Nota: [<t>]"), "{'t': ' a  '}");
+		// Block: the leading blanks of a line and the empty lines in between are content; the
+		// trailing blanks (10.2) and the final empty lines (10.3) are not
+		String data = "{'t': '  uno  \\n\\ndos\\t\\n  \\n\\n'}";
+		assertFills(doc("Nota >>", "\t  uno", "\t", "\tdos"), doc("Nota >>", "\t<t>"), data);
+		TextNode block = (TextNode) new FillJson().fill(new Parser().parse(doc("Nota >>", "\t<t>")), json(data)).get(0);
+		assertEquals(List.of("  uno", "", "dos"), block.getTextLines());
+	}
+
+	@Test
+	void theTextOfABlockAroundTheDataIsNormalizedToo() {
+		// An optional Slot with no data leaves a blank at the end of a line, and a last line empty
+		assertFills(doc("Nota >>", "\tA: x", "\tB"), doc("Nota >>", "\tA: <t> ?<falta>", "\tB", "\t?<falta>"), "{'t': 'x'}");
+		TextNode block = (TextNode) new FillJson().fill(new Parser().parse(doc("Nota >>", "\tA: <t> ?<falta>", "\tB", "\t?<falta>")),
+				json("{'t': 'x'}")).get(0);
+		assertEquals(List.of("A: x", "B"), block.getTextLines());
 	}
 
 	// ----------------------------------------------------------------
