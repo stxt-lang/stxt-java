@@ -191,11 +191,16 @@ public final class JsonTransform {
 		else
 			value = json.asText();
 
-		// The schema decides the form where it leaves no choice; where it allows both (TEXT,
-		// MARKDOWN), a text with more than one line can only be a block
-		if ("BLOCK".equals(def.getType()) || value.indexOf('\n') >= 0)
+		// The schema decides the form where it leaves no choice. Where it allows both (TEXT,
+		// MARKDOWN), the form that loses less: a block for a text with more than one line or with
+		// leading blanks, which an inline value would trim; inline otherwise
+		if ("BLOCK".equals(def.getType()) || value.indexOf('\n') >= 0 || startsWithBlank(value))
 			return new TextNode(def.getName(), namespace, value);
 		return new InlineNode(def.getName(), namespace, value);
+	}
+
+	private static boolean startsWithBlank(String value) {
+		return !value.isEmpty() && (value.charAt(0) == ' ' || value.charAt(0) == '\t');
 	}
 
 	// ----------------------------------------------------------------
