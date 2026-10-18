@@ -21,8 +21,10 @@ import dev.stxt.utils.StringUtils;
  * <p>It reads the shape that {@link ExportJson} writes, with the same rules in the other
  * direction. The schema gives what the JSON does not carry: the name of the elements of a list,
  * the namespace of each node and, where the schema leaves the choice, the form of the node.
- * Keys are matched with the children of the schema by canonical name. The root node is not
- * wrapped in the JSON: the import is told its name and namespace.
+ * Keys are matched with the children of the schema by canonical name. A string, a number or a
+ * boolean is accepted for any node with no children, whatever its type, and written as text:
+ * the validation of the imported document says whether it fits. The root node is not wrapped in
+ * the JSON: the import is told its name and namespace.
  */
 public final class ImportJson {
 	private final Definitions definitions;
