@@ -34,11 +34,11 @@ import dev.stxt.TextNode;
  *     nothing but that navigation: no more navigation, no text, no children, no more lines.
  * <li>The filled node keeps the form it has: a value with line breaks is an error inline, and
  *     several lines in a block.
+ * <li>Blanks are allowed between the navigation Slots and before the text.
  * </ul>
  *
  * <p>Neither a definition nor a namespace is needed, and the document with Slots is not
- * validated. Blanks between the navigation Slots are allowed here; the specification does not
- * say it yet.
+ * validated.
  */
 public final class FillJson {
 	// A Slot: an optional leading ?, and a name between <>, [] or {}
