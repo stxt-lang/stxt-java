@@ -14,7 +14,7 @@ import dev.stxt.runtime.UnifiedSchemaProvider;
 import dev.stxt.schema.SchemaValidator;
 
 /**
- * Runs {@link JsonTransform} in both directions: exports a document to JSON, imports that JSON
+ * Runs {@link ExportJson} and {@link ImportJson}: exports a document to JSON, imports that JSON
  * back and checks that the tree is the same. With no arguments it uses the example below; with
  * two, a definition file and a document file.
  */
@@ -56,16 +56,15 @@ Server (com.example.servers):
 		UnifiedSchemaProvider schemas = new UnifiedSchemaProvider();
 		schemas.addFile(definition);
 		SchemaValidator validator = new SchemaValidator(schemas, true);
-		JsonTransform transform = new JsonTransform(schemas);
 
 		Node root = new Parser().parse(document).get(0);
 		check("document", validator.validate(root));
 
-		String json = transform.exportJson(root);
+		String json = new ExportJson(schemas).exportJson(root);
 		System.out.println("--- export: STXT to JSON");
 		System.out.println(json);
 
-		Node imported = transform.importJson(json, root.getName(), root.getNamespace());
+		Node imported = new ImportJson(schemas).importJson(json, root.getName(), root.getNamespace());
 		check("imported document", validator.validate(imported));
 		System.out.println("--- import: JSON to STXT");
 		System.out.print(NodeWriter.toSTXT(imported));
