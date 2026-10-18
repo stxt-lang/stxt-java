@@ -1,4 +1,4 @@
-package transforms;
+package dev.stxt.transform;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -16,7 +16,7 @@ import dev.stxt.runtime.TreeJson;
  * the specification shows; with two, a document with Slots and a JSON file.
  */
 public class DemoFillJson {
-	private static final String DOCUMENT = """
+	static final String DOCUMENT = """
 Order (com.example.orders): <number>
 	Date: <date>
 	Currency: EUR
@@ -42,7 +42,7 @@ Order (com.example.orders): <number>
 		Carrier: <carrier>
 """;
 
-	private static final String DATA = """
+	static final String DATA = """
 {
 	"number": "2026-0142",
 	"date": "2026-10-12",
@@ -61,7 +61,7 @@ Order (com.example.orders): <number>
 }
 """;
 
-	private static final String EXPECTED = """
+	static final String EXPECTED = """
 Order (com.example.orders): 2026-0142
 	Date: 2026-10-12
 	Currency: EUR

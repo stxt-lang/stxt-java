@@ -1,4 +1,4 @@
-package transforms;
+package dev.stxt.transform;
 
 import java.io.IOException;
 import java.nio.file.Files;
