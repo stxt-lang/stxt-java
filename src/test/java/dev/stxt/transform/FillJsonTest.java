@@ -91,7 +91,7 @@ public class FillJsonTest {
 	}
 
 	// ----------------------------------------------------------------
-	// <var>
+	// <var> and ${var}
 	// ----------------------------------------------------------------
 
 	@Test
@@ -103,43 +103,77 @@ public class FillJsonTest {
 	}
 
 	@Test
+	void aVarIsTheValueOfTheNodeAndCanHaveChildren() {
+		assertFills(doc("Pedido: 7", "\tFecha: hoy"), doc("Pedido: <n>", "\tFecha: <f>"), "{'n': 7, 'f': 'hoy'}");
+	}
+
+	@Test
+	void aVarEndsTheValue() {
+		String data = "{'a': 1, 'b': 2, 'producto': 'x', 'lineas': [{'producto': 'y'}]}";
+		assertFills(doc("V: 1"), doc("V: <a>  "), data);
+		assertFails("SLOT_MISPLACED", "Nothing can follow <a>, which is the value of the node", doc("V: <a> <b>"), data);
+		assertFails("SLOT_MISPLACED", "Nothing can follow <a>", doc("V: <a> (${b})"), data);
+		assertFails("SLOT_MISPLACED", "Nothing can follow <producto>", doc("Línea: <producto>[lineas]"), data);
+		assertFails("SLOT_MISPLACED", "Nothing can follow <producto>", doc("Línea: [lineas]<producto> extra"), data);
+	}
+
+	@Test
+	void aVarAndATextWithOnlyAVarGiveTheSame() {
+		assertFills(doc("A: hoy", "B: hoy"), doc("A: <f>", "B: ${f}"), "{'f': 'hoy'}");
+	}
+
+	@Test
 	void putsSeveralVarsInsideATextAndCopiesTheTextAround() {
 		assertFills(doc("Referencia: Pedido 2026-0142/Correos."),
-				doc("Referencia: Pedido <numero>/<transportista>."), "{'numero': '2026-0142', 'transportista': 'Correos'}");
+				doc("Referencia: Pedido ${numero}/${transportista}."), "{'numero': '2026-0142', 'transportista': 'Correos'}");
 	}
 
 	@Test
 	void putsVarsInAnyLineOfABlock() {
 		assertFills(doc("Instrucciones >>", "\tPedido 7, del lunes.", "\tEntregar por la mañana.", "\tFirma: Ana"),
-				doc("Instrucciones >>", "\tPedido <n>, del <dia>.", "\tEntregar por la mañana.", "\tFirma: <firma>"),
+				doc("Instrucciones >>", "\tPedido ${n}, del ${dia}.", "\tEntregar por la mañana.", "\tFirma: ${firma}"),
 				"{'n': 7, 'dia': 'lunes', 'firma': 'Ana'}");
 	}
 
 	// ----------------------------------------------------------------
-	// Names of Slots
+	// Names of Slots, and what is text
 	// ----------------------------------------------------------------
 
 	@Test
 	void aSlotNameHasAsciiLettersDigitsHyphensAndUnderscores() {
-		assertFills(doc("V: a b c d"), doc("V: <x1> <datos-cliente> <id_2> <X>"),
-				"{'x1': 'a', 'datos-cliente': 'b', 'id_2': 'c', 'X': 'd'}");
+		assertFills(doc("V: a b c d", "W: e"), doc("V: ${x1} ${datos-cliente} ${id_2} ${X}", "W: [mis-envios_2]"),
+				"{'x1': 'a', 'datos-cliente': 'b', 'id_2': 'c', 'X': 'd', 'mis-envios_2': ['e']}");
 	}
 
 	@Test
 	void whatDoesNotHaveTheFormOfASlotIsText() {
-		assertFills(doc("V: </p> <a href=\"x\"> <> <número> [] {}"), doc("V: </p> <a href=\"x\"> <> <número> [] {}"), "{}");
+		assertFills(doc("V: </p> <a href=\"x\"> <> <número> [] {} ${} ${a b} ${número} $x $"),
+				doc("V: </p> <a href=\"x\"> <> <número> [] {} ${} ${a b} ${número} $x $"), "{}");
 	}
 
 	@Test
-	void whatHasTheFormOfASlotIsASlotWithNoEscape() {
-		assertFails("SLOT_NO_DATA", "No data for <p>", doc("Html >>", "\t<p>Hola</p>"), "{}");
-		assertFails("SLOT_NO_DATA", "No data for <html>", doc("Formato: <html>"), "{}");
-		assertFills(doc("Html >>", "\t<b>Hola</p>"), doc("Html >>", "\t<p>Hola</p>"), "{'p': '<b>'}");
+	void inTheTextAngleSquareAndCurlyBracketsAreText() {
+		assertFills(doc("Etiqueta: Ver [nota] y {nota} en <b>", "Html >>", "\t<p>Hola, Ana</p>", "\t<br>"),
+				doc("Etiqueta: Ver [nota] y {nota} en <b>", "Html >>", "\t<p>Hola, ${nombre}</p>", "\t<br>"), "{'nombre': 'Ana'}");
+	}
+
+	@Test
+	void whatHasTheFormOfAVarIsAVar() {
+		assertFails("SLOT_NO_DATA", "No data for ${HOME}", doc("Script >>", "\techo \"${HOME}\""), "{}");
+	}
+
+	@Test
+	void twoDollarsBeforeABraceAreALiteralDollarAndBrace() {
+		assertFills(doc("Script >>", "\techo \"${HOME}\" 7"), doc("Script >>", "\techo \"$${HOME}\" ${n}"), "{'n': 7}");
+		assertFills(doc("V: ${n} es 7, ${a b}"), doc("V: $${n} es ${n}, $${a b}"), "{'n': 7}");
+		// Elsewhere, $$ is copied as it is
+		assertFills(doc("Fórmula >>", "\t$$x^2$$ y 7 $$"), doc("Fórmula >>", "\t$$x^2$$ y ${n} $$"), "{'n': 7}");
 	}
 
 	@Test
 	void aSlotNameIsLookedUpAsItIsWithCase() {
 		assertFails("SLOT_NO_DATA", "No data for <Fecha>", doc("Fecha: <Fecha>"), "{'fecha': 'hoy'}");
+		assertFails("SLOT_NO_DATA", "No data for ${Fecha}", doc("Fecha: ${Fecha}"), "{'fecha': 'hoy'}");
 	}
 
 	// ----------------------------------------------------------------
@@ -149,7 +183,7 @@ public class FillJsonTest {
 	@Test
 	void aSlotLooksUpItsDataInTheCurrentElementAndThenUpwards() {
 		assertFills(doc("Envío: Correos", "\tReferencia: 7/Correos", "Envío: DHL", "\tReferencia: 7/DHL"),
-				doc("Envío: [envios]<transportista>", "\tReferencia: <numero>/<transportista>"),
+				doc("Envío: [envios]<transportista>", "\tReferencia: ${numero}/${transportista}"),
 				"{'numero': 7, 'envios': [{'transportista': 'Correos'}, {'transportista': 'DHL'}]}");
 	}
 
@@ -181,19 +215,26 @@ public class FillJsonTest {
 	@Test
 	void everySlotIsRequired() {
 		assertFails("SLOT_NO_DATA", "No data for <cantidad>", doc("Cantidad: <cantidad>"), "{}");
+		assertFails("SLOT_NO_DATA", "No data for ${cantidad}", doc("Cantidad: ${cantidad} uds."), "{}");
 		assertFails("SLOT_NO_DATA", "No data for {cliente}", doc("Cliente: {cliente}"), "{}");
 		assertFails("SLOT_NO_DATA", "No data for [lineas]", doc("Línea: [lineas]"), "{}");
 	}
 
 	@Test
-	void anOptionalVarWithNoDataPutsNothingAndTheNodeStays() {
-		assertFills(doc("Cliente:", "\tTeléfono:"), doc("Cliente:", "\tTeléfono: ?<telefono>"), "{}");
+	void anOptionalVarWithNoDataRemovesTheNodeWithItsChildren() {
+		assertFills(doc("Cliente:"), doc("Cliente:", "\tTeléfono: ?<telefono>", "\t\tTipo: móvil"), "{}");
+		assertFills(doc("Cliente:", "\tTeléfono: 600"), doc("Cliente:", "\tTeléfono: ?<telefono>"), "{'telefono': 600}");
+	}
+
+	@Test
+	void anOptionalVarOfTheTextWithNoDataPutsNothingAndTheNodeStays() {
+		assertFills(doc("Cliente:", "\tTeléfono:"), doc("Cliente:", "\tTeléfono: ${?telefono}"), "{}");
 	}
 
 	@Test
 	void anOptionalVarInsideATextOnlyRemovesItsPiece() {
 		assertFills(doc("Referencia: 2026-0142", "Notas >>", "\tRevisión: ."),
-				doc("Referencia: <numero>?<revision>", "Notas >>", "\tRevisión: ?<revision>."), "{'numero': '2026-0142'}");
+				doc("Referencia: ${numero}${?revision}", "Notas >>", "\tRevisión: ${?revision}."), "{'numero': '2026-0142'}");
 	}
 
 	@Test
@@ -221,6 +262,7 @@ public class FillJsonTest {
 	void dataThatDoesNotFitItsSlotIsAnError() {
 		assertFails("SLOT_DATA_MISMATCH", "<cliente> expects a string, a number or a boolean", doc("Cliente: <cliente>"), "{'cliente': {}}");
 		assertFails("SLOT_DATA_MISMATCH", "<lineas> expects a string, a number or a boolean", doc("Línea: <lineas>"), "{'lineas': [1]}");
+		assertFails("SLOT_DATA_MISMATCH", "${cliente} expects a string, a number or a boolean", doc("Cliente: ${cliente}"), "{'cliente': {}}");
 		assertFails("SLOT_DATA_MISMATCH", "[lineas] expects an array", doc("Línea: [lineas]"), "{'lineas': 'x'}");
 		assertFails("SLOT_DATA_MISMATCH", "[lineas] expects an array", doc("Línea: [lineas]"), "{'lineas': {}}");
 		assertFails("SLOT_DATA_MISMATCH", "{cliente} expects an object", doc("Cliente: {cliente}"), "{'cliente': 'x'}");
@@ -263,14 +305,16 @@ public class FillJsonTest {
 	void aNodeThatTakesAValueFromTheListHasNothingElse() {
 		String data = "{'bultos': ['C-01', 'C-02'], 'peso': 3}";
 		assertFails("SLOT_MISPLACED", "has nothing else", doc("Bulto: [bultos] (caja)"), data);
-		assertFails("SLOT_MISPLACED", "has nothing else", doc("Bulto: [bultos]<peso>"), data);
+		assertFails("SLOT_MISPLACED", "has nothing else", doc("Bulto: [bultos] ${peso}"), data);
 		assertFails("SLOT_MISPLACED", "has nothing else", doc("Bulto: [bultos]", "\tPeso: <peso>"), data);
-		assertFails("SLOT_MISPLACED", "has nothing else", doc("Bulto >>", "\t[bultos]", "\tPeso: <peso>"), data);
+		assertFails("SLOT_MISPLACED", "has nothing else", doc("Bulto >>", "\t[bultos]", "\tPeso: ${peso}"), data);
 	}
 
 	@Test
 	void noNavigationCanFollowAListOfValues() {
-		assertFails("SLOT_MISPLACED", "nothing can follow it: {medidas}", doc("Bulto: [bultos]{medidas}"), "{'bultos': ['C-01'], 'medidas': {}}");
+		String data = "{'bultos': ['C-01'], 'medidas': {}, 'peso': 3}";
+		assertFails("SLOT_MISPLACED", "nothing can follow it: {medidas}", doc("Bulto: [bultos]{medidas}"), data);
+		assertFails("SLOT_MISPLACED", "nothing can follow it: <peso>", doc("Bulto: [bultos]<peso>"), data);
 	}
 
 	@Test
@@ -297,7 +341,8 @@ public class FillJsonTest {
 	void navigationIsAppliedFromLeftToRight() {
 		String data = "{'cliente': {'nombre': 'Atenea', 'direcciones': [{'calle': 'Mayor'}, {'calle': 'Sol'}]}}";
 		assertFills(doc("Dirección: Atenea, Mayor", "Dirección: Atenea, Sol"),
-				doc("Dirección: {cliente}[direcciones]<nombre>, <calle>"), data);
+				doc("Dirección: {cliente}[direcciones]${nombre}, ${calle}"), data);
+		assertFills(doc("Dirección: Mayor", "Dirección: Sol"), doc("Dirección: {cliente}[direcciones]<calle>"), data);
 	}
 
 	@Test
@@ -310,15 +355,14 @@ public class FillJsonTest {
 	void blanksAreAllowedBetweenTheNavigationAndBeforeTheText() {
 		String data = "{'cliente': {'direcciones': [{'calle': 'Mayor'}]}}";
 		assertFills(doc("Dirección: Mayor"), doc("Dirección: {cliente} [direcciones]   <calle>"), data);
-		assertFills(doc("Dirección: Mayor"), doc("Dirección: {cliente}\t[direcciones]<calle>"), data);
+		assertFills(doc("Dirección: Mayor"), doc("Dirección: {cliente}\t[direcciones]${calle}"), data);
 	}
 
 	@Test
-	void theTextCannotRepeatNorEnter() {
-		String data = "{'producto': 'x', 'lineas': [], 'nota': {}}";
-		assertFails("SLOT_MISPLACED", "Navigation only goes at the start of the value: [lineas]", doc("Línea: <producto>[lineas]"), data);
-		assertFails("SLOT_MISPLACED", "Navigation only goes at the start of the value: [nota]", doc("Etiqueta: Ver [nota]"), data);
-		assertFails("SLOT_MISPLACED", "Navigation only goes at the start of the value: {nota}", doc("Etiqueta: Ver {nota}"), data);
+	void theTextCannotRepeatNorEnterNorBeTheValue() {
+		// What would be navigation is text once the text has started
+		assertFills(doc("Línea: x [lineas] {nota} <producto>"), doc("Línea: ${producto} [lineas] {nota} <producto>"),
+				"{'producto': 'x'}");
 	}
 
 	// ----------------------------------------------------------------
@@ -328,34 +372,32 @@ public class FillJsonTest {
 	@Test
 	void theFirstLineOfABlockWithOnlyNavigationIsNotCopied() {
 		assertFills(doc("Etiqueta >>", "\tTransportista: Correos", "Etiqueta >>", "\tTransportista: DHL"),
-				doc("Etiqueta >>", "\t[envios]", "\tTransportista: <transportista>"),
+				doc("Etiqueta >>", "\t[envios]", "\tTransportista: ${transportista}"),
 				"{'envios': [{'transportista': 'Correos'}, {'transportista': 'DHL'}]}");
 	}
 
 	@Test
 	void theFirstLineOfABlockWithMoreIsText() {
-		assertFills(doc("Etiqueta >>", "\tPedido 7"), doc("Etiqueta >>", "\tPedido <n>"), "{'n': 7}");
-		assertFails("SLOT_MISPLACED", "Navigation only goes at the start of the value: [envios]",
-				doc("Etiqueta >>", "\t[envios] Pedido", "\tTexto"), "{'envios': []}");
-		assertFails("SLOT_MISPLACED", "Navigation only goes at the start of the value: [envios]",
-				doc("Etiqueta >>", "\tPedido", "\t[envios]"), "{'envios': []}");
+		assertFills(doc("Etiqueta >>", "\tPedido 7"), doc("Etiqueta >>", "\tPedido ${n}"), "{'n': 7}");
+		assertFills(doc("Etiqueta >>", "\t[envios] Pedido", "\tTexto"), doc("Etiqueta >>", "\t[envios] Pedido", "\tTexto"), "{}");
+		assertFills(doc("Etiqueta >>", "\tPedido", "\t[envios]"), doc("Etiqueta >>", "\tPedido", "\t[envios]"), "{}");
+	}
+
+	@Test
+	void aVarIsNeverNavigationInABlock() {
+		assertFills(doc("Html >>", "\t<html>", "\t<p>x</p>"), doc("Html >>", "\t<html>", "\t<p>${t}</p>"), "{'t': 'x', 'html': 'no'}");
+		assertFills(doc("Nota >>", "\t[envios]<t>"), doc("Nota >>", "\t[envios]<t>"), "{'envios': [{'t': 'x'}]}");
 	}
 
 	@Test
 	void anEmptyOrBlankFirstLineOfABlockIsText() {
-		assertFills(doc("Notas >>", "\t", "\tHola Ana"), doc("Notas >>", "\t", "\tHola <nombre>"), "{'nombre': 'Ana'}");
-		assertFills(doc("Notas >>", "\t", "\tHola Ana"), doc("Notas >>", "\t    ", "\tHola <nombre>"), "{'nombre': 'Ana'}");
-	}
-
-	@Test
-	void aBlockWithNavigationOnlyLaterIsAnError() {
-		assertFails("SLOT_MISPLACED", "Navigation only goes at the start of the value: [envios]",
-				doc("Etiqueta >>", "\t", "\t[envios]", "\tTexto"), "{'envios': []}");
+		assertFills(doc("Notas >>", "\t", "\tHola Ana"), doc("Notas >>", "\t", "\tHola ${nombre}"), "{'nombre': 'Ana'}");
+		assertFills(doc("Notas >>", "\t", "\tHola Ana"), doc("Notas >>", "\t    ", "\tHola ${nombre}"), "{'nombre': 'Ana'}");
 	}
 
 	@Test
 	void aBlockKeepsTheIndentationOfItsLines() {
-		assertFills(doc("Código >>", "\tif x:", "\t    y = 1"), doc("Código >>", "\tif <cond>:", "\t    y = <v>"),
+		assertFills(doc("Código >>", "\tif x:", "\t    y = 1"), doc("Código >>", "\tif ${cond}:", "\t    y = ${v}"),
 				"{'cond': 'x', 'v': 1}");
 	}
 
@@ -365,33 +407,34 @@ public class FillJsonTest {
 
 	@Test
 	void theNodeKeepsItsForm() {
-		assertFills(doc("Nota: hola", "Texto >>", "\thola"), doc("Nota: <t>", "Texto >>", "\t<t>"), "{'t': 'hola'}");
+		assertFills(doc("Nota: hola", "Texto >>", "\thola"), doc("Nota: <t>", "Texto >>", "\t${t}"), "{'t': 'hola'}");
 	}
 
 	@Test
 	void dataWithLineBreaksIsAnErrorInlineAndSeveralLinesInABlock() {
 		assertFails("SLOT_DATA_MISMATCH", "An inline value cannot have line breaks", doc("Nota: <t>"), "{'t': 'uno\\ndos'}");
-		assertFills(doc("Nota >>", "\tA: uno", "\tdos."), doc("Nota >>", "\tA: <t>."), "{'t': 'uno\\ndos'}");
+		assertFails("SLOT_DATA_MISMATCH", "An inline value cannot have line breaks", doc("Nota: A ${t}"), "{'t': 'uno\\ndos'}");
+		assertFills(doc("Nota >>", "\tA: uno", "\tdos."), doc("Nota >>", "\tA: ${t}."), "{'t': 'uno\\ndos'}");
 	}
 
 	@Test
 	void theFilledDocumentHasTheTreeItsTextWouldGive() {
 		// Inline: no blanks at either end (STXT-SPEC 5.1); inside the text, they stay
 		assertFills(doc("Nota: hola"), doc("Nota: <t>"), "{'t': '  hola \\t'}");
-		assertFills(doc("Nota: [ a  ]"), doc("Nota: [<t>]"), "{'t': ' a  '}");
+		assertFills(doc("Nota: [ a  ]"), doc("Nota: [${t}]"), "{'t': ' a  '}");
 		// Block: the leading blanks of a line and the empty lines in between are content; the
 		// trailing blanks (10.2) and the final empty lines (10.3) are not
 		String data = "{'t': '  uno  \\n\\ndos\\t\\n  \\n\\n'}";
-		assertFills(doc("Nota >>", "\t  uno", "\t", "\tdos"), doc("Nota >>", "\t<t>"), data);
-		TextNode block = (TextNode) new FillJson().fill(new Parser().parse(doc("Nota >>", "\t<t>")), json(data)).get(0);
+		assertFills(doc("Nota >>", "\t  uno", "\t", "\tdos"), doc("Nota >>", "\t${t}"), data);
+		TextNode block = (TextNode) new FillJson().fill(new Parser().parse(doc("Nota >>", "\t${t}")), json(data)).get(0);
 		assertEquals(List.of("  uno", "", "dos"), block.getTextLines());
 	}
 
 	@Test
 	void theTextOfABlockAroundTheDataIsNormalizedToo() {
 		// An optional Slot with no data leaves a blank at the end of a line, and a last line empty
-		assertFills(doc("Nota >>", "\tA: x", "\tB"), doc("Nota >>", "\tA: <t> ?<falta>", "\tB", "\t?<falta>"), "{'t': 'x'}");
-		TextNode block = (TextNode) new FillJson().fill(new Parser().parse(doc("Nota >>", "\tA: <t> ?<falta>", "\tB", "\t?<falta>")),
+		assertFills(doc("Nota >>", "\tA: x", "\tB"), doc("Nota >>", "\tA: ${t} ${?falta}", "\tB", "\t${?falta}"), "{'t': 'x'}");
+		TextNode block = (TextNode) new FillJson().fill(new Parser().parse(doc("Nota >>", "\tA: ${t} ${?falta}", "\tB", "\t${?falta}")),
 				json("{'t': 'x'}")).get(0);
 		assertEquals(List.of("A: x", "B"), block.getTextLines());
 	}

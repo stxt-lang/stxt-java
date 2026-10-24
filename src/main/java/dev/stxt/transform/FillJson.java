@@ -18,18 +18,21 @@ import dev.stxt.utils.StringUtils;
  * {@code Genesis}, and these rules are the ones of its example in §4: they may change with it.
  *
  * <ul>
- * <li>A Slot is {@code <var>} (puts a value), {@code {object}} (enters an object) or
- *     {@code [list]} (repeats the node once for every element), with a name of ASCII letters,
- *     digits, {@code -} and {@code _}. Everything with that form is a Slot.
- * <li>The value of a node starts with its navigation, {@code [list]} and {@code {object}} only,
- *     applied from left to right; the rest is text, where only {@code <var>} may appear. In a
- *     block, the first line is the navigation when it has some and nothing else, and it is not
- *     copied.
+ * <li>The value of a node starts with its navigation: {@code [list]} (repeats the node once for
+ *     every element), {@code {object}} (enters an object) and {@code <var>} (puts a value),
+ *     applied from left to right, with a name of ASCII letters, digits, {@code -} and {@code _}.
+ *     A {@code <var>} ends the value: only blanks can follow it. The rest of the value is text,
+ *     where {@code ${var}} puts a value; {@code <x>}, {@code [x]} and {@code {x}} are text there,
+ *     and <code>$${</code> is a literal <code>${</code>.
+ * <li>In a block, the first line is the navigation when it has {@code [list]} and
+ *     {@code {object}} and nothing else, and it is not copied. A {@code <var>} is never navigation
+ *     in a block.
  * <li>A Slot looks its data up in the current element and then upwards to the root of the data.
  *     A {@code null} counts as absent.
- * <li>Every Slot is required unless it has a leading {@code ?}. With no data, {@code ?[list]} and
- *     {@code ?{object}} remove the node, with its children, and {@code ?<var>} puts nothing: only
- *     the navigation decides whether a node appears and how many times.
+ * <li>Every Slot is required unless it has a {@code ?}: {@code ?[list]}, {@code ?{object}},
+ *     {@code ?<var>} and {@code ${?var}}. With no data, the navigation removes the node, with its
+ *     children, and {@code ${?var}} puts nothing: only the navigation decides whether a node
+ *     appears and how many times.
  * <li>When the elements of a list are values, each one is the value of its node, which must have
  *     nothing but that navigation: no more navigation, no text, no children, no more lines.
  * <li>The filled node keeps the form it has: a value with line breaks is an error inline, and
@@ -43,13 +46,12 @@ import dev.stxt.utils.StringUtils;
  * validated.
  */
 public final class FillJson {
-	// A Slot: an optional leading ?, and a name between <>, [] or {}
-	private static final Pattern SLOT = Pattern.compile("(\\?)?(?:<([A-Za-z0-9_-]+)>|\\[([A-Za-z0-9_-]+)\\]|\\{([A-Za-z0-9_-]+)\\})");
+	// A Slot of the navigation: an optional leading ?, and a name between [], {} or <>
+	private static final Pattern NAVIGATION = Pattern.compile("(\\?)?(?:\\[([A-Za-z0-9_-]+)\\]|\\{([A-Za-z0-9_-]+)\\}|<([A-Za-z0-9_-]+)>)");
+	// A Slot of the text, ${var} or ${?var}, and the escape $${, which is a literal ${
+	private static final Pattern TEXT = Pattern.compile("\\$\\$\\{|\\$\\{(\\?)?([A-Za-z0-9_-]+)\\}");
 
 	private record Slot(char kind, String name, boolean optional, String source) {
-		boolean isNavigation() {
-			return kind != '<';
-		}
 	}
 
 	// Where Slots are looked up: the current element and, above it, what contains it
@@ -60,6 +62,10 @@ public final class FillJson {
 					return object.get(name);
 			return null;
 		}
+	}
+
+	// A copy of the node: where its Slots are looked up, and the value a <var> gives it, if any
+	private record Copy(Context context, Object value) {
 	}
 
 	/**
@@ -88,7 +94,7 @@ public final class FillJson {
 		if (node instanceof TextNode block) {
 			List<String> lines = block.getTextLines();
 			// The first line is the navigation if it has some and nothing else; an empty or blank line is text
-			if (!lines.isEmpty() && lines.get(0).substring(readNavigation(lines.get(0), navigation)).isBlank()
+			if (!lines.isEmpty() && lines.get(0).substring(readNavigation(node, lines.get(0), navigation)).isBlank()
 					&& !navigation.isEmpty()) {
 				text.addAll(lines.subList(1, lines.size()));
 			} else {
@@ -97,44 +103,51 @@ public final class FillJson {
 			}
 		} else {
 			String value = ((InlineNode) node).getValue();
-			text.add(value.substring(readNavigation(value, navigation)));
+			text.add(value.substring(readNavigation(node, value, navigation)));
 		}
-		for (String line : text)
-			for (Slot slot : slotsOf(line))
-				if (slot.isNavigation())
-					throw error(node, "SLOT_MISPLACED", "Navigation only goes at the start of the value: " + slot.source());
 
 		List<Node> filled = new ArrayList<>();
-		for (Context element : navigate(node, navigation, context))
-			filled.add(Json.isValue(element.data()) ? fillWithElement(node, text, element) : fillWithText(node, text, element));
+		for (Copy copy : navigate(node, navigation, context))
+			filled.add(Json.isValue(copy.context().data()) ? fillWithElement(node, text, copy.context()) : fillWithText(node, text, copy));
 		return filled;
 	}
 
-	// Reads the [list] and {object} at the start of a value and returns where its text begins
-	private static int readNavigation(String value, List<Slot> navigation) {
-		Matcher m = SLOT.matcher(value);
+	// Reads the navigation at the start of a value and returns where its text begins. A <var> is
+	// navigation only inline, and it ends the value: only blanks can follow it
+	private static int readNavigation(Node node, String value, List<Slot> navigation) {
+		Matcher m = NAVIGATION.matcher(value);
 		int end = 0;
 		while (true) {
-			int start = end;
-			while (start < value.length() && (value.charAt(start) == ' ' || value.charAt(start) == '\t'))
-				start++;
-			m.region(start, value.length());
+			m.region(skipBlanks(value, end), value.length());
 			if (!m.lookingAt())
 				return end;
 			Slot slot = slotOf(m);
-			if (!slot.isNavigation())
-				return end;
+			if (slot.kind() == '<') {
+				if (node instanceof TextNode)
+					return end;
+				if (skipBlanks(value, m.end()) < value.length())
+					throw error(node, "SLOT_MISPLACED", "Nothing can follow " + slot.source() + ", which is the value of the node");
+				navigation.add(slot);
+				return value.length();
+			}
 			navigation.add(slot);
 			end = m.end();
 		}
 	}
 
-	// One context for every copy of the node: none if an optional Slot has no data
-	private static List<Context> navigate(Node node, List<Slot> navigation, Context context) {
-		List<Context> current = List.of(context);
+	private static int skipBlanks(String value, int from) {
+		while (from < value.length() && (value.charAt(from) == ' ' || value.charAt(from) == '\t'))
+			from++;
+		return from;
+	}
+
+	// One copy for every element of the lists: none if an optional Slot has no data
+	private static List<Copy> navigate(Node node, List<Slot> navigation, Context context) {
+		List<Copy> current = List.of(new Copy(context, null));
 		for (Slot slot : navigation) {
-			List<Context> next = new ArrayList<>();
-			for (Context c : current) {
+			List<Copy> next = new ArrayList<>();
+			for (Copy copy : current) {
+				Context c = copy.context();
 				if (Json.isValue(c.data()))
 					throw error(node, "SLOT_MISPLACED", "A list of values gives the value of the node; nothing can follow it: " + slot.source());
 				Object data = c.lookup(slot.name());
@@ -146,16 +159,24 @@ public final class FillJson {
 				if (slot.kind() == '{') {
 					if (!(data instanceof Map))
 						throw error(node, "SLOT_DATA_MISMATCH", slot.source() + " expects an object, not " + Json.kind(data));
-					next.add(new Context(data, c));
-				} else {
+					next.add(new Copy(new Context(data, c), null));
+				} else if (slot.kind() == '[') {
 					for (Object e : checkList(node, slot, data))
 						if (e != null)
-							next.add(new Context(e, c));
+							next.add(new Copy(new Context(e, c), null));
+				} else {
+					next.add(new Copy(c, checkValue(node, slot, data)));
 				}
 			}
 			current = next;
 		}
 		return current;
+	}
+
+	private static Object checkValue(Node node, Slot slot, Object data) {
+		if (!Json.isValue(data))
+			throw error(node, "SLOT_DATA_MISMATCH", slot.source() + " expects a string, a number or a boolean, not " + Json.kind(data));
+		return data;
 	}
 
 	private static List<?> checkList(Node node, Slot slot, Object data) {
@@ -184,14 +205,17 @@ public final class FillJson {
 		return newNode(node, List.of(Json.text(element.data())));
 	}
 
-	private static Node fillWithText(Node node, List<String> text, Context context) {
+	private static Node fillWithText(Node node, List<String> text, Copy copy) {
 		List<String> lines = new ArrayList<>();
-		for (String line : text)
-			lines.add(substitute(node, line, context));
+		if (copy.value() != null)
+			lines.add(Json.text(copy.value()));
+		else
+			for (String line : text)
+				lines.add(substitute(node, line, copy.context()));
 		Node filled = newNode(node, lines);
 		if (filled instanceof InlineNode inline)
 			for (Node child : ((InlineNode) node).getChildren())
-				for (Node c : fillNode(child, context))
+				for (Node c : fillNode(child, copy.context()))
 					inline.addChild(c);
 		return filled;
 	}
@@ -215,42 +239,35 @@ public final class FillJson {
 		return new InlineNode(node.getName(), node.getDeclaredNamespace(), value);
 	}
 
-	// Puts the data of every <var>; the text around is copied as it is
+	// Puts the data of every ${var}; the text around is copied as it is, and $${ gives ${
 	private static String substitute(Node node, String text, Context context) {
-		Matcher m = SLOT.matcher(text);
+		Matcher m = TEXT.matcher(text);
 		StringBuilder out = new StringBuilder();
 		int last = 0;
 		while (m.find()) {
-			Slot slot = slotOf(m);
 			out.append(text, last, m.start());
+			last = m.end();
+			if (m.group(2) == null) {
+				out.append("${");
+				continue;
+			}
+			Slot slot = new Slot('$', m.group(2), m.group(1) != null, m.group());
 			Object data = context.lookup(slot.name());
 			if (data == null && !slot.optional())
 				throw error(node, "SLOT_NO_DATA", "No data for " + slot.source());
-			if (data != null) {
-				if (!Json.isValue(data))
-					throw error(node, "SLOT_DATA_MISMATCH", slot.source() + " expects a string, a number or a boolean, not " + Json.kind(data));
-				out.append(Json.text(data));
-			}
-			last = m.end();
+			if (data != null)
+				out.append(Json.text(checkValue(node, slot, data)));
 		}
 		return out.append(text, last, text.length()).toString();
-	}
-
-	private static List<Slot> slotsOf(String text) {
-		List<Slot> slots = new ArrayList<>();
-		Matcher m = SLOT.matcher(text);
-		while (m.find())
-			slots.add(slotOf(m));
-		return slots;
 	}
 
 	private static Slot slotOf(Matcher m) {
 		boolean optional = m.group(1) != null;
 		if (m.group(2) != null)
-			return new Slot('<', m.group(2), optional, m.group());
+			return new Slot('[', m.group(2), optional, m.group());
 		if (m.group(3) != null)
-			return new Slot('[', m.group(3), optional, m.group());
-		return new Slot('{', m.group(4), optional, m.group());
+			return new Slot('{', m.group(3), optional, m.group());
+		return new Slot('<', m.group(4), optional, m.group());
 	}
 
 	private static TransformException error(Node node, String code, String message) {

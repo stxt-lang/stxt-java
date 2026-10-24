@@ -31,15 +31,15 @@ Order (com.example.orders): <number>
 		Note: ?<note>
 	Shipment: [shipments]
 		Carrier: <carrier>
-		Reference: <number>/<carrier>
+		Reference: ${number}/${carrier}
 		Parcel: [parcels]
 	Instructions >>
-		Order <number>, dated <date>.
+		Order ${number}, dated ${date}.
 		Deliver in the morning.
 	Label >>
 		[shipments]
-		Order <number>
-		Carrier: <carrier>
+		Order ${number}
+		Carrier: ${carrier}
 """;
 
 	static final String DATA = """
@@ -68,7 +68,6 @@ Order (com.example.orders): 2026-0142
 	Customer:
 		Name: Athena Bookshop
 		Email: orders@athena.example
-		Phone:
 	Line: A5 notebook
 		Quantity: 40
 		Price: 3.25
@@ -76,7 +75,6 @@ Order (com.example.orders): 2026-0142
 	Line: HB pencil
 		Quantity: 200
 		Price: 0.45
-		Note:
 	Shipment:
 		Carrier: Royal Mail
 		Reference: 2026-0142/Royal Mail
