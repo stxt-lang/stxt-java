@@ -379,14 +379,28 @@ public class FillJsonTest {
 	@Test
 	void theFirstLineOfABlockWithMoreIsText() {
 		assertFills(doc("Etiqueta >>", "\tPedido 7"), doc("Etiqueta >>", "\tPedido ${n}"), "{'n': 7}");
-		assertFills(doc("Etiqueta >>", "\t[envios] Pedido", "\tTexto"), doc("Etiqueta >>", "\t[envios] Pedido", "\tTexto"), "{}");
 		assertFills(doc("Etiqueta >>", "\tPedido", "\t[envios]"), doc("Etiqueta >>", "\tPedido", "\t[envios]"), "{}");
+		assertFills(doc("Etiqueta >>", "\t<b>[nota]</b>"), doc("Etiqueta >>", "\t<b>[nota]</b>"), "{}");
+	}
+
+	@Test
+	void aFirstLineOfABlockThatStartsWithNavigationHasNothingElse() {
+		String data = "{'envios': [{'t': 'x'}], 'cliente': {}}";
+		String message = "The first line of a block that starts with navigation has nothing else: ";
+		assertFills(doc("Etiqueta >>", "\tx"), doc("Etiqueta >>", "\t  {cliente} [envios]  ", "\t${t}"),
+				"{'cliente': {'envios': [{'t': 'x'}]}}");
+		assertFails("SLOT_MISPLACED", message + "Pedido", doc("Etiqueta >>", "\t[envios] Pedido", "\tTexto"), data);
+		assertFails("SLOT_MISPLACED", message + "<t>", doc("Etiqueta >>", "\t[envios]<t>"), data);
+		assertFails("SLOT_MISPLACED", message + "${t}", doc("Etiqueta >>", "\t{cliente} ${t}"), data);
+		assertFails("SLOT_MISPLACED", message + "x", doc("Etiqueta >>", "\t[parece_navegacion]{pero-no-lo-es} x"), data);
+		// A Markdown link at the start of a block has the form of a Slot
+		assertFails("SLOT_MISPLACED", message + "(index)", doc("Menú >>", "\t[Inicio](index)"), data);
 	}
 
 	@Test
 	void aVarIsNeverNavigationInABlock() {
 		assertFills(doc("Html >>", "\t<html>", "\t<p>x</p>"), doc("Html >>", "\t<html>", "\t<p>${t}</p>"), "{'t': 'x', 'html': 'no'}");
-		assertFills(doc("Nota >>", "\t[envios]<t>"), doc("Nota >>", "\t[envios]<t>"), "{'envios': [{'t': 'x'}]}");
+		assertFills(doc("Html >>", "\t<b>[nota]</b> ${t}"), doc("Html >>", "\t<b>[nota]</b> ${t}"), "{'t': '${t}'}");
 	}
 
 	@Test

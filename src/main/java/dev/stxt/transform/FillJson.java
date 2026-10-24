@@ -24,9 +24,9 @@ import dev.stxt.utils.StringUtils;
  *     A {@code <var>} ends the value: only blanks can follow it. The rest of the value is text,
  *     where {@code ${var}} puts a value; {@code <x>}, {@code [x]} and {@code {x}} are text there,
  *     and <code>$${</code> is a literal <code>${</code>.
- * <li>In a block, the first line is the navigation when it has {@code [list]} and
- *     {@code {object}} and nothing else, and it is not copied. A {@code <var>} is never navigation
- *     in a block.
+ * <li>In a block, a first line that starts with {@code [list]} or {@code {object}} is the
+ *     navigation, has nothing else and is not copied; any other first line is text. A
+ *     {@code <var>} is never navigation in a block.
  * <li>A Slot looks its data up in the current element and then upwards to the root of the data.
  *     A {@code null} counts as absent.
  * <li>Every Slot is required unless it has a {@code ?}: {@code ?[list]}, {@code ?{object}},
@@ -93,13 +93,16 @@ public final class FillJson {
 		List<String> text = new ArrayList<>();
 		if (node instanceof TextNode block) {
 			List<String> lines = block.getTextLines();
-			// The first line is the navigation if it has some and nothing else; an empty or blank line is text
-			if (!lines.isEmpty() && lines.get(0).substring(readNavigation(node, lines.get(0), navigation)).isBlank()
-					&& !navigation.isEmpty()) {
-				text.addAll(lines.subList(1, lines.size()));
-			} else {
-				navigation.clear();
+			// A first line that starts with [list] or {object} is the navigation, and has nothing else;
+			// any other first line, an empty or blank one too, is text
+			String first = lines.isEmpty() ? "" : lines.get(0);
+			int end = skipBlanks(first, readNavigation(node, first, navigation));
+			if (navigation.isEmpty()) {
 				text.addAll(lines);
+			} else {
+				if (end < first.length())
+					throw error(node, "SLOT_MISPLACED", "The first line of a block that starts with navigation has nothing else: " + first.substring(end));
+				text.addAll(lines.subList(1, lines.size()));
 			}
 		} else {
 			String value = ((InlineNode) node).getValue();
