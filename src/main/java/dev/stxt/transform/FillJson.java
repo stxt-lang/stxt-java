@@ -24,9 +24,9 @@ import dev.stxt.utils.StringUtils;
  *     A {@code <var>} ends the value: only blanks can follow it. The rest of the value is text,
  *     where {@code ${var}} puts a value; {@code <x>}, {@code [x]} and {@code {x}} are text there,
  *     and <code>$${</code> is a literal <code>${</code>.
- * <li>In a block, a first line that starts with {@code [list]} or {@code {object}} is the
- *     navigation, has nothing else and is not copied; any other first line is text. A
- *     {@code <var>} is never navigation in a block.
+ * <li>In a block, a first line that starts with {@code [list]}, {@code {object}} or
+ *     {@code <var>} is the navigation, has nothing else and is not copied; any other first line
+ *     is text. A {@code <var>} puts the content of the block, which has no more lines.
  * <li>A Slot looks its data up in the current element and then upwards to the root of the data.
  *     A {@code null} counts as absent.
  * <li>Every Slot is required unless it has a {@code ?}: {@code ?[list]}, {@code ?{object}},
@@ -93,8 +93,8 @@ public final class FillJson {
 		List<String> text = new ArrayList<>();
 		if (node instanceof TextNode block) {
 			List<String> lines = block.getTextLines();
-			// A first line that starts with [list] or {object} is the navigation, and has nothing else;
-			// any other first line, an empty or blank one too, is text
+			// A first line that starts with [list], {object} or <var> is the navigation, and has nothing
+			// else; any other first line, an empty or blank one too, is text
 			String first = lines.isEmpty() ? "" : lines.get(0);
 			int end = skipBlanks(first, readNavigation(node, first, navigation));
 			if (navigation.isEmpty()) {
@@ -102,6 +102,9 @@ public final class FillJson {
 			} else {
 				if (end < first.length())
 					throw error(node, "SLOT_MISPLACED", "The first line of a block that starts with navigation has nothing else: " + first.substring(end));
+				Slot last = navigation.get(navigation.size() - 1);
+				if (last.kind() == '<' && lines.size() > 1)
+					throw error(node, "SLOT_MISPLACED", "A block whose content is " + last.source() + " has no more lines");
 				text.addAll(lines.subList(1, lines.size()));
 			}
 		} else {
@@ -115,8 +118,8 @@ public final class FillJson {
 		return filled;
 	}
 
-	// Reads the navigation at the start of a value and returns where its text begins. A <var> is
-	// navigation only inline, and it ends the value: only blanks can follow it
+	// Reads the navigation at the start of a value and returns where its text begins. A <var> ends
+	// the value: only blanks can follow it
 	private static int readNavigation(Node node, String value, List<Slot> navigation) {
 		Matcher m = NAVIGATION.matcher(value);
 		int end = 0;
@@ -126,8 +129,6 @@ public final class FillJson {
 				return end;
 			Slot slot = slotOf(m);
 			if (slot.kind() == '<') {
-				if (node instanceof TextNode)
-					return end;
 				if (skipBlanks(value, m.end()) < value.length())
 					throw error(node, "SLOT_MISPLACED", "Nothing can follow " + slot.source() + ", which is the value of the node");
 				navigation.add(slot);

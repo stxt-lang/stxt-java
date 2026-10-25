@@ -153,8 +153,9 @@ public class FillJsonTest {
 
 	@Test
 	void inTheTextAngleSquareAndCurlyBracketsAreText() {
-		assertFills(doc("Etiqueta: Ver [nota] y {nota} en <b>", "Html >>", "\t<p>Hola, Ana</p>", "\t<br>"),
-				doc("Etiqueta: Ver [nota] y {nota} en <b>", "Html >>", "\t<p>Hola, ${nombre}</p>", "\t<br>"), "{'nombre': 'Ana'}");
+		assertFills(doc("Etiqueta: Ver [nota] y {nota} en <b>", "Html >>", "\t<div class=\"saludo\">", "\t<p>Hola, Ana</p>", "\t<br>"),
+				doc("Etiqueta: Ver [nota] y {nota} en <b>", "Html >>", "\t<div class=\"saludo\">", "\t<p>Hola, ${nombre}</p>", "\t<br>"),
+				"{'nombre': 'Ana'}");
 	}
 
 	@Test
@@ -380,7 +381,7 @@ public class FillJsonTest {
 	void theFirstLineOfABlockWithMoreIsText() {
 		assertFills(doc("Etiqueta >>", "\tPedido 7"), doc("Etiqueta >>", "\tPedido ${n}"), "{'n': 7}");
 		assertFills(doc("Etiqueta >>", "\tPedido", "\t[envios]"), doc("Etiqueta >>", "\tPedido", "\t[envios]"), "{}");
-		assertFills(doc("Etiqueta >>", "\t<b>[nota]</b>"), doc("Etiqueta >>", "\t<b>[nota]</b>"), "{}");
+		assertFills(doc("Etiqueta >>", "\tVer <b>[nota]</b> <t>"), doc("Etiqueta >>", "\tVer <b>[nota]</b> <t>"), "{}");
 	}
 
 	@Test
@@ -390,7 +391,7 @@ public class FillJsonTest {
 		assertFills(doc("Etiqueta >>", "\tx"), doc("Etiqueta >>", "\t  {cliente} [envios]  ", "\t${t}"),
 				"{'cliente': {'envios': [{'t': 'x'}]}}");
 		assertFails("SLOT_MISPLACED", message + "Pedido", doc("Etiqueta >>", "\t[envios] Pedido", "\tTexto"), data);
-		assertFails("SLOT_MISPLACED", message + "<t>", doc("Etiqueta >>", "\t[envios]<t>"), data);
+		assertFails("SLOT_MISPLACED", "Nothing can follow <t>", doc("Etiqueta >>", "\t<t> Pedido"), data);
 		assertFails("SLOT_MISPLACED", message + "${t}", doc("Etiqueta >>", "\t{cliente} ${t}"), data);
 		assertFails("SLOT_MISPLACED", message + "x", doc("Etiqueta >>", "\t[parece_navegacion]{pero-no-lo-es} x"), data);
 		// A Markdown link at the start of a block has the form of a Slot
@@ -398,9 +399,23 @@ public class FillJsonTest {
 	}
 
 	@Test
-	void aVarIsNeverNavigationInABlock() {
-		assertFills(doc("Html >>", "\t<html>", "\t<p>x</p>"), doc("Html >>", "\t<html>", "\t<p>${t}</p>"), "{'t': 'x', 'html': 'no'}");
-		assertFills(doc("Html >>", "\t<b>[nota]</b> ${t}"), doc("Html >>", "\t<b>[nota]</b> ${t}"), "{'t': '${t}'}");
+	void aVarIsTheContentOfABlock() {
+		assertFills(doc("Notas >>", "\tuno", "\tdos"), doc("Notas >>", "\t<notas>"), "{'notas': 'uno\\ndos'}");
+		assertFills(doc("Notas >>", "\tuno", "\tdos"), doc("Notas >>", "\t${notas}"), "{'notas': 'uno\\ndos'}");
+		assertFills(doc("Nota >>", "\tx", "Nota >>", "\ty"), doc("Nota >>", "\t[envios]  <t>  "), "{'envios': [{'t': 'x'}, {'t': 'y'}]}");
+		assertFills(doc("Pedido: 7"), doc("Pedido: 7", "\tNotas >>", "\t\t?<notas>"), "{}");
+		assertFails("SLOT_NO_DATA", "No data for <notas>", doc("Notas >>", "\t<notas>"), "{}");
+		assertFails("SLOT_DATA_MISMATCH", "<notas> expects a string", doc("Notas >>", "\t<notas>"), "{'notas': {}}");
+	}
+
+	@Test
+	void aBlockWhoseContentIsAVarHasNoMoreLines() {
+		String data = "{'html': 'x', 'p': 'y'}";
+		assertFails("SLOT_MISPLACED", "A block whose content is <html> has no more lines", doc("Html >>", "\t<html>", "\t<p>${t}</p>"), data);
+		// An HTML or XML block cannot start with a tag that has the form of a Slot
+		assertFails("SLOT_MISPLACED", "Nothing can follow <p>", doc("Html >>", "\t<p>Hola</p>"), data);
+		assertFills(doc("Html >>", "\t<!DOCTYPE html>", "\t<p>x</p>"), doc("Html >>", "\t<!DOCTYPE html>", "\t<p>${t}</p>"), "{'t': 'x'}");
+		assertFills(doc("Html >>", "\tVer <b>[nota]</b> ${t}"), doc("Html >>", "\tVer <b>[nota]</b> ${t}"), "{'t': '${t}'}");
 	}
 
 	@Test
