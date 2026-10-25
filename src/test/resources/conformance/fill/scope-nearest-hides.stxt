@@ -1,4 +1,4 @@
-# The nearest data item hides the one above.
+# In the text, the nearest data item hides the one above.
 Customer: {customer}
-	Name: <name>
+	Name: ${name}
 Name: <name>

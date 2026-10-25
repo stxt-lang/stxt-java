@@ -27,8 +27,9 @@ import dev.stxt.utils.StringUtils;
  * <li>In a block, a first line that starts with {@code [list]}, {@code {object}} or
  *     {@code <var>} is the navigation, has nothing else and is not copied; any other first line
  *     is text. A {@code <var>} puts the content of the block, which has no more lines.
- * <li>A Slot looks its data up in the current element and then upwards to the root of the data.
- *     A {@code null} counts as absent.
+ * <li>A Slot of the navigation looks its data up only in the current element. A {@code ${var}}
+ *     looks it up in the current element and then upwards to the root of the data, until a level
+ *     has the key. A {@code null} counts as absent, and in the text it ends the lookup.
  * <li>Every Slot is required unless it has a {@code ?}: {@code ?[list]}, {@code ?{object}},
  *     {@code ?<var>} and {@code ${?var}}. With no data, the navigation removes the node, with its
  *     children, and {@code ${?var}} puts nothing: only the navigation decides whether a node
@@ -56,9 +57,16 @@ public final class FillJson {
 
 	// Where Slots are looked up: the current element and, above it, what contains it
 	private record Context(Object data, Context parent) {
+		// The navigation looks only in the current element
+		Object find(String name) {
+			return data instanceof Map<?, ?> object ? object.get(name) : null;
+		}
+
+		// The text goes upwards until a level has the key; a null there counts as absent and ends
+		// the lookup
 		Object lookup(String name) {
 			for (Context c = this; c != null; c = c.parent)
-				if (c.data instanceof Map<?, ?> object && object.get(name) != null)
+				if (c.data instanceof Map<?, ?> object && object.containsKey(name))
 					return object.get(name);
 			return null;
 		}
@@ -153,7 +161,7 @@ public final class FillJson {
 				Context c = copy.context();
 				if (Json.isValue(c.data()))
 					throw error(node, "SLOT_MISPLACED", "A list of values gives the value of the node; nothing can follow it: " + slot.source());
-				Object data = c.lookup(slot.name());
+				Object data = c.find(slot.name());
 				if (data == null) {
 					if (slot.optional())
 						continue;

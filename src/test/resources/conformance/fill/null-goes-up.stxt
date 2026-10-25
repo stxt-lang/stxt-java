@@ -1,3 +1,0 @@
-# A null counts as absent, and the lookup goes on upwards.
-Customer: {customer}
-	Name: <name>

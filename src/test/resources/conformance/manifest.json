@@ -273,7 +273,7 @@
       "id": "fill/scope-element-then-up",
       "category": "fill",
       "spec": "STXT-TRANSFORM-SPEC §4",
-      "description": "A Slot looks up its data item in the current element and then upwards.",
+      "description": "A ${var} looks up its data item in the current element and then upwards.",
       "input": "fill/scope-element-then-up.stxt",
       "data": "fill/scope-element-then-up.json",
       "expected": "fill/scope-element-then-up.expected.stxt"
@@ -282,10 +282,76 @@
       "id": "fill/scope-nearest-hides",
       "category": "fill",
       "spec": "STXT-TRANSFORM-SPEC §4",
-      "description": "The nearest data item hides the one above.",
+      "description": "In the text, the nearest data item hides the one above.",
       "input": "fill/scope-nearest-hides.stxt",
       "data": "fill/scope-nearest-hides.json",
       "expected": "fill/scope-nearest-hides.expected.stxt"
+    },
+    {
+      "id": "fill/scope-navigation-var-local",
+      "category": "fill-error",
+      "spec": "STXT-TRANSFORM-SPEC §4",
+      "description": "<var> looks up its data item only in the current element.",
+      "input": "fill/scope-navigation-var-local.stxt",
+      "data": "fill/scope-navigation-var-local.json",
+      "error": {
+        "code": "SLOT_NO_DATA",
+        "line": 3
+      }
+    },
+    {
+      "id": "fill/scope-navigation-list-local",
+      "category": "fill-error",
+      "spec": "STXT-TRANSFORM-SPEC §4",
+      "description": "[list] looks up its array only in the current element.",
+      "input": "fill/scope-navigation-list-local.stxt",
+      "data": "fill/scope-navigation-list-local.json",
+      "error": {
+        "code": "SLOT_NO_DATA",
+        "line": 3
+      }
+    },
+    {
+      "id": "fill/scope-navigation-object-local",
+      "category": "fill-error",
+      "spec": "STXT-TRANSFORM-SPEC §4",
+      "description": "{object} looks up its object only in the current element.",
+      "input": "fill/scope-navigation-object-local.stxt",
+      "data": "fill/scope-navigation-object-local.json",
+      "error": {
+        "code": "SLOT_NO_DATA",
+        "line": 3
+      }
+    },
+    {
+      "id": "fill/scope-optional-navigation-local",
+      "category": "fill",
+      "spec": "STXT-TRANSFORM-SPEC §4",
+      "description": "An optional Slot of the navigation with no data item in the current element removes the node, even if a level above has one.",
+      "input": "fill/scope-optional-navigation-local.stxt",
+      "data": "fill/scope-optional-navigation-local.json",
+      "expected": "fill/scope-optional-navigation-local.expected.stxt"
+    },
+    {
+      "id": "fill/scope-text-null-ends",
+      "category": "fill-error",
+      "spec": "STXT-TRANSFORM-SPEC §4",
+      "description": "In the text, a null counts as absent and ends the lookup.",
+      "input": "fill/scope-text-null-ends.stxt",
+      "data": "fill/scope-text-null-ends.json",
+      "error": {
+        "code": "SLOT_NO_DATA",
+        "line": 3
+      }
+    },
+    {
+      "id": "fill/scope-optional-text-null-ends",
+      "category": "fill",
+      "spec": "STXT-TRANSFORM-SPEC §4",
+      "description": "${?var} puts nothing for a null, even if a level above has the key.",
+      "input": "fill/scope-optional-text-null-ends.stxt",
+      "data": "fill/scope-optional-text-null-ends.json",
+      "expected": "fill/scope-optional-text-null-ends.expected.stxt"
     },
     {
       "id": "fill/object-node-and-children",
@@ -295,15 +361,6 @@
       "input": "fill/object-node-and-children.stxt",
       "data": "fill/object-node-and-children.json",
       "expected": "fill/object-node-and-children.expected.stxt"
-    },
-    {
-      "id": "fill/null-goes-up",
-      "category": "fill",
-      "spec": "STXT-TRANSFORM-SPEC §4",
-      "description": "A null counts as absent, and the lookup goes on upwards.",
-      "input": "fill/null-goes-up.stxt",
-      "data": "fill/null-goes-up.json",
-      "expected": "fill/null-goes-up.expected.stxt"
     },
     {
       "id": "fill/null-is-absent",
