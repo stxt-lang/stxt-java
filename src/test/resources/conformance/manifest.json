@@ -198,6 +198,15 @@
       "expected": "fill/not-slot-form-is-text.expected.stxt"
     },
     {
+      "id": "fill/question-mark-outside-is-text",
+      "category": "fill",
+      "spec": "STXT-TRANSFORM-SPEC §4",
+      "description": "A ? outside the delimiters is text: it does not make a Slot optional.",
+      "input": "fill/question-mark-outside-is-text.stxt",
+      "data": "fill/question-mark-outside-is-text.json",
+      "expected": "fill/question-mark-outside-is-text.expected.stxt"
+    },
+    {
       "id": "fill/text-brackets-are-text",
       "category": "fill",
       "spec": "STXT-TRANSFORM-SPEC §4",
@@ -426,7 +435,7 @@
       "id": "fill/optional-var-removes-node",
       "category": "fill",
       "spec": "STXT-TRANSFORM-SPEC §4",
-      "description": "?<var> with no data item removes the node, with its children.",
+      "description": "<?var> with no data item removes the node, with its children.",
       "input": "fill/optional-var-removes-node.stxt",
       "data": "fill/optional-var-removes-node.json",
       "expected": "fill/optional-var-removes-node.expected.stxt"
@@ -435,10 +444,19 @@
       "id": "fill/optional-var-with-data",
       "category": "fill",
       "spec": "STXT-TRANSFORM-SPEC §4",
-      "description": "?<var> with a data item puts it.",
+      "description": "<?var> with a data item puts it.",
       "input": "fill/optional-var-with-data.stxt",
       "data": "fill/optional-var-with-data.json",
       "expected": "fill/optional-var-with-data.expected.stxt"
+    },
+    {
+      "id": "fill/optional-list-object-with-data",
+      "category": "fill",
+      "spec": "STXT-TRANSFORM-SPEC §4",
+      "description": "[?list] and {?object} with a data item behave as [list] and {object}.",
+      "input": "fill/optional-list-object-with-data.stxt",
+      "data": "fill/optional-list-object-with-data.json",
+      "expected": "fill/optional-list-object-with-data.expected.stxt"
     },
     {
       "id": "fill/optional-text-var-node-stays",
@@ -462,7 +480,7 @@
       "id": "fill/optional-list-object-removed",
       "category": "fill",
       "spec": "STXT-TRANSFORM-SPEC §4",
-      "description": "?[list] and ?{object} with no data item remove the node, with its children.",
+      "description": "[?list] and {?object} with no data item remove the node, with its children.",
       "input": "fill/optional-list-object-removed.stxt",
       "data": "fill/optional-list-object-removed.json",
       "expected": "fill/optional-list-object-removed.expected.stxt"
@@ -471,7 +489,7 @@
       "id": "fill/optional-object-null",
       "category": "fill",
       "spec": "STXT-TRANSFORM-SPEC §4",
-      "description": "?{object} with a null removes the node.",
+      "description": "{?object} with a null removes the node.",
       "input": "fill/optional-object-null.stxt",
       "data": "fill/optional-object-null.json",
       "expected": "fill/optional-object-null.expected.stxt"
@@ -922,7 +940,7 @@
       "id": "fill/block-optional-var-removes",
       "category": "fill",
       "spec": "STXT-TRANSFORM-SPEC §4",
-      "description": "?<var> as the content of a block with no data item removes the block.",
+      "description": "<?var> as the content of a block with no data item removes the block.",
       "input": "fill/block-optional-var-removes.stxt",
       "data": "fill/block-optional-var-removes.json",
       "expected": "fill/block-optional-var-removes.expected.stxt"
@@ -983,6 +1001,15 @@
       "input": "fill/block-doctype.stxt",
       "data": "fill/block-doctype.json",
       "expected": "fill/block-doctype.expected.stxt"
+    },
+    {
+      "id": "fill/block-xml-declaration",
+      "category": "fill",
+      "spec": "STXT-TRANSFORM-SPEC §4",
+      "description": "An XML block can start with an XML declaration, which does not have the form of a Slot.",
+      "input": "fill/block-xml-declaration.stxt",
+      "data": "fill/block-xml-declaration.json",
+      "expected": "fill/block-xml-declaration.expected.stxt"
     },
     {
       "id": "fill/data-not-filled-again",

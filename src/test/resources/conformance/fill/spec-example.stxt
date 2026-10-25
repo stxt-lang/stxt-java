@@ -6,11 +6,11 @@ Order (com.example.orders): <number>
 		Name: <name>
 		Email: <email>
 		# The phone is optional
-		Phone: ?<phone>
+		Phone: <?phone>
 	Line: [lines]<product>
 		Quantity: <quantity>
 		Price: <price>
-		Note: ?<note>
+		Note: <?note>
 	Shipment: [shipments]
 		Carrier: <carrier>
 		Reference: ${number}/${carrier}

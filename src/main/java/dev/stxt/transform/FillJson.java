@@ -30,8 +30,9 @@ import dev.stxt.utils.StringUtils;
  * <li>A Slot of the navigation looks its data up only in the current element. A {@code ${var}}
  *     looks it up in the current element and then upwards to the root of the data, until a level
  *     has the key. A {@code null} counts as absent, and in the text it ends the lookup.
- * <li>Every Slot is required unless it has a {@code ?}: {@code ?[list]}, {@code ?{object}},
- *     {@code ?<var>} and {@code ${?var}}. With no data, the navigation removes the node, with its
+ * <li>Every Slot is required unless it has a {@code ?} after its opening delimiter:
+ *     {@code [?list]}, {@code {?object}}, {@code <?var>} and {@code ${?var}}; a {@code ?} outside
+ *     the delimiters is text. With no data, the navigation removes the node, with its
  *     children, and {@code ${?var}} puts nothing: only the navigation decides whether a node
  *     appears and how many times.
  * <li>When the elements of a list are values, each one is the value of its node, which must have
@@ -47,8 +48,9 @@ import dev.stxt.utils.StringUtils;
  * validated.
  */
 public final class FillJson {
-	// A Slot of the navigation: an optional leading ?, and a name between [], {} or <>
-	private static final Pattern NAVIGATION = Pattern.compile("(\\?)?(?:\\[([A-Za-z0-9_-]+)\\]|\\{([A-Za-z0-9_-]+)\\}|<([A-Za-z0-9_-]+)>)");
+	// A Slot of the navigation: a name between [], {} or <>, with an optional ? after the opening
+	// delimiter
+	private static final Pattern NAVIGATION = Pattern.compile("\\[(\\??)([A-Za-z0-9_-]+)\\]|\\{(\\??)([A-Za-z0-9_-]+)\\}|<(\\??)([A-Za-z0-9_-]+)>");
 	// A Slot of the text, ${var} or ${?var}, and the escape $${, which is a literal ${
 	private static final Pattern TEXT = Pattern.compile("\\$\\$\\{|\\$\\{(\\?)?([A-Za-z0-9_-]+)\\}");
 
@@ -273,12 +275,11 @@ public final class FillJson {
 	}
 
 	private static Slot slotOf(Matcher m) {
-		boolean optional = m.group(1) != null;
 		if (m.group(2) != null)
-			return new Slot('[', m.group(2), optional, m.group());
-		if (m.group(3) != null)
-			return new Slot('{', m.group(3), optional, m.group());
-		return new Slot('<', m.group(4), optional, m.group());
+			return new Slot('[', m.group(2), !m.group(1).isEmpty(), m.group());
+		if (m.group(4) != null)
+			return new Slot('{', m.group(4), !m.group(3).isEmpty(), m.group());
+		return new Slot('<', m.group(6), !m.group(5).isEmpty(), m.group());
 	}
 
 	private static TransformException error(Node node, String code, String message) {

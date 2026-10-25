@@ -1,4 +1,4 @@
-# ?{object} with a null removes the node.
+# {?object} with a null removes the node.
 Order: 1
-	Customer: ?{customer}
+	Customer: {?customer}
 		Name: <name>
