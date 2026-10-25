@@ -7,60 +7,121 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
+import org.junit.jupiter.api.function.Executable;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+import dev.stxt.Node;
 import dev.stxt.Parser;
-import dev.stxt.exceptions.TransformException;
+import dev.stxt.exceptions.ParseException;
 import dev.stxt.runtime.TreeJson;
+import dev.stxt.runtime.UnifiedSchemaProvider;
+import dev.stxt.schema.SchemaValidator;
 import test.Corpus;
 import test.FileTestLocation;
 import test.JSON;
 
 /**
  * The cases of STXT-TRANSFORM-SPEC (Genesis) in {@code src/test/resources/conformance}, written
- * as data with the layout of the conformance kit of stxt-lang ({@code manifest.json} plus one
- * folder per category), so that they can move to the kit when the specification has normative
- * rules.
+ * as data with the layout of the conformance kit of stxt-lang ({@code manifest.json}, one folder
+ * per operation and the definitions in {@code definitions/}), so that they can move to the kit
+ * when the specification has normative rules.
  *
  * <ul>
  * <li>{@code fill}: the input, filled with the JSON data, has the canonical tree of the expected
  * document, compared as a JSON value.</li>
  * <li>{@code fill-error}: the fill fails, and the error carries the expected code and line: the
  * line of the node in the input or, with {@code "in": "data"}, the line in the data.</li>
+ * <li>{@code export}: the root node of the input, exported with every set of definitions, equals
+ * the expected JSON as a value: members in order, numbers by their text in plain notation. This
+ * runner also compares the text, since the writer of this port follows the format of §3.1.</li>
+ * <li>{@code export-error}: the export fails with the expected code and line.</li>
+ * <li>{@code import}: the JSON input, imported as the given node, has the canonical tree of the
+ * expected document and, when the case says so, is valid or not.</li>
+ * <li>{@code import-error}: the import fails with the expected code and line (0 when the error
+ * is not about a line of the JSON).</li>
+ * <li>{@code json}: the JSON reader accepts the input, and its value equals the expected one.</li>
+ * <li>{@code json-error}: the JSON reader rejects the input with the expected code and line.</li>
  * </ul>
  */
 public class TransformCasesTest {
 
 	private static final File DIRECTORY = FileTestLocation.getFile("conformance");
 
+	private static String read(String path) {
+		return Corpus.read(new File(DIRECTORY, path));
+	}
+
 	private static String read(JsonNode c, String member) {
-		return Corpus.read(new File(DIRECTORY, c.get(member).asText()));
+		return read(c.get(member).asText());
+	}
+
+	private static List<UnifiedSchemaProvider> definitions(JsonNode c) {
+		List<UnifiedSchemaProvider> sets = new ArrayList<>();
+		for (JsonNode set: c.get("definitions")) {
+			UnifiedSchemaProvider provider = new UnifiedSchemaProvider();
+			set.forEach(file -> provider.addFile(read(file.asText())));
+			sets.add(provider);
+		}
+		return sets;
+	}
+
+	private static String canonical(String document) {
+		return TreeJson.toCanonicalJson(new Parser().parse(document));
+	}
+
+	// Two values of the JSON reader are the same with their members in the same order, and
+	// numbers with the same text in plain notation
+	private static void assertSameJson(Object expected, Object actual, String where) {
+		if (expected instanceof Map<?, ?> e && actual instanceof Map<?, ?> a) {
+			assertEquals(new ArrayList<>(e.keySet()), new ArrayList<>(a.keySet()), where + ": keys");
+			for (Object key: e.keySet())
+				assertSameJson(e.get(key), a.get(key), where + "." + key);
+		}
+		else if (expected instanceof List<?> e && actual instanceof List<?> a) {
+			assertEquals(e.size(), a.size(), where + ": size");
+			for (int i = 0; i < e.size(); i++)
+				assertSameJson(e.get(i), a.get(i), where + "[" + i + "]");
+		}
+		else if (expected instanceof BigDecimal && actual instanceof BigDecimal) {
+			assertEquals(Json.text(expected), Json.text(actual), where);
+		}
+		else {
+			assertEquals(expected, actual, where);
+		}
+	}
+
+	private static void assertFails(JsonNode c, Executable transform) {
+		String expected = c.get("error").get("code").asText() + "@" + c.get("error").get("line").asInt();
+		ParseException e = assertThrows(ParseException.class, transform, c.get("id").asText() + ": no error, expected " + expected);
+		assertEquals(expected, e.getCode() + "@" + e.getLine(), c.get("id").asText() + ": " + e.getMessage());
 	}
 
 	@TestFactory
 	List<DynamicTest> runsTheTransformCases() {
-		JsonNode cases = JSON.toJsonTree(Corpus.read(new File(DIRECTORY, "manifest.json"))).get("cases");
+		JsonNode cases = JSON.toJsonTree(read("manifest.json")).get("cases");
 		List<DynamicTest> tests = new ArrayList<>();
 
-		tests.add(dynamicTest("lists every case file, and every case exactly once", () -> {
+		tests.add(dynamicTest("refers to every case file, and lists every case exactly once", () -> {
 			Set<String> ids = new HashSet<>();
-			Set<String> listed = new HashSet<>();
+			Set<String> referred = new HashSet<>();
 			for (JsonNode c: cases) {
 				assertTrue(ids.add(c.get("id").asText()), "duplicate case id " + c.get("id").asText());
-				listed.add(c.get("input").asText());
+				for (String member: List.of("input", "data", "expected"))
+					if (c.has(member)) referred.add(c.get(member).asText());
+				if (c.has("definitions")) c.get("definitions").forEach(set -> set.forEach(file -> referred.add(file.asText())));
 			}
-			for (File file: Corpus.findStxtFiles(new File(DIRECTORY, "fill"))) {
-				if (file.getName().endsWith(".expected.stxt")) continue;
-				assertTrue(listed.contains("fill/" + file.getName()), "fill/" + file.getName() + " is not in the manifest");
-			}
+			for (String path: files(DIRECTORY, ""))
+				assertTrue(referred.contains(path), path + " is not in the manifest");
 		}));
 
 		for (JsonNode c: cases) {
@@ -69,21 +130,44 @@ public class TransformCasesTest {
 
 			tests.add(dynamicTest(id + ": " + c.get("description").asText(), () -> {
 				String input = read(c, "input");
-				String data = read(c, "data");
 				switch (category) {
 					case "fill": {
-						String expected = TreeJson.toCanonicalJson(new Parser().parse(read(c, "expected")));
-						String actual = TreeJson.toCanonicalJson(new FillJson().fill(new Parser().parse(input), data));
-						assertEquals(JSON.toJsonTree(expected), JSON.toJsonTree(actual), id);
+						List<Node> filled = new FillJson().fill(new Parser().parse(input), read(c, "data"));
+						assertEquals(JSON.toJsonTree(canonical(read(c, "expected"))), JSON.toJsonTree(TreeJson.toCanonicalJson(filled)), id);
 						break;
 					}
-					case "fill-error": {
-						TransformException e = assertThrows(TransformException.class, () -> new FillJson().fill(new Parser().parse(input), data),
-								id + ": filled without errors, expected " + c.get("error").get("code").asText());
-						assertEquals(c.get("error").get("code").asText() + "@" + c.get("error").get("line").asInt(),
-								e.getCode() + "@" + e.getLine(), id + ": " + e.getMessage());
+					case "fill-error":
+						assertFails(c, () -> new FillJson().fill(new Parser().parse(input), read(c, "data")));
 						break;
-					}
+					case "export":
+						for (UnifiedSchemaProvider schemas: definitions(c)) {
+							String exported = new ExportJson(schemas).exportJson(new Parser().parse(input).get(0));
+							assertSameJson(Json.read(read(c, "expected")), Json.read(exported), id);
+							assertEquals(read(c, "expected"), exported, id + ": text");
+						}
+						break;
+					case "export-error":
+						for (UnifiedSchemaProvider schemas: definitions(c))
+							assertFails(c, () -> new ExportJson(schemas).exportJson(new Parser().parse(input).get(0)));
+						break;
+					case "import":
+						for (UnifiedSchemaProvider schemas: definitions(c)) {
+							Node imported = new ImportJson(schemas).importJson(input, c.get("node").asText(), c.get("namespace").asText());
+							assertEquals(JSON.toJsonTree(canonical(read(c, "expected"))), JSON.toJsonTree(TreeJson.toCanonicalJson(List.of(imported))), id);
+							if (c.has("valid"))
+								assertEquals(c.get("valid").asBoolean(), new SchemaValidator(schemas, true).validate(imported).isEmpty(), id + ": valid");
+						}
+						break;
+					case "import-error":
+						for (UnifiedSchemaProvider schemas: definitions(c))
+							assertFails(c, () -> new ImportJson(schemas).importJson(input, c.get("node").asText(), c.get("namespace").asText()));
+						break;
+					case "json":
+						assertSameJson(Json.read(read(c, "expected")), Json.read(input), id);
+						break;
+					case "json-error":
+						assertFails(c, () -> Json.read(input));
+						break;
 					default:
 						fail(id + ": unknown category " + category);
 				}
@@ -91,5 +175,18 @@ public class TransformCasesTest {
 		}
 
 		return tests;
+	}
+
+	// The case files under a directory, relative to the root of the cases and with '/'
+	private static List<String> files(File dir, String prefix) {
+		List<String> result = new ArrayList<>();
+		File[] entries = dir.listFiles();
+		if (entries == null) return result;
+		for (File entry: entries) {
+			String path = prefix + entry.getName();
+			if (entry.isDirectory()) result.addAll(files(entry, path + "/"));
+			else if (!path.equals("manifest.json") && !entry.getName().startsWith(".")) result.add(path);
+		}
+		return result;
 	}
 }
