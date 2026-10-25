@@ -74,9 +74,8 @@ public final class FillJson {
 	 * @param document the root nodes of a document with Slots, as the parser returns them.
 	 * @param json the data, as a JSON text.
 	 * @return the root nodes of the filled document; it is not validated here.
-	 * @throws TransformException if the JSON cannot be read ({@code JSON_NOT_VALID},
-	 *         {@code JSON_DUPLICATE_KEY}), if a required Slot has no data ({@code SLOT_NO_DATA}),
-	 *         if the data does not fit its Slot ({@code SLOT_DATA_MISMATCH}) or if a Slot is where
+	 * @throws TransformException if the JSON cannot be read ({@code JSON_NOT_VALID}), if a
+	 *         required Slot has no data ({@code SLOT_NO_DATA}), if the data does not fit its Slot ({@code SLOT_DATA_MISMATCH}) or if a Slot is where
 	 *         it cannot be ({@code SLOT_MISPLACED}).
 	 * @throws LimitException if the JSON exceeds a limit of the reader.
 	 */

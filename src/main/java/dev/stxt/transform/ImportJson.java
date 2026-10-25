@@ -43,9 +43,8 @@ public final class ImportJson {
 	 * @param name name of the root node to build.
 	 * @param namespace namespace of the root node; its schema drives the import.
 	 * @return the root node; it is not validated here.
-	 * @throws TransformException if the JSON cannot be read ({@code JSON_NOT_VALID},
-	 *         {@code JSON_DUPLICATE_KEY}), if a namespace has no schema or a node is not defined
-	 *         in it ({@code SCHEMA_NOT_FOUND}, {@code NODE_NOT_DEFINED_IN_SCHEMA}), if a key is not
+	 * @throws TransformException if the JSON cannot be read ({@code JSON_NOT_VALID}), if a
+	 *         namespace has no schema or a node is not defined in it ({@code SCHEMA_NOT_FOUND}, {@code NODE_NOT_DEFINED_IN_SCHEMA}), if a key is not
 	 *         a child of its node ({@code IMPORT_KEY_NOT_DEFINED}) or if a JSON value does not have
 	 *         the shape its node needs ({@code IMPORT_DATA_MISMATCH}).
 	 * @throws LimitException if the JSON exceeds a limit of the reader.

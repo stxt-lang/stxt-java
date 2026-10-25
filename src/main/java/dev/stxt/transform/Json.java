@@ -21,8 +21,10 @@ import dev.stxt.exceptions.TransformException;
  *
  * <p>The reader is strict, as RFC 8259 writes the grammar: no comments, no trailing commas, no
  * single quotes, no leading zeros, no unescaped control characters, no content after the value.
- * Where RFC 8259 leaves the choice, it rejects: a duplicate key and an unpaired surrogate are
- * errors (as in I-JSON, RFC 7493). A byte order mark at the start is ignored, as the STXT parser
+ * Where RFC 8259 leaves the choice, it reads as {@code JSON.parse} in JavaScript,
+ * {@code json.loads} in Python and Jackson do: a duplicate key is accepted and the last value
+ * wins, with the key where it first appeared; an unpaired surrogate, escaped or not, is accepted
+ * and kept in the string as it is. A byte order mark at the start is ignored, as the STXT parser
  * does. Like the parser (STXT-SPEC 11.2), it has limits, with the same defaults and codes: the
  * nesting of arrays and objects ({@code LIMIT_NESTING_EXCEEDED}), the size of the text
  * ({@code LIMIT_INPUT_SIZE_EXCEEDED}) and the length of a number written in plain notation
@@ -259,10 +261,7 @@ final class Json {
 				skipBlanks();
 				if (pos >= text.length() || text.charAt(pos) != '"')
 					throw error("Expected a key between double quotes");
-				int keyLine = line;
 				String key = string();
-				if (object.containsKey(key))
-					throw new TransformException(keyLine, "JSON_DUPLICATE_KEY", "Duplicate key in a JSON object: \"" + key + "\"");
 				skipBlanks();
 				if (!next(':'))
 					throw error("Expected ':' after a key");
@@ -324,10 +323,6 @@ final class Json {
 					start = pos;
 				} else if (c < 0x20) {
 					throw error("Unescaped " + describe(c) + " in a string");
-				} else if (Character.isHighSurrogate(c) && pos + 1 < text.length() && Character.isLowSurrogate(text.charAt(pos + 1))) {
-					pos += 2;
-				} else if (Character.isSurrogate(c)) {
-					throw error("Unpaired surrogate " + describe(c) + " in a string");
 				} else {
 					pos++;
 				}
@@ -348,20 +343,8 @@ final class Json {
 				case 'r': out.append('\r'); break;
 				case 't': out.append('\t'); break;
 				case 'u':
-					char u = hex4();
-					if (Character.isHighSurrogate(u)) {
-						if (!text.startsWith("\\u", pos))
-							throw error("Unpaired surrogate \\u" + hex(u) + " in a string");
-						pos += 2;
-						char low = hex4();
-						if (!Character.isLowSurrogate(low))
-							throw error("Unpaired surrogate \\u" + hex(u) + " in a string");
-						out.append(u).append(low);
-					} else if (Character.isLowSurrogate(u)) {
-						throw error("Unpaired surrogate \\u" + hex(u) + " in a string");
-					} else {
-						out.append(u);
-					}
+					// A surrogate pair is two escapes in a row, and each one appends its half
+					out.append(hex4());
 					break;
 				default:
 					pos--;

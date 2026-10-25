@@ -10,8 +10,8 @@
     "export-error": "Same, but the export must fail, and the first error must carry `error.code` and `error.line`: the line of the node. The codes are provisional while STXT-TRANSFORM-SPEC is in Genesis.",
     "import": "For every set of `definitions`: import the JSON text of `input` as the node `node` of `namespace` (STXT-TRANSFORM-SPEC §3.2); the canonical tree of the result must equal the canonical tree of `expected`, compared as a JSON value. When `valid` is given, validating the imported node with the recursive validator must give no error (true) or some error (false).",
     "import-error": "Same, but the import must fail, and the first error must carry `error.code` and `error.line`: the line in `input` for an error of the JSON text, 0 for the others. The codes are provisional while STXT-TRANSFORM-SPEC is in Genesis.",
-    "json": "Read the JSON text of `input` with the JSON reader of the transforms (RFC 8259, strict); it must be accepted, and its value must equal the value of `expected` as `export` compares them.",
-    "json-error": "Reading `input` must fail, and the first error must carry `error.code` and `error.line` (1-based). The reader rejects what RFC 8259 does not allow, a duplicate key and an unpaired surrogate (as I-JSON, RFC 7493), and applies the limits of STXT-SPEC §11.2 with their default values."
+    "json": "Read the JSON text of `input` with the JSON reader of the transforms (RFC 8259, strict; where RFC 8259 leaves the choice, as JSON.parse, json.loads and Jackson read: the last value of a duplicate key wins, and an unpaired surrogate is kept); it must be accepted, and its value must equal the value of `expected` as `export` compares them.",
+    "json-error": "Reading `input` must fail, and the first error must carry `error.code` and `error.line` (1-based). The reader rejects what RFC 8259 does not allow and applies the limits of STXT-SPEC §11.2 with their default values. A duplicate key and an unpaired surrogate are not errors (category `json`)."
   },
   "cases": [
     {
@@ -1282,6 +1282,21 @@
       "valid": false
     },
     {
+      "id": "import/duplicate-key",
+      "category": "import",
+      "spec": "STXT-TRANSFORM-SPEC §3.2",
+      "description": "A duplicate key is accepted, and the last value wins.",
+      "definitions": [
+        [
+          "definitions/com.example.servers.template.stxt"
+        ]
+      ],
+      "input": "import/duplicate-key.json",
+      "node": "Server",
+      "namespace": "com.example.servers",
+      "expected": "import/duplicate-key.expected.stxt"
+    },
+    {
       "id": "import/mismatch-array-number",
       "category": "import-error",
       "spec": "STXT-TRANSFORM-SPEC §3.2",
@@ -1462,24 +1477,6 @@
       }
     },
     {
-      "id": "import/duplicate-key",
-      "category": "import-error",
-      "spec": "STXT-TRANSFORM-SPEC §3.2",
-      "description": "A key repeated in an object is an error.",
-      "definitions": [
-        [
-          "definitions/com.example.servers.template.stxt"
-        ]
-      ],
-      "input": "import/duplicate-key.json",
-      "node": "Server",
-      "namespace": "com.example.servers",
-      "error": {
-        "code": "JSON_DUPLICATE_KEY",
-        "line": 1
-      }
-    },
-    {
       "id": "json/literal-true",
       "category": "json",
       "spec": "STXT-TRANSFORM-SPEC §1; RFC 8259",
@@ -1656,6 +1653,54 @@
       "input": "json/limit-number-length.json",
       "expected": "json/limit-number-length.expected.json",
       "requirement": "SHOULD"
+    },
+    {
+      "id": "json/duplicate-key",
+      "category": "json",
+      "spec": "STXT-TRANSFORM-SPEC §1; RFC 8259 §4",
+      "description": "A duplicate key is accepted: the last value wins, and the key stays where it first appeared, as JSON.parse, json.loads and Jackson read it.",
+      "input": "json/duplicate-key.json",
+      "expected": "json/duplicate-key.expected.json"
+    },
+    {
+      "id": "json/surrogate-high-alone",
+      "category": "json",
+      "spec": "STXT-TRANSFORM-SPEC §1; RFC 8259 §8.2",
+      "description": "An escaped high surrogate alone is accepted and kept as it is.",
+      "input": "json/surrogate-high-alone.json",
+      "expected": "json/surrogate-high-alone.expected.json"
+    },
+    {
+      "id": "json/surrogate-low-alone",
+      "category": "json",
+      "spec": "STXT-TRANSFORM-SPEC §1; RFC 8259 §8.2",
+      "description": "An escaped low surrogate alone is accepted and kept as it is.",
+      "input": "json/surrogate-low-alone.json",
+      "expected": "json/surrogate-low-alone.expected.json"
+    },
+    {
+      "id": "json/surrogate-high-then-escape",
+      "category": "json",
+      "spec": "STXT-TRANSFORM-SPEC §1; RFC 8259 §8.2",
+      "description": "An escaped high surrogate followed by an escape that is not a low surrogate: two characters, kept as they are.",
+      "input": "json/surrogate-high-then-escape.json",
+      "expected": "json/surrogate-high-then-escape.expected.json"
+    },
+    {
+      "id": "json/surrogate-high-then-character",
+      "category": "json",
+      "spec": "STXT-TRANSFORM-SPEC §1; RFC 8259 §8.2",
+      "description": "An escaped high surrogate followed by a character: two characters, kept as they are.",
+      "input": "json/surrogate-high-then-character.json",
+      "expected": "json/surrogate-high-then-character.expected.json"
+    },
+    {
+      "id": "json/surrogate-low-then-high",
+      "category": "json",
+      "spec": "STXT-TRANSFORM-SPEC §1; RFC 8259 §8.2",
+      "description": "An escaped low surrogate followed by a high one is no pair: two lone surrogates, kept as they are.",
+      "input": "json/surrogate-low-then-high.json",
+      "expected": "json/surrogate-low-then-high.expected.json"
     },
     {
       "id": "json/empty",
@@ -2139,61 +2184,6 @@
       "error": {
         "code": "JSON_NOT_VALID",
         "line": 1
-      }
-    },
-    {
-      "id": "json/surrogate-high-alone",
-      "category": "json-error",
-      "spec": "STXT-TRANSFORM-SPEC §1; RFC 8259",
-      "description": "An escaped high surrogate alone.",
-      "input": "json/surrogate-high-alone.json",
-      "error": {
-        "code": "JSON_NOT_VALID",
-        "line": 1
-      }
-    },
-    {
-      "id": "json/surrogate-low-alone",
-      "category": "json-error",
-      "spec": "STXT-TRANSFORM-SPEC §1; RFC 8259",
-      "description": "An escaped low surrogate alone.",
-      "input": "json/surrogate-low-alone.json",
-      "error": {
-        "code": "JSON_NOT_VALID",
-        "line": 1
-      }
-    },
-    {
-      "id": "json/surrogate-high-then-escape",
-      "category": "json-error",
-      "spec": "STXT-TRANSFORM-SPEC §1; RFC 8259",
-      "description": "An escaped high surrogate followed by an escape that is not a low surrogate.",
-      "input": "json/surrogate-high-then-escape.json",
-      "error": {
-        "code": "JSON_NOT_VALID",
-        "line": 1
-      }
-    },
-    {
-      "id": "json/surrogate-high-then-character",
-      "category": "json-error",
-      "spec": "STXT-TRANSFORM-SPEC §1; RFC 8259",
-      "description": "An escaped high surrogate followed by a character.",
-      "input": "json/surrogate-high-then-character.json",
-      "error": {
-        "code": "JSON_NOT_VALID",
-        "line": 1
-      }
-    },
-    {
-      "id": "json/duplicate-key",
-      "category": "json-error",
-      "spec": "STXT-TRANSFORM-SPEC §1; RFC 8259 §4; RFC 7493 §2.3",
-      "description": "A key repeated in an object is an error, at the line of the second one (RFC 7493 §2.3).",
-      "input": "json/duplicate-key.json",
-      "error": {
-        "code": "JSON_DUPLICATE_KEY",
-        "line": 3
       }
     },
     {

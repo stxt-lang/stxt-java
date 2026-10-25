@@ -43,9 +43,14 @@ public class JsonTest {
 	// ----------------------------------------------------------------
 
 	@Test
-	void rejectsUnpairedSurrogatesInTheText() {
-		assertNotJson("\"\uD800\"");
-		assertNotJson("\"\uDC00\uD800\"");
+	void keepsUnpairedSurrogatesInTheText() {
+		assertEquals("\uD800", Json.read("\"\uD800\""));
+		assertEquals("\uDC00\uD800x", Json.read("\"\uDC00\uD800x\""));
+	}
+
+	@Test
+	void stillRejectsAnUnescapedControlCharacter() {
+		assertNotJson("\"\uD800\u0001\"");
 	}
 
 	// ----------------------------------------------------------------
