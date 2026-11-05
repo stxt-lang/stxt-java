@@ -1,7 +1,0 @@
-{
-	"Name": "x",
-	"Active": false,
-	"Ports": [7],
-	"Load": 0.50,
-	"Tag": ["a", "b"]
-}

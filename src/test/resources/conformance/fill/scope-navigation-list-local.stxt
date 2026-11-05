@@ -1,3 +1,0 @@
-# [list] looks up its array only in the current element.
-Shipment: [shipments]
-	Contact: [contacts]

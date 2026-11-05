@@ -1,3 +1,0 @@
-# A $$ not followed by { is copied as it is.
-Formula >>
-	$$x^2$$ and ${n} $$

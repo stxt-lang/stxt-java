@@ -1,3 +1,0 @@
-# <?var> with a data item puts it.
-Customer:
-	Phone: <?phone>

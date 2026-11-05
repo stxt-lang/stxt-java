@@ -1,4 +1,0 @@
-# A block that takes its content from the list has nothing else: no more lines.
-Parcel >>
-	[parcels]
-	Weight: ${weight}

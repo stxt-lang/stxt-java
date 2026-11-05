@@ -1,3 +1,0 @@
-# <var> looks up its data item only in the current element.
-Customer: {customer}
-	Name: <name>

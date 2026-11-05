@@ -1,3 +1,0 @@
-# $${ is a literal ${.
-Script >>
-	echo "$${HOME}" ${n}

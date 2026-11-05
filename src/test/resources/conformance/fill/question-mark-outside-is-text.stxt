@@ -1,3 +1,0 @@
-# A ? outside the delimiters is text: it does not make a Slot optional.
-Note: ?<note>
-Link: https://example.com/search?${query}

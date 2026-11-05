@@ -1,4 +1,0 @@
-# A block whose content is <var> has no more lines.
-Html >>
-	<html>
-	<p>${t}</p>

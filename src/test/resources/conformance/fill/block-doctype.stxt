@@ -1,4 +1,0 @@
-# An HTML block can start with <!DOCTYPE html>, which does not have the form of a Slot.
-Html >>
-	<!DOCTYPE html>
-	<p>${t}</p>

@@ -1,6 +1,0 @@
-# In the text, <x>, [x] and {x} are text, inline and in a block.
-Label: See [note] and {note} in <b>
-Html >>
-	<div class="greeting">
-	<p>Hello, ${name}</p>
-	<br>

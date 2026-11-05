@@ -1,3 +1,0 @@
-# A first block line that starts with navigation has nothing else: no ${var}.
-Label >>
-	{customer} ${t}

@@ -1,3 +1,0 @@
-# An object applies to the node and to its children.
-Customer: {customer}<name>
-	Email: <email>

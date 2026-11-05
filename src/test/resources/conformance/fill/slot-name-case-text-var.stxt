@@ -1,2 +1,0 @@
-# The name of a ${var} is looked up as it is, case-sensitively: ${Date} does not find date.
-Date: ${Date}

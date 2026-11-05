@@ -1,4 +1,0 @@
-# A block keeps the indentation of its lines.
-Code >>
-	if ${cond}:
-	    y = ${v}

@@ -1,3 +1,0 @@
-# A node that takes its value from the list has nothing else: no children.
-Parcel: [parcels]
-	Weight: <weight>

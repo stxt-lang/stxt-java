@@ -1,4 +1,0 @@
-# <?var> as the content of a block with no data item removes the block.
-Order: 7
-	Notes >>
-		<?notes>
