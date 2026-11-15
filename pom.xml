@@ -6,7 +6,7 @@
 
     <groupId>dev.stxt</groupId>
     <artifactId>stxt-core</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
     <packaging>jar</packaging>
 
     <!-- Metadatos exigidos por Maven Central (name, description, url, licencia,
@@ -50,16 +50,16 @@
         <maven.compiler.release>17</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- Build reproducible: fija las fechas dentro del jar. Se actualiza en cada release. -->
-        <project.build.outputTimestamp>2026-09-10T18:00:00Z</project.build.outputTimestamp>
+        <project.build.outputTimestamp>2026-11-15T12:00:00Z</project.build.outputTimestamp>
         <junit.version>5.10.0</junit.version>
-        <jackson.version>2.22.1</jackson.version>
+        <jackson.version>3.3.0</jackson.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
             <!-- BOM de Jackson para alinear versiones -->
             <dependency>
-                <groupId>com.fasterxml.jackson</groupId>
+                <groupId>tools.jackson</groupId>
                 <artifactId>jackson-bom</artifactId>
                 <version>${jackson.version}</version>
                 <type>pom</type>
@@ -70,24 +70,10 @@
 
     <!-- Todas las dependencias son de test: el jar publicado no arrastra ninguna. -->
     <dependencies>
-        <!-- Jackson núcleo (ObjectMapper) -->
+        <!-- Jackson núcleo (JsonMapper) -->
         <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
+            <groupId>tools.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- Opcional: mejor soporte para constructores, records, etc. -->
-        <dependency>
-            <groupId>com.fasterxml.jackson.module</groupId>
-            <artifactId>jackson-module-parameter-names</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- Opcional: tipos de fecha/hora de Java 8+ -->
-        <dependency>
-            <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-jsr310</artifactId>
             <scope>test</scope>
         </dependency>
 

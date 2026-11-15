@@ -1,20 +1,18 @@
 package test;
 
-import java.io.IOException;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.util.DefaultIndenter;
-import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.core.util.DefaultIndenter;
+import tools.jackson.core.util.DefaultPrettyPrinter;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.PropertyNamingStrategies;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.SerializationFeature;
+import tools.jackson.databind.ValueSerializer;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.module.SimpleModule;
 
 import dev.stxt.InlineNode;
 import dev.stxt.Node;
@@ -58,89 +56,71 @@ public final class JSON {
 	 * different, cyclic shape; this keeps the fixtures valid as regression data. The canonical tree
 	 * of STXT-TREE-SPEC is a different, normative serialization ({@code dev.stxt.runtime.TreeJson}).
 	 */
-	private static final class LegacyNodeSerializer extends JsonSerializer<Node> {
+	private static final class LegacyNodeSerializer extends ValueSerializer<Node> {
 		@Override
-		public void serialize(Node node, JsonGenerator gen, SerializerProvider provider) throws IOException {
+		public void serialize(Node node, JsonGenerator gen, SerializationContext context) {
 			gen.writeStartObject();
-			gen.writeStringField("name", node.getName());
-			gen.writeStringField("normalized_name", node.getCanonicalName());
-			gen.writeStringField("namespace", node.getNamespace());
-			gen.writeBooleanField("text_node", node.isTextNode());
-			gen.writeStringField("value", node instanceof InlineNode inline ? inline.getValue() : "");
-			gen.writeArrayFieldStart("text_lines");
+			gen.writeStringProperty("name", node.getName());
+			gen.writeStringProperty("normalized_name", node.getCanonicalName());
+			gen.writeStringProperty("namespace", node.getNamespace());
+			gen.writeBooleanProperty("text_node", node.isTextNode());
+			gen.writeStringProperty("value", node instanceof InlineNode inline ? inline.getValue() : "");
+			gen.writeArrayPropertyStart("text_lines");
 			if (node instanceof TextNode text)
 				for (String line : text.getTextLines())
 					gen.writeString(line);
 			gen.writeEndArray();
-			gen.writeNumberField("line", node.getLine());
-			gen.writeNumberField("level", node.getLevel());
-			gen.writeArrayFieldStart("children");
+			gen.writeNumberProperty("line", node.getLine());
+			gen.writeNumberProperty("level", node.getLevel());
+			gen.writeArrayPropertyStart("children");
 			if (node instanceof InlineNode inline)
 				for (Node child : inline.getChildren())
-					serialize(child, gen, provider);
+					serialize(child, gen, context);
 			gen.writeEndArray();
-			gen.writeStringField("qualified_name", node.getQualifiedName());
-			gen.writeStringField("text", node.getText());
+			gen.writeStringProperty("qualified_name", node.getQualifiedName());
+			gen.writeStringProperty("text", node.getText());
 			gen.writeEndObject();
 		}
 	}
-
-	private static ObjectMapper configure(ObjectMapper mapper) {
-		return mapper
-				.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
-				.addMixIn(NodeDefinition.class, NodeDefinitionMixin.class)
-				.addMixIn(ChildDefinition.class, ChildDefinitionMixin.class)
-				.addMixIn(Schema.class, SchemaMixin.class)
-				.registerModule(new SimpleModule().addSerializer(Node.class, new LegacyNodeSerializer()));
-	}
-
-	private static final ObjectMapper MAPPER = configure(new ObjectMapper());
 
 	// Shared pretty-print configuration (tab indentation)
 	private static final DefaultIndenter INDENTER = new DefaultIndenter(IDENTER_STRING, DefaultIndenter.SYS_LF);
 	private static final DefaultPrettyPrinter PRETTY_PRINTER = new DefaultPrettyPrinter().withObjectIndenter(INDENTER)
 			.withArrayIndenter(INDENTER);
 
-	private static final ObjectMapper MAPPER_PRETTY = createPrettyMapper();
-
-	private static ObjectMapper createPrettyMapper() {
-		ObjectMapper mapper = configure(new ObjectMapper()).enable(SerializationFeature.INDENT_OUTPUT);
-
-		// Use shared pretty printer
-		mapper.setDefaultPrettyPrinter(PRETTY_PRINTER);
-		return mapper;
+	private static JsonMapper.Builder builder() {
+		return JsonMapper.builder()
+				.propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
+				.addMixIn(NodeDefinition.class, NodeDefinitionMixin.class)
+				.addMixIn(ChildDefinition.class, ChildDefinitionMixin.class)
+				.addMixIn(Schema.class, SchemaMixin.class)
+				.addModule(new SimpleModule().addSerializer(Node.class, new LegacyNodeSerializer()));
 	}
+
+	private static final JsonMapper MAPPER = builder().build();
+
+	private static final JsonMapper MAPPER_PRETTY = builder()
+			.enable(SerializationFeature.INDENT_OUTPUT)
+			.defaultPrettyPrinter(PRETTY_PRINTER)
+			.build();
 
 	private JSON() {
 		// prevent instantiation
 	}
 
 	public static final String toJson(Object obj) {
-		try {
-			return MAPPER.writeValueAsString(obj);
-		} catch (JsonProcessingException e) {
-			throw new RuntimeException(e);
-		}
+		return MAPPER.writeValueAsString(obj);
 	}
 
 	public static final String toJsonPretty(Object obj) {
-		try {
-			return MAPPER_PRETTY.writerWithDefaultPrettyPrinter().writeValueAsString(obj);
-		} catch (JsonProcessingException e) {
-			throw new RuntimeException(e);
-		}
+		return MAPPER_PRETTY.writerWithDefaultPrettyPrinter().writeValueAsString(obj);
 	}
 
 	public static JsonNode toJsonTree(Object obj) {
 		return toJsonTree(toJson(obj));
 	}
-	
-	
+
 	public static JsonNode toJsonTree(String json) {
-		try {
-			return MAPPER.readTree(json);
-		} catch (IOException e) {
-			throw new RuntimeException("JSON parsing error", e);
-		}
+		return MAPPER.readTree(json);
 	}
 }

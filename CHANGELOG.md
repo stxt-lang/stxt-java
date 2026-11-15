@@ -4,6 +4,19 @@ All notable changes to `dev.stxt:stxt-core` are documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [1.0.4] - 2026-11-15
+
+**The tests use Jackson 3.** The library code is that of 1.0.3 and the jar still has no runtime
+dependencies, but the published `pom.xml` lists the test dependencies, and it named
+`jackson-databind` 2.22.1. No language change: a patch.
+
+### Changed
+
+- Test dependencies: `tools.jackson.core:jackson-databind` 3.3.0, aligned by the BOM
+  `tools.jackson:jackson-bom`, instead of `com.fasterxml.jackson.core:jackson-databind` 2.22.1.
+  `jackson-module-parameter-names` and `jackson-datatype-jsr310` are removed: Jackson 3 includes
+  them in `jackson-databind`.
+
 ## [1.0.3] - 2026-09-10
 
 **A project-level `.stxt` that is a symbolic link forms no level** (STXT-DISCOVERY-SPEC §4.1,

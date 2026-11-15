@@ -21,7 +21,7 @@ import java.util.Set;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import tools.jackson.databind.JsonNode;
 
 import dev.stxt.Node;
 import dev.stxt.Parser;
@@ -115,15 +115,15 @@ public class ConformanceKitTest {
         }
     }
 
-    private static String text(JsonNode node) { return node == null || node.isNull() ? null : node.asText(); }
+    private static String text(JsonNode node) { return node == null || node.isNull() ? null : node.asString(); }
 
     private static void discovery(String id, JsonNode c) {
         MemoryFileSystem fs = new MemoryFileSystem();
-        c.get("files").fields().forEachRemaining(e -> fs.put(e.getKey(), Corpus.read(new File(directory, e.getValue().asText()))));
-        if (c.has("dirs")) c.get("dirs").forEach(d -> fs.addDir(Path.of(d.asText())));
+        c.get("files").properties().forEach(e -> fs.put(e.getKey(), Corpus.read(new File(directory, e.getValue().asString()))));
+        if (c.has("dirs")) c.get("dirs").forEach(d -> fs.addDir(Path.of(d.asString())));
         JsonNode env = c.get("environment");
         List<String> stxtPath = env.get("stxtPath").isNull() ? null : new ArrayList<>();
-        if (stxtPath != null) env.get("stxtPath").forEach(p -> stxtPath.add(p.asText()));
+        if (stxtPath != null) env.get("stxtPath").forEach(p -> stxtPath.add(p.asString()));
         Path userDir = text(env.get("userDir")) == null ? null : Path.of(text(env.get("userDir")));
         Path systemDir = text(env.get("systemDir")) == null ? null : Path.of(text(env.get("systemDir")));
         DiscoveryEnvironment environment = new DiscoveryEnvironment() {
@@ -137,10 +137,10 @@ public class ConformanceKitTest {
         JsonNode expected = c.get("expected");
 
         List<String> chain = new ArrayList<>();
-        expected.get("chain").forEach(p -> chain.add(p.asText()));
+        expected.get("chain").forEach(p -> chain.add(p.asString()));
         assertEquals(chain, result.getChain().stream().map(p -> p.toString().replace(File.separatorChar, '/')).toList(), id + ": chain");
 
-        expected.get("active").fields().forEachRemaining(e -> {
+        expected.get("active").properties().forEach(e -> {
             DiscoveryDefinition definition = result.getDefinition(e.getKey());
             String file = definition == null ? null : definition.getFile().toString().replace(File.separatorChar, '/');
             assertEquals(text(e.getValue()), file, id + ": active definition of " + e.getKey());
@@ -150,9 +150,9 @@ public class ConformanceKitTest {
         List<DiscoveryError> actual = new ArrayList<>(result.getErrors());
         assertEquals(expected.get("errors").size(), actual.size(), id + ": errors " + actual);
         for (JsonNode e: expected.get("errors")) {
-            DiscoveryError match = actual.stream().filter(a -> a.getCode().equals(e.get("code").asText())
-                && (!e.has("file") || a.getFile().replace(File.separatorChar, '/').equals(e.get("file").asText()))
-                && (!e.has("namespace") || e.get("namespace").asText().equals(a.getNamespace()))).findFirst().orElse(null);
+            DiscoveryError match = actual.stream().filter(a -> a.getCode().equals(e.get("code").asString())
+                && (!e.has("file") || a.getFile().replace(File.separatorChar, '/').equals(e.get("file").asString()))
+                && (!e.has("namespace") || e.get("namespace").asString().equals(a.getNamespace()))).findFirst().orElse(null);
             assertNotNull(match, id + ": missing error " + e + " in " + actual);
             actual.remove(match);
         }
@@ -182,7 +182,7 @@ public class ConformanceKitTest {
     }
 
     private static String expected(JsonNode c) {
-        return c.get("error").get("code").asText() + "@" + c.get("error").get("line").asInt();
+        return c.get("error").get("code").asString() + "@" + c.get("error").get("line").asInt();
     }
 
     @TestFactory
@@ -194,9 +194,9 @@ public class ConformanceKitTest {
 
         tests.add(dynamicTest("declares a kit date and the dated specifications it covers", () -> {
             String date = "\\d{4}-\\d{2}-\\d{2}";
-            assertTrue(manifest.get("kit").asText().matches(date));
+            assertTrue(manifest.get("kit").asString().matches(date));
             for (String s : List.of("STXT-SPEC", "STXT-TREE-SPEC", "STXT-SCHEMA-SPEC", "STXT-TEMPLATE-SPEC", "STXT-DISCOVERY-SPEC")) {
-                assertTrue(manifest.get("specifications").get(s).asText().matches(date), s);
+                assertTrue(manifest.get("specifications").get(s).asString().matches(date), s);
             }
             assertFalse(cases.isEmpty());
         }));
@@ -205,8 +205,8 @@ public class ConformanceKitTest {
         tests.add(dynamicTest("marks the optional cases with a requirement level of SHOULD or MAY", () -> {
             for (JsonNode c : cases) {
                 if (c.has("requirement")) {
-                    String level = c.get("requirement").asText();
-                    assertTrue(level.equals("SHOULD") || level.equals("MAY"), c.get("id").asText() + ": requirement " + level);
+                    String level = c.get("requirement").asString();
+                    assertTrue(level.equals("SHOULD") || level.equals("MAY"), c.get("id").asString() + ": requirement " + level);
                 }
             }
         }));
@@ -214,21 +214,21 @@ public class ConformanceKitTest {
         tests.add(dynamicTest("declares cumulative profiles that cover every category", () -> {
             JsonNode profiles = manifest.get("profiles");
             Set<String> covered = new HashSet<>();
-            profiles.fields().forEachRemaining(e -> {
+            profiles.properties().forEach(e -> {
                 JsonNode p = e.getValue();
-                if (p.has("includes")) assertTrue(profiles.has(p.get("includes").asText()), "profile " + e.getKey() + " includes an unknown profile");
-                p.get("specifications").forEach(s -> assertTrue(manifest.get("specifications").has(s.asText()), "profile " + e.getKey() + ": unknown specification " + s.asText()));
-                p.get("categories").forEach(c -> covered.add(c.asText()));
+                if (p.has("includes")) assertTrue(profiles.has(p.get("includes").asString()), "profile " + e.getKey() + " includes an unknown profile");
+                p.get("specifications").forEach(s -> assertTrue(manifest.get("specifications").has(s.asString()), "profile " + e.getKey() + ": unknown specification " + s.asString()));
+                p.get("categories").forEach(c -> covered.add(c.asString()));
             });
-            for (JsonNode c: cases) assertTrue(covered.contains(c.get("category").asText()), "category " + c.get("category").asText() + " belongs to no profile");
+            for (JsonNode c: cases) assertTrue(covered.contains(c.get("category").asString()), "category " + c.get("category").asString() + " belongs to no profile");
         }));
 
         tests.add(dynamicTest("lists every case file, and every case exactly once", () -> {
             Set<String> ids = new HashSet<>();
             Set<String> listed = new HashSet<>();
             for (JsonNode c: cases) {
-                assertTrue(ids.add(c.get("id").asText()), "duplicate case id " + c.get("id").asText());
-                if (c.has("input")) listed.add(c.get("input").asText());
+                assertTrue(ids.add(c.get("id").asString()), "duplicate case id " + c.get("id").asString());
+                if (c.has("input")) listed.add(c.get("input").asString());
             }
             for (String sub: List.of("tree", "parse", "validate", "definition-errors", "format")) {
                 for (File file: Corpus.findStxtFiles(new File(directory, sub))) {
@@ -239,26 +239,26 @@ public class ConformanceKitTest {
         }));
 
         for (JsonNode c: cases) {
-            String id = c.get("id").asText();
-            String category = c.get("category").asText();
-            String input = c.has("input") ? Corpus.read(new File(directory, c.get("input").asText())) : null;
+            String id = c.get("id").asString();
+            String category = c.get("category").asString();
+            String input = c.has("input") ? Corpus.read(new File(directory, c.get("input").asString())) : null;
 
-            tests.add(dynamicTest(id + ": " + c.get("description").asText(), () -> {
+            tests.add(dynamicTest(id + ": " + c.get("description").asString(), () -> {
                 switch (category) {
                     case "discovery":
                         discovery(id, c);
                         break;
                     case "tree": {
                         List<Node> nodes = new Parser().parse(input);
-                        JsonNode expected = JSON.toJsonTree(Corpus.read(new File(directory, c.get("expected").asText())));
+                        JsonNode expected = JSON.toJsonTree(Corpus.read(new File(directory, c.get("expected").asString())));
                         assertEquals(expected, JSON.toJsonTree(TreeJson.toCanonicalJson(nodes)));
                         break;
                     }
                     case "parse-error": {
                         ParseException error = assertThrows(ParseException.class, () -> new Parser().parse(input),
-                            id + ": parsed without errors, expected " + c.get("error").get("code").asText());
+                            id + ": parsed without errors, expected " + c.get("error").get("code").asString());
                         assertNotNull(error);
-                        assertEquals(c.get("error").get("code").asText(), error.getCode());
+                        assertEquals(c.get("error").get("code").asString(), error.getCode());
                         assertEquals(c.get("error").get("line").asInt(), error.getLine());
                         break;
                     }
@@ -266,7 +266,7 @@ public class ConformanceKitTest {
                     case "validate-error": {
                         for (JsonNode set: c.get("definitions")) {
                             List<String> files = new ArrayList<>();
-                            set.forEach(f -> files.add(f.asText()));
+                            set.forEach(f -> files.add(f.asString()));
                             String actual = firstValidationError(input, loadDefinitions(files, null));
                             String where = id + " with " + files;
                             if (category.equals("validate")) assertEquals(null, actual, where);
@@ -276,17 +276,17 @@ public class ConformanceKitTest {
                     }
                     case "writer": {
                         List<Node> nodes = new Parser().parse(input);
-                        assertEquals(Corpus.read(new File(directory, c.get("expected").get("tabs").asText())), NodeWriter.toSTXT(nodes, IndentStyle.TABS), id + ": tabs");
-                        assertEquals(Corpus.read(new File(directory, c.get("expected").get("spaces").asText())), NodeWriter.toSTXT(nodes, IndentStyle.SPACES_4), id + ": spaces");
+                        assertEquals(Corpus.read(new File(directory, c.get("expected").get("tabs").asString())), NodeWriter.toSTXT(nodes, IndentStyle.TABS), id + ": tabs");
+                        assertEquals(Corpus.read(new File(directory, c.get("expected").get("spaces").asString())), NodeWriter.toSTXT(nodes, IndentStyle.SPACES_4), id + ": spaces");
                         break;
                     }
                     case "format": {
                         List<String> expectedErrors = new ArrayList<>();
-                        c.get("errors").forEach(e -> expectedErrors.add(e.get("code").asText() + "@" + e.get("line").asInt()));
+                        c.get("errors").forEach(e -> expectedErrors.add(e.get("code").asString() + "@" + e.get("line").asInt()));
                         for (IndentStyle style: IndentStyle.values()) {
                             String key = style == IndentStyle.TABS ? "tabs" : "spaces";
                             FormatResult result = Formatter.format(input, style);
-                            assertEquals(Corpus.read(new File(directory, c.get("expected").get(key).asText())), result.text(), id + ": " + key);
+                            assertEquals(Corpus.read(new File(directory, c.get("expected").get(key).asString())), result.text(), id + ": " + key);
                             assertEquals(expectedErrors, result.errors().stream().map(e -> e.getCode() + "@" + e.getLine()).toList(), id + ": errors with " + key);
                         }
                         break;
@@ -296,7 +296,7 @@ public class ConformanceKitTest {
                         // their line (ParseException.NO_LINE = 0 for the document-level ones,
                         // which is what the kit asserts); any other STXTException maps to 0.
                         STXTException error = assertThrows(STXTException.class,
-                            () -> loadDefinitions(List.of(c.get("input").asText()), c.get("kind").asText()),
+                            () -> loadDefinitions(List.of(c.get("input").asString()), c.get("kind").asString()),
                             id + ": loaded without errors, expected " + expected(c));
                         int line = error instanceof ParseException pe ? pe.getLine() : 0;
                         assertEquals(expected(c), error.getCode() + "@" + line, id);

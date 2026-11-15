@@ -7,7 +7,7 @@ import java.io.File;
 
 import org.junit.jupiter.api.Test;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import tools.jackson.databind.JsonNode;
 
 import dev.stxt.Constants;
 import test.Corpus;
@@ -32,6 +32,6 @@ class ConstantsTest {
 		File file = new File(new File(Corpus.findStxtLang(), "conformance"), "manifest.json");
 		JsonNode manifest = JSON.toJsonTree(Corpus.read(file));
 
-		assertEquals(manifest.get("specifications").get("STXT-SPEC").asText(), Constants.SPEC_VERSION);
+		assertEquals(manifest.get("specifications").get("STXT-SPEC").asString(), Constants.SPEC_VERSION);
 	}
 }
